@@ -21,6 +21,668 @@
             box-sizing: border-box;
         }
 
+        // NEW GAME FUNCTIONS - FASE 3
+
+        // Fraction Game Functions
+        function generateFractionChallenge() {
+            const denominators = [2, 3, 4, 6, 8];
+            const denominator = denominators[Math.floor(Math.random() * denominators.length)];
+            const numerator = Math.floor(Math.random() * denominator) + 1;
+            
+            fractionData = { numerator, denominator };
+            
+            document.getElementById('fraction-total').textContent = denominator;
+            document.getElementById('fraction-display').textContent = '?';
+            document.getElementById('fraction-input').value = '';
+            document.getElementById('fraction-feedback').textContent = '';
+            
+            generateFractionVisual();
+        }
+
+        function generateFractionVisual() {
+            const visualContainer = document.getElementById('fraction-visual');
+            visualContainer.innerHTML = '';
+            
+            // Create pizza circles
+            for (let pizza = 0; pizza < 2; pizza++) {
+                const pizzaDiv = document.createElement('div');
+                pizzaDiv.style.display = 'flex';
+                pizzaDiv.style.flexDirection = 'column';
+                pizzaDiv.style.alignItems = 'center';
+                pizzaDiv.style.margin = '0 20px';
+                
+                const pizzaLabel = document.createElement('div');
+                pizzaLabel.textContent = `Pizza ${pizza + 1}`;
+                pizzaLabel.style.fontSize = '1rem';
+                pizzaLabel.style.marginBottom = '10px';
+                pizzaLabel.style.fontWeight = 'bold';
+                pizzaDiv.appendChild(pizzaLabel);
+                
+                const circle = document.createElement('div');
+                circle.className = 'fraction-circle';
+                
+                // Calculate slice angle
+                const sliceAngle = 360 / fractionData.denominator;
+                
+                for (let i = 0; i < fractionData.denominator; i++) {
+                    const slice = document.createElement('div');
+                    slice.className = 'fraction-slice';
+                    slice.style.transform = `rotate(${i * sliceAngle}deg)`;
+                    
+                    // Color first numerator slices if this is pizza 1
+                    if (pizza === 0 && i < fractionData.numerator) {
+                        slice.style.background = '#F59E0B';
+                    } else {
+                        slice.style.background = 'transparent';
+                        slice.style.border = '2px solid #D97706';
+                    }
+                    
+                    circle.appendChild(slice);
+                }
+                
+                pizzaDiv.appendChild(circle);
+                visualContainer.appendChild(pizzaDiv);
+            }
+            
+            document.getElementById('fraction-question').textContent = `Quante parti sono colorate nella Pizza 1?`;
+        }
+
+        function checkFractionAnswer() {
+            const userAnswer = parseInt(document.getElementById('fraction-input').value);
+            const isCorrect = userAnswer === fractionData.numerator;
+            
+            updateAdaptiveStats(isCorrect);
+            
+            const feedbackEl = document.getElementById('fraction-feedback');
+            
+            if (isCorrect) {
+                document.getElementById('fraction-display').textContent = fractionData.numerator;
+                feedbackEl.textContent = `🍕 Bravissimo! La frazione è ${fractionData.numerator}/${fractionData.denominator}!`;
+                feedbackEl.className = 'feedback success';
+                
+                updateScore(30);
+                updateStars(4);
+                
+                setTimeout(() => generateFractionChallenge(), 2500);
+            } else {
+                feedbackEl.textContent = '🤗 Conta le parti colorate nella Pizza 1!';
+                feedbackEl.className = 'feedback error';
+            }
+        }
+
+        // Variables Game Functions
+        function generateVariableChallenge() {
+            const scenarios = [
+                {
+                    title: '🎪 Al Luna Park',
+                    description: 'Calcola quanti biglietti puoi comprare!',
+                    variables: [
+                        { name: 'soldi', label: 'I tuoi soldi', value: Math.floor(Math.random() * 50) + 20, unit: '€' },
+                        { name: 'prezzo_biglietto', label: 'Prezzo biglietto', value: Math.floor(Math.random() * 8) + 3, unit: '€' }
+                    ],
+                    calculation: 'soldi ÷ prezzo_biglietto',
+                    question: 'Quanti biglietti puoi comprare?'
+                },
+                {
+                    title: '🍕 Pizzeria',
+                    description: 'Calcola il costo totale!',
+                    variables: [
+                        { name: 'pizze', label: 'Numero pizze', value: Math.floor(Math.random() * 6) + 2, unit: '' },
+                        { name: 'prezzo_pizza', label: 'Prezzo per pizza', value: Math.floor(Math.random() * 5) + 8, unit: '€' }
+                    ],
+                    calculation: 'pizze × prezzo_pizza',
+                    question: 'Quanto costi in totale?'
+                },
+                {
+                    title: '🚗 Viaggio',
+                    description: 'Calcola quanto tempo ci vuole!',
+                    variables: [
+                        { name: 'distanza', label: 'Distanza', value: Math.floor(Math.random() * 200) + 100, unit: 'km' },
+                        { name: 'velocita', label: 'Velocità', value: Math.floor(Math.random() * 30) + 50, unit: 'km/h' }
+                    ],
+                    calculation: 'distanza ÷ velocita',
+                    question: 'Quante ore di viaggio?'
+                }
+            ];
+            
+            variableData = scenarios[Math.floor(Math.random() * scenarios.length)];
+            
+            document.getElementById('variable-scenario').textContent = variableData.title;
+            document.getElementById('variable-description').textContent = variableData.description;
+            document.getElementById('variable-calculation').textContent = variableData.calculation + ' = ?';
+            document.getElementById('variable-result').value = '';
+            document.getElementById('variable-feedback').textContent = '';
+            
+            updateVariableDisplay();
+        }
+
+        function updateVariableDisplay() {
+            const container = document.getElementById('variable-containers');
+            container.innerHTML = '';
+            
+            variableData.variables.forEach(variable => {
+                const varDiv = document.createElement('div');
+                varDiv.className = 'variable-container';
+                varDiv.innerHTML = `
+                    <h4 style="font-size: 1.2rem; margin-bottom: 1rem;">📦 ${variable.label}</h4>
+                    <input type="number" 
+                           value="${variable.value}" 
+                           class="variable-input" 
+                           onchange="updateVariableValue('${variable.name}', this.value)">
+                    <div style="margin-top: 0.5rem; font-weight: bold;">${variable.unit}</div>
+                `;
+                container.appendChild(varDiv);
+            });
+        }
+
+        function updateVariableValue(name, value) {
+            const variable = variableData.variables.find(v => v.name === name);
+            if (variable) {
+                variable.value = parseInt(value) || 0;
+            }
+        }
+
+        function checkVariableAnswer() {
+            const userAnswer = parseInt(document.getElementById('variable-result').value);
+            let correctAnswer;
+            
+            const vars = variableData.variables;
+            if (variableData.calculation.includes('÷')) {
+                correctAnswer = Math.floor(vars[0].value / vars[1].value);
+            } else if (variableData.calculation.includes('×')) {
+                correctAnswer = vars[0].value * vars[1].value;
+            }
+            
+            const isCorrect = userAnswer === correctAnswer;
+            updateAdaptiveStats(isCorrect);
+            
+            const feedbackEl = document.getElementById('variable-feedback');
+            
+            if (isCorrect) {
+                feedbackEl.textContent = `📦 Perfetto! Il risultato è ${correctAnswer}!`;
+                feedbackEl.className = 'feedback success';
+                
+                updateScore(35);
+                updateStars(4);
+                
+                setTimeout(() => generateVariableChallenge(), 2500);
+            } else {
+                feedbackEl.textContent = `🤔 Prova ancora! Usa i valori nelle variabili per calcolare.`;
+                feedbackEl.className = 'feedback error';
+            }
+        }
+
+        // Optimization Game Functions
+        function generateOptimizationChallenge() {
+            const challenges = [
+                {
+                    title: 'Trova il numero più grande',
+                    question: 'Devi trovare il numero più grande in una lista di 1000 numeri',
+                    slow: [
+                        '1. Confronta il primo con tutti gli altri',
+                        '2. Confronta il secondo con tutti gli altri',
+                        '3. Confronta il terzo con tutti gli altri',
+                        '4. Continua fino alla fine...',
+                        '⏱️ Risultato: 500,000 confronti!'
+                    ],
+                    fast: [
+                        '1. Ricorda il primo numero come "massimo"',
+                        '2. Confronta ogni numero con il "massimo"',
+                        '3. Se è più grande, diventa il nuovo "massimo"',
+                        '4. Continua fino alla fine',
+                        '⚡ Risultato: solo 1000 confronti!'
+                    ]
+                },
+                {
+                    title: 'Cercare una parola nel dizionario',
+                    question: 'Devi trovare una parola in un dizionario di 1000 pagine',
+                    slow: [
+                        '1. Inizia dalla prima pagina',
+                        '2. Leggi tutte le parole della pagina',
+                        '3. Se non la trovi, vai alla pagina successiva',
+                        '4. Continua fino a trovarla...',
+                        '⏱️ Risultato: potrebbero volerci 500 pagine!'
+                    ],
+                    fast: [
+                        '1. Apri il dizionario a metà',
+                        '2. La parola è prima o dopo questa pagina?',
+                        '3. Scegli la metà giusta e ripeti',
+                        '4. Continua a dimezzare...',
+                        '⚡ Risultato: solo 10 tentativi massimo!'
+                    ]
+                },
+                {
+                    title: 'Ordinare i compiti della classe',
+                    question: 'Devi mettere in ordine 30 compiti per voto',
+                    slow: [
+                        '1. Trova il voto più alto tra tutti',
+                        '2. Mettilo da parte',
+                        '3. Trova il voto più alto tra quelli rimasti',
+                        '4. Ripeti fino alla fine...',
+                        '⏱️ Risultato: molti confronti ripetuti!'
+                    ],
+                    fast: [
+                        '1. Dividi i compiti in due gruppi',
+                        '2. Ordina ciascun gruppo separatamente',
+                        '3. Unisci i due gruppi ordinati',
+                        '4. Fatto!',
+                        '⚡ Risultato: molto più veloce!'
+                    ]
+                }
+            ];
+            
+            optimizationData = challenges[Math.floor(Math.random() * challenges.length)];
+            
+            document.getElementById('optimization-title').textContent = optimizationData.title;
+            document.getElementById('optimization-question').textContent = optimizationData.question;
+            
+            const slowEl = document.getElementById('slow-algorithm');
+            slowEl.innerHTML = '';
+            optimizationData.slow.forEach(step => {
+                const stepEl = document.createElement('div');
+                stepEl.textContent = step;
+                stepEl.style.marginBottom = '0.5rem';
+                slowEl.appendChild(stepEl);
+            });
+            
+            const fastEl = document.getElementById('fast-algorithm');
+            fastEl.innerHTML = '';
+            optimizationData.fast.forEach(step => {
+                const stepEl = document.createElement('div');
+                stepEl.textContent = step;
+                stepEl.style.marginBottom = '0.5rem';
+                fastEl.appendChild(stepEl);
+            });
+            
+            document.getElementById('optimization-feedback').textContent = '';
+        }
+
+        function checkOptimizationAnswer(choice) {
+            const isCorrect = choice === 'fast';
+            updateAdaptiveStats(isCorrect);
+            
+            const feedbackEl = document.getElementById('optimization-feedback');
+            
+            if (isCorrect) {
+                feedbackEl.textContent = '🚀 Perfetto! L\'algoritmo veloce è sempre meglio per grandi quantità di dati!';
+                feedbackEl.className = 'feedback success';
+                
+                updateScore(40);
+                updateStars(5);
+                
+                setTimeout(() => generateOptimizationChallenge(), 3000);
+            } else {
+                feedbackEl.textContent = '🤔 Pensa: quale algoritmo funzionerebbe meglio con 1 milione di elementi?';
+                feedbackEl.className = 'feedback error';
+            }
+        }
+
+        // Statistics Game Functions
+        function generateStatisticsChallenge() {
+            const datasets = [
+                {
+                    title: 'Sport Preferiti della Classe',
+                    data: [
+                        { label: 'Calcio', value: Math.floor(Math.random() * 10) + 5 },
+                        { label: 'Basket', value: Math.floor(Math.random() * 8) + 3 },
+                        { label: 'Tennis', value: Math.floor(Math.random() * 6) + 2 },
+                        { label: 'Nuoto', value: Math.floor(Math.random() * 7) + 4 }
+                    ],
+                    questions: [
+                        'Quale sport ha più voti?',
+                        'Quale sport ha meno voti?',
+                        'Quanti voti ha il calcio?'
+                    ]
+                },
+                {
+                    title: 'Animali Preferiti',
+                    data: [
+                        { label: 'Cani', value: Math.floor(Math.random() * 12) + 8 },
+                        { label: 'Gatti', value: Math.floor(Math.random() * 10) + 6 },
+                        { label: 'Pesci', value: Math.floor(Math.random() * 5) + 2 },
+                        { label: 'Uccelli', value: Math.floor(Math.random() * 6) + 3 }
+                    ],
+                    questions: [
+                        'Quale animale è più amato?',
+                        'Quale animale ha meno preferenze?',
+                        'Quanti voti hanno i cani?'
+                    ]
+                },
+                {
+                    title: 'Colori Preferiti',
+                    data: [
+                        { label: 'Blu', value: Math.floor(Math.random() * 9) + 6 },
+                        { label: 'Rosso', value: Math.floor(Math.random() * 8) + 4 },
+                        { label: 'Verde', value: Math.floor(Math.random() * 7) + 5 },
+                        { label: 'Giallo', value: Math.floor(Math.random() * 6) + 3 }
+                    ],
+                    questions: [
+                        'Quale colore piace di più?',
+                        'Quale colore ha meno voti?',
+                        'Quanti voti ha il blu?'
+                    ]
+                }
+            ];
+            
+            statisticsData = datasets[Math.floor(Math.random() * datasets.length)];
+            const questionIndex = Math.floor(Math.random() * statisticsData.questions.length);
+            statisticsData.currentQuestion = statisticsData.questions[questionIndex];
+            
+            document.getElementById('statistics-title').textContent = statisticsData.title;
+            document.getElementById('statistics-question').textContent = statisticsData.currentQuestion;
+            document.getElementById('statistics-input').value = '';
+            document.getElementById('statistics-feedback').textContent = '';
+            
+            generateStatisticsChart();
+        }
+
+        function generateStatisticsChart() {
+            const chartContainer = document.getElementById('statistics-chart');
+            chartContainer.innerHTML = '';
+            
+            const maxValue = Math.max(...statisticsData.data.map(d => d.value));
+            
+            statisticsData.data.forEach(item => {
+                const barDiv = document.createElement('div');
+                barDiv.className = 'chart-bar';
+                
+                const height = (item.value / maxValue) * 200;
+                barDiv.style.height = height + 'px';
+                
+                const valueEl = document.createElement('div');
+                valueEl.className = 'bar-value';
+                valueEl.textContent = item.value;
+                barDiv.appendChild(valueEl);
+                
+                const labelEl = document.createElement('div');
+                labelEl.className = 'bar-label';
+                labelEl.textContent = item.label;
+                barDiv.appendChild(labelEl);
+                
+                chartContainer.appendChild(barDiv);
+            });
+        }
+
+        function checkStatisticsAnswer() {
+            const userAnswer = document.getElementById('statistics-input').value.toLowerCase().trim();
+            let correctAnswer = '';
+            
+            if (statisticsData.currentQuestion.includes('più') || statisticsData.currentQuestion.includes('maggior')) {
+                const max = Math.max(...statisticsData.data.map(d => d.value));
+                correctAnswer = statisticsData.data.find(d => d.value === max).label.toLowerCase();
+            } else if (statisticsData.currentQuestion.includes('meno') || statisticsData.currentQuestion.includes('minor')) {
+                const min = Math.min(...statisticsData.data.map(d => d.value));
+                correctAnswer = statisticsData.data.find(d => d.value === min).label.toLowerCase();
+            } else {
+                // Numeric answer
+                const numericAnswers = statisticsData.data.filter(d => 
+                    statisticsData.currentQuestion.toLowerCase().includes(d.label.toLowerCase()));
+                if (numericAnswers.length > 0) {
+                    correctAnswer = numericAnswers[0].value.toString();
+                }
+            }
+            
+            const isCorrect = userAnswer === correctAnswer || parseInt(userAnswer) === parseInt(correctAnswer);
+            updateAdaptiveStats(isCorrect);
+            
+            const feedbackEl = document.getElementById('statistics-feedback');
+            
+            if (isCorrect) {
+                feedbackEl.textContent = '📊 Perfetto! Sai leggere i grafici!';
+                feedbackEl.className = 'feedback success';
+                
+                updateScore(35);
+                updateStars(4);
+                
+                setTimeout(() => generateStatisticsChallenge(), 2500);
+            } else {
+                feedbackEl.textContent = `🤔 Guarda bene le altezze delle barre! La risposta è: ${correctAnswer}`;
+                feedbackEl.className = 'feedback info';
+            }
+        }
+
+        // Projects Game Functions
+        function generateProjectChallenge() {
+            const projects = [
+                {
+                    name: '🎮 Gioco del Memory',
+                    steps: [
+                        { name: 'Progettazione', icon: '🎨', description: 'Stai progettando l\'interfaccia utente del gioco...' },
+                        { name: 'Contenuti', icon: '📝', description: 'Stai creando le carte e i contenuti del memory...' },
+                        { name: 'Programmazione', icon: '💻', description: 'Stai scrivendo il codice per la logica del gioco...' },
+                        { name: 'Testing', icon: '🧪', description: 'Stai testando il gioco per trovare eventuali bug...' },
+                        { name: 'Pubblicazione', icon: '🚀', description: 'Stai pubblicando il gioco online!' }
+                    ]
+                },
+                {
+                    name: '📱 App per Studiare',
+                    steps: [
+                        { name: 'Ricerca', icon: '🔍', description: 'Stai studiando come fanno gli studenti a imparare meglio...' },
+                        { name: 'Design', icon: '🎨', description: 'Stai disegnando come apparirà l\'app...' },
+                        { name: 'Sviluppo', icon: '⚙️', description: 'Stai programmando tutte le funzioni dell\'app...' },
+                        { name: 'Test Utenti', icon: '👥', description: 'Stai facendo provare l\'app ad altri studenti...' },
+                        { name: 'Lancio', icon: '🎉', description: 'Stai pubblicando l\'app sugli store!' }
+                    ]
+                },
+                {
+                    name: '🌐 Sito della Scuola',
+                    steps: [
+                        { name: 'Pianificazione', icon: '📋', description: 'Stai decidendo che informazioni mettere nel sito...' },
+                        { name: 'Grafica', icon: '🎨', description: 'Stai creando logo, colori e immagini...' },
+                        { name: 'Codifica', icon: '💻', description: 'Stai scrivendo il codice HTML e CSS...' },
+                        { name: 'Contenuti', icon: '📝', description: 'Stai scrivendo tutti i testi e aggiungendo foto...' },
+                        { name: 'Online', icon: '🌐', description: 'Stai mettendo il sito online!' }
+                    ]
+                }
+            ];
+            
+            projectData = projects[Math.floor(Math.random() * projects.length)];
+            projectData.currentStep = 0;
+            
+            document.getElementById('project-name').textContent = projectData.name;
+            document.getElementById('total-steps').textContent = projectData.steps.length;
+            
+            updateProjectDisplay();
+        }
+
+        function updateProjectDisplay() {
+            const progressPercent = ((projectData.currentStep + 1) / projectData.steps.length) * 100;
+            document.getElementById('progress-fill').style.width = progressPercent + '%';
+            document.getElementById('current-step').textContent = projectData.currentStep + 1;
+            
+            // Update current step info
+            const currentStepData = projectData.steps[projectData.currentStep];
+            document.getElementById('current-step-icon').textContent = currentStepData.icon;
+            document.getElementById('current-step-name').textContent = currentStepData.name;
+            document.getElementById('current-step-description').textContent = currentStepData.description;
+            
+            // Update steps list
+            const stepsContainer = document.getElementById('project-steps');
+            stepsContainer.innerHTML = '';
+            
+            projectData.steps.forEach((step, index) => {
+                const stepEl = document.createElement('div');
+                stepEl.className = 'project-step';
+                
+                if (index < projectData.currentStep) {
+                    stepEl.classList.add('step-complete');
+                } else if (index === projectData.currentStep) {
+                    stepEl.classList.add('step-current');
+                } else {
+                    stepEl.classList.add('step-pending');
+                }
+                
+                const icon = index < projectData.currentStep ? '✅' : 
+                            index === projectData.currentStep ? '🚧' : '⏳';
+                
+                stepEl.innerHTML = `
+                    <span style="font-size: 1.5rem;">${icon}</span>
+                    <span style="font-weight: bold;">${index + 1}. ${step.name}</span>
+                `;
+                
+                stepsContainer.appendChild(stepEl);
+            });
+        }
+
+        function advanceProjectStep() {
+            if (projectData.currentStep < projectData.steps.length - 1) {
+                projectData.currentStep++;
+                updateProjectDisplay();
+                
+                const feedbackEl = document.getElementById('project-feedback');
+                feedbackEl.textContent = `⚡ Step completato! Ora lavori su: ${projectData.steps[projectData.currentStep].name}`;
+                feedbackEl.className = 'feedback success';
+                
+                updateScore(25);
+                updateStars(3);
+                
+                setTimeout(() => {
+                    feedbackEl.textContent = '';
+                }, 2000);
+            } else {
+                const feedbackEl = document.getElementById('project-feedback');
+                feedbackEl.textContent = '🎉 Progetto completato! Sei un vero sviluppatore!';
+                feedbackEl.className = 'feedback success';
+                
+                updateScore(50);
+                updateStars(5);
+                
+                setTimeout(() => generateProjectChallenge(), 3000);
+            }
+        }
+
+        // Collaboration Game Functions
+        function generateCollaborationChallenge() {
+            const projects = [
+                {
+                    name: '🌐 Sito Web della Scuola',
+                    roles: [
+                        { name: 'Designer', icon: '🎨', description: 'Stai creando mockup e interfacce belle da vedere...' },
+                        { name: 'Programmatore', icon: '💻', description: 'Stai scrivendo il codice e implementando le funzioni...' },
+                        { name: 'Tester', icon: '🧪', description: 'Stai cercando bug e testando tutte le funzionalità...' },
+                        { name: 'Content Writer', icon: '📝', description: 'Stai scrivendo i testi e preparando i contenuti...' }
+                    ],
+                    messages: [
+                        'Designer: "Ho finito i mockup della homepage! 🎨"',
+                        'Programmatore: "Perfetto! Inizio a programmare subito 💻"',
+                        'Tester: "Tutto funziona bene, ottimo lavoro team! 🧪"',
+                        'Content Writer: "I testi sono pronti per la pubblicazione 📝"'
+                    ]
+                },
+                {
+                    name: '🎮 Videogioco Educativo',
+                    roles: [
+                        { name: 'Game Designer', icon: '🎯', description: 'Stai progettando i livelli e le meccaniche di gioco...' },
+                        { name: 'Artista', icon: '🎨', description: 'Stai disegnando personaggi e ambientazioni...' },
+                        { name: 'Programmatore', icon: '⚙️', description: 'Stai programmando il motore di gioco...' },
+                        { name: 'Sound Designer', icon: '🎵', description: 'Stai creando musiche e effetti sonori...' }
+                    ],
+                    messages: [
+                        'Game Designer: "Il gameplay è bilanciato perfettamente! 🎯"',
+                        'Artista: "I personaggi sono pronti e coloratissimi! 🎨"',
+                        'Programmatore: "Il codice gira senza bug! ⚙️"',
+                        'Sound Designer: "La colonna sonora è epica! 🎵"'
+                    ]
+                },
+                {
+                    name: '📱 App per la Sostenibilità',
+                    roles: [
+                        { name: 'UX Designer', icon: '📐', description: 'Stai progettando l\'esperienza utente dell\'app...' },
+                        { name: 'Developer', icon: '📱', description: 'Stai sviluppando l\'app per smartphone...' },
+                        { name: 'Data Scientist', icon: '📊', description: 'Stai analizzando i dati ambientali...' },
+                        { name: 'Marketing', icon: '📢', description: 'Stai promuovendo l\'app per sensibilizzare le persone...' }
+                    ],
+                    messages: [
+                        'UX Designer: "L\'interfaccia è intuitiva e user-friendly! 📐"',
+                        'Developer: "L\'app è veloce e stabile! 📱"',
+                        'Data Scientist: "I dati mostrano un grande impatto positivo! 📊"',
+                        'Marketing: "La campagna sta avendo successo! 📢"'
+                    ]
+                }
+            ];
+            
+            collaborationData = projects[Math.floor(Math.random() * projects.length)];
+            collaborationData.currentRole = 0;
+            
+            document.getElementById('collaboration-project').textContent = collaborationData.name;
+            
+            updateCollaborationDisplay();
+        }
+
+        function updateCollaborationDisplay() {
+            // Update team roles
+            const rolesContainer = document.getElementById('team-roles');
+            rolesContainer.innerHTML = '';
+            
+            collaborationData.roles.forEach((role, index) => {
+                const roleEl = document.createElement('div');
+                roleEl.className = 'team-role';
+                
+                if (index < collaborationData.currentRole) {
+                    roleEl.classList.add('role-complete');
+                } else if (index === collaborationData.currentRole) {
+                    roleEl.classList.add('role-active');
+                } else {
+                    roleEl.classList.add('role-pending');
+                }
+                
+                const status = index < collaborationData.currentRole ? '✅ Completato' : 
+                              index === collaborationData.currentRole ? '🚧 In corso' : '⏳ In attesa';
+                
+                roleEl.innerHTML = `
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">${role.icon}</div>
+                    <div style="font-weight: bold; margin-bottom: 0.5rem;">${role.name}</div>
+                    <div style="font-size: 0.9rem;">${status}</div>
+                `;
+                
+                rolesContainer.appendChild(roleEl);
+            });
+            
+            // Update current role info
+            const currentRoleData = collaborationData.roles[collaborationData.currentRole];
+            document.getElementById('current-role-icon').textContent = currentRoleData.icon;
+            document.getElementById('current-role-name').textContent = currentRoleData.name;
+            document.getElementById('current-role-description').textContent = currentRoleData.description;
+            
+            // Update chat messages
+            const chatContainer = document.getElementById('chat-messages');
+            chatContainer.innerHTML = '';
+            
+            for (let i = 0; i <= collaborationData.currentRole && i < collaborationData.messages.length; i++) {
+                const messageEl = document.createElement('div');
+                messageEl.className = 'chat-message';
+                messageEl.textContent = collaborationData.messages[i];
+                chatContainer.appendChild(messageEl);
+            }
+        }
+
+        function advanceCollaborationStep() {
+            if (collaborationData.currentRole < collaborationData.roles.length - 1) {
+                collaborationData.currentRole++;
+                updateCollaborationDisplay();
+                
+                const feedbackEl = document.getElementById('collaboration-feedback');
+                feedbackEl.textContent = `🤝 Ottimo lavoro! Ora collabori come: ${collaborationData.roles[collaborationData.currentRole].name}`;
+                feedbackEl.className = 'feedback success';
+                
+                updateScore(30);
+                updateStars(4);
+                
+                setTimeout(() => {
+                    feedbackEl.textContent = '';
+                }, 2000);
+            } else {
+                const feedbackEl = document.getElementById('collaboration-feedback');
+                feedbackEl.textContent = '🎉 Progetto di squadra completato! Siete un team fantastico!';
+                feedbackEl.className = 'feedback success';
+                
+                updateScore(60);
+                updateStars(6);
+                
+                setTimeout(() => generateCollaborationChallenge(), 3000);
+            }
+        }
+
         // Progress and Stats Functions
         function updateScore(points) {
             score += points;
@@ -124,6 +786,12 @@
                     checkCountingAnswer();
                 } else if (currentGame === 'tabelline-complete') {
                     checkTabellinesAnswer();
+                } else if (currentGame === 'frazioni-visual') {
+                    checkFractionAnswer();
+                } else if (currentGame === 'variabili-semplici') {
+                    checkVariableAnswer();
+                } else if (currentGame === 'statistica-base') {
+                    checkStatisticsAnswer();
                 }
             }
         });
@@ -725,11 +1393,192 @@
             align-items: center;
         }
 
-        .command-buttons {
+        /* Fraction Game Styles */
+        .fraction-visual {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .fraction-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid #D97706;
+            position: relative;
+            overflow: hidden;
+            background: #FEF3C7;
+        }
+        
+        .fraction-slice {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: 100% 100%;
+            background: #F59E0B;
+        }
+
+        /* Variable Game Styles */
+        .variable-containers {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .variable-container {
+            background: #EFF6FF;
+            border: 4px solid #3B82F6;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .variable-input {
+            font-size: 2rem;
+            text-align: center;
+            border: 3px solid #3B82F6;
+            border-radius: 1rem;
+            padding: 0.75rem;
+            width: 120px;
+            margin-top: 1rem;
+        }
+
+        /* Statistics Game Styles */
+        .chart-container {
+            background: white;
+            border: 4px solid #8B5CF6;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin: 2rem 0;
+            height: 300px;
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .chart-bar {
+            background: #8B5CF6;
+            border-radius: 0.5rem;
+            min-width: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .bar-value {
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .bar-label {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-align: center;
+            color: #374151;
+        }
+
+        /* Project Game Styles */
+        .project-progress {
+            background: #F3F4F6;
+            border-radius: 1rem;
+            height: 20px;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #F59E0B 0%, #D97706 100%);
+            height: 100%;
+            transition: width 0.5s ease;
+            border-radius: 1rem;
+        }
+        
+        .project-steps {
+            display: grid;
             gap: 1rem;
             margin: 2rem 0;
+        }
+        
+        .project-step {
+            padding: 1rem;
+            border-radius: 1rem;
+            border: 3px solid;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .step-complete {
+            background: #D1FAE5;
+            border-color: #10B981;
+        }
+        
+        .step-current {
+            background: #FEF3C7;
+            border-color: #F59E0B;
+            transform: scale(1.05);
+        }
+        
+        .step-pending {
+            background: #F3F4F6;
+            border-color: #D1D5DB;
+        }
+
+        /* Collaboration Game Styles */
+        .team-roles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .team-role {
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 3px solid;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .role-active {
+            background: #FEF3C7;
+            border-color: #F59E0B;
+            transform: scale(1.05);
+        }
+        
+        .role-complete {
+            background: #D1FAE5;
+            border-color: #10B981;
+        }
+        
+        .role-pending {
+            background: #F3F4F6;
+            border-color: #D1D5DB;
+        }
+
+        .chat-simulation {
+            background: #F0F9FF;
+            border: 3px solid #0284C7;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .chat-message {
+            background: white;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-left: 4px solid #0284C7;
         }
 
         /* Footer */
@@ -784,6 +1633,260 @@
                     <button class="nav-btn reset-btn" onclick="resetProgress()">🔄 Reset</button>
                 </div>
 
+        <!-- NEW GAMES - FASE 3 (Classi 4ª e 5ª) -->
+
+        <!-- Fractions Game -->
+        <div id="fractions-game" class="game-screen">
+            <div class="game-header">
+                <div class="game-header-content">
+                    <button class="nav-btn" onclick="closeGame()">← Indietro</button>
+                    <div class="game-title">🍕 Frazioni Interattive</div>
+                    <div class="stats-bar">
+                        <div class="stat-item stat-stars">⭐ <span id="fractions-stars">0</span></div>
+                        <div class="stat-item stat-score">🏆 <span id="fractions-score">0</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="game-content">
+                <div class="game-area">
+                    <h3 style="font-size: 2rem; margin-bottom: 2rem;">🍕 Visualizza le Frazioni!</h3>
+                    <p id="fraction-question" style="font-size: 1.5rem; margin-bottom: 2rem;">Quante parti sono colorate?</p>
+                    <div id="fraction-visual" class="fraction-visual">
+                        <!-- Pizza circles will be generated here -->
+                    </div>
+                    <div style="font-size: 1.3rem; margin: 2rem 0;">
+                        Frazione: <span id="fraction-display">?</span> / <span id="fraction-total">?</span>
+                    </div>
+                    <div class="input-area">
+                        <input type="number" id="fraction-input" class="game-input" placeholder="?" min="0">
+                        <button class="game-btn" onclick="checkFractionAnswer()">✅ Controlla</button>
+                        <button class="game-btn secondary" onclick="generateFractionChallenge()">🔄 Nuova Frazione</button>
+                    </div>
+                    <div id="fraction-feedback" class="feedback"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variables Game -->
+        <div id="variables-game" class="game-screen">
+            <div class="game-header">
+                <div class="game-header-content">
+                    <button class="nav-btn" onclick="closeGame()">← Indietro</button>
+                    <div class="game-title">📦 Le Mie Prime Variabili</div>
+                    <div class="stats-bar">
+                        <div class="stat-item stat-stars">⭐ <span id="variables-stars">0</span></div>
+                        <div class="stat-item stat-score">🏆 <span id="variables-score">0</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="game-content">
+                <div class="game-area">
+                    <h3 id="variable-scenario" style="font-size: 2rem; margin-bottom: 1rem;">🎪 Al Luna Park</h3>
+                    <p id="variable-description" style="font-size: 1.3rem; margin-bottom: 2rem;">Calcola quanti biglietti puoi comprare!</p>
+                    <div id="variable-containers" class="variable-containers">
+                        <!-- Variable containers will be generated here -->
+                    </div>
+                    <div style="background: #F0F9FF; padding: 2rem; border-radius: 1rem; margin: 2rem 0;">
+                        <h4 style="font-size: 1.5rem; margin-bottom: 1rem;">🧮 Calcolo:</h4>
+                        <div id="variable-calculation" style="font-size: 1.3rem; margin-bottom: 1rem;">
+                            soldi ÷ prezzo_biglietto = ?
+                        </div>
+                        <input type="number" id="variable-result" class="game-input" placeholder="Risultato" style="width: 150px;">
+                    </div>
+                    <div style="margin: 1rem 0;">
+                        <button class="game-btn" onclick="checkVariableAnswer()">🧮 Calcola!</button>
+                        <button class="game-btn secondary" onclick="generateVariableChallenge()">🔄 Nuovo Scenario</button>
+                    </div>
+                    <div id="variable-feedback" class="feedback"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Optimization Game -->
+        <div id="optimization-game" class="game-screen">
+            <div class="game-header">
+                <div class="game-header-content">
+                    <button class="nav-btn" onclick="closeGame()">← Indietro</button>
+                    <div class="game-title">🏃‍♂️ Algoritmi Veloci</div>
+                    <div class="stats-bar">
+                        <div class="stat-item stat-stars">⭐ <span id="optimization-stars">0</span></div>
+                        <div class="stat-item stat-score">🏆 <span id="optimization-score">0</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="game-content">
+                <div class="game-area">
+                    <h3 id="optimization-title" style="font-size: 2rem; margin-bottom: 1rem;">Quale algoritmo è più veloce?</h3>
+                    <p id="optimization-question" style="font-size: 1.3rem; margin-bottom: 2rem;">Confronta due modi diversi di risolvere lo stesso problema</p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+                        <div style="background: #FEE2E2; border: 4px solid #EF4444; border-radius: 1.5rem; padding: 2rem;">
+                            <h4 style="color: #DC2626; font-size: 1.5rem; margin-bottom: 1rem; text-align: center;">🐌 Algoritmo Lento</h4>
+                            <div id="slow-algorithm" style="font-size: 1rem; line-height: 1.6;">
+                                <!-- Slow algorithm steps -->
+                            </div>
+                            <div style="margin-top: 1rem; color: #DC2626; font-weight: bold; text-align: center;">
+                                ⏱️ Tempo: Molto lento
+                            </div>
+                        </div>
+                        
+                        <div style="background: #D1FAE5; border: 4px solid #10B981; border-radius: 1.5rem; padding: 2rem;">
+                            <h4 style="color: #059669; font-size: 1.5rem; margin-bottom: 1rem; text-align: center;">🚀 Algoritmo Veloce</h4>
+                            <div id="fast-algorithm" style="font-size: 1rem; line-height: 1.6;">
+                                <!-- Fast algorithm steps -->
+                            </div>
+                            <div style="margin-top: 1rem; color: #059669; font-weight: bold; text-align: center;">
+                                ⚡ Tempo: Molto veloce
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 style="font-size: 1.5rem; margin: 2rem 0;">Quale algoritmo sceglieresti?</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <button class="game-btn red" onclick="checkOptimizationAnswer('slow')" style="font-size: 1.2rem; padding: 1.5rem;">
+                            🐌 Algoritmo Lento
+                        </button>
+                        <button class="game-btn" onclick="checkOptimizationAnswer('fast')" style="font-size: 1.2rem; padding: 1.5rem;">
+                            🚀 Algoritmo Veloce
+                        </button>
+                    </div>
+                    
+                    <button class="game-btn secondary" onclick="generateOptimizationChallenge()" style="margin-top: 1rem;">🔄 Nuova Sfida</button>
+                    <div id="optimization-feedback" class="feedback"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Game -->
+        <div id="statistics-game" class="game-screen">
+            <div class="game-header">
+                <div class="game-header-content">
+                    <button class="nav-btn" onclick="closeGame()">← Indietro</button>
+                    <div class="game-title">📊 I Miei Primi Grafici</div>
+                    <div class="stats-bar">
+                        <div class="stat-item stat-stars">⭐ <span id="statistics-stars">0</span></div>
+                        <div class="stat-item stat-score">🏆 <span id="statistics-score">0</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="game-content">
+                <div class="game-area">
+                    <h3 id="statistics-title" style="font-size: 2rem; margin-bottom: 1rem;">📊 Analizza i Dati!</h3>
+                    <p style="font-size: 1.3rem; margin-bottom: 2rem;">Studia il grafico a barre e rispondi alla domanda</p>
+                    
+                    <div id="statistics-chart" class="chart-container">
+                        <!-- Chart bars will be generated here -->
+                    </div>
+                    
+                    <div style="background: #F0F9FF; padding: 2rem; border-radius: 1rem; margin: 2rem 0;">
+                        <h4 style="font-size: 1.5rem; margin-bottom: 1rem;">❓ Domanda:</h4>
+                        <p id="statistics-question" style="font-size: 1.3rem; margin-bottom: 1rem;">
+                            Quale categoria ha più voti?
+                        </p>
+                        <input type="text" id="statistics-input" style="font-size: 1.5rem; padding: 1rem; border: 3px solid #3B82F6; border-radius: 1rem; text-align: center; width: 200px;" placeholder="Risposta...">
+                    </div>
+                    
+                    <div style="margin: 1rem 0;">
+                        <button class="game-btn" onclick="checkStatisticsAnswer()">📊 Analizza!</button>
+                        <button class="game-btn secondary" onclick="generateStatisticsChallenge()">🔄 Nuovi Dati</button>
+                    </div>
+                    <div id="statistics-feedback" class="feedback"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Game -->
+        <div id="projects-game" class="game-screen">
+            <div class="game-header">
+                <div class="game-header-content">
+                    <button class="nav-btn" onclick="closeGame()">← Indietro</button>
+                    <div class="game-title">🎮 Crea il Tuo Gioco</div>
+                    <div class="stats-bar">
+                        <div class="stat-item stat-stars">⭐ <span id="projects-stars">0</span></div>
+                        <div class="stat-item stat-score">🏆 <span id="projects-score">0</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="game-content">
+                <div class="game-area">
+                    <h3 id="project-name" style="font-size: 2rem; margin-bottom: 1rem;">🎮 Gioco del Memory</h3>
+                    <p style="font-size: 1.3rem; margin-bottom: 2rem;">Sviluppa un progetto software step-by-step!</p>
+                    
+                    <div style="background: #F3F4F6; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0;">
+                        <h4 style="font-size: 1.3rem; margin-bottom: 1rem;">📈 Progresso Progetto:</h4>
+                        <div id="project-progress" class="project-progress">
+                            <div id="progress-fill" class="progress-fill" style="width: 20%;"></div>
+                        </div>
+                        <div style="text-align: center; margin-top: 0.5rem; font-size: 1.1rem; font-weight: bold;">
+                            Step <span id="current-step">1</span> di <span id="total-steps">5</span>
+                        </div>
+                    </div>
+                    
+                    <div id="project-steps" class="project-steps">
+                        <!-- Project steps will be generated here -->
+                    </div>
+                    
+                    <div style="background: #FEF3C7; padding: 2rem; border-radius: 1rem; margin: 2rem 0;">
+                        <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem;" id="current-step-icon">🎨</div>
+                        <h4 style="font-size: 1.5rem; text-align: center; margin-bottom: 1rem;" id="current-step-name">Progettazione</h4>
+                        <p style="font-size: 1.1rem; text-align: center;" id="current-step-description">Stai progettando l'interfaccia utente del gioco...</p>
+                    </div>
+                    
+                    <div style="margin: 1rem 0;">
+                        <button class="game-btn" onclick="advanceProjectStep()">⚡ Completa Step</button>
+                        <button class="game-btn secondary" onclick="generateProjectChallenge()">🔄 Nuovo Progetto</button>
+                    </div>
+                    <div id="project-feedback" class="feedback"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collaboration Game -->
+        <div id="collaboration-game" class="game-screen">
+            <div class="game-header">
+                <div class="game-header-content">
+                    <button class="nav-btn" onclick="closeGame()">← Indietro</button>
+                    <div class="game-title">🤝 Coding di Squadra</div>
+                    <div class="stats-bar">
+                        <div class="stat-item stat-stars">⭐ <span id="collaboration-stars">0</span></div>
+                        <div class="stat-item stat-score">🏆 <span id="collaboration-score">0</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="game-content">
+                <div class="game-area">
+                    <h3 id="collaboration-project" style="font-size: 2rem; margin-bottom: 1rem;">🌐 Sito Web della Scuola</h3>
+                    <p style="font-size: 1.3rem; margin-bottom: 2rem;">Collabora con il team per completare il progetto!</p>
+                    
+                    <div id="team-roles" class="team-roles">
+                        <!-- Team roles will be generated here -->
+                    </div>
+                    
+                    <div style="background: #F0F9FF; padding: 2rem; border-radius: 1rem; margin: 2rem 0;">
+                        <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem;" id="current-role-icon">🎨</div>
+                        <h4 style="font-size: 1.5rem; text-align: center; margin-bottom: 1rem;">
+                            Tu stai lavorando come: <span id="current-role-name">Designer</span>
+                        </h4>
+                        <p style="font-size: 1.1rem; text-align: center; margin-bottom: 1rem;" id="current-role-description">
+                            Stai creando mockup e interfacce belle da vedere...
+                        </p>
+                    </div>
+                    
+                    <div id="team-chat" class="chat-simulation">
+                        <h4 style="font-size: 1.2rem; margin-bottom: 1rem; color: #0284C7;">💬 Chat del Team:</h4>
+                        <div id="chat-messages">
+                            <!-- Chat messages will be generated here -->
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 1rem 0;">
+                        <button class="game-btn" onclick="advanceCollaborationStep()">🤝 Passa al Prossimo Ruolo</button>
+                        <button class="game-btn secondary" onclick="generateCollaborationChallenge()">🔄 Nuovo Team Project</button>
+                    </div>
+                    <div id="collaboration-feedback" class="feedback"></div>
+                </div>
+            </div>
+
                 <div class="classes-grid">
                     <div class="class-card" onclick="selectClass(1)">
                         <div class="card-emoji">🌱</div>
@@ -830,7 +1933,7 @@
                             <span class="badge coding">Variabili</span>
                             <span class="badge thinking">Ottimizzazione</span>
                         </div>
-                        <div style="color: #F59E0B; font-weight: bold;">🔧 In sviluppo (Fase 3)</div>
+                        <div style="color: #059669; font-weight: bold;">✅ 3 Giochi attivi</div>
                     </div>
 
                     <div class="class-card" onclick="selectClass(5)">
@@ -842,7 +1945,7 @@
                             <span class="badge coding">Progetti</span>
                             <span class="badge thinking">Collaborazione</span>
                         </div>
-                        <div style="color: #F59E0B; font-weight: bold;">🔧 In sviluppo (Fase 3)</div>
+                        <div style="color: #059669; font-weight: bold;">✅ 3 Giochi attivi</div>
                     </div>
                 </div>
 
@@ -1258,6 +2361,12 @@
         let tabellinesData = {};
         let algorithmData = {};
         let debugData = {};
+        let fractionData = {};
+        let variableData = {};
+        let optimizationData = {};
+        let statisticsData = {};
+        let projectData = {};
+        let collaborationData = {};
 
         // Classes Data - UPDATED FOR FASE 2
         const classesData = {
@@ -1509,13 +2618,13 @@
                 age: "9-10 anni",
                 games: {
                     matematica: [
-                        { id: 'frazioni-visual', name: '🍕 Frazioni Interattive', description: 'Visualizza e opera con le frazioni', active: false }
+                        { id: 'frazioni-visual', name: '🍕 Frazioni Interattive', description: 'Visualizza e opera con le frazioni', active: true }
                     ],
                     coding: [
-                        { id: 'variabili-semplici', name: '📦 Le Mie Prime Variabili', description: 'Contenitori per i dati', active: false }
+                        { id: 'variabili-semplici', name: '📦 Le Mie Prime Variabili', description: 'Contenitori per i dati', active: true }
                     ],
                     pensiero: [
-                        { id: 'ottimizzazione', name: '🏃‍♂️ Algoritmi Veloci', description: 'Come rendere il codice più efficiente', active: false }
+                        { id: 'ottimizzazione', name: '🏃‍♂️ Algoritmi Veloci', description: 'Come rendere il codice più efficiente', active: true }
                     ]
                 }
             },
@@ -1526,13 +2635,13 @@
                 age: "10-11 anni",
                 games: {
                     matematica: [
-                        { id: 'statistica-base', name: '📊 I Miei Primi Grafici', description: 'Raccogli e analizza dati', active: false }
+                        { id: 'statistica-base', name: '📊 I Miei Primi Grafici', description: 'Raccogli e analizza dati', active: true }
                     ],
                     coding: [
-                        { id: 'progetti-completi', name: '🎮 Crea il Tuo Gioco', description: 'Progetti completi con interfaccia', active: false }
+                        { id: 'progetti-completi', name: '🎮 Crea il Tuo Gioco', description: 'Progetti completi con interfaccia', active: true }
                     ],
                     pensiero: [
-                        { id: 'collaborazione-digitale', name: '🤝 Coding di Squadra', description: 'Progetti collaborativi online', active: false }
+                        { id: 'collaborazione-digitale', name: '🤝 Coding di Squadra', description: 'Progetti collaborativi online', active: true }
                     ]
                 }
             }
@@ -1688,8 +2797,33 @@
                     document.getElementById('debug-advanced-game').style.display = 'flex';
                     generateDebugChallenge();
                     break;
+                // NEW GAMES - FASE 3
+                case 'frazioni-visual':
+                    document.getElementById('fractions-game').style.display = 'flex';
+                    generateFractionChallenge();
+                    break;
+                case 'variabili-semplici':
+                    document.getElementById('variables-game').style.display = 'flex';
+                    generateVariableChallenge();
+                    break;
+                case 'ottimizzazione':
+                    document.getElementById('optimization-game').style.display = 'flex';
+                    generateOptimizationChallenge();
+                    break;
+                case 'statistica-base':
+                    document.getElementById('statistics-game').style.display = 'flex';
+                    generateStatisticsChallenge();
+                    break;
+                case 'progetti-completi':
+                    document.getElementById('projects-game').style.display = 'flex';
+                    generateProjectChallenge();
+                    break;
+                case 'collaborazione-digitale':
+                    document.getElementById('collaboration-game').style.display = 'flex';
+                    generateCollaborationChallenge();
+                    break;
                 default:
-                    alert('Gioco in sviluppo - disponibile nella Fase 3!');
+                    alert('Gioco in sviluppo - sarà disponibile presto!');
                     showCategoryView();
             }
             
