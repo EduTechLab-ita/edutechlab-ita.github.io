@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTech Lab - Pensiero Computazionale</title>
+    <meta name="description" content="Piattaforma di Pensiero Computazionale per la Scuola Primaria">
+    <meta name="theme-color" content="#3B82F6">
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #DBEAFE 0%, #D1FAE5 100%);
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            color: #2563EB;
+            margin-bottom: 1rem;
+        }
+        
+        .header h2 {
+            font-size: 1.5rem;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            color: #6B7280;
+            font-size: 1.1rem;
+        }
+        
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .stat-stars { background: #FEF3C7; color: #92400E; }
+        .stat-score { background: #D1FAE5; color: #065F46; }
+        .stat-level { background: #E0E7FF; color: #3730A3; }
+        
+        /* Navigation Buttons */
+        .nav-btn {
+            background: #F3F4F6;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-btn:hover {
+            background: #E5E7EB;
+            transform: translateY(-1px);
+        }
+        
+        .reset-btn {
+            background: #FEE2E2;
+            color: #DC2626;
+        }
+        
+        .reset-btn:hover {
+            background: #FEF2F2;
+        }
+        
+        /* Grid Layouts */
+        .classes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        /* Cards */
+        .class-card, .category-card, .game-card {
+            background: linear-gradient(135deg, white 0%, #F9FAFB 100%);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #E5E7EB;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            position: relative;
+        }
+        
+        .class-card:hover, .category-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .game-card.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .game-card.disabled:hover {
+            transform: none;
+        }
+        
+        .card-emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1F2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-description {
+            color: #6B7280;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .badge {
+            background: #EFF6FF;
+            color: #1E40AF;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .badge.math { background: #EFF6FF; color: #1E40AF; }
+        .badge.coding { background: #ECFDF5; color: #059669; }
+        .badge.thinking { background: #FAF5FF; color: #7C3AED; }
+        
+        /* Game Screen */
+        .game-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #DBEAFE 0%, #D1FAE5 100%);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+        }
+        
+        .game-header {
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .game-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .game-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2563EB;
+        }
+        
+        .game-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .game-area {
+            background: white;
+            border-radius: 2rem;
+            padding: 3rem;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .question {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #1F2937;
+            margin-bottom: 2rem;
+        }
+        
+        .visual-objects {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            min-height: 200px;
+        }
+        
+        .visual-object {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            transition: transform 0.2s;
+        }
+        
+        .visual-object:hover {
+            transform: scale(1.1);
+        }
+        
+        .input-area {
+            margin: 2rem 0;
+        }
+        
+        .game-input {
+            font-size: 3rem;
+            text-align: center;
+            border: 4px solid #3B82F6;
+            border-radius: 1rem;
+            padding: 1rem;
+            width: 200px;
+            margin-right: 1rem;
+        }
+        
+        .game-btn {
+            background: #10B981;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 0.5rem;
+        }
+        
+        .game-btn:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .game-btn.secondary {
+            background: #3B82F6;
+        }
+        
+        .game-btn.secondary:hover {
+            background: #2563EB;
+        }
+        
+        .feedback {
+            font-size: 2rem;
+            font-weight: bold;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            margin: 1rem 0;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .feedback.success {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+        
+        .feedback.error {
+            background: #FEE2E2;
+            color: #DC2626;
+        }
+        
+        .feedback.info {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+        
+        /* Pattern Game */
+        .pattern-sequence {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .pattern-item {
+            font-size: 4rem;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #F3F4F6;
+            border: 4px solid #D1D5DB;
+            border-radius: 1rem;
+        }
+        
+        .pattern-item.missing {
+            border-style: dashed;
+            background: #FEF3C7;
+        }
+        
+        .pattern-options {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .pattern-option {
+            font-size: 4rem;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 4px solid #D1D5DB;
+            border-radius: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .pattern-option:hover {
+            border-color: #3B82F6;
+            transform: scale(1.1);
+        }
+        
+        .pattern-option.selected {
+            border-color: #10B981;
+            background: #D1FAE5;
+        }
+        
+        /* Sequence Game */
+        .sequence-area {
+            background: #F3F4F6;
+            border: 4px solid #D1D5DB;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem 0;
+            min-height: 120px;
+        }
+        
+        .sequence-items {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .sequence-item {
+            background: #EFF6FF;
+            border: 2px solid #3B82F6;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .sequence-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .sequence-option {
+            background: #FEF3C7;
+            border: 3px solid #F59E0B;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .sequence-option:hover {
+            background: #FED7AA;
+            transform: translateY(-2px);
+        }
+        
+        /* Footer */
+        .footer {
+            background: #1F2937;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            border-radius: 1rem;
+        }
+        
+        .footer h3 {
+            color: #60A5FA;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .question { font-size: 2.5rem; }
+            .game-input { font-size: 2rem; width: 150px; }
+            .game-area { padding: 2rem; }
+            .pattern-item, .pattern-option { font-size: 2.5rem; width: 80px; height: 80px; }
+            .stats-bar { flex-direction: column; align-items: center; }
+            .game-header-content { justify-content: center; text-align: center; }
+        }
+        
+        /* Hidden class */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- HOMEPAGE -->
+        <div id="homepage" class="view">
+            <div class="container">
+                <header class="header">
+                    <h1>🎓 EduTech Lab</h1>
+                    <h2>Pensiero Computazionale per la Scuola Primaria</h2>
+                    <p>Scegli la tua classe e inizia il viaggio nel mondo del coding!</p>
+                </header>
+
+                <!-- Stats Bar (visible when there are points) -->
+                <div id="stats-bar" class="stats-bar" style="display: none;">
+                    <div class="stat-item stat-stars">⭐ <span id="stars-count">0</span> stelle</div>
+                    <div class="stat-item stat-score">🏆 <span id="score-count">0</span> punti</div>
+                    <div class="stat-item stat-level">🧠 Livello <span id="level-count">1</span></div>
+                    <button class="nav-btn reset-btn" onclick="resetProgress()">🔄 Reset</button>
+                </div>
+
+                <div class="classes-grid">
+                    <div class="class-card" onclick="selectClass(1)">
+                        <div class="card-emoji">🌱</div>
+                        <h3 class="card-title">Classe 1ª</h3>
+                        <p class="card-description">I primi passi nel mondo digitale (6-7 anni)</p>
+                        <div class="card-badges">
+                            <span class="badge math">Conteggio</span>
+                            <span class="badge coding">Robot</span>
+                            <span class="badge thinking">Pattern</span>
+                        </div>
+                        <div style="color: #059669; font-weight: bold;">✅ 4 Giochi attivi</div>
+                    </div>
+
+                    <div class="class-card" onclick="selectClass(2)">
+                        <div class="card-emoji">🌿</div>
+                        <h3 class="card-title">Classe 2ª</h3>
+                        <p class="card-description">Piccoli programmatori crescono (7-8 anni)</p>
+                        <div class="card-badges">
+                            <span class="badge math">Tabelline</span>
+                            <span class="badge coding">Loop</span>
+                            <span class="badge thinking">Se-Allora</span>
+                        </div>
+                        <div style="color: #059669; font-weight: bold;">✅ 3 Giochi attivi</div>
+                    </div>
+
+                    <div class="class-card" onclick="selectClass(3)">
+                        <div class="card-emoji">🌳</div>
+                        <h3 class="card-title">Classe 3ª</h3>
+                        <p class="card-description">Logica in azione (8-9 anni)</p>
+                        <div class="card-badges">
+                            <span class="badge math">Tabelline</span>
+                            <span class="badge coding">Algoritmi</span>
+                            <span class="badge thinking">Debug</span>
+                        </div>
+                        <div style="color: #F59E0B; font-weight: bold;">🔧 In sviluppo (Fase 2)</div>
+                    </div>
+
+                    <div class="class-card" onclick="selectClass(4)">
+                        <div class="card-emoji">🌲</div>
+                        <h3 class="card-title">Classe 4ª</h3>
+                        <p class="card-description">Algoritmi avanzati (9-10 anni)</p>
+                        <div class="card-badges">
+                            <span class="badge math">Frazioni</span>
+                            <span class="badge coding">Variabili</span>
+                            <span class="badge thinking">Ottimizzazione</span>
+                        </div>
+                        <div style="color: #F59E0B; font-weight: bold;">🔧 In sviluppo (Fase 3)</div>
+                    </div>
+
+                    <div class="class-card" onclick="selectClass(5)">
+                        <div class="card-emoji">🌺</div>
+                        <h3 class="card-title">Classe 5ª</h3>
+                        <p class="card-description">Programmatori junior (10-11 anni)</p>
+                        <div class="card-badges">
+                            <span class="badge math">Statistiche</span>
+                            <span class="badge coding">Progetti</span>
+                            <span class="badge thinking">Collaborazione</span>
+                        </div>
+                        <div style="color: #F59E0B; font-weight: bold;">🔧 In sviluppo (Fase 3)</div>
+                    </div>
+                </div>
+
+                <!-- Info Project -->
+                <div style="background: linear-gradient(135deg, white 0%, #EFF6FF 100%); border-radius: 2rem; padding: 3rem; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <h3 style="font-size: 2rem; color: #1F2937; margin-bottom: 1rem;">🚀 EduTech Lab Platform</h3>
+                        <p style="color: #6B7280; max-width: 600px; margin: 0 auto;">
+                            Piattaforma integrata per lo sviluppo del pensiero computazionale nella scuola primaria.
+                        </p>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; text-align: center;">
+                        <div>
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); border-radius: 1rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 2rem;">🧮</div>
+                            <h4 style="color: #2563EB; font-size: 1.2rem; margin-bottom: 0.5rem;">Matematica</h4>
+                            <p style="color: #6B7280; font-size: 0.9rem;">Conteggio, operazioni e problem solving</p>
+                        </div>
+                        <div>
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #10B981 0%, #059669 100%); border-radius: 1rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 2rem;">💻</div>
+                            <h4 style="color: #059669; font-size: 1.2rem; margin-bottom: 0.5rem;">Coding</h4>
+                            <p style="color: #6B7280; font-size: 0.9rem;">Algoritmi, sequenze e robotica educativa</p>
+                        </div>
+                        <div>
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%); border-radius: 1rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 2rem;">🧠</div>
+                            <h4 style="color: #7C3AED; font-size: 1.2rem; margin-bottom: 0.5rem;">Pensiero Computazionale</h4>
+                            <p style="color: #6B7280; font-size: 0.9rem;">Pattern recognition e debugging</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CLASS VIEW -->
+        <div id="class-view" class="view hidden">
+            <div class="container">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+                    <button class="nav-btn" onclick="showHomepage()">🏠 Tutte le Classi</button>
+                    <div id="class-stats" class="stats-bar">
+                        <div class="stat-item stat-stars">⭐ <span id="class-stars">0</span> stelle</div>
+                        <div class="stat-item stat-score">🏆 <span id="class-score">0</span> punti</div>
+                        <div class="stat-item stat-level">🧠 Livello <span id="class-level">1</span></div>
+                    </div>
+                    <button class="nav-btn reset-btn" onclick="resetProgress()">🔄 Reset</button>
+                </div>
+
+                <header class="header">
+                    <h1 id="class-title">🌱 Classe 1ª - Prima Primaria</h1>
+                    <p id="class-description">I primi passi nel mondo digitale</p>
+                </header>
+
+                <div class="categories-grid">
+                    <div class="category-card" onclick="selectCategory('matematica')">
+                        <div class="card-emoji">🧮</div>
+                        <h3 class="card-title">Matematica</h3>
+                        <p class="card-description">Conteggio, operazioni e problem solving</p>
+                        <div id="math-games-count" style="color: #059669; font-weight: bold;">✅ 2 giochi attivi</div>
+                    </div>
+
+                    <div class="category-card" onclick="selectCategory('coding')">
+                        <div class="card-emoji">💻</div>
+                        <h3 class="card-title">Coding</h3>
+                        <p class="card-description">Sequenze, algoritmi e programmazione</p>
+                        <div id="coding-games-count" style="color: #059669; font-weight: bold;">✅ 1 giochi attivi</div>
+                    </div>
+
+                    <div class="category-card" onclick="selectCategory('pensiero')">
+                        <div class="card-emoji">🧠</div>
+                        <h3 class="card-title">Pensiero Computazionale</h3>
+                        <p class="card-description">Pattern, debugging e decomposizione</p>
+                        <div id="thinking-games-count" style="color: #059669; font-weight: bold;">✅ 1 giochi attivi</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CATEGORY VIEW -->
+        <div id="category-view" class="view hidden">
+            <div class="container">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <button class="nav-btn" onclick="backToClass()">← Menu Classe</button>
+                    <h2 id="category-title" style="font-size: 2rem; font-weight: bold;">🧮 Matematica</h2>
+                    <div></div>
+                </div>
+
+                <div id="games-container" class="games-grid">
+                    <!-- Games will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- GAME SCREENS -->
+        <!-- Math Game -->
+        <div id="math-game" class="game-screen">
+            <div class="game-header">
+                <div class="game-header-content">
+                    <button class="nav-btn" onclick="closeGame()">← Indietro</button>
+                    <div class="game-title" id="math-game-title">🧮 Matematica Magica</div>
+                    <div class="stats-bar">
+                        <div class="stat-item stat-stars">⭐ <span id="math-stars">0</span></div>
+                        <div class="stat-item stat-score">🏆 <span id="math-score">0</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="game-content">
+                <div class="game-area">
+                    <div id="math-question" class="question">2 + 3 = ?</div>
+                    <div id="math-visual" class="visual-objects">
+                        <!-- Visual objects will be populated by JavaScript -->
+                    </div>
+                    <div class="input-area">
+                        <input type="number" id="math-input" class="game-input" placeholder="?">
+                        <button class="game-btn" onclick="checkMathAnswer()">✅ Controlla</button>
+                        <button class="game-btn secondary" onclick="generateMathQuestion()">🔄 Nuova</button>
+                    </div>
+                    <div id="math-feedback" class="feedback"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Counting Game -->
+        <div id="counting-game" class="game-screen">
+            <div class="game-header">
+                <div class="game-header-content">
+                    <button class="nav-btn" onclick="closeGame()">← Indietro</button>
+                    <div class="game-title">🔢 Conteggio Magico</div>
+                    <div class="stats-bar">
+                        <div class="stat-item stat-stars">⭐ <span id="counting-stars">0</span></div>
+                        <div class="stat-item stat-score">🏆 <span id="counting-score">0</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="game-content">
+                <div class="game-area">
+                    <h3 style="font-size: 2rem; margin-bottom: 2rem;">Conta tutti gli oggetti!</h3>
+                    <div id="counting-field" style="position: relative; width: 100%; height: 300px; background: #F3F4F6; border-radius: 1rem; margin: 2rem 0;">
+                        <!-- Objects will be positioned here -->
+                    </div>
+                    <div class="input-area">
+                        <input type="number" id="counting-input" class="game-input" placeholder="?">
+                        <button class="game-btn" onclick="checkCountingAnswer()">✅ Ho Contato!</button>
+                        <button class="game-btn secondary" onclick="generateCountingChallenge()">🔄 Nuovi Oggetti</button>
+                    </div>
+                    <div id="counting-feedback" class="feedback"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pattern Game -->
+        <div id="pattern-game" class="game-screen">
+            <div class="game-header">
+                <div class="game-header-content">
+                    <button class="nav-btn" onclick="closeGame()">← Indietro</button>
+                    <div class="game-title">🌈 Trova il Pattern</div>
+                    <div class="stats-bar">
+                        <div class="stat-item stat-stars">⭐ <span id="pattern-stars">0</span></div>
+                        <div class="stat-item stat-score">🏆 <span id="pattern-score">0</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="game-content">
+                <div class="game-area">
+                    <h3 style="font-size: 2rem; margin-bottom: 2rem;">Completa il Pattern!</h3>
+                    <div id="pattern-sequence" class="pattern-sequence">
+                        <!-- Pattern will be shown here -->
+                    </div>
+                    <p style="font-size: 1.5rem; margin: 2rem 0;">Quale forma viene dopo?</p>
+                    <div id="pattern-options" class="pattern-options">
+                        <!-- Options will be shown here -->
+                    </div>
+                    <button class="game-btn secondary" onclick="generatePattern()">🔄 Nuovo Pattern</button>
+                    <div id="pattern-feedback" class="feedback"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sequence Game -->
+        <div id="sequence-game" class="game-screen">
+            <div class="game-header">
+                <div class="game-header-content">
+                    <button class="nav-btn" onclick="closeGame()">← Indietro</button>
+                    <div class="game-title">📝 Sequenze Narrative</div>
+                    <div class="stats-bar">
+                        <div class="stat-item stat-stars">⭐ <span id="sequence-stars">0</span></div>
+                        <div class="stat-item stat-score">🏆 <span id="sequence-score">0</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="game-content">
+                <div class="game-area">
+                    <h3 id="sequence-title" style="font-size: 2rem; margin-bottom: 2rem;">La giornata di Marco</h3>
+                    <div style="margin-bottom: 2rem;">
+                        <h4 style="font-size: 1.3rem; margin-bottom: 1rem;">La tua sequenza:</h4>
+                        <div id="user-sequence" class="sequence-area">
+                            <div class="sequence-items">
+                                <div style="color: #6B7280; font-style: italic;">Inizia a ordinare...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <h4 style="font-size: 1.3rem; margin-bottom: 1rem;">Clicca nell'ordine giusto:</h4>
+                    <div id="sequence-options" class="sequence-options">
+                        <!-- Options will be populated here -->
+                    </div>
+                    <button class="game-btn secondary" onclick="generateSequenceStory()">🔄 Nuova Storia</button>
+                    <div id="sequence-feedback" class="feedback"></div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <h3>🎓 EduTech Lab</h3>
+            <p style="margin-bottom: 0.5rem;">Piattaforma di Pensiero Computazionale per la Scuola Primaria</p>
+            <p style="font-size: 0.9rem; color: #9CA3AF;">
+                © 2025 EduTech Lab by <strong style="color: #60A5FA;">Fabio Rizzotto</strong>
+            </p>
+            <p style="font-size: 0.8rem; color: #9CA3AF;">
+                Insegnante | Animatore Digitale | Formatore Docenti | Esperto PNRR
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Global State Management
+        let currentView = 'homepage';
+        let selectedClass = 1;
+        let selectedCategory = '';
+        let currentGame = '';
+        
+        // Game States
+        let score = parseInt(localStorage.getItem('edutech_score') || '0');
+        let stars = parseInt(localStorage.getItem('edutech_stars') || '0');
+        let level = parseInt(localStorage.getItem('edutech_level') || '1');
+        
+        // Adaptive Learning System
+        let adaptiveData = JSON.parse(localStorage.getItem('edutech_adaptive') || '{"consecutiveCorrect": 0, "consecutiveWrong": 0, "totalQuestions": 0, "correctAnswers": 0, "currentDifficulty": 1}');
+        
+        // Game-specific states
+        let mathQuestion = {};
+        let countingData = {};
+        let patternData = {};
+        let sequenceData = {};
+
+        // Classes Data
+        const classesData = {
+            1: {
+                name: "Prima Primaria",
+                emoji: "🌱",
+                description: "I primi passi nel mondo digitale",
+                age: "6-7 anni",
+                games: {
+                    matematica: [
+                        { id: 'conteggio', name: '🔢 Conteggio Magico', description: 'Conta oggetti e associa al numero', active: true },
+                        { id: 'addizioni-visual', name: '➕ Addizioni Visual', description: 'Somme fino a 10 con oggetti colorati', active: true }
+                    ],
+                    coding: [
+                        { id: 'sequenze-base', name: '📝 Prime Sequenze', description: 'Ordinare azioni quotidiane', active: true }
+                    ],
+                    pensiero: [
+                        { id: 'pattern-semplici', name: '🌈 Trova il Pattern', description: 'Riconosci sequenze colorate', active: true }
+                    ]
+                }
+            },
+            2: {
+                name: "Seconda Primaria",
+                emoji: "🌿", 
+                description: "Piccoli programmatori crescono",
+                age: "7-8 anni",
+                games: {
+                    matematica: [
+                        { id: 'tabelline-base', name: '✖️ Prime Tabelline', description: 'Tabellina del 2, 5 e 10', active: true }
+                    ],
+                    coding: [
+                        { id: 'loop-semplici', name: '🔄 I Miei Primi Loop', description: 'Ripeti 3 volte: avanti', active: false }
+                    ],
+                    pensiero: [
+                        { id: 'if-then-base', name: '🚦 Se Allora', description: 'Prime condizioni logiche', active: false }
+                    ]
+                }
+            }
+        };
+
+        // Initialize App
+        function initApp() {
+            updateStats();
+            
+            // Show stats if user has made progress
+            if (score > 0 || stars > 0) {
+                document.getElementById('stats-bar').style.display = 'flex';
+            }
+        }
+
+        // Navigation Functions
+        function selectClass(classNum) {
+            selectedClass = classNum;
+            showClassView();
+        }
+
+        function showHomepage() {
+            hideAllViews();
+            document.getElementById('homepage').classList.remove('hidden');
+            currentView = 'homepage';
+        }
+
+        function showClassView() {
+            hideAllViews();
+            document.getElementById('class-view').classList.remove('hidden');
+            currentView = 'class-view';
+            updateClassHeader();
+        }
+
+        function selectCategory(category) {
+            selectedCategory = category;
+            showCategoryView();
+        }
+
+        function showCategoryView() {
+            hideAllViews();
+            document.getElementById('category-view').classList.remove('hidden');
+            currentView = 'category-view';
+            updateCategoryView();
+        }
+
+        function backToClass() {
+            showClassView();
+        }
+
+        function hideAllViews() {
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.add('hidden');
+            });
+            document.querySelectorAll('.game-screen').forEach(game => {
+                game.style.display = 'none';
+            });
+        }
+
+        function updateClassHeader() {
+            const classInfo = classesData[selectedClass];
+            if (classInfo) {
+                document.getElementById('class-title').textContent = `${classInfo.emoji} Classe ${selectedClass}ª - ${classInfo.name}`;
+                document.getElementById('class-description').textContent = classInfo.description;
+                
+                // Update game counts
+                document.getElementById('math-games-count').textContent = `✅ ${classInfo.games.matematica.filter(g => g.active).length} giochi attivi`;
+                document.getElementById('coding-games-count').textContent = `✅ ${classInfo.games.coding.filter(g => g.active).length} giochi attivi`;
+                document.getElementById('thinking-games-count').textContent = `✅ ${classInfo.games.pensiero.filter(g => g.active).length} giochi attivi`;
+            }
+        }
+
+        function updateCategoryView() {
+            const categoryTitles = {
+                matematica: '🧮 Matematica',
+                coding: '💻 Coding', 
+                pensiero: '🧠 Pensiero Computazionale'
+            };
+            
+            document.getElementById('category-title').textContent = categoryTitles[selectedCategory];
+            
+            const gamesContainer = document.getElementById('games-container');
+            gamesContainer.innerHTML = '';
+            
+            const classInfo = classesData[selectedClass];
+            if (classInfo && classInfo.games[selectedCategory]) {
+                classInfo.games[selectedCategory].forEach(game => {
+                    const gameCard = document.createElement('div');
+                    gameCard.className = `game-card ${!game.active ? 'disabled' : ''}`;
+                    if (game.active) {
+                        gameCard.onclick = () => startGame(game.id);
+                    }
+                    
+                    gameCard.innerHTML = `
+                        <h3 class="card-title">${game.name}</h3>
+                        <p class="card-description">${game.description}</p>
+                        <div style="color: ${game.active ? '#059669' : '#F59E0B'}; font-weight: bold;">
+                            ${game.active ? '✅ Funzionante' : '🔧 In sviluppo'}
+                        </div>
+                    `;
+                    
+                    gamesContainer.appendChild(gameCard);
+                });
+            }
+        }
+
+        // Game Functions
+        function startGame(gameId) {
+            currentGame = gameId;
+            hideAllViews();
+            
+            switch(gameId) {
+                case 'conteggio':
+                    document.getElementById('counting-game').style.display = 'flex';
+                    generateCountingChallenge();
+                    break;
+                case 'addizioni-visual':
+                    document.getElementById('math-game').style.display = 'flex';
+                    document.getElementById('math-game-title').textContent = '➕ Addizioni Visual';
+                    generateMathQuestion();
+                    break;
+                case 'pattern-semplici':
+                    document.getElementById('pattern-game').style.display = 'flex';
+                    generatePattern();
+                    break;
+                case 'sequenze-base':
+                    document.getElementById('sequence-game').style.display = 'flex';
+                    generateSequenceStory();
+                    break;
+                case 'tabelline-base':
+                    document.getElementById('math-game').style.display = 'flex';
+                    document.getElementById('math-game-title').textContent = '✖️ Prime Tabelline';
+                    generateMultiplicationQuestion();
+                    break;
+                default:
+                    alert('Gioco in sviluppo - disponibile nella Fase 2!');
+                    showCategoryView();
+            }
+            
+            updateGameStats();
+        }
+
+        function closeGame() {
+            showCategoryView();
+        }
+
+        // Math Game Functions
+        function generateMathQuestion() {
+            const difficulty = adaptiveData.currentDifficulty;
+            let maxNum;
+            
+            switch(difficulty) {
+                case 1: maxNum = 5; break;
+                case 2: maxNum = 10; break;
+                case 3: maxNum = 15; break;
+                default: maxNum = 10;
+            }
+            
+            const a = Math.floor(Math.random() * maxNum) + 1;
+            const b = Math.floor(Math.random() * (maxNum - a)) + 1;
+            const operation = currentGame === 'tabelline-base' ? '×' : '+';
+            
+            if (operation === '×') {
+                // Multiplication for tabelline
+                const tables = difficulty <= 2 ? [2, 5, 10] : [2, 3, 4, 5, 6, 7, 8, 9, 10];
+                const table = tables[Math.floor(Math.random() * tables.length)];
+                const multiplier = Math.floor(Math.random() * 10) + 1;
+                mathQuestion = { a: table, b: multiplier, operation: '×', result: table * multiplier, difficulty };
+            } else {
+                // Addition
+                mathQuestion = { a, b, operation: '+', result: a + b, difficulty };
+            }
+            
+            document.getElementById('math-question').textContent = `${mathQuestion.a} ${mathQuestion.operation} ${mathQuestion.b} = ?`;
+            document.getElementById('math-input').value = '';
+            document.getElementById('math-feedback').textContent = '';
+            
+            generateMathVisual();
+        }
+
+        function generateMultiplicationQuestion() {
+            const difficulty = adaptiveData.currentDifficulty;
+            const tables = difficulty <= 2 ? [2, 5, 10] : [2, 3, 4, 5, 6, 7, 8, 9, 10];
+            const table = tables[Math.floor(Math.random() * tables.length)];
+            const multiplier = Math.floor(Math.random() * 10) + 1;
+            
+            mathQuestion = { a: table, b: multiplier, operation: '×', result: table * multiplier, difficulty };
+            
+            document.getElementById('math-question').textContent = `${mathQuestion.a} × ${mathQuestion.b} = ?`;
+            document.getElementById('math-input').value = '';
+            document.getElementById('math-feedback').textContent = '';
+            
+            generateMultiplicationVisual();
+        }
+
+        function generateMathVisual() {
+            const visualContainer = document.getElementById('math-visual');
+            visualContainer.innerHTML = '';
+            
+            // Create visual objects for addition
+            const colors = ['#3B82F6', '#EF4444'];
+            
+            for (let i = 0; i < mathQuestion.a; i++) {
+                const obj = document.createElement('div');
+                obj.className = 'visual-object';
+                obj.style.backgroundColor = colors[0];
+                obj.textContent = i + 1;
+                visualContainer.appendChild(obj);
+            }
+            
+            if (mathQuestion.operation === '+') {
+                for (let i = 0; i < mathQuestion.b; i++) {
+                    const obj = document.createElement('div');
+                    obj.className = 'visual-object';
+                    obj.style.backgroundColor = colors[1];
+                    obj.textContent = i + 1;
+                    visualContainer.appendChild(obj);
+                }
+            }
+        }
+
+        function generateMultiplicationVisual() {
+            const visualContainer = document.getElementById('math-visual');
+            visualContainer.innerHTML = '';
+            
+            // Create visual groups for multiplication
+            for (let group = 0; group < mathQuestion.b; group++) {
+                const groupDiv = document.createElement('div');
+                groupDiv.style.display = 'flex';
+                groupDiv.style.flexDirection = 'column';
+                groupDiv.style.alignItems = 'center';
+                groupDiv.style.margin = '0 10px';
+                
+                const groupLabel = document.createElement('div');
+                groupLabel.textContent = `Gruppo ${group + 1}`;
+                groupLabel.style.fontSize = '0.8rem';
+                groupLabel.style.marginBottom = '5px';
+                groupDiv.appendChild(groupLabel);
+                
+                const groupContainer = document.createElement('div');
+                groupContainer.style.display = 'flex';
+                groupContainer.style.flexWrap = 'wrap';
+                groupContainer.style.maxWidth = '120px';
+                groupContainer.style.gap = '2px';
+                
+                for (let i = 0; i < mathQuestion.a; i++) {
+                    const obj = document.createElement('div');
+                    obj.style.width = '25px';
+                    obj.style.height = '25px';
+                    obj.style.backgroundColor = '#F59E0B';
+                    obj.style.borderRadius = '50%';
+                    obj.style.display = 'flex';
+                    obj.style.alignItems = 'center';
+                    obj.style.justifyContent = 'center';
+                    obj.style.color = 'white';
+                    obj.style.fontSize = '0.7rem';
+                    obj.textContent = i + 1;
+                    groupContainer.appendChild(obj);
+                }
+                
+                groupDiv.appendChild(groupContainer);
+                visualContainer.appendChild(groupDiv);
+            }
+        }
+
+        function checkMathAnswer() {
+            const userAnswer = parseInt(document.getElementById('math-input').value);
+            const isCorrect = userAnswer === mathQuestion.result;
+            
+            updateAdaptiveStats(isCorrect);
+            
+            const feedbackEl = document.getElementById('math-feedback');
+            
+            if (isCorrect) {
+                const encouragements = [
+                    '🎉 Fantastico! Sei bravissimo!',
+                    '⭐ Perfetto! Continua così!',
+                    '🚀 Incredibile! Sei un campione!',
+                    '🏆 Straordinario! Hai imparato!'
+                ];
+                
+                feedbackEl.textContent = encouragements[Math.floor(Math.random() * encouragements.length)];
+                feedbackEl.className = 'feedback success';
+                
+                updateScore(10 * mathQuestion.difficulty);
+                updateStars(mathQuestion.difficulty);
+                
+                setTimeout(() => {
+                    if (currentGame === 'tabelline-base') {
+                        generateMultiplicationQuestion();
+                    } else {
+                        generateMathQuestion();
+                    }
+                }, 2000);
+            } else {
+                const supportive = [
+                    '🤗 Non ti preoccupare! Proviamo insieme!',
+                    '💪 Quasi ci sei! Prova ancora!',
+                    '😊 Va benissimo sbagliare, impariamo così!',
+                    '🌟 Sei coraggioso a provare! Riprova!'
+                ];
+                
+                feedbackEl.textContent = supportive[Math.floor(Math.random() * supportive.length)];
+                feedbackEl.className = 'feedback error';
+            }
+        }
+
+        // Counting Game Functions
+        function generateCountingChallenge() {
+            const target = Math.min(5 + adaptiveData.currentDifficulty * 2, 20);
+            const emojis = ['🔴', '🟡', '🔵', '🟢', '🟣', '🟠', '⭐', '❤️', '🎈', '🌸', '🍎', '⚽'];
+            
+            countingData = { target, objects: [] };
+            
+            const field = document.getElementById('counting-field');
+            field.innerHTML = '';
+            
+            for (let i = 0; i < target; i++) {
+                const obj = document.createElement('div');
+                obj.style.position = 'absolute';
+                obj.style.fontSize = '2rem';
+                obj.style.left = (Math.random() * 80 + 10) + '%';
+                obj.style.top = (Math.random() * 70 + 15) + '%';
+                obj.style.transform = 'translate(-50%, -50%)';
+                obj.style.cursor = 'pointer';
+                obj.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                
+                field.appendChild(obj);
+            }
+            
+            document.getElementById('counting-input').value = '';
+            document.getElementById('counting-feedback').textContent = '';
+        }
+
+        function checkCountingAnswer() {
+            const userAnswer = parseInt(document.getElementById('counting-input').value);
+            const isCorrect = userAnswer === countingData.target;
+            
+            updateAdaptiveStats(isCorrect);
+            
+            const feedbackEl = document.getElementById('counting-feedback');
+            
+            if (isCorrect) {
+                feedbackEl.textContent = '🎉 Perfetto! Hai contato tutto!';
+                feedbackEl.className = 'feedback success';
+                
+                updateScore(5 * adaptiveData.currentDifficulty);
+                updateStars(1);
+                
+                setTimeout(() => generateCountingChallenge(), 2000);
+            } else {
+                feedbackEl.textContent = '🤗 Conta ancora! Tocca ogni oggetto!';
+                feedbackEl.className = 'feedback error';
+            }
+        }
+
+        // Pattern Game Functions
+        function generatePattern() {
+            const shapes = ['🔴', '🟡', '🔵', '🟢', '🟣'];
+            const patternLength = Math.min(3 + level, 5);
+            const basePattern = [];
+            
+            for (let i = 0; i < patternLength; i++) {
+                basePattern.push(shapes[i % 3]);
+            }
+            
+            const fullPattern = [...basePattern, ...basePattern, ...basePattern.slice(0, -1)];
+            const nextElement = basePattern[basePattern.length - 1];
+            
+            patternData = { pattern: fullPattern, correct: nextElement };
+            
+            // Generate options
+            const options = [nextElement];
+            while (options.length < 3) {
+                const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
+                if (!options.includes(randomShape)) {
+                    options.push(randomShape);
+                }
+            }
+            patternData.options = options.sort(() => Math.random() - 0.5);
+            
+            displayPattern();
+        }
+
+        function displayPattern() {
+            const sequenceEl = document.getElementById('pattern-sequence');
+            sequenceEl.innerHTML = '';
+            
+            patternData.pattern.forEach(shape => {
+                const item = document.createElement('div');
+                item.className = 'pattern-item';
+                item.textContent = shape;
+                sequenceEl.appendChild(item);
+            });
+            
+            // Add missing item placeholder
+            const missing = document.createElement('div');
+            missing.className = 'pattern-item missing';
+            missing.textContent = '?';
+            sequenceEl.appendChild(missing);
+            
+            // Display options
+            const optionsEl = document.getElementById('pattern-options');
+            optionsEl.innerHTML = '';
+            
+            patternData.options.forEach(option => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'pattern-option';
+                optionEl.textContent = option;
+                optionEl.onclick = () => checkPatternAnswer(option);
+                optionsEl.appendChild(optionEl);
+            });
+            
+            document.getElementById('pattern-feedback').textContent = '';
+        }
+
+        function checkPatternAnswer(selectedOption) {
+            const isCorrect = selectedOption === patternData.correct;
+            
+            updateAdaptiveStats(isCorrect);
+            
+            const feedbackEl = document.getElementById('pattern-feedback');
+            
+            if (isCorrect) {
+                feedbackEl.textContent = '🌟 Perfetto! Hai trovato il pattern!';
+                feedbackEl.className = 'feedback success';
+                
+                updateScore(15);
+                updateStars(2);
+                
+                setTimeout(() => generatePattern(), 2000);
+            } else {
+                feedbackEl.textContent = '🤔 Guarda bene... quale forma si ripete?';
+                feedbackEl.className = 'feedback error';
+            }
+        }
+
+        // Sequence Game Functions
+        function generateSequenceStory() {
+            const stories = [
+                {
+                    title: 'La giornata di Marco',
+                    sequence: ['🛏️ Sveglia', '🦷 Lava denti', '🍞 Colazione', '🎒 Scuola', '🍝 Pranzo', '😴 Nanna'],
+                    scrambled: ['🍝 Pranzo', '🛏️ Sveglia', '😴 Nanna', '🎒 Scuola', '🦷 Lava denti', '🍞 Colazione']
+                },
+                {
+                    title: 'Preparare i biscotti',
+                    sequence: ['🥚 Uova', '🥛 Latte', '🥄 Mescola', '🔥 Cuoci', '🍪 Biscotti'],
+                    scrambled: ['🍪 Biscotti', '🥄 Mescola', '🥚 Uova', '🔥 Cuoci', '🥛 Latte']
+                }
+            ];
+            
+            sequenceData = stories[Math.floor(Math.random() * stories.length)];
+            sequenceData.userOrder = [];
+            
+            document.getElementById('sequence-title').textContent = sequenceData.title;
+            updateSequenceDisplay();
+        }
+
+        function updateSequenceDisplay() {
+            const userSequenceEl = document.getElementById('user-sequence').querySelector('.sequence-items');
+            userSequenceEl.innerHTML = '';
+            
+            if (sequenceData.userOrder.length === 0) {
+                userSequenceEl.innerHTML = '<div style="color: #6B7280; font-style: italic;">Inizia a ordinare...</div>';
+            } else {
+                sequenceData.userOrder.forEach((item, index) => {
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'sequence-item';
+                    itemEl.innerHTML = `<span style="background: #EFF6FF; padding: 0.2rem 0.5rem; border-radius: 50%; font-size: 0.8rem;">${index + 1}</span>${item}`;
+                    userSequenceEl.appendChild(itemEl);
+                });
+            }
+            
+            // Update options (show only unselected items)
+            const optionsEl = document.getElementById('sequence-options');
+            optionsEl.innerHTML = '';
+            
+            sequenceData.scrambled.filter(item => !sequenceData.userOrder.includes(item)).forEach(item => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'sequence-option';
+                optionEl.textContent = item;
+                optionEl.onclick = () => addToSequence(item);
+                optionsEl.appendChild(optionEl);
+            });
+        }
+
+        function addToSequence(item) {
+            sequenceData.userOrder.push(item);
+            updateSequenceDisplay();
+            
+            if (sequenceData.userOrder.length === sequenceData.sequence.length) {
+                const isCorrect = JSON.stringify(sequenceData.userOrder) === JSON.stringify(sequenceData.sequence);
+                updateAdaptiveStats(isCorrect);
+                
+                const feedbackEl = document.getElementById('sequence-feedback');
+                
+                if (isCorrect) {
+                    feedbackEl.textContent = '🌟 Sequenza perfetta! Sei un ordinatore!';
+                    feedbackEl.className = 'feedback success';
+                    
+                    updateScore(20);
+                    updateStars(3);
+                    
+                    setTimeout(() => generateSequenceStory(), 2000);
+                } else {
+                    feedbackEl.textContent = '🤔 Pensa all\'ordine giusto... cosa succede prima?';
+                    feedbackEl.className = 'feedback error';
+                    sequenceData.userOrder = [];
+                    setTimeout(() => updateSequenceDisplay(), 1000);
+                }
+            }
+        }
+
+        // Progress and Stats Functions
+        function updateScore(points) {
+            score += points;
+            updateStats();
+        }
+
+        function updateStars(newStars) {
+            stars += newStars;
+            updateStats();
+        }
+
+        function updateStats() {
+            // Update all score displays
+            document.querySelectorAll('[id$="-score"], #score-count').forEach(el => {
+                el.textContent = score;
+            });
+            
+            // Update all stars displays
+            document.querySelectorAll('[id$="-stars"], #stars-count').forEach(el => {
+                el.textContent = stars;
+            });
+            
+            // Update level displays
+            document.querySelectorAll('[id$="-level"], #level-count').forEach(el => {
+                el.textContent = level;
+            });
+            
+            // Save to localStorage
+            localStorage.setItem('edutech_score', score.toString());
+            localStorage.setItem('edutech_stars', stars.toString());
+            localStorage.setItem('edutech_level', level.toString());
+            
+            // Show stats bar if progress made
+            if (score > 0 || stars > 0) {
+                document.getElementById('stats-bar').style.display = 'flex';
+            }
+        }
+
+        function updateGameStats() {
+            updateStats();
+        }
+
+        function updateAdaptiveStats(isCorrect) {
+            adaptiveData.totalQuestions++;
+            if (isCorrect) {
+                adaptiveData.correctAnswers++;
+                adaptiveData.consecutiveCorrect++;
+                adaptiveData.consecutiveWrong = 0;
+            } else {
+                adaptiveData.consecutiveCorrect = 0;
+                adaptiveData.consecutiveWrong++;
+            }
+            
+            // Adjust difficulty
+            if (isCorrect && adaptiveData.consecutiveCorrect >= 4) {
+                adaptiveData.currentDifficulty = Math.min(5, adaptiveData.currentDifficulty + 1);
+                adaptiveData.consecutiveCorrect = 0;
+            } else if (!isCorrect && adaptiveData.consecutiveWrong >= 2) {
+                adaptiveData.currentDifficulty = Math.max(1, adaptiveData.currentDifficulty - 1);
+                adaptiveData.consecutiveWrong = 0;
+            }
+            
+            // Update level based on adaptive difficulty
+            level = adaptiveData.currentDifficulty;
+            
+            localStorage.setItem('edutech_adaptive', JSON.stringify(adaptiveData));
+        }
+
+        function resetProgress() {
+            if (confirm('Sei sicuro di voler resettare tutti i progressi? (Utile per cambio classe)')) {
+                score = 0;
+                stars = 0;
+                level = 1;
+                adaptiveData = {
+                    consecutiveCorrect: 0,
+                    consecutiveWrong: 0,
+                    totalQuestions: 0,
+                    correctAnswers: 0,
+                    currentDifficulty: 1
+                };
+                
+                localStorage.removeItem('edutech_score');
+                localStorage.removeItem('edutech_stars');
+                localStorage.removeItem('edutech_level');
+                localStorage.removeItem('edutech_adaptive');
+                
+                updateStats();
+                document.getElementById('stats-bar').style.display = 'none';
+            }
+        }
+
+        // Initialize app when page loads
+        document.addEventListener('DOMContentLoaded', initApp);
+        
+        // Add keyboard support for games
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                if (currentGame === 'addizioni-visual' || currentGame === 'tabelline-base') {
+                    checkMathAnswer();
+                } else if (currentGame === 'conteggio') {
+                    checkCountingAnswer();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
