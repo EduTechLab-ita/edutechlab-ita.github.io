@@ -20,6 +20,116 @@
             padding: 0;
             box-sizing: border-box;
         }
+
+        // Progress and Stats Functions
+        function updateScore(points) {
+            score += points;
+            updateStats();
+        }
+
+        function updateStars(newStars) {
+            stars += newStars;
+            updateStats();
+        }
+
+        function updateStats() {
+            // Update all score displays
+            document.querySelectorAll('[id$="-score"], #score-count').forEach(el => {
+                el.textContent = score;
+            });
+            
+            // Update all stars displays
+            document.querySelectorAll('[id$="-stars"], #stars-count').forEach(el => {
+                el.textContent = stars;
+            });
+            
+            // Update level displays
+            document.querySelectorAll('[id$="-level"], #level-count').forEach(el => {
+                el.textContent = level;
+            });
+            
+            // Save to localStorage
+            localStorage.setItem('edutech_score', score.toString());
+            localStorage.setItem('edutech_stars', stars.toString());
+            localStorage.setItem('edutech_level', level.toString());
+            
+            // Show stats bar if progress made
+            if (score > 0 || stars > 0) {
+                document.getElementById('stats-bar').style.display = 'flex';
+            }
+        }
+
+        function updateGameStats() {
+            updateStats();
+        }
+
+        function updateAdaptiveStats(isCorrect) {
+            adaptiveData.totalQuestions++;
+            if (isCorrect) {
+                adaptiveData.correctAnswers++;
+                adaptiveData.consecutiveCorrect++;
+                adaptiveData.consecutiveWrong = 0;
+            } else {
+                adaptiveData.consecutiveCorrect = 0;
+                adaptiveData.consecutiveWrong++;
+            }
+            
+            // Adjust difficulty
+            if (isCorrect && adaptiveData.consecutiveCorrect >= 4) {
+                adaptiveData.currentDifficulty = Math.min(5, adaptiveData.currentDifficulty + 1);
+                adaptiveData.consecutiveCorrect = 0;
+            } else if (!isCorrect && adaptiveData.consecutiveWrong >= 2) {
+                adaptiveData.currentDifficulty = Math.max(1, adaptiveData.currentDifficulty - 1);
+                adaptiveData.consecutiveWrong = 0;
+            }
+            
+            // Update level based on adaptive difficulty
+            level = adaptiveData.currentDifficulty;
+            
+            localStorage.setItem('edutech_adaptive', JSON.stringify(adaptiveData));
+        }
+
+        function resetProgress() {
+            if (confirm('Sei sicuro di voler resettare tutti i progressi? (Utile per cambio classe)')) {
+                score = 0;
+                stars = 0;
+                level = 1;
+                adaptiveData = {
+                    consecutiveCorrect: 0,
+                    consecutiveWrong: 0,
+                    totalQuestions: 0,
+                    correctAnswers: 0,
+                    currentDifficulty: 1
+                };
+                
+                localStorage.removeItem('edutech_score');
+                localStorage.removeItem('edutech_stars');
+                localStorage.removeItem('edutech_level');
+                localStorage.removeItem('edutech_adaptive');
+                
+                updateStats();
+                document.getElementById('stats-bar').style.display = 'none';
+            }
+        }
+
+        // Initialize app when page loads
+        document.addEventListener('DOMContentLoaded', initApp);
+        
+        // Add keyboard support for games
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                if (currentGame === 'addizioni-visual' || currentGame === 'tabelline-base') {
+                    checkMathAnswer();
+                } else if (currentGame === 'conteggio') {
+                    checkCountingAnswer();
+                } else if (currentGame === 'tabelline-complete') {
+                    checkTabellinesAnswer();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -320,6 +430,30 @@
             background: #2563EB;
         }
         
+        .game-btn.yellow {
+            background: #F59E0B;
+        }
+        
+        .game-btn.yellow:hover {
+            background: #D97706;
+        }
+        
+        .game-btn.red {
+            background: #EF4444;
+        }
+        
+        .game-btn.red:hover {
+            background: #DC2626;
+        }
+        
+        .game-btn.purple {
+            background: #8B5CF6;
+        }
+        
+        .game-btn.purple:hover {
+            background: #7C3AED;
+        }
+        
         .feedback {
             font-size: 2rem;
             font-weight: bold;
@@ -453,7 +587,151 @@
             background: #FED7AA;
             transform: translateY(-2px);
         }
+
+        /* Loop Game Styles */
+        .loop-area {
+            background: #F0F9FF;
+            border: 4px solid #0284C7;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem 0;
+            min-height: 150px;
+        }
         
+        .loop-commands {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .loop-command {
+            background: #0284C7;
+            color: white;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* If-Then Game Styles */
+        .condition-card {
+            background: #FEF3C7;
+            border: 4px solid #F59E0B;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .then-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .then-option {
+            background: #DBEAFE;
+            border: 3px solid #3B82F6;
+            border-radius: 1rem;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .then-option:hover {
+            background: #BFDBFE;
+            transform: scale(1.05);
+        }
+
+        /* Debug Game Styles */
+        .debug-sequence {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .debug-command {
+            background: white;
+            border: 4px solid #D1D5DB;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            min-width: 120px;
+        }
+        
+        .debug-command:hover {
+            border-color: #EF4444;
+            transform: scale(1.05);
+        }
+        
+        .debug-command.error {
+            border-color: #EF4444;
+            background: #FEE2E2;
+            transform: scale(1.1);
+        }
+
+        /* Algorithm Game Styles */
+        .algorithm-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            max-width: 300px;
+            margin: 0 auto 2rem;
+        }
+        
+        .grid-cell {
+            width: 80px;
+            height: 80px;
+            border: 2px solid #D1D5DB;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            background: white;
+        }
+        
+        .algorithm-solution {
+            background: #F0F9FF;
+            border: 4px solid #0284C7;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            min-height: 120px;
+        }
+        
+        .solution-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .solution-step {
+            background: #DBEAFE;
+            border: 2px solid #3B82F6;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .command-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
         /* Footer */
         .footer {
             background: #1F2937;
@@ -478,6 +756,7 @@
             .pattern-item, .pattern-option { font-size: 2.5rem; width: 80px; height: 80px; }
             .stats-bar { flex-direction: column; align-items: center; }
             .game-header-content { justify-content: center; text-align: center; }
+            .grid-cell { width: 60px; height: 60px; font-size: 1.5rem; }
         }
         
         /* Hidden class */
@@ -539,7 +818,7 @@
                             <span class="badge coding">Algoritmi</span>
                             <span class="badge thinking">Debug</span>
                         </div>
-                        <div style="color: #F59E0B; font-weight: bold;">🔧 In sviluppo (Fase 2)</div>
+                        <div style="color: #059669; font-weight: bold;">✅ 3 Giochi attivi</div>
                     </div>
 
                     <div class="class-card" onclick="selectClass(4)">
@@ -773,6 +1052,175 @@
             </div>
         </div>
 
+        <!-- NEW GAMES - FASE 2 -->
+        
+        <!-- Loop Game -->
+        <div id="loop-game" class="game-screen">
+            <div class="game-header">
+                <div class="game-header-content">
+                    <button class="nav-btn" onclick="closeGame()">← Indietro</button>
+                    <div class="game-title">🔄 I Miei Primi Loop</div>
+                    <div class="stats-bar">
+                        <div class="stat-item stat-stars">⭐ <span id="loop-stars">0</span></div>
+                        <div class="stat-item stat-score">🏆 <span id="loop-score">0</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="game-content">
+                <div class="game-area">
+                    <h3 id="loop-challenge-title" style="font-size: 2rem; margin-bottom: 2rem;">Fai saltare la rana 3 volte!</h3>
+                    <div style="font-size: 4rem; margin: 2rem 0;" id="loop-character">🐸</div>
+                    <p style="font-size: 1.5rem; margin: 1rem 0;">Programma il loop:</p>
+                    <div id="loop-solution" class="loop-area">
+                        <div class="loop-commands">
+                            <div style="color: #6B7280; font-style: italic;">Inizia a programmare...</div>
+                        </div>
+                    </div>
+                    <div id="loop-buttons" class="command-buttons">
+                        <button class="game-btn" onclick="addLoopCommand('salta')">🐸 Salta</button>
+                        <button class="game-btn" onclick="addLoopCommand('vola')">🐦 Vola</button>
+                        <button class="game-btn" onclick="addLoopCommand('corri')">🏃 Corri</button>
+                    </div>
+                    <div style="margin: 1rem 0;">
+                        <button class="game-btn" onclick="checkLoopSolution()">✅ Esegui Loop</button>
+                        <button class="game-btn red" onclick="clearLoopSolution()">🗑️ Cancella</button>
+                        <button class="game-btn secondary" onclick="generateLoopChallenge()">🔄 Nuova Sfida</button>
+                    </div>
+                    <div id="loop-feedback" class="feedback"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- If-Then Game -->
+        <div id="if-then-game" class="game-screen">
+            <div class="game-header">
+                <div class="game-header-content">
+                    <button class="nav-btn" onclick="closeGame()">← Indietro</button>
+                    <div class="game-title">🚦 Se Allora</div>
+                    <div class="stats-bar">
+                        <div class="stat-item stat-stars">⭐ <span id="if-then-stars">0</span></div>
+                        <div class="stat-item stat-score">🏆 <span id="if-then-score">0</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="game-content">
+                <div class="game-area">
+                    <h3 style="font-size: 2rem; margin-bottom: 2rem;">Cosa faresti SE...?</h3>
+                    <div id="if-condition" class="condition-card">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">⛈️</div>
+                        <h4 style="font-size: 1.8rem;">SE piove forte...</h4>
+                    </div>
+                    <h4 style="font-size: 1.5rem; margin: 2rem 0;">ALLORA...</h4>
+                    <div id="then-options" class="then-options">
+                        <!-- Options will be populated here -->
+                    </div>
+                    <button class="game-btn secondary" onclick="generateIfThenChallenge()">🔄 Nuova Situazione</button>
+                    <div id="if-then-feedback" class="feedback"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabelline Complete Game -->
+        <div id="tabelline-complete-game" class="game-screen">
+            <div class="game-header">
+                <div class="game-header-content">
+                    <button class="nav-btn" onclick="closeGame()">← Indietro</button>
+                    <div class="game-title">🎯 Tabelline Master</div>
+                    <div class="stats-bar">
+                        <div class="stat-item stat-stars">⭐ <span id="tabelline-stars">0</span></div>
+                        <div class="stat-item stat-score">🏆 <span id="tabelline-score">0</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="game-content">
+                <div class="game-area">
+                    <div id="tabelline-question" class="question">7 × 8 = ?</div>
+                    <div style="font-size: 1.5rem; margin: 1rem 0;" id="tabelline-info">Tabellina del 7</div>
+                    <div id="tabelline-visual" class="visual-objects">
+                        <!-- Visual groups will be populated by JavaScript -->
+                    </div>
+                    <div class="input-area">
+                        <input type="number" id="tabelline-input" class="game-input" placeholder="?">
+                        <button class="game-btn" onclick="checkTabellinesAnswer()">✅ Controlla</button>
+                        <button class="game-btn secondary" onclick="generateTabellinesQuestion()">🔄 Nuova</button>
+                    </div>
+                    <div id="tabelline-feedback" class="feedback"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Algorithm Game -->
+        <div id="algorithm-game" class="game-screen">
+            <div class="game-header">
+                <div class="game-header-content">
+                    <button class="nav-btn" onclick="closeGame()">← Indietro</button>
+                    <div class="game-title">⚙️ Algoritmi Intelligenti</div>
+                    <div class="stats-bar">
+                        <div class="stat-item stat-stars">⭐ <span id="algorithm-stars">0</span></div>
+                        <div class="stat-item stat-score">🏆 <span id="algorithm-score">0</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="game-content">
+                <div class="game-area">
+                    <h3 id="algorithm-title" style="font-size: 2rem; margin-bottom: 1rem;">Porta il robot al tesoro!</h3>
+                    <p id="algorithm-description" style="font-size: 1.2rem; margin-bottom: 2rem;">Programma il robot per raggiungere il tesoro evitando gli ostacoli</p>
+                    <div id="algorithm-grid" class="algorithm-grid">
+                        <!-- Grid will be populated here -->
+                    </div>
+                    <div id="algorithm-solution" class="algorithm-solution">
+                        <h4 style="font-size: 1.3rem; margin-bottom: 1rem;">Il tuo algoritmo:</h4>
+                        <div id="solution-steps" class="solution-steps">
+                            <div style="color: #6B7280; font-style: italic;">Inizia a programmare...</div>
+                        </div>
+                    </div>
+                    <div id="algorithm-buttons" class="command-buttons">
+                        <button class="game-btn" onclick="addAlgorithmStep('su')">⬆️ Su</button>
+                        <button class="game-btn" onclick="addAlgorithmStep('giù')">⬇️ Giù</button>
+                        <button class="game-btn" onclick="addAlgorithmStep('sinistra')">⬅️ Sinistra</button>
+                        <button class="game-btn" onclick="addAlgorithmStep('destra')">➡️ Destra</button>
+                    </div>
+                    <div style="margin: 1rem 0;">
+                        <button class="game-btn" onclick="checkAlgorithmSolution()">✅ Testa Algoritmo</button>
+                        <button class="game-btn red" onclick="clearAlgorithmSolution()">🗑️ Cancella</button>
+                        <button class="game-btn secondary" onclick="generateAlgorithmChallenge()">🔄 Nuovo Puzzle</button>
+                    </div>
+                    <div id="algorithm-feedback" class="feedback"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debug Advanced Game -->
+        <div id="debug-advanced-game" class="game-screen">
+            <div class="game-header">
+                <div class="game-header-content">
+                    <button class="nav-btn" onclick="closeGame()">← Indietro</button>
+                    <div class="game-title">🔧 Debug Master</div>
+                    <div class="stats-bar">
+                        <div class="stat-item stat-stars">⭐ <span id="debug-advanced-stars">0</span></div>
+                        <div class="stat-item stat-score">🏆 <span id="debug-advanced-score">0</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="game-content">
+                <div class="game-area">
+                    <h3 style="font-size: 2rem; margin-bottom: 2rem;">🔧 Trova il Bug Complesso!</h3>
+                    <p id="debug-description" style="font-size: 1.3rem; margin-bottom: 2rem;">Questo algoritmo ha un errore logico. Quale comando è sbagliato?</p>
+                    <div style="background: #FEF3C7; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0;">
+                        <div style="font-size: 1.2rem; color: #92400E;">
+                            💡 <strong>Suggerimento:</strong> <span id="debug-hint">Pensa a cosa dovrebbe fare ogni comando...</span>
+                        </div>
+                    </div>
+                    <h4 style="font-size: 1.5rem; margin-bottom: 1rem;">Algoritmo da debuggare:</h4>
+                    <div id="debug-sequence" class="debug-sequence">
+                        <!-- Commands will be populated here -->
+                    </div>
+                    <button class="game-btn secondary" onclick="generateDebugChallenge()">🔄 Nuovo Algoritmo</button>
+                    <div id="debug-advanced-feedback" class="feedback"></div>
+                </div>
+            </div>
+        </div>
+
         <footer class="footer">
             <h3>🎓 EduTech Lab</h3>
             <p style="margin-bottom: 0.5rem;">Piattaforma di Pensiero Computazionale per la Scuola Primaria</p>
@@ -805,8 +1253,13 @@
         let countingData = {};
         let patternData = {};
         let sequenceData = {};
+        let loopData = {};
+        let ifThenData = {};
+        let tabellinesData = {};
+        let algorithmData = {};
+        let debugData = {};
 
-        // Classes Data
+        // Classes Data - UPDATED FOR FASE 2
         const classesData = {
             1: {
                 name: "Prima Primaria",
@@ -825,6 +1278,195 @@
                         { id: 'pattern-semplici', name: '🌈 Trova il Pattern', description: 'Riconosci sequenze colorate', active: true }
                     ]
                 }
+            ];
+            
+            algorithmData = challenges[Math.floor(Math.random() * challenges.length)];
+            algorithmData.userSolution = [];
+            
+            document.getElementById('algorithm-title').textContent = algorithmData.title;
+            document.getElementById('algorithm-description').textContent = algorithmData.description;
+            
+            updateAlgorithmDisplay();
+        }
+
+        function updateAlgorithmDisplay() {
+            // Update grid
+            const gridEl = document.getElementById('algorithm-grid');
+            gridEl.innerHTML = '';
+            
+            algorithmData.grid.forEach(row => {
+                row.forEach(cell => {
+                    const cellEl = document.createElement('div');
+                    cellEl.className = 'grid-cell';
+                    cellEl.textContent = cell;
+                    gridEl.appendChild(cellEl);
+                });
+            });
+            
+            // Update solution
+            const solutionEl = document.getElementById('solution-steps');
+            solutionEl.innerHTML = '';
+            
+            if (algorithmData.userSolution.length === 0) {
+                solutionEl.innerHTML = '<div style="color: #6B7280; font-style: italic;">Inizia a programmare...</div>';
+            } else {
+                algorithmData.userSolution.forEach((step, index) => {
+                    const stepEl = document.createElement('div');
+                    stepEl.className = 'solution-step';
+                    stepEl.innerHTML = `
+                        <span>${index + 1}. ${step}</span>
+                        <button onclick="removeAlgorithmStep(${index})" style="background: #EF4444; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;">×</button>
+                    `;
+                    solutionEl.appendChild(stepEl);
+                });
+            }
+        }
+
+        function addAlgorithmStep(step) {
+            algorithmData.userSolution.push(step);
+            updateAlgorithmDisplay();
+        }
+
+        function removeAlgorithmStep(index) {
+            algorithmData.userSolution.splice(index, 1);
+            updateAlgorithmDisplay();
+        }
+
+        function clearAlgorithmSolution() {
+            algorithmData.userSolution = [];
+            updateAlgorithmDisplay();
+            document.getElementById('algorithm-feedback').textContent = '';
+        }
+
+        function checkAlgorithmSolution() {
+            const isCorrect = JSON.stringify(algorithmData.userSolution) === JSON.stringify(algorithmData.solution);
+            
+            updateAdaptiveStats(isCorrect);
+            
+            const feedbackEl = document.getElementById('algorithm-feedback');
+            
+            if (isCorrect) {
+                feedbackEl.textContent = '⚙️ Perfetto! Il tuo algoritmo funziona!';
+                feedbackEl.className = 'feedback success';
+                
+                updateScore(30);
+                updateStars(4);
+                
+                setTimeout(() => generateAlgorithmChallenge(), 2000);
+            } else {
+                feedbackEl.textContent = '🤔 L\'algoritmo non è corretto. Prova un percorso diverso!';
+                feedbackEl.className = 'feedback error';
+            }
+        }
+
+        // Debug Advanced Game Functions
+        function generateDebugChallenge() {
+            const challenges = [
+                {
+                    description: 'Questo algoritmo dovrebbe far arrivare il robot alla meta',
+                    hint: 'Controlla se tutti i movimenti sono nella direzione giusta',
+                    sequence: [
+                        'Inizia',
+                        'Vai a destra',
+                        'Vai a sinistra', // ERRORE: dovrebbe essere 'Vai a destra'
+                        'Vai in basso',
+                        'Prendi tesoro'
+                    ],
+                    errorIndex: 2,
+                    correctCommand: 'Vai a destra'
+                },
+                {
+                    description: 'Questo algoritmo dovrebbe contare fino a 5',
+                    hint: 'Controlla se la sequenza di numeri è corretta',
+                    sequence: [
+                        'Conta 1',
+                        'Conta 2',
+                        'Conta 4', // ERRORE: dovrebbe essere 'Conta 3'
+                        'Conta 4',
+                        'Conta 5'
+                    ],
+                    errorIndex: 2,
+                    correctCommand: 'Conta 3'
+                },
+                {
+                    description: 'Questo algoritmo dovrebbe preparare una pizza',
+                    hint: 'Controlla se tutti i passaggi sono nell\'ordine giusto',
+                    sequence: [
+                        'Prepara impasto',
+                        'Cuoci in forno', // ERRORE: dovrebbe essere dopo 'Aggiungi condimenti'
+                        'Aggiungi condimenti',
+                        'Stendi impasto',
+                        'Servi pizza'
+                    ],
+                    errorIndex: 1,
+                    correctCommand: 'Stendi impasto'
+                },
+                {
+                    description: 'Questo algoritmo dovrebbe lavare i denti',
+                    hint: 'Controlla se la sequenza delle azioni è logica',
+                    sequence: [
+                        'Prendi spazzolino',
+                        'Metti dentifricio',
+                        'Sciacqua bocca', // ERRORE: dovrebbe essere dopo 'Spazzola denti'
+                        'Spazzola denti',
+                        'Riponi spazzolino'
+                    ],
+                    errorIndex: 2,
+                    correctCommand: 'Spazzola denti'
+                }
+            ];
+            
+            debugData = challenges[Math.floor(Math.random() * challenges.length)];
+            debugData.found = false;
+            
+            document.getElementById('debug-description').textContent = debugData.description;
+            document.getElementById('debug-hint').textContent = debugData.hint;
+            
+            updateDebugDisplay();
+        }
+
+        function updateDebugDisplay() {
+            const sequenceEl = document.getElementById('debug-sequence');
+            sequenceEl.innerHTML = '';
+            
+            debugData.sequence.forEach((command, index) => {
+                const commandEl = document.createElement('div');
+                commandEl.className = 'debug-command';
+                if (debugData.found && index === debugData.errorIndex) {
+                    commandEl.classList.add('error');
+                }
+                commandEl.innerHTML = `
+                    <div style="font-weight: bold; margin-bottom: 0.5rem;">${index + 1}</div>
+                    <div>${command}</div>
+                `;
+                commandEl.onclick = () => checkDebugAnswer(index);
+                sequenceEl.appendChild(commandEl);
+            });
+        }
+
+        function checkDebugAnswer(selectedIndex) {
+            const isCorrect = selectedIndex === debugData.errorIndex;
+            
+            updateAdaptiveStats(isCorrect);
+            
+            const feedbackEl = document.getElementById('debug-advanced-feedback');
+            
+            if (isCorrect) {
+                debugData.found = true;
+                updateDebugDisplay();
+                
+                feedbackEl.textContent = `🔧 Ottimo! Hai trovato l'errore. Il comando corretto è: "${debugData.correctCommand}"`;
+                feedbackEl.className = 'feedback success';
+                
+                updateScore(25);
+                updateStars(4);
+                
+                setTimeout(() => generateDebugChallenge(), 3000);
+            } else {
+                feedbackEl.textContent = '🤔 Non è questo l\'errore. Leggi attentamente tutti i comandi!';
+                feedbackEl.className = 'feedback error';
+            }
+        }
             },
             2: {
                 name: "Seconda Primaria",
@@ -836,10 +1478,61 @@
                         { id: 'tabelline-base', name: '✖️ Prime Tabelline', description: 'Tabellina del 2, 5 e 10', active: true }
                     ],
                     coding: [
-                        { id: 'loop-semplici', name: '🔄 I Miei Primi Loop', description: 'Ripeti 3 volte: avanti', active: false }
+                        { id: 'loop-semplici', name: '🔄 I Miei Primi Loop', description: 'Ripeti 3 volte: avanti', active: true }
                     ],
                     pensiero: [
-                        { id: 'if-then-base', name: '🚦 Se Allora', description: 'Prime condizioni logiche', active: false }
+                        { id: 'if-then-base', name: '🚦 Se Allora', description: 'Prime condizioni logiche', active: true }
+                    ]
+                }
+            },
+            3: {
+                name: "Terza Primaria",
+                emoji: "🌳",
+                description: "Logica in azione",
+                age: "8-9 anni",
+                games: {
+                    matematica: [
+                        { id: 'tabelline-complete', name: '🎯 Tabelline Master', description: 'Tutte le tabelline fino a 10', active: true }
+                    ],
+                    coding: [
+                        { id: 'algoritmi-medi', name: '⚙️ Algoritmi Intelligenti', description: 'Sequenze con condizioni', active: true }
+                    ],
+                    pensiero: [
+                        { id: 'debug-avanzato', name: '🔧 Debug Master', description: 'Trova errori in algoritmi complessi', active: true }
+                    ]
+                }
+            },
+            4: {
+                name: "Quarta Primaria",
+                emoji: "🌲",
+                description: "Algoritmi avanzati",
+                age: "9-10 anni",
+                games: {
+                    matematica: [
+                        { id: 'frazioni-visual', name: '🍕 Frazioni Interattive', description: 'Visualizza e opera con le frazioni', active: false }
+                    ],
+                    coding: [
+                        { id: 'variabili-semplici', name: '📦 Le Mie Prime Variabili', description: 'Contenitori per i dati', active: false }
+                    ],
+                    pensiero: [
+                        { id: 'ottimizzazione', name: '🏃‍♂️ Algoritmi Veloci', description: 'Come rendere il codice più efficiente', active: false }
+                    ]
+                }
+            },
+            5: {
+                name: "Quinta Primaria",
+                emoji: "🌺",
+                description: "Programmatori junior",
+                age: "10-11 anni",
+                games: {
+                    matematica: [
+                        { id: 'statistica-base', name: '📊 I Miei Primi Grafici', description: 'Raccogli e analizza dati', active: false }
+                    ],
+                    coding: [
+                        { id: 'progetti-completi', name: '🎮 Crea il Tuo Gioco', description: 'Progetti completi con interfaccia', active: false }
+                    ],
+                    pensiero: [
+                        { id: 'collaborazione-digitale', name: '🤝 Coding di Squadra', description: 'Progetti collaborativi online', active: false }
                     ]
                 }
             }
@@ -974,8 +1667,29 @@
                     document.getElementById('math-game-title').textContent = '✖️ Prime Tabelline';
                     generateMultiplicationQuestion();
                     break;
+                // NEW GAMES - FASE 2
+                case 'loop-semplici':
+                    document.getElementById('loop-game').style.display = 'flex';
+                    generateLoopChallenge();
+                    break;
+                case 'if-then-base':
+                    document.getElementById('if-then-game').style.display = 'flex';
+                    generateIfThenChallenge();
+                    break;
+                case 'tabelline-complete':
+                    document.getElementById('tabelline-complete-game').style.display = 'flex';
+                    generateTabellinesQuestion();
+                    break;
+                case 'algoritmi-medi':
+                    document.getElementById('algorithm-game').style.display = 'flex';
+                    generateAlgorithmChallenge();
+                    break;
+                case 'debug-avanzato':
+                    document.getElementById('debug-advanced-game').style.display = 'flex';
+                    generateDebugChallenge();
+                    break;
                 default:
-                    alert('Gioco in sviluppo - disponibile nella Fase 2!');
+                    alert('Gioco in sviluppo - disponibile nella Fase 3!');
                     showCategoryView();
             }
             
@@ -1000,18 +1714,9 @@
             
             const a = Math.floor(Math.random() * maxNum) + 1;
             const b = Math.floor(Math.random() * (maxNum - a)) + 1;
-            const operation = currentGame === 'tabelline-base' ? '×' : '+';
+            const operation = '+';
             
-            if (operation === '×') {
-                // Multiplication for tabelline
-                const tables = difficulty <= 2 ? [2, 5, 10] : [2, 3, 4, 5, 6, 7, 8, 9, 10];
-                const table = tables[Math.floor(Math.random() * tables.length)];
-                const multiplier = Math.floor(Math.random() * 10) + 1;
-                mathQuestion = { a: table, b: multiplier, operation: '×', result: table * multiplier, difficulty };
-            } else {
-                // Addition
-                mathQuestion = { a, b, operation: '+', result: a + b, difficulty };
-            }
+            mathQuestion = { a, b, operation, result: a + b, difficulty };
             
             document.getElementById('math-question').textContent = `${mathQuestion.a} ${mathQuestion.operation} ${mathQuestion.b} = ?`;
             document.getElementById('math-input').value = '';
@@ -1354,110 +2059,312 @@
             }
         }
 
-        // Progress and Stats Functions
-        function updateScore(points) {
-            score += points;
-            updateStats();
-        }
+        // NEW GAME FUNCTIONS - FASE 2
 
-        function updateStars(newStars) {
-            stars += newStars;
-            updateStats();
-        }
-
-        function updateStats() {
-            // Update all score displays
-            document.querySelectorAll('[id$="-score"], #score-count').forEach(el => {
-                el.textContent = score;
-            });
-            
-            // Update all stars displays
-            document.querySelectorAll('[id$="-stars"], #stars-count').forEach(el => {
-                el.textContent = stars;
-            });
-            
-            // Update level displays
-            document.querySelectorAll('[id$="-level"], #level-count').forEach(el => {
-                el.textContent = level;
-            });
-            
-            // Save to localStorage
-            localStorage.setItem('edutech_score', score.toString());
-            localStorage.setItem('edutech_stars', stars.toString());
-            localStorage.setItem('edutech_level', level.toString());
-            
-            // Show stats bar if progress made
-            if (score > 0 || stars > 0) {
-                document.getElementById('stats-bar').style.display = 'flex';
-            }
-        }
-
-        function updateGameStats() {
-            updateStats();
-        }
-
-        function updateAdaptiveStats(isCorrect) {
-            adaptiveData.totalQuestions++;
-            if (isCorrect) {
-                adaptiveData.correctAnswers++;
-                adaptiveData.consecutiveCorrect++;
-                adaptiveData.consecutiveWrong = 0;
-            } else {
-                adaptiveData.consecutiveCorrect = 0;
-                adaptiveData.consecutiveWrong++;
-            }
-            
-            // Adjust difficulty
-            if (isCorrect && adaptiveData.consecutiveCorrect >= 4) {
-                adaptiveData.currentDifficulty = Math.min(5, adaptiveData.currentDifficulty + 1);
-                adaptiveData.consecutiveCorrect = 0;
-            } else if (!isCorrect && adaptiveData.consecutiveWrong >= 2) {
-                adaptiveData.currentDifficulty = Math.max(1, adaptiveData.currentDifficulty - 1);
-                adaptiveData.consecutiveWrong = 0;
-            }
-            
-            // Update level based on adaptive difficulty
-            level = adaptiveData.currentDifficulty;
-            
-            localStorage.setItem('edutech_adaptive', JSON.stringify(adaptiveData));
-        }
-
-        function resetProgress() {
-            if (confirm('Sei sicuro di voler resettare tutti i progressi? (Utile per cambio classe)')) {
-                score = 0;
-                stars = 0;
-                level = 1;
-                adaptiveData = {
-                    consecutiveCorrect: 0,
-                    consecutiveWrong: 0,
-                    totalQuestions: 0,
-                    correctAnswers: 0,
-                    currentDifficulty: 1
-                };
-                
-                localStorage.removeItem('edutech_score');
-                localStorage.removeItem('edutech_stars');
-                localStorage.removeItem('edutech_level');
-                localStorage.removeItem('edutech_adaptive');
-                
-                updateStats();
-                document.getElementById('stats-bar').style.display = 'none';
-            }
-        }
-
-        // Initialize app when page loads
-        document.addEventListener('DOMContentLoaded', initApp);
-        
-        // Add keyboard support for games
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                if (currentGame === 'addizioni-visual' || currentGame === 'tabelline-base') {
-                    checkMathAnswer();
-                } else if (currentGame === 'conteggio') {
-                    checkCountingAnswer();
+        // Loop Game Functions
+        function generateLoopChallenge() {
+            const challenges = [
+                {
+                    title: 'Fai saltare la rana 3 volte!',
+                    character: '🐸',
+                    action: 'salta',
+                    times: 3
+                },
+                {
+                    title: 'Fai volare l\'uccello 4 volte!',
+                    character: '🐦',
+                    action: 'vola',
+                    times: 4
+                },
+                {
+                    title: 'Fai correre il coniglio 5 volte!',
+                    character: '🐰',
+                    action: 'corri',
+                    times: 5
                 }
+            ];
+            
+            loopData = challenges[Math.floor(Math.random() * challenges.length)];
+            loopData.solution = [];
+            
+            document.getElementById('loop-challenge-title').textContent = loopData.title;
+            document.getElementById('loop-character').textContent = loopData.character;
+            updateLoopDisplay();
+        }
+
+        function updateLoopDisplay() {
+            const solutionEl = document.getElementById('loop-solution').querySelector('.loop-commands');
+            solutionEl.innerHTML = '';
+            
+            if (loopData.solution.length === 0) {
+                solutionEl.innerHTML = '<div style="color: #6B7280; font-style: italic;">Inizia a programmare...</div>';
+            } else {
+                loopData.solution.forEach((command, index) => {
+                    const commandEl = document.createElement('div');
+                    commandEl.className = 'loop-command';
+                    commandEl.innerHTML = `<span>${index + 1}.</span><span>${command}</span>`;
+                    solutionEl.appendChild(commandEl);
+                });
             }
-        });
-    </script>
-</body>
-</html>
+        }
+
+        function addLoopCommand(command) {
+            loopData.solution.push(command);
+            updateLoopDisplay();
+        }
+
+        function clearLoopSolution() {
+            loopData.solution = [];
+            updateLoopDisplay();
+            document.getElementById('loop-feedback').textContent = '';
+        }
+
+        function checkLoopSolution() {
+            const isCorrect = loopData.solution.length === loopData.times && 
+                             loopData.solution.every(cmd => cmd === loopData.action);
+            
+            updateAdaptiveStats(isCorrect);
+            
+            const feedbackEl = document.getElementById('loop-feedback');
+            
+            if (isCorrect) {
+                feedbackEl.textContent = `🔄 Perfetto! Hai fatto ripetere l'azione ${loopData.times} volte!`;
+                feedbackEl.className = 'feedback success';
+                
+                updateScore(25);
+                updateStars(3);
+                
+                setTimeout(() => generateLoopChallenge(), 2000);
+            } else {
+                feedbackEl.textContent = `🤔 Ripeti sempre "${loopData.action}" per ${loopData.times} volte!`;
+                feedbackEl.className = 'feedback error';
+            }
+        }
+
+        // If-Then Game Functions
+        function generateIfThenChallenge() {
+            const challenges = [
+                {
+                    condition: '⛈️ SE piove forte...',
+                    emoji: '⛈️',
+                    options: [
+                        '🏠 Resto a casa',
+                        '🏖️ Vado al mare', 
+                        '🌞 Prendo il sole'
+                    ],
+                    correct: 0
+                },
+                {
+                    condition: '🔥 SE c\'è un incendio...',
+                    emoji: '🔥',
+                    options: [
+                        '💧 Chiamo i pompieri',
+                        '📸 Faccio una foto',
+                        '🍿 Guardo lo spettacolo'
+                    ],
+                    correct: 0
+                },
+                {
+                    condition: '🍎 SE ho fame...',
+                    emoji: '🍎',
+                    options: [
+                        '🎮 Gioco ai videogame',
+                        '🍕 Mangio qualcosa',
+                        '😴 Vado a dormire'
+                    ],
+                    correct: 1
+                },
+                {
+                    condition: '😴 SE sono stanco...',
+                    emoji: '😴',
+                    options: [
+                        '🏃 Vado a correre',
+                        '🛏️ Vado a riposare',
+                        '📚 Studio di più'
+                    ],
+                    correct: 1
+                }
+            ];
+            
+            ifThenData = challenges[Math.floor(Math.random() * challenges.length)];
+            
+            const conditionEl = document.getElementById('if-condition');
+            conditionEl.innerHTML = `
+                <div style="font-size: 4rem; margin-bottom: 1rem;">${ifThenData.emoji}</div>
+                <h4 style="font-size: 1.8rem;">${ifThenData.condition}</h4>
+            `;
+            
+            const optionsEl = document.getElementById('then-options');
+            optionsEl.innerHTML = '';
+            
+            ifThenData.options.forEach((option, index) => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'then-option';
+                optionEl.innerHTML = `
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">${option.split(' ')[0]}</div>
+                    <div style="font-size: 1.2rem; font-weight: bold;">${option.split(' ').slice(1).join(' ')}</div>
+                `;
+                optionEl.onclick = () => checkIfThenAnswer(index);
+                optionsEl.appendChild(optionEl);
+            });
+            
+            document.getElementById('if-then-feedback').textContent = '';
+        }
+
+        function checkIfThenAnswer(selectedIndex) {
+            const isCorrect = selectedIndex === ifThenData.correct;
+            
+            updateAdaptiveStats(isCorrect);
+            
+            const feedbackEl = document.getElementById('if-then-feedback');
+            
+            if (isCorrect) {
+                feedbackEl.textContent = '🧠 Perfetto! Hai scelto la conseguenza logica!';
+                feedbackEl.className = 'feedback success';
+                
+                updateScore(20);
+                updateStars(2);
+                
+                setTimeout(() => generateIfThenChallenge(), 2000);
+            } else {
+                feedbackEl.textContent = '🤔 Pensa meglio... cosa faresti davvero in questa situazione?';
+                feedbackEl.className = 'feedback error';
+            }
+        }
+
+        // Tabellines Complete Game Functions
+        function generateTabellinesQuestion() {
+            const difficulty = Math.min(adaptiveData.currentDifficulty + 2, 5); // More challenging
+            const allTables = [2, 3, 4, 5, 6, 7, 8, 9, 10];
+            const table = allTables[Math.floor(Math.random() * allTables.length)];
+            const multiplier = Math.floor(Math.random() * 10) + 1;
+            
+            tabellinesData = { table, multiplier, result: table * multiplier, difficulty };
+            
+            document.getElementById('tabelline-question').textContent = `${table} × ${multiplier} = ?`;
+            document.getElementById('tabelline-info').textContent = `Tabellina del ${table}`;
+            document.getElementById('tabelline-input').value = '';
+            document.getElementById('tabelline-feedback').textContent = '';
+            
+            generateTabellinesVisual();
+        }
+
+        function generateTabellinesVisual() {
+            const visualContainer = document.getElementById('tabelline-visual');
+            visualContainer.innerHTML = '';
+            
+            // Show fewer groups for readability on harder tables
+            const showGroups = Math.min(tabellinesData.multiplier, 6);
+            
+            for (let group = 0; group < showGroups; group++) {
+                const groupDiv = document.createElement('div');
+                groupDiv.style.display = 'flex';
+                groupDiv.style.flexDirection = 'column';
+                groupDiv.style.alignItems = 'center';
+                groupDiv.style.margin = '0 8px';
+                
+                const groupLabel = document.createElement('div');
+                groupLabel.textContent = `Gruppo ${group + 1}`;
+                groupLabel.style.fontSize = '0.7rem';
+                groupLabel.style.marginBottom = '3px';
+                groupDiv.appendChild(groupLabel);
+                
+                const groupContainer = document.createElement('div');
+                groupContainer.style.display = 'flex';
+                groupContainer.style.flexWrap = 'wrap';
+                groupContainer.style.maxWidth = '80px';
+                groupContainer.style.gap = '1px';
+                
+                for (let i = 0; i < Math.min(tabellinesData.table, 8); i++) {
+                    const obj = document.createElement('div');
+                    obj.style.width = '18px';
+                    obj.style.height = '18px';
+                    obj.style.backgroundColor = '#8B5CF6';
+                    obj.style.borderRadius = '50%';
+                    obj.style.display = 'flex';
+                    obj.style.alignItems = 'center';
+                    obj.style.justifyContent = 'center';
+                    obj.style.color = 'white';
+                    obj.style.fontSize = '0.6rem';
+                    obj.textContent = i + 1;
+                    groupContainer.appendChild(obj);
+                }
+                
+                groupDiv.appendChild(groupContainer);
+                visualContainer.appendChild(groupDiv);
+            }
+            
+            if (tabellinesData.multiplier > 6) {
+                const moreDiv = document.createElement('div');
+                moreDiv.style.fontSize = '1.2rem';
+                moreDiv.style.color = '#8B5CF6';
+                moreDiv.style.margin = '0 10px';
+                moreDiv.textContent = `... e altri ${tabellinesData.multiplier - 6} gruppi`;
+                visualContainer.appendChild(moreDiv);
+            }
+        }
+
+        function checkTabellinesAnswer() {
+            const userAnswer = parseInt(document.getElementById('tabelline-input').value);
+            const isCorrect = userAnswer === tabellinesData.result;
+            
+            updateAdaptiveStats(isCorrect);
+            
+            const feedbackEl = document.getElementById('tabelline-feedback');
+            
+            if (isCorrect) {
+                feedbackEl.textContent = '⚡ Fantastico! Sei un master delle tabelline!';
+                feedbackEl.className = 'feedback success';
+                
+                updateScore(15 * tabellinesData.difficulty);
+                updateStars(3);
+                
+                setTimeout(() => generateTabellinesQuestion(), 1500);
+            } else {
+                feedbackEl.textContent = '💪 Quasi! Conta tutti gli oggetti nei gruppi!';
+                feedbackEl.className = 'feedback error';
+            }
+        }
+
+        // Algorithm Game Functions
+        function generateAlgorithmChallenge() {
+            const challenges = [
+                {
+                    title: 'Porta il robot al tesoro!',
+                    description: 'Programma il robot per raggiungere il tesoro',
+                    grid: [
+                        ['🤖', '', ''],
+                        ['', '🪨', ''],
+                        ['', '', '🏆']
+                    ],
+                    start: [0, 0],
+                    target: [2, 2],
+                    obstacles: [[1, 1]],
+                    solution: ['destra', 'destra', 'giù', 'giù']
+                },
+                {
+                    title: 'Raccogli la stella!',
+                    description: 'Evita gli ostacoli e raggiungi la stella',
+                    grid: [
+                        ['🤖', '🪨', ''],
+                        ['', '', '⭐'],
+                        ['🪨', '', '']
+                    ],
+                    start: [0, 0],
+                    target: [1, 2],
+                    obstacles: [[0, 1], [2, 0]],
+                    solution: ['giù', 'destra', 'destra', 'su']
+                },
+                {
+                    title: 'Trova la chiave!',
+                    description: 'Naviga attraverso il labirinto',
+                    grid: [
+                        ['🤖', '', '🪨'],
+                        ['🪨', '', ''],
+                        ['', '', '🗝️']
+                    ],
+                    start: [0, 0],
+                    target: [2, 2],
+                    obstacles: [[0, 2], [1, 0]],
+                    solution: ['destra', 'giù', 'giù', 'destra']
+                }
