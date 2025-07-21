@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Interattivi - EduTechLab</title>
+    <meta name="description" content="Quiz educativi interattivi su Pensiero Computazionale, Coding, Robotica e AI per docenti e studenti">
+    
+    <!-- PWA Configuration -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e293b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.3) 0%, transparent 50%);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            color: #93c5fd;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.1);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-link:hover {
+            color: white;
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffffff, #e0e7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        /* Main Content */
+        main {
+            padding: 4rem 0;
+        }
+
+        .quiz-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .quiz-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 5px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .quiz-card:hover::before {
+            left: 100%;
+        }
+
+        .quiz-card:nth-child(1) { border-top-color: #3b82f6; }
+        .quiz-card:nth-child(2) { border-top-color: #8b5cf6; }
+        .quiz-card:nth-child(3) { border-top-color: #06b6d4; }
+        .quiz-card:nth-child(4) { border-top-color: #10b981; }
+
+        .quiz-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .quiz-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .quiz-card h3 {
+            color: #1e293b;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .quiz-card p {
+            color: #64748b;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .quiz-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .start-quiz-btn {
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .start-quiz-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .start-quiz-btn:hover::before {
+            left: 100%;
+        }
+
+        .start-quiz-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Quiz Modal */
+        .quiz-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .quiz-content {
+            background: white;
+            max-width: 800px;
+            margin: 2rem auto;
+            border-radius: 20px;
+            padding: 3rem;
+            position: relative;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close-quiz {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #6b7280;
+            transition: color 0.3s ease;
+        }
+
+        .close-quiz:hover {
+            color: #dc2626;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .quiz-title {
+            color: #1e293b;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .quiz-progress {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .quiz-progress-bar {
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            height: 100%;
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .question-container {
+            margin: 2rem 0;
+        }
+
+        .question {
+            font-size: 1.3rem;
+            color: #1e293b;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .answers {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .answer-btn {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            position: relative;
+        }
+
+        .answer-btn:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            transform: translateX(5px);
+        }
+
+        .answer-btn.selected {
+            background: #dbeafe;
+            border-color: #3b82f6;
+            color: #1e40af;
+        }
+
+        .answer-btn.correct {
+            background: #dcfce7;
+            border-color: #22c55e;
+            color: #15803d;
+        }
+
+        .answer-btn.incorrect {
+            background: #fef2f2;
+            border-color: #ef4444;
+            color: #dc2626;
+        }
+
+        .next-question-btn {
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .next-question-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .quiz-result {
+            text-align: center;
+            display: none;
+        }
+
+        .result-score {
+            font-size: 3rem;
+            color: #3b82f6;
+            margin-bottom: 1rem;
+        }
+
+        .result-message {
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 2rem;
+        }
+
+        .restart-quiz-btn {
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .restart-quiz-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .stats-title {
+            text-align: center;
+            color: #1e293b;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 1.5rem;
+            background: #f8fafc;
+            border-radius: 12px;
+            border-top: 3px solid #3b82f6;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3b82f6;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .back-link {
+                position: static;
+                display: inline-flex;
+                margin-bottom: 2rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .quiz-content {
+                margin: 1rem;
+                padding: 2rem;
+            }
+
+            .question {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="back-link">
+            ← Torna al sito
+        </a>
+        <div class="header-content">
+            <h1>🎯 Quiz Interattivi</h1>
+            <p class="subtitle">Metti alla prova le tue competenze STEAM con quiz educativi interattivi</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Quiz Cards -->
+            <div class="quiz-grid">
+                <!-- Pensiero Computazionale -->
+                <div class="quiz-card">
+                    <div class="quiz-icon">🧠</div>
+                    <h3>Pensiero Computazionale</h3>
+                    <p>Verifica la tua conoscenza su algoritmi, decomposizione, pattern recognition e astrazione.</p>
+                    <div class="quiz-info">
+                        <span>🕒 5-7 minuti</span>
+                        <span>❓ 8 domande</span>
+                        <span>📊 Livello: Base</span>
+                    </div>
+                    <button class="start-quiz-btn" onclick="startQuiz('computational')">
+                        Inizia Quiz
+                    </button>
+                </div>
+
+                <!-- Coding di Base -->
+                <div class="quiz-card">
+                    <div class="quiz-icon">💻</div>
+                    <h3>Coding di Base</h3>
+                    <p>Testa le tue competenze sui concetti fondamentali della programmazione e logica algoritmiche.</p>
+                    <div class="quiz-info">
+                        <span>🕒 6-8 minuti</span>
+                        <span>❓ 10 domande</span>
+                        <span>📊 Livello: Base</span>
+                    </div>
+                    <button class="start-quiz-btn" onclick="startQuiz('coding')">
+                        Inizia Quiz
+                    </button>
+                </div>
+
+                <!-- Robotica Educativa -->
+                <div class="quiz-card">
+                    <div class="quiz-icon">🤖</div>
+                    <h3>Robotica Educativa</h3>
+                    <p>Esplora i concetti di robotica, sensori, attuatori e programmazione di dispositivi.</p>
+                    <div class="quiz-info">
+                        <span>🕒 7-9 minuti</span>
+                        <span>❓ 12 domande</span>
+                        <span>📊 Livello: Intermedio</span>
+                    </div>
+                    <button class="start-quiz-btn" onclick="startQuiz('robotics')">
+                        Inizia Quiz
+                    </button>
+                </div>
+
+                <!-- AI in Didattica -->
+                <div class="quiz-card">
+                    <div class="quiz-icon">🎯</div>
+                    <h3>AI in Didattica</h3>
+                    <p>Scopri come integrare l'Intelligenza Artificiale nella didattica in modo etico ed efficace.</p>
+                    <div class="quiz-info">
+                        <span>🕒 8-10 minuti</span>
+                        <span>❓ 15 domande</span>
+                        <span>📊 Livello: Avanzato</span>
+                    </div>
+                    <button class="start-quiz-btn" onclick="startQuiz('ai')">
+                        Inizia Quiz
+                    </button>
+                </div>
+            </div>
+
+            <!-- Statistics Section -->
+            <div class="stats-section">
+                <h3 class="stats-title">📈 Le tue Statistiche</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" id="total-quizzes">0</div>
+                        <div class="stat-label">Quiz Completati</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="average-score">0%</div>
+                        <div class="stat-label">Punteggio Medio</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="best-category">-</div>
+                        <div class="stat-label">Categoria Migliore</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="total-time">0min</div>
+                        <div class="stat-label">Tempo Totale</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Quiz Modal -->
+    <div class="quiz-modal" id="quizModal">
+        <div class="quiz-content">
+            <button class="close-quiz" onclick="closeQuiz()">&times;</button>
+            
+            <div class="quiz-header">
+                <h2 class="quiz-title" id="quizTitle">Quiz in corso...</h2>
+                <div class="quiz-progress">
+                    <div class="quiz-progress-bar" id="progressBar"></div>
+                </div>
+                <p><span id="questionNumber">1</span> di <span id="totalQuestions">10</span></p>
+            </div>
+
+            <div class="question-container" id="questionContainer">
+                <div class="question" id="currentQuestion">Caricamento domanda...</div>
+                <div class="answers" id="answersContainer">
+                    <!-- Le risposte verranno inserite qui dinamicamente -->
+                </div>
+                <button class="next-question-btn" id="nextBtn" onclick="nextQuestion()">
+                    Prossima Domanda
+                </button>
+            </div>
+
+            <div class="quiz-result" id="quizResult">
+                <div class="result-score" id="finalScore">0/10</div>
+                <div class="result-message" id="resultMessage">Ottimo lavoro!</div>
+                <button class="restart-quiz-btn" onclick="restartCurrentQuiz()">🔄 Rifai Quiz</button>
+                <button class="restart-quiz-btn" onclick="closeQuiz()">🏠 Torna alla Home</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz Data
+        const quizzes = {
+            computational: {
+                title: "🧠 Pensiero Computazionale",
+                questions: [
+                    {
+                        question: "Cos'è la decomposizione nel pensiero computazionale?",
+                        answers: [
+                            "Suddividere un problema complesso in sottoproblemi più semplici",
+                            "Eliminare parti non necessarie del codice",
+                            "Confrontare due algoritmi diversi",
+                            "Ripetere un processo più volte"
+                        ],
+                        correct: 0
+                    },
+                    {
+                        question: "Il pattern recognition consiste nel:",
+                        answers: [
+                            "Creare nuovi modelli di programmazione",
+                            "Riconoscere schemi e similarità ricorrenti",
+                            "Eliminare errori nel codice",
+                            "Ottimizzare le prestazioni"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "L'astrazione nel problem solving significa:",
+                        answers: [
+                            "Rendere il codice più complesso",
+                            "Aggiungere dettagli specifici",
+                            "Concentrarsi sui dettagli essenziali ignorando quelli irrilevanti",
+                            "Copiare soluzioni esistenti"
+                        ],
+                        correct: 2
+                    },
+                    {
+                        question: "Un algoritmo è:",
+                        answers: [
+                            "Un tipo di linguaggio di programmazione",
+                            "Una sequenza finita di istruzioni per risolvere un problema",
+                            "Un computer molto veloce",
+                            "Un errore nel codice"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "La programmazione visuale (es. Scratch) è utile perché:",
+                        answers: [
+                            "È più veloce della programmazione testuale",
+                            "Non richiede logica",
+                            "Aiuta a comprendere i concetti senza la complessità della sintassi",
+                            "È solo per bambini"
+                        ],
+                        correct: 2
+                    },
+                    {
+                        question: "Un debug è:",
+                        answers: [
+                            "Aggiungere nuove funzionalità",
+                            "Trovare e correggere errori nel codice",
+                            "Velocizzare l'esecuzione",
+                            "Tradurre in un altro linguaggio"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "I loop (cicli) servono per:",
+                        answers: [
+                            "Creare errori",
+                            "Ripetere istruzioni",
+                            "Cancellare dati",
+                            "Connettere internet"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Le variabili in programmazione sono:",
+                        answers: [
+                            "Sempre numeri",
+                            "Contenitori per memorizzare dati",
+                            "Errori del programma",
+                            "Comandi speciali"
+                        ],
+                        correct: 1
+                    }
+                ]
+            },
+            coding: {
+                title: "💻 Coding di Base",
+                questions: [
+                    {
+                        question: "Scratch è principalmente:",
+                        answers: [
+                            "Un linguaggio di programmazione professionale",
+                            "Un linguaggio di programmazione visuale educativo",
+                            "Un tipo di computer",
+                            "Un sistema operativo"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "In Scratch, i 'blocchi' rappresentano:",
+                        answers: [
+                            "Ostacoli nel gioco",
+                            "Istruzioni di programmazione",
+                            "Errori del codice",
+                            "File salvati"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Un 'sprite' in Scratch è:",
+                        answers: [
+                            "Un errore nel programma",
+                            "Un tipo di blocco",
+                            "Un personaggio o oggetto programmabile",
+                            "Una variabile numerica"
+                        ],
+                        correct: 2
+                    },
+                    {
+                        question: "Il blocco 'ripeti per sempre' in Scratch crea:",
+                        answers: [
+                            "Un errore infinito",
+                            "Un ciclo infinito",
+                            "Una variabile",
+                            "Un nuovo sprite"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Le coordinate X e Y in Scratch indicano:",
+                        answers: [
+                            "Il colore dell'oggetto",
+                            "La posizione sullo stage",
+                            "La velocità di movimento",
+                            "Il numero di cloni"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Un 'if-else' (se-altrimenti) è:",
+                        answers: [
+                            "Un tipo di variabile",
+                            "Una struttura di controllo condizionale",
+                            "Un movimento dello sprite",
+                            "Un suono"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Per far parlare uno sprite in Scratch si usa:",
+                        answers: [
+                            "Il blocco 'muovi'",
+                            "Il blocco 'dire'",
+                            "Il blocco 'ripeti'",
+                            "Il blocco 'nasconditi'"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "I sensori in Scratch permettono di:",
+                        answers: [
+                            "Cambiare il colore",
+                            "Rilevare eventi (click, tasti, collisioni)",
+                            "Creare nuovi sprite",
+                            "Salvare il progetto"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Un clone in Scratch è:",
+                        answers: [
+                            "Un errore duplicato",
+                            "Una copia identica di uno sprite",
+                            "Un nuovo progetto",
+                            "Un tipo di variabile"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Per creare animazioni fluide in Scratch è importante:",
+                        answers: [
+                            "Usare molte variabili",
+                            "Utilizzare 'attendi' tra i movimenti",
+                            "Evitare i cicli",
+                            "Usare solo movimenti grandi"
+                        ],
+                        correct: 1
+                    }
+                ]
+            },
+            robotics: {
+                title: "🤖 Robotica Educativa",
+                questions: [
+                    {
+                        question: "Cosa sono i sensori in robotica?",
+                        answers: [
+                            "Parti che fanno muovere il robot",
+                            "Dispositivi che raccolgono informazioni dall'ambiente",
+                            "Batterie del robot",
+                            "Programmi del computer"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Un attuatore è:",
+                        answers: [
+                            "Un sensore molto preciso",
+                            "Un componente che produce movimento o azione",
+                            "Un tipo di batteria",
+                            "Un linguaggio di programmazione"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Il microcontrollore in un robot è:",
+                        answers: [
+                            "Il 'cervello' che elabora le informazioni",
+                            "Il motore principale",
+                            "La batteria",
+                            "Il sensore più importante"
+                        ],
+                        correct: 0
+                    },
+                    {
+                        question: "Un sensore ultrasuoni misura:",
+                        answers: [
+                            "La temperatura",
+                            "Il colore",
+                            "La distanza",
+                            "Il peso"
+                        ],
+                        correct: 2
+                    },
+                    {
+                        question: "Arduino è:",
+                        answers: [
+                            "Un tipo di robot",
+                            "Una piattaforma hardware programmabile",
+                            "Un sensore",
+                            "Un sistema operativo"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "I motori servo si caratterizzano per:",
+                        answers: [
+                            "Velocità molto alta",
+                            "Controllo preciso della posizione",
+                            "Funzionamento silenzioso",
+                            "Basso consumo energetico"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Un robot autonomo è:",
+                        answers: [
+                            "Sempre collegato al computer",
+                            "Capace di prendere decisioni senza controllo umano diretto",
+                            "Molto costoso",
+                            "Sempre con ruote"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Il feedback in robotica è:",
+                        answers: [
+                            "Un errore del sistema",
+                            "Informazioni che ritornano dai sensori per correggere l'azione",
+                            "Il rumore del motore",
+                            "La velocità massima"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "I LED in un progetto robotico spesso indicano:",
+                        answers: [
+                            "Errori nel sistema",
+                            "Stati o condizioni del robot",
+                            "La carica della batteria",
+                            "La velocità"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "La robotica educativa sviluppa principalmente:",
+                        answers: [
+                            "Solo competenze tecniche",
+                            "Competenze STEAM (Science, Technology, Engineering, Arts, Mathematics)",
+                            "Solo creatività",
+                            "Solo matematica"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Un algoritmo di controllo PID serve per:",
+                        answers: [
+                            "Programmare in Python",
+                            "Regolare con precisione il comportamento del robot",
+                            "Connettere sensori",
+                            "Caricare la batteria"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Nel making educativo, il 'prototipare' significa:",
+                        answers: [
+                            "Copiare progetti esistenti",
+                            "Creare versioni iniziali per testare idee",
+                            "Comprare componenti costosi",
+                            "Finire subito il progetto"
+                        ],
+                        correct: 1
+                    }
+                ]
+            },
+            ai: {
+                title: "🎯 AI in Didattica",
+                questions: [
+                    {
+                        question: "L'AI generativa in educazione può essere utilizzata per:",
+                        answers: [
+                            "Sostituire completamente i docenti",
+                            "Creare contenuti educativi personalizzati e supportare l'apprendimento",
+                            "Eliminare la creatività degli studenti",
+                            "Rendere obsoleti i libri di testo"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Un uso etico dell'AI in didattica prevede:",
+                        answers: [
+                            "Sostituire il pensiero critico degli studenti",
+                            "Trasparenza sull'uso dell'AI e mantenimento del controllo umano",
+                            "Utilizzarla per tutti i compiti degli studenti",
+                            "Nascondere agli studenti quando si usa l'AI"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "ChatGPT e strumenti simili sono esempi di:",
+                        answers: [
+                            "Intelligenza Artificiale Generale",
+                            "Large Language Models (LLM)",
+                            "Algoritmi di ricerca",
+                            "Database educativi"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "L'apprendimento adattivo tramite AI significa:",
+                        answers: [
+                            "Tutti gli studenti studiano lo stesso contenuto",
+                            "Il sistema si adatta al ritmo e stile di apprendimento individuale",
+                            "L'AI prende decisioni per gli studenti",
+                            "Si eliminano le valutazioni"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "I rischi dell'AI in educazione includono:",
+                        answers: [
+                            "Aumento delle competenze digitali",
+                            "Dipendenza eccessiva e perdita di competenze critiche",
+                            "Miglioramento dell'apprendimento",
+                            "Maggiore personalizzazione"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Un prompt efficace per l'AI educativa dovrebbe essere:",
+                        answers: [
+                            "Molto generico",
+                            "Specifico, con contesto e obiettivi chiari",
+                            "Solo una parola",
+                            "Sempre uguale per tutti"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "L'AI può supportare i docenti nel:",
+                        answers: [
+                            "Sostituire la loro esperienza pedagogica",
+                            "Creare materiali, valutazioni e feedback personalizzati",
+                            "Eliminare la necessità di formazione",
+                            "Prendere decisioni educative importanti"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Il 'machine learning' è:",
+                        answers: [
+                            "Un modo per far imparare le macchine da sole",
+                            "Un approccio per far 'apprendere' pattern dai dati agli algoritmi",
+                            "Un nuovo tipo di computer",
+                            "Un linguaggio di programmazione"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Per integrare l'AI in modo efficace nella didattica è importante:",
+                        answers: [
+                            "Usarla per qualsiasi attività",
+                            "Formare i docenti e avere obiettivi pedagogici chiari",
+                            "Eliminarare i metodi tradizionali",
+                            "Affidarsi completamente all'AI"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Gli studenti dovrebbero essere educati sull'AI per:",
+                        answers: [
+                            "Diventare tutti programmatori",
+                            "Sviluppare alfabetizzazione digitale e pensiero critico",
+                            "Evitare completamente la tecnologia",
+                            "Usarla senza limiti"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Il 'bias' nell'AI si riferisce a:",
+                        answers: [
+                            "Errori di programmazione",
+                            "Pregiudizi nei dati o negli algoritmi che possono influenzare i risultati",
+                            "La velocità del computer",
+                            "Il costo della tecnologia"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "L'AI nell'educazione inclusiva può:",
+                        answers: [
+                            "Creare più barriere",
+                            "Supportare studenti con bisogni educativi speciali",
+                            "Escludere alcuni studenti",
+                            "Sostituire il supporto umano"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "La privacy dei dati degli studenti con l'AI richiede:",
+                        answers: [
+                            "Nessuna attenzione particolare",
+                            "Protezioni rigorose e trasparenza nell'uso",
+                            "Condivisione libera dei dati",
+                            "Solo controlli tecnici"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Il futuro dell'AI in educazione dovrebbe puntare a:",
+                        answers: [
+                            "Automatizzare tutto",
+                            "Aumentare l'interazione umana e personalizzare l'apprendimento",
+                            "Ridurre i costi a ogni costo",
+                            "Standardizzare tutti i percorsi"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        question: "Un chatbot educativo ben progettato dovrebbe:",
+                        answers: [
+                            "Rispondere a tutto",
+                            "Avere limiti chiari e indirizzare agli umani quando necessario",
+                            "Non dire mai che non sa",
+                            "Sostituire il docente"
+                        ],
+                        correct: 1
+                    }
+                ]
+            }
+        };
+
+        // Quiz State
+        let currentQuiz = null;
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedAnswer = null;
+        let quizStartTime = null;
+
+        // Statistics
+        let stats = JSON.parse(localStorage.getItem('quizStats') || '{"totalQuizzes": 0, "totalScore": 0, "categoryScores": {}, "totalTime": 0}');
+
+        // Initialize stats display
+        updateStatsDisplay();
+
+        function startQuiz(quizType) {
+            currentQuiz = quizzes[quizType];
+            currentQuestionIndex = 0;
+            score = 0;
+            selectedAnswer = null;
+            quizStartTime = Date.now();
+            
+            document.getElementById('quizModal').style.display = 'block';
+            document.getElementById('quizTitle').textContent = currentQuiz.title;
+            document.getElementById('totalQuestions').textContent = currentQuiz.questions.length;
+            document.getElementById('questionContainer').style.display = 'block';
+            document.getElementById('quizResult').style.display = 'none';
+            
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = currentQuiz.questions[currentQuestionIndex];
+            const progress = ((currentQuestionIndex + 1) / currentQuiz.questions.length) * 100;
+            
+            document.getElementById('questionNumber').textContent = currentQuestionIndex + 1;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('currentQuestion').textContent = question.question;
+            document.getElementById('nextBtn').style.display = 'none';
+            selectedAnswer = null;
+            
+            const answersContainer = document.getElementById('answersContainer');
+            answersContainer.innerHTML = '';
+            
+            question.answers.forEach((answer, index) => {
+                const button = document.createElement('button');
+                button.className = 'answer-btn';
+                button.textContent = answer;
+                button.onclick = () => selectAnswer(index, button);
+                answersContainer.appendChild(button);
+            });
+        }
+
+        function selectAnswer(index, button) {
+            // Remove previous selections
+            document.querySelectorAll('.answer-btn').forEach(btn => {
+                btn.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            selectedAnswer = index;
+            const question = currentQuiz.questions[currentQuestionIndex];
+            
+            // Show correct/incorrect
+            document.querySelectorAll('.answer-btn').forEach((btn, idx) => {
+                if (idx === question.correct) {
+                    btn.classList.add('correct');
+                } else if (idx === selectedAnswer && idx !== question.correct) {
+                    btn.classList.add('incorrect');
+                }
+                btn.disabled = true;
+            });
+            
+            if (selectedAnswer === question.correct) {
+                score++;
+            }
+            
+            document.getElementById('nextBtn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex < currentQuiz.questions.length) {
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            const percentage = Math.round((score / currentQuiz.questions.length) * 100);
+            const quizTime = Math.round((Date.now() - quizStartTime) / 60000); // in minutes
+            
+            document.getElementById('questionContainer').style.display = 'none';
+            document.getElementById('quizResult').style.display = 'block';
+            document.getElementById('finalScore').textContent = `${score}/${currentQuiz.questions.length} (${percentage}%)`;
+            
+            let message = '';
+            if (percentage >= 90) message = '🏆 Eccellente! Sei un esperto!';
+            else if (percentage >= 80) message = '🌟 Ottimo lavoro!';
+            else if (percentage >= 70) message = '👍 Buon risultato!';
+            else if (percentage >= 60) message = '📚 Continua a studiare!';
+            else message = '💪 Non mollare, riprova!';
+            
+            document.getElementById('resultMessage').textContent = message;
+            
+            // Update stats
+            updateStats(currentQuiz.title, percentage, quizTime);
+        }
+
+        function updateStats(quizTitle, percentage, time) {
+            stats.totalQuizzes++;
+            stats.totalScore += percentage;
+            stats.totalTime += time;
+            
+            if (!stats.categoryScores[quizTitle]) {
+                stats.categoryScores[quizTitle] = [];
+            }
+            stats.categoryScores[quizTitle].push(percentage);
+            
+            localStorage.setItem('quizStats', JSON.stringify(stats));
+            updateStatsDisplay();
+        }
+
+        function updateStatsDisplay() {
+            document.getElementById('total-quizzes').textContent = stats.totalQuizzes;
+            document.getElementById('average-score').textContent = 
+                stats.totalQuizzes > 0 ? Math.round(stats.totalScore / stats.totalQuizzes) + '%' : '0%';
+            document.getElementById('total-time').textContent = stats.totalTime + 'min';
+            
+            // Find best category
+            let bestCategory = '-';
+            let bestScore = 0;
+            for (const [category, scores] of Object.entries(stats.categoryScores)) {
+                const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+                if (avg > bestScore) {
+                    bestScore = avg;
+                    bestCategory = category.replace('🧠 ', '').replace('💻 ', '').replace('🤖 ', '').replace('🎯 ', '');
+                }
+            }
+            document.getElementById('best-category').textContent = bestCategory;
+        }
+
+        function restartCurrentQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            selectedAnswer = null;
+            quizStartTime = Date.now();
+            
+            document.getElementById('questionContainer').style.display = 'block';
+            document.getElementById('quizResult').style.display = 'none';
+            
+            showQuestion();
+        }
+
+        function closeQuiz() {
+            document.getElementById('quizModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('quizModal');
+            if (event.target === modal) {
+                closeQuiz();
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeQuiz();
+            }
+        });
+    </script>
+</body>
+</html>
