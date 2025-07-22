@@ -412,11 +412,6 @@
             margin: 0 auto 1rem;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         /* Play button for when autoplay is blocked */
         .video-play-btn {
             position: absolute;
@@ -460,7 +455,7 @@
             text-align: center;
             font-size: 1rem;
             font-weight: 600;
-            z-index: 30000; /* AUMENTATO per essere sempre sopra */
+            z-index: 25000;
             transform: translateY(-100%);
             transition: all 0.5s ease;
             box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
@@ -512,11 +507,6 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
-        }
-
-        .close-update-btn:hover {
-            background: rgba(255,255,255,0.2);
-            transform: scale(1.1);
         }
 
         /* Hide scrollbar during video modal */
@@ -1150,6 +1140,19 @@
                 gap: 1rem;
             }
 
+            .modal-content {
+                margin: 1rem;
+                max-height: 95vh;
+            }
+
+            .modal-header {
+                padding: 1.5rem;
+            }
+
+            .modal-body {
+                padding: 1.5rem;
+            }
+
             .video-modal-content {
                 max-width: 95vw;
                 max-height: 85vh;
@@ -1182,19 +1185,6 @@
             .update-btn {
                 padding: 0.5rem 1.2rem;
                 font-size: 0.9rem;
-            }
-
-            .modal-content {
-                margin: 1rem;
-                max-height: 95vh;
-            }
-
-            .modal-header {
-                padding: 1.5rem;
-            }
-
-            .modal-body {
-                padding: 1.5rem;
             }
         }
 
@@ -1242,7 +1232,6 @@
             <button class="close-update-btn" onclick="dismissUpdate()" title="Chiudi notifica">×</button>
         </div>
     </div>
-
     <!-- VIDEO WELCOME MODAL -->
     <div class="video-welcome-modal" id="videoWelcomeModal">
         <div class="video-modal-content">
@@ -1482,10 +1471,10 @@
     <footer>
         <div class="container">
             <div class="footer-links">
-                <a href="#privacy">Privacy Policy</a>
-                <a href="#cookies">Cookie Policy</a>
-                <a href="#legal">Note Legali</a>
-                <a href="#terms">Termini di Servizio</a>
+                <a onclick="openModal('privacyModal')">Privacy Policy</a>
+                <a onclick="openModal('cookieModal')">Cookie Policy</a>
+                <a onclick="openModal('legalModal')">Note Legali</a>
+                <a onclick="openModal('termsModal')">Termini di Servizio</a>
             </div>
             <p>&copy; 2025 EduTechLab - Fabio Rizzotto. Tutti i diritti riservati.</p>
             <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 1rem;">
@@ -1820,18 +1809,50 @@
             document.getElementById('cookieBanner').style.display = 'block';
         }
 
+        // Modal Functions
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.getElementsByClassName('modal');
+            for (let modal of modals) {
+                if (event.target === modal) {
+                    modal.classList.remove('show');
+                    document.body.style.overflow = 'auto';
+                }
+            }
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modals = document.getElementsByClassName('modal');
+                for (let modal of modals) {
+                    if (modal.classList.contains('show')) {
+                        modal.classList.remove('show');
+                        document.body.style.overflow = 'auto';
+                    }
+                }
+                // Also close video modal
+                closeVideoModal();
+            }
+        });
+
         // VIDEO MODAL MANAGEMENT
         let videoModalShown = false;
         let autoplayFailed = false;
-        let updateAvailable = false; // NUOVO FLAG
 
         function showVideoModal() {
-            // CONTROLLO: Se c'è un aggiornamento disponibile, NON mostrare il video
-            if (updateAvailable) {
-                console.log('Aggiornamento disponibile: video saltato');
-                return;
-            }
-
             if (!videoModalShown && !sessionStorage.getItem('videoModalShown')) {
                 const modal = document.getElementById('videoWelcomeModal');
                 const video = document.getElementById('welcomeVideo');
@@ -1843,9 +1864,11 @@
                 const playPromise = video.play();
                 if (playPromise !== undefined) {
                     playPromise.then(() => {
+                        // Autoplay started successfully
                         console.log("Video autoplay started");
                         hidePlayButton();
                     }).catch(error => {
+                        // Autoplay was prevented
                         console.log("Autoplay prevented, showing play button:", error);
                         autoplayFailed = true;
                         showPlayButton();
@@ -1904,99 +1927,16 @@
             }
         });
 
+        // Show video modal when page loads (with a small delay for better UX)
+        window.addEventListener('load', function() {
+            setTimeout(showVideoModal, 1000);
+        });
+
         // Auto-close modal after video completes 3 loops (24 seconds) - only if playing
         document.getElementById('welcomeVideo').addEventListener('timeupdate', function() {
+            // Only auto-close if video is actually playing (not paused due to autoplay block)
             if (this.currentTime >= 24 && videoModalShown && !this.paused && !autoplayFailed) {
                 setTimeout(closeVideoModal, 1000);
-            }
-        });
-
-        // ===============================
-        // SISTEMA DI NOTIFICA AGGIORNAMENTI - VERSIONE CORRETTA
-        // ===============================
-        
-        // IMPORTANTE: Quando modifichi il sito, incrementa questo numero!
-        const SITE_VERSION = '2.0.0'; // <-- CAMBIA QUESTO QUANDO AGGIORNI IL SITO
-        
-        // Controlla se c'è un aggiornamento disponibile
-        function checkForUpdates() {
-            const lastVersion = localStorage.getItem('siteVersion');
-            const updateDismissed = sessionStorage.getItem('updateDismissed');
-            
-            console.log('Versione corrente:', SITE_VERSION);
-            console.log('Versione salvata:', lastVersion);
-            console.log('Update dismissed:', updateDismissed);
-            
-            // Se è la prima visita o c'è una nuova versione e non è stata dismessa
-            if (lastVersion !== SITE_VERSION && !updateDismissed) {
-                // Se non è la prima visita (c'era una versione precedente)
-                if (lastVersion) {
-                    console.log('Aggiornamento rilevato!');
-                    updateAvailable = true; // IMPOSTA IL FLAG
-                    showUpdateNotification();
-                    return true; // Indica che c'è un aggiornamento
-                } else {
-                    // Prima visita, salva la versione corrente
-                    console.log('Prima visita, salvo versione');
-                    localStorage.setItem('siteVersion', SITE_VERSION);
-                }
-            }
-            return false; // Nessun aggiornamento
-        }
-
-        // Mostra la notifica di aggiornamento
-        function showUpdateNotification() {
-            const notification = document.getElementById('updateNotification');
-            // Mostra subito il banner se c'è un aggiornamento
-            setTimeout(() => {
-                notification.classList.add('show');
-                console.log('Banner di aggiornamento mostrato');
-            }, 500); // Ridotto il delay per essere più veloce del video
-        }
-
-        // Aggiorna il sito (ricarica la pagina)
-        function updateSite() {
-            console.log('Aggiornamento del sito...');
-            localStorage.setItem('siteVersion', SITE_VERSION);
-            sessionStorage.removeItem('updateDismissed');
-            
-            // Forza il ricaricamento senza cache
-            window.location.reload(true);
-        }
-
-        // Nascondi la notifica per questa sessione
-        function dismissUpdate() {
-            console.log('Aggiornamento dismesso');
-            const notification = document.getElementById('updateNotification');
-            notification.classList.remove('show');
-            sessionStorage.setItem('updateDismissed', 'true');
-            updateAvailable = false; // RESET FLAG
-            
-            // Aggiorna comunque la versione in background
-            setTimeout(() => {
-                localStorage.setItem('siteVersion', SITE_VERSION);
-                // Ora può mostrare il video se non è già stato mostrato
-                if (!sessionStorage.getItem('videoModalShown')) {
-                    setTimeout(showVideoModal, 1000);
-                }
-            }, 1000);
-        }
-
-        // INIZIALIZZAZIONE CORRETTA
-        document.addEventListener('DOMContentLoaded', function() {
-            // PRIMA controlla gli aggiornamenti
-            const hasUpdate = checkForUpdates();
-            
-            // POI, solo se non ci sono aggiornamenti, programma il video
-            if (!hasUpdate) {
-                setTimeout(showVideoModal, 1000);
-            }
-        });
-
-        // Close modal with Escape key
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeVideoModal();
             }
         });
 
@@ -2065,6 +2005,64 @@
             const currentYear = new Date().getFullYear();
             document.querySelector('footer p').innerHTML = 
                 `&copy; ${currentYear} EduTechLab - Fabio Rizzotto. Tutti i diritti riservati.`;
+        });
+
+        // ===============================
+        // SISTEMA DI NOTIFICA AGGIORNAMENTI
+        // ===============================
+        
+        // IMPORTANTE: Quando modifichi il sito, incrementa questo numero!
+        const SITE_VERSION = '1.1.0'; // <-- CAMBIA QUESTO QUANDO AGGIORNI IL SITO
+        
+        // Controlla se c'è un aggiornamento disponibile
+        function checkForUpdates() {
+            const lastVersion = localStorage.getItem('siteVersion');
+            const updateDismissed = sessionStorage.getItem('updateDismissed');
+            
+            // Se è la prima visita o c'è una nuova versione e non è stata dismessa
+            if (lastVersion !== SITE_VERSION && !updateDismissed) {
+                // Se non è la prima visita (c'era una versione precedente)
+                if (lastVersion) {
+                    showUpdateNotification();
+                } else {
+                    // Prima visita, salva la versione corrente
+                    localStorage.setItem('siteVersion', SITE_VERSION);
+                }
+            }
+        }
+
+        // Mostra la notifica di aggiornamento
+        function showUpdateNotification() {
+            const notification = document.getElementById('updateNotification');
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 1500); // Appare dopo 1.5 secondi per non interferire con il video
+        }
+
+        // Aggiorna il sito (ricarica la pagina)
+        function updateSite() {
+            localStorage.setItem('siteVersion', SITE_VERSION);
+            sessionStorage.removeItem('updateDismissed');
+            
+            // Forza il ricaricamento senza cache
+            window.location.reload(true);
+        }
+
+        // Nascondi la notifica per questa sessione
+        function dismissUpdate() {
+            const notification = document.getElementById('updateNotification');
+            notification.classList.remove('show');
+            sessionStorage.setItem('updateDismissed', 'true');
+            
+            // Aggiorna comunque la versione in background
+            setTimeout(() => {
+                localStorage.setItem('siteVersion', SITE_VERSION);
+            }, 1000);
+        }
+
+        // Avvia il controllo aggiornamenti al caricamento della pagina
+        document.addEventListener('DOMContentLoaded', function() {
+            checkForUpdates();
         });
 
         // Register Service Worker for PWA
