@@ -325,8 +325,8 @@
 
         .video-close-btn {
             position: absolute;
-            top: -70px;
-            right: 0;
+            top: 20px;
+            right: 20px;
             background: linear-gradient(45deg, #ef4444, #dc2626);
             color: white;
             border: none;
@@ -412,9 +412,35 @@
             margin: 0 auto 1rem;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        /* Play button for when autoplay is blocked */
+        .video-play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 2rem;
+            transition: all 0.3s ease;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+            z-index: 20002;
+        }
+
+        .video-play-btn:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.6);
+        }
+
+        .video-play-btn.show {
+            display: flex;
         }
 
         /* Hide scrollbar during video modal */
@@ -1075,7 +1101,14 @@
                 width: 40px;
                 height: 40px;
                 font-size: 1.2rem;
-                top: -60px;
+                top: 10px;
+                right: 10px;
+            }
+
+            .video-play-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
             }
         }
 
@@ -1128,14 +1161,17 @@
                 <div class="loading-spinner"></div>
                 <p>Caricamento video...</p>
             </div>
+            <button class="video-play-btn" id="videoPlayBtn" onclick="playVideo()">
+                ▶
+            </button>
             <video 
                 class="welcome-video" 
                 id="welcomeVideo" 
-                autoplay 
                 loop 
                 playsinline 
                 onloadeddata="hideVideoLoading()"
-                onplay="hideVideoLoading()">
+                onplay="hideVideoLoading(); hidePlayButton();"
+                onpause="showPlayButton();">
                 <source src="Video_Generato_Idea_e_Logo.mp4" type="video/mp4">
                 Il tuo browser non supporta i video HTML5.
             </video>
@@ -1730,6 +1766,7 @@
 
         // VIDEO MODAL MANAGEMENT
         let videoModalShown = false;
+        let autoplayFailed = false;
 
         function showVideoModal() {
             if (!videoModalShown && !sessionStorage.getItem('videoModalShown')) {
@@ -1740,14 +1777,44 @@
                 document.body.classList.add('modal-open');
                 
                 // Try to play video with sound
-                video.play().catch(function(error) {
-                    console.log("Autoplay prevented:", error);
-                    // If autoplay fails, show a play button or instructions
-                });
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        // Autoplay started successfully
+                        console.log("Video autoplay started");
+                        hidePlayButton();
+                    }).catch(error => {
+                        // Autoplay was prevented
+                        console.log("Autoplay prevented, showing play button:", error);
+                        autoplayFailed = true;
+                        showPlayButton();
+                    });
+                }
                 
                 videoModalShown = true;
                 sessionStorage.setItem('videoModalShown', 'true');
             }
+        }
+
+        function playVideo() {
+            const video = document.getElementById('welcomeVideo');
+            video.play().then(() => {
+                hidePlayButton();
+                autoplayFailed = false;
+            }).catch(error => {
+                console.log("Manual play failed:", error);
+                alert("Impossibile riprodurre il video. Prova ad aggiornare la pagina.");
+            });
+        }
+
+        function showPlayButton() {
+            const playBtn = document.getElementById('videoPlayBtn');
+            playBtn.classList.add('show');
+        }
+
+        function hidePlayButton() {
+            const playBtn = document.getElementById('videoPlayBtn');
+            playBtn.classList.remove('show');
         }
 
         function closeVideoModal() {
@@ -1759,6 +1826,7 @@
             
             video.pause();
             video.currentTime = 0;
+            hidePlayButton();
         }
 
         function hideVideoLoading() {
@@ -1780,10 +1848,10 @@
             setTimeout(showVideoModal, 1000);
         });
 
-        // Auto-close modal after video completes 3 loops (24 seconds)
+        // Auto-close modal after video completes 3 loops (24 seconds) - only if playing
         document.getElementById('welcomeVideo').addEventListener('timeupdate', function() {
-            // Since the video is 8 seconds, after 24 seconds (3 loops) auto-close
-            if (this.currentTime >= 24 && videoModalShown) {
+            // Only auto-close if video is actually playing (not paused due to autoplay block)
+            if (this.currentTime >= 24 && videoModalShown && !this.paused && !autoplayFailed) {
                 setTimeout(closeVideoModal, 1000);
             }
         });
