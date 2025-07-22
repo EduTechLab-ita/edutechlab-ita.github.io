@@ -499,27 +499,48 @@
             border-color: #d32f2f;
         }
 
-        /* Visual Elements */
-        .counting-objects, .visual-objects {
+        /* NUOVO: Visual Elements Layout Orizzontale Responsive */
+        .counting-objects {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            justify-content: center;
+            align-items: center;
+            margin: 2rem 0;
+            max-height: 40vh;
+            overflow-y: auto;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 1rem;
+        }
+
+        .visual-objects {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
             justify-content: center;
+            align-items: center;
             margin: 2rem 0;
+            max-height: 45vh;
+            overflow-y: auto;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 1rem;
         }
 
         .counting-object {
-            font-size: 3rem;
-            padding: 0.5rem;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            padding: 0.3rem;
             border-radius: 50%;
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            width: 80px;
-            height: 80px;
+            width: clamp(50px, 8vw, 70px);
+            height: clamp(50px, 8vw, 70px);
             display: flex;
             align-items: center;
             justify-content: center;
             animation: bounceIn 0.5s ease-out;
+            flex-shrink: 0;
         }
 
         @keyframes bounceIn {
@@ -529,20 +550,72 @@
         }
 
         .visual-object {
-            width: 60px;
-            height: 60px;
+            width: clamp(40px, 6vw, 60px);
+            height: clamp(40px, 6vw, 60px);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: clamp(0.8rem, 2vw, 1.2rem);
             font-weight: bold;
             color: white;
             transition: transform 0.2s;
+            flex-shrink: 0;
         }
 
         .visual-object:hover {
             transform: scale(1.1);
+        }
+
+        /* Addizioni Visual - NUOVO Layout Orizzontale */
+        .addition-groups {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            align-items: center;
+            margin: 2rem 0;
+            max-height: 50vh;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 1.5rem;
+        }
+
+        .addition-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .group-label {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #374151;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+        }
+
+        .objects-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(45px, 1fr));
+            gap: 0.5rem;
+            max-width: 200px;
+        }
+
+        .operator {
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: #667eea;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            width: clamp(60px, 8vw, 80px);
+            height: clamp(60px, 8vw, 80px);
         }
 
         /* Pattern Game */
@@ -578,88 +651,75 @@
             border-color: #45a049;
         }
 
-        /* Sequence Game */
-        .sequence-area {
-            background: #f3f4f6;
+        /* Sequence Game - NUOVO Design Intuitivo */
+        .sequence-instructions {
+            background: #E3F2FD;
+            border: 2px solid #2196F3;
             border-radius: 1rem;
-            padding: 2rem;
-            margin: 2rem 0;
-            min-height: 120px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
         }
 
-        .sequence-items {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
+        .sequence-instructions h3 {
+            color: #1976D2;
+            margin-bottom: 0.5rem;
         }
 
-        .sequence-item {
-            background: #EFF6FF;
-            border: 2px solid #3B82F6;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        .sequence-story {
+            background: #FFF9C4;
+            border: 2px solid #FBC02D;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            text-align: center;
         }
 
         .sequence-options {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 1rem;
             margin: 2rem 0;
+            max-width: 800px;
         }
 
         .sequence-option {
-            background: #FEF3C7;
-            border: 3px solid #F59E0B;
+            background: white;
+            border: 3px solid #E0E0E0;
             border-radius: 1rem;
-            padding: 1.5rem;
-            font-size: 1.2rem;
+            padding: 1rem;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: all 0.2s;
+            text-align: center;
+            position: relative;
         }
 
         .sequence-option:hover {
-            background: #FED7AA;
+            border-color: #667eea;
+            background: #f0f4ff;
             transform: translateY(-2px);
         }
 
-        /* Fractions Game */
-        .fraction-visual {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2rem;
+        .sequence-option.selected {
+            border-color: #4CAF50;
+            background: #E8F5E8;
         }
 
-        .pizza-container {
-            position: relative;
-            width: 200px;
-            height: 200px;
-        }
-
-        .pizza-slice {
+        .sequence-number {
             position: absolute;
-            width: 100px;
-            height: 100px;
-            border: 3px solid #FF6B35;
+            top: -10px;
+            right: -10px;
+            background: #4CAF50;
+            color: white;
             border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform-origin: 0 0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .pizza-slice.filled {
-            background: #FF6B35;
-        }
-
-        .pizza-slice:hover {
-            transform: scale(1.1);
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: bold;
         }
 
         /* Info Project Section */
@@ -783,6 +843,17 @@
             .stats-bar {
                 flex-direction: column;
                 align-items: center;
+            }
+
+            .addition-groups {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .operator {
+                width: 50px;
+                height: 50px;
+                font-size: 2rem;
             }
         }
 
@@ -1021,7 +1092,113 @@
         let stars = parseInt(localStorage.getItem('edutech_stars') || '0');
         let level = parseInt(localStorage.getItem('edutech_level') || '1');
 
-        // Classes and Games Data - COMPLETO PER TUTTE LE CLASSI
+        // NUOVO: Generatori dinamici per contenuti infiniti
+        const contentGenerators = {
+            animals: ['🐱', '🐶', '🐸', '🦋', '🐢', '🐰', '🦊', '🐻', '🦆', '🐧', '🐙', '🐠', '🦀', '🐝', '🐛'],
+            fruits: ['🍎', '🍌', '🍓', '🍊', '🍒', '🥝', '🍇', '🍑', '🥭', '🍐', '🫐', '🥥', '🍈', '🍋', '🥕'],
+            objects: ['⚽', '🎈', '🌟', '🎁', '📚', '🧸', '🚗', '✏️', '🎨', '🧩', '🎵', '🏀', '🎪', '🎭', '🎯'],
+            colors: ['🔴', '🔵', '🟡', '🟢', '🟠', '🟣', '🟤', '⚫', '⚪', '🟥', '🟦', '🟨', '🟩', '🟧', '🟪'],
+            shapes: ['⭐', '🔶', '🔷', '⬜', '⬛', '🔸', '🔹', '🟢', '🔴', '🟡', '🔵', '🟣', '🟠', '🟤', '⚪'],
+            
+            // Generatori per sequenze italiane
+            dailyRoutines: [
+                {
+                    name: 'Mattino a Scuola',
+                    sequence: [
+                        { emoji: '🛏️', text: 'Mi sveglio' },
+                        { emoji: '🦷', text: 'Mi lavo i denti' },
+                        { emoji: '🍞', text: 'Faccio colazione' },
+                        { emoji: '🎒', text: 'Preparo lo zaino' },
+                        { emoji: '🚌', text: 'Vado a scuola' }
+                    ]
+                },
+                {
+                    name: 'Preparare una Pizza',
+                    sequence: [
+                        { emoji: '🌾', text: 'Preparo la farina' },
+                        { emoji: '💧', text: 'Aggiungo acqua' },
+                        { emoji: '🤲', text: 'Impasto' },
+                        { emoji: '🍅', text: 'Metto il pomodoro' },
+                        { emoji: '🧀', text: 'Aggiungo il formaggio' }
+                    ]
+                },
+                {
+                    name: 'Piantare un Seme',
+                    sequence: [
+                        { emoji: '🌱', text: 'Prendo il seme' },
+                        { emoji: '🪣', text: 'Riempio il vaso' },
+                        { emoji: '☂️', text: 'Faccio un buco' },
+                        { emoji: '🌱', text: 'Metto il seme' },
+                        { emoji: '💧', text: 'Innaffio' }
+                    ]
+                },
+                {
+                    name: 'Fare i Compiti',
+                    sequence: [
+                        { emoji: '🎒', text: 'Apro lo zaino' },
+                        { emoji: '📚', text: 'Prendo i libri' },
+                        { emoji: '✏️', text: 'Preparo matita e penna' },
+                        { emoji: '📝', text: 'Scrivo i compiti' },
+                        { emoji: '📚', text: 'Ripongo tutto' }
+                    ]
+                }
+            ],
+
+            // Generatori per variabili più interessanti
+            variableScenarios: [
+                {
+                    context: 'videogioco',
+                    variables: [
+                        { name: 'vite', description: 'le vite del personaggio', min: 1, max: 5 },
+                        { name: 'livello', description: 'il livello raggiunto', min: 1, max: 10 },
+                        { name: 'monete', description: 'le monete raccolte', min: 10, max: 100 },
+                        { name: 'energia', description: 'l\'energia rimasta', min: 20, max: 100 }
+                    ]
+                },
+                {
+                    context: 'scuola',
+                    variables: [
+                        { name: 'compiti', description: 'i compiti da fare', min: 1, max: 8 },
+                        { name: 'voto', description: 'il voto della verifica', min: 6, max: 10 },
+                        { name: 'pagine', description: 'le pagine lette', min: 5, max: 50 },
+                        { name: 'amici', description: 'gli amici in classe', min: 15, max: 25 }
+                    ]
+                },
+                {
+                    context: 'cucina',
+                    variables: [
+                        { name: 'ingredienti', description: 'gli ingredienti per la ricetta', min: 3, max: 8 },
+                        { name: 'minuti', description: 'i minuti di cottura', min: 10, max: 60 },
+                        { name: 'porzioni', description: 'le porzioni del dolce', min: 4, max: 12 },
+                        { name: 'temperatura', description: 'i gradi del forno', min: 160, max: 200 }
+                    ]
+                }
+            ],
+
+            // Generatori per algoritmi più interessanti
+            algorithmChallenges: [
+                {
+                    type: 'ordinamento',
+                    scenarios: [
+                        { task: 'Ordinare i bambini per altezza', items: 'bambini', criteria: 'altezza' },
+                        { task: 'Mettere i libri in ordine alfabetico', items: 'libri', criteria: 'titolo' },
+                        { task: 'Sistemare i numeri dal più piccolo', items: 'numeri', criteria: 'valore' },
+                        { task: 'Organizzare i colori per intensità', items: 'colori', criteria: 'intensità' }
+                    ]
+                },
+                {
+                    type: 'ricerca',
+                    scenarios: [
+                        { task: 'Trovare il libro giusto nella biblioteca', strategy: 'dividere gli scaffali' },
+                        { task: 'Cercare un amico nel parco', strategy: 'guardare nelle aree più frequentate' },
+                        { task: 'Trovare la chiave di casa', strategy: 'controllare i posti usuali' },
+                        { task: 'Scegliere il regalo perfetto', strategy: 'pensare ai gusti della persona' }
+                    ]
+                }
+            ]
+        };
+
+        // Classes and Games Data - AGGIORNATO
         const classesData = {
             1: {
                 name: "Prima Primaria",
@@ -1165,6 +1342,21 @@
             }
         }
 
+        // NUOVE FUNZIONI: Generatori di contenuto dinamico
+
+        function getRandomElements(array, count) {
+            const shuffled = [...array].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        function generateDynamicNumbers(min, max, exclude = []) {
+            const numbers = [];
+            for (let i = min; i <= max; i++) {
+                if (!exclude.includes(i)) numbers.push(i);
+            }
+            return numbers.sort(() => 0.5 - Math.random());
+        }
+
         // Class selection
         function selectClass(classNum) {
             currentClass = classNum;
@@ -1280,7 +1472,7 @@
             }
         }
 
-        // Counting Game - Adattato per tutte le classi
+        // MIGLIORATA: Counting Game con oggetti dinamici
         function generateCountingQuestion() {
             const classLevel = currentClass;
             let max;
@@ -1296,7 +1488,10 @@
             
             const count = Math.floor(Math.random() * max) + 1;
             
-            const objects = ['🍎', '🌟', '🚗', '🐱', '🎈', '🌸', '⚽', '🍓', '🟦', '🟨', '🟩', '🟪'];
+            // Scegli categoria casuale per varietà
+            const categories = Object.keys(contentGenerators).filter(key => Array.isArray(contentGenerators[key]));
+            const selectedCategory = categories[Math.floor(Math.random() * categories.length)];
+            const objects = contentGenerators[selectedCategory];
             const selectedObject = objects[Math.floor(Math.random() * objects.length)];
             
             gameState.currentQuestion = {
@@ -1319,7 +1514,7 @@
             `;
         }
 
-        // Addition Game - Migliorato per tutte le classi
+        // MIGLIORATA: Addition Game con layout orizzontale
         function generateAdditionQuestion() {
             const classLevel = currentClass;
             let maxNum;
@@ -1348,19 +1543,28 @@
             document.getElementById('gameContent').innerHTML = `
                 <div class="question">${a} + ${b} = ?</div>
                 ${useVisual ? `
-                <div class="visual-objects">
-                    <div style="display: flex; gap: 2rem; align-items: center; justify-content: center; flex-wrap: wrap;">
-                        <div>
-                            ${Array(a).fill('🔵').map((obj, i) => 
-                                `<div class="counting-object" style="animation-delay: ${i * 0.1}s; background: #3B82F6;">${i+1}</div>`
+                <div class="addition-groups">
+                    <div class="addition-group">
+                        <div class="group-label">Primo gruppo</div>
+                        <div class="objects-container">
+                            ${Array(a).fill('').map((_, i) => 
+                                `<div class="visual-object" style="background: #3B82F6; animation-delay: ${i * 0.1}s;">${i+1}</div>`
                             ).join('')}
                         </div>
-                        <div style="font-size: 3rem;">+</div>
-                        <div>
-                            ${Array(b).fill('🔴').map((obj, i) => 
-                                `<div class="counting-object" style="animation-delay: ${(a + i) * 0.1}s; background: #EF4444;">${i+1}</div>`
+                    </div>
+                    <div class="operator">+</div>
+                    <div class="addition-group">
+                        <div class="group-label">Secondo gruppo</div>
+                        <div class="objects-container">
+                            ${Array(b).fill('').map((_, i) => 
+                                `<div class="visual-object" style="background: #EF4444; animation-delay: ${(a + i) * 0.1}s;">${i+1}</div>`
                             ).join('')}
                         </div>
+                    </div>
+                    <div class="operator">=</div>
+                    <div class="addition-group">
+                        <div class="group-label">Risultato</div>
+                        <div style="font-size: 3rem; color: #4CAF50;">?</div>
                     </div>
                 </div>
                 ` : ''}
@@ -1372,7 +1576,7 @@
             `;
         }
 
-        // Operations Question (Classe 2+)
+        // Operations Question (Classe 2+) - Dinamica
         function generateOperationsQuestion() {
             const operations = ['+', '-'];
             const operation = operations[Math.floor(Math.random() * operations.length)];
@@ -1402,7 +1606,7 @@
             `;
         }
 
-        // Multiplication Question (Classe 3+)
+        // Multiplication Question (Classe 3+) - Dinamica
         function generateMultiplicationQuestion() {
             const classLevel = currentClass;
             let maxTable;
@@ -1425,7 +1629,7 @@
                 ${classLevel <= 4 ? generateMultiplicationVisual(a, b) : ''}
                 <div class="answers-grid">
                     ${generateNumberOptions(result, 4).map(num => 
-                        `<button class="answer-btn" onclick="selectAnswer(${num})">${num}</button>`
+                        `<button class="answer-btn" onclick="selectAnswer(${num})">${num</button>`
                     ).join('')}
                 </div>
             `;
@@ -1433,15 +1637,13 @@
 
         function generateMultiplicationVisual(a, b) {
             return `
-                <div class="visual-objects">
+                <div class="addition-groups">
                     ${Array(b).fill(0).map((_, groupIndex) => `
-                        <div style="display: flex; flex-direction: column; align-items: center; margin: 0 10px;">
-                            <div style="font-size: 0.8rem; margin-bottom: 5px;">Gruppo ${groupIndex + 1}</div>
-                            <div style="display: flex; flex-wrap: wrap; max-width: 120px; gap: 2px;">
+                        <div class="addition-group">
+                            <div class="group-label">Gruppo ${groupIndex + 1}</div>
+                            <div class="objects-container">
                                 ${Array(a).fill(0).map((_, i) => `
-                                    <div style="width: 25px; height: 25px; background: #F59E0B; border-radius: 50%; 
-                                                display: flex; align-items: center; justify-content: center; 
-                                                color: white; font-size: 0.7rem;">${i + 1}</div>
+                                    <div class="visual-object" style="background: #F59E0B;">${i + 1}</div>
                                 `).join('')}
                             </div>
                         </div>
@@ -1450,168 +1652,188 @@
             `;
         }
 
-        // Sequence Game - Esteso per tutte le classi
+        // RIVOLUZIONATA: Sequence Game con istruzioni chiare per bambini italiani
         function generateSequenceQuestion() {
-            const sequences = [
-                { 
-                    sequence: ['🌅', '🦷', '🍞', '🎒', '🏠'],
-                    question: 'Ordina la giornata scolastica',
-                    correct: [0, 1, 2, 3, 4]
-                },
-                {
-                    sequence: ['🛌', '👔', '🍳', '🚌', '📚'],
-                    question: 'Sequenza mattutina',
-                    correct: [0, 1, 2, 3, 4]
-                },
-                {
-                    sequence: ['🌱', '🌿', '🌳', '🌲', '🌺'],
-                    question: 'Crescita di una pianta',
-                    correct: [0, 1, 2, 3, 4]
-                }
-            ];
+            // Scegli una routine casuale
+            const routines = contentGenerators.dailyRoutines;
+            const selectedRoutine = routines[Math.floor(Math.random() * routines.length)];
             
-            const selected = sequences[Math.floor(Math.random() * sequences.length)];
-            const shuffled = [...selected.sequence].sort(() => Math.random() - 0.5);
+            // Mescola l'ordine per renderlo una sfida
+            const correctOrder = selectedRoutine.sequence.map((item, index) => ({ ...item, correctIndex: index }));
+            const shuffledOrder = [...correctOrder].sort(() => Math.random() - 0.5);
             
             gameState.currentQuestion = {
-                correct: selected.sequence,
-                shuffled: shuffled,
+                routine: selectedRoutine,
+                correct: correctOrder,
+                shuffled: shuffledOrder,
                 userOrder: []
             };
 
             document.getElementById('gameContent').innerHTML = `
-                <div class="question">${selected.question}</div>
-                <p>Clicca gli elementi nell'ordine corretto:</p>
-                <div class="pattern-container">
-                    ${shuffled.map((item, index) => 
-                        `<div class="pattern-item" onclick="selectSequenceItem('${item}', this)">${item}</div>`
+                <div class="sequence-instructions">
+                    <h3>📋 Come funziona:</h3>
+                    <p>Devi mettere in ordine le azioni per <strong>"${selectedRoutine.name}"</strong></p>
+                    <p>Clicca le azioni nel giusto ordine (da 1 a ${selectedRoutine.sequence.length})</p>
+                </div>
+                
+                <div class="question">Metti in ordine: ${selectedRoutine.name}</div>
+                
+                <div class="sequence-story">
+                    <strong>Cosa devi fare:</strong> Riordina queste azioni nella sequenza corretta!
+                </div>
+                
+                <div class="sequence-options">
+                    ${shuffledOrder.map((item, index) => 
+                        `<div class="sequence-option" onclick="selectSequenceItem(${item.correctIndex}, '${item.text}', this)">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">${item.emoji}</div>
+                            <div>${item.text}</div>
+                        </div>`
                     ).join('')}
                 </div>
+                
                 <div style="margin-top: 2rem;">
-                    <div style="font-weight: bold;">Sequenza selezionata:</div>
-                    <div id="selectedSequence" style="font-size: 2rem; margin-top: 1rem;"></div>
+                    <div style="font-weight: bold; font-size: 1.2rem; color: #374151;">La tua sequenza:</div>
+                    <div id="selectedSequence" style="font-size: 1.5rem; margin-top: 1rem; min-height: 2rem; background: #F3F4F6; padding: 1rem; border-radius: 0.5rem;">
+                        <em>Inizia cliccando la prima azione...</em>
+                    </div>
                 </div>
             `;
             
             document.getElementById('checkAnswerBtn').style.display = 'inline-block';
         }
 
-        function selectSequenceItem(item, element) {
+        function selectSequenceItem(correctIndex, text, element) {
             if (element.classList.contains('selected')) return;
             
             element.classList.add('selected');
-            gameState.currentQuestion.userOrder.push(item);
+            const userOrderLength = gameState.currentQuestion.userOrder.length + 1;
+            element.innerHTML += `<div class="sequence-number">${userOrderLength}</div>`;
             
-            document.getElementById('selectedSequence').textContent = 
-                gameState.currentQuestion.userOrder.join(' → ');
+            gameState.currentQuestion.userOrder.push({ correctIndex, text });
+            
+            // Aggiorna la visualizzazione della sequenza
+            const sequenceDisplay = gameState.currentQuestion.userOrder
+                .map((item, index) => `${index + 1}. ${item.text}`)
+                .join('<br>');
+            
+            document.getElementById('selectedSequence').innerHTML = sequenceDisplay || '<em>Inizia cliccando la prima azione...</em>';
         }
 
-        // Pattern Game - Avanzato per tutte le classi
+        // MIGLIORATA: Pattern Game con contenuti dinamici infiniti
         function generatePatternQuestion() {
             const classLevel = currentClass;
-            let patterns;
+            let patternTypes, patternLength;
             
             if (classLevel <= 2) {
-                patterns = [
-                    { pattern: ['🔴', '🔵'], next: '🔴' },
-                    { pattern: ['⭐', '🌙'], next: '⭐' },
-                    { pattern: ['🍎', '🍌'], next: '🍎' }
-                ];
+                patternTypes = [contentGenerators.colors.slice(0, 3), contentGenerators.shapes.slice(0, 3), contentGenerators.fruits.slice(0, 3)];
+                patternLength = 2;
             } else if (classLevel <= 3) {
-                patterns = [
-                    { pattern: ['🔴', '🔵', '🔴', '🔵'], next: '🔴' },
-                    { pattern: ['⭐', '⭐', '🌙'], next: '⭐' },
-                    { pattern: ['1', '2', '3'], next: '1' }
-                ];
+                patternTypes = [contentGenerators.colors, contentGenerators.shapes, contentGenerators.animals.slice(0, 4)];
+                patternLength = 3;
             } else {
-                patterns = [
-                    { pattern: ['🔴', '🔵', '🟡', '🔴', '🔵'], next: '🟡' },
-                    { pattern: ['A', 'B', 'A', 'C', 'A', 'B'], next: 'A' },
-                    { pattern: ['1', '2', '4', '1', '2'], next: '4' }
-                ];
+                patternTypes = [contentGenerators.colors, contentGenerators.shapes, contentGenerators.animals, contentGenerators.objects];
+                patternLength = Math.min(3 + adaptiveData.currentDifficulty, 5);
             }
             
-            const basePattern = patterns[Math.floor(Math.random() * patterns.length)];
-            const difficulty = adaptiveData.currentDifficulty;
+            // Scegli tipo casuale e crea pattern
+            const selectedType = patternTypes[Math.floor(Math.random() * patternTypes.length)];
+            const patternBase = getRandomElements(selectedType, patternLength);
             
-            // Extend pattern based on difficulty
+            // Estendi il pattern basato sulla difficoltà
+            const repetitions = 2 + adaptiveData.currentDifficulty;
             let fullPattern = [];
-            for (let i = 0; i < 2 + difficulty; i++) {
-                fullPattern = fullPattern.concat(basePattern.pattern);
+            for (let i = 0; i < repetitions; i++) {
+                fullPattern = fullPattern.concat(patternBase);
             }
             
-            const visiblePattern = fullPattern.slice(0, -1);
-            const correctAnswer = fullPattern[fullPattern.length - 1];
+            // Rimuovi l'ultimo elemento (da indovinare)
+            const correctAnswer = fullPattern.pop();
             
             gameState.currentQuestion = {
-                pattern: visiblePattern,
+                pattern: fullPattern,
                 correct: correctAnswer
             };
 
-            const options = generatePatternOptions(correctAnswer);
+            // Genera opzioni casuali che includano la risposta corretta
+            const wrongOptions = selectedType.filter(item => item !== correctAnswer);
+            const allOptions = [correctAnswer, ...getRandomElements(wrongOptions, 3)];
+            const shuffledOptions = allOptions.sort(() => Math.random() - 0.5);
 
             document.getElementById('gameContent').innerHTML = `
-                <div class="question">Completa il pattern!</div>
+                <div class="question">Quale elemento completa il pattern?</div>
                 <div class="pattern-container">
-                    ${visiblePattern.map(item => 
+                    ${fullPattern.map(item => 
                         `<div class="pattern-item">${item}</div>`
                     ).join('')}
-                    <div class="pattern-item" style="border: 3px dashed #667eea;">?</div>
+                    <div class="pattern-item" style="border: 3px dashed #667eea; background: #F3F4F6;">?</div>
                 </div>
                 <div class="answers-grid">
-                    ${options.map(option => 
+                    ${shuffledOptions.map(option => 
                         `<button class="answer-btn" onclick="selectAnswer('${option}')">${option}</button>`
                     ).join('')}
                 </div>
             `;
         }
 
-        function generatePatternOptions(correct) {
-            const allOptions = ['🔴', '🔵', '🟡', '⭐', '🌙', '🍎', '🍌', '1', '2', '3', 'A', 'B', 'C'];
-            const options = [correct];
-            
-            while (options.length < 4) {
-                const random = allOptions[Math.floor(Math.random() * allOptions.length)];
-                if (!options.includes(random)) {
-                    options.push(random);
-                }
-            }
-            
-            return options.sort(() => Math.random() - 0.5);
-        }
-
-        // Debugging Game (Classe 2+)
+        // Debugging Game (Classe 2+) - Dinamica
         function generateDebuggingQuestion() {
-            const sequences = [
-                { correct: ['🌅', '🦷', '🍞', '🎒'], wrong: ['🌅', '🍞', '🦷', '🎒'], error: 2 },
-                { correct: ['1', '2', '3', '4'], wrong: ['1', '3', '2', '4'], error: 1 },
-                { correct: ['🔴', '🔵', '🔴', '🔵'], wrong: ['🔴', '🔴', '🔴', '🔵'], error: 1 }
-            ];
+            // Crea una sequenza corretta casuale
+            const routines = contentGenerators.dailyRoutines;
+            const selectedRoutine = routines[Math.floor(Math.random() * routines.length)];
+            const correctSequence = selectedRoutine.sequence.map(item => item.emoji);
             
-            const selected = sequences[Math.floor(Math.random() * sequences.length)];
-            gameState.currentQuestion = { error: selected.error };
+            // Introduci un errore casuale
+            const errorPosition = Math.floor(Math.random() * correctSequence.length);
+            const wrongSequence = [...correctSequence];
+            
+            // Sostituisci con un elemento casuale
+            const allEmojis = [...contentGenerators.animals, ...contentGenerators.fruits, ...contentGenerators.objects];
+            let wrongElement;
+            do {
+                wrongElement = allEmojis[Math.floor(Math.random() * allEmojis.length)];
+            } while (correctSequence.includes(wrongElement));
+            
+            wrongSequence[errorPosition] = wrongElement;
+            
+            gameState.currentQuestion = { error: errorPosition };
 
             document.getElementById('gameContent').innerHTML = `
-                <div class="question">Trova l'errore nella sequenza!</div>
+                <div class="question">🐛 Trova l'errore nella sequenza "${selectedRoutine.name}"!</div>
+                <div class="sequence-story">
+                    <strong>Sequenza corretta:</strong> ${correctSequence.join(' → ')}<br>
+                    <strong>Sequenza con errore:</strong> ${wrongSequence.join(' → ')}
+                </div>
                 <div class="pattern-container">
-                    ${selected.wrong.map((item, index) => 
+                    ${wrongSequence.map((item, index) => 
                         `<div class="pattern-item" onclick="selectAnswer(${index})">${item}</div>`
                     ).join('')}
                 </div>
-                <p>Clicca sull'elemento che è nella posizione sbagliata!</p>
+                <p>Clicca sull'elemento che NON dovrebbe essere lì!</p>
             `;
         }
 
-        // Loop Game (Classe 3+)
+        // Loop Game (Classe 3+) - Dinamica
         function generateLoopQuestion() {
-            const actions = ['salta', 'gira', 'cammina', 'ferma'];
-            const action = actions[Math.floor(Math.random() * actions.length)];
-            const times = Math.floor(Math.random() * 5) + 2;
+            const actions = [
+                { action: 'salta', emoji: '🦘' },
+                { action: 'gira', emoji: '🌀' },
+                { action: 'cammina', emoji: '🚶' },
+                { action: 'batti le mani', emoji: '👏' },
+                { action: 'alza le braccia', emoji: '🙌' }
+            ];
+            
+            const selectedAction = actions[Math.floor(Math.random() * actions.length)];
+            const times = Math.floor(Math.random() * 8) + 2; // Da 2 a 10
             
             gameState.currentQuestion = { result: times };
 
             document.getElementById('gameContent').innerHTML = `
-                <div class="question">Se devo "${action}" ${times} volte, quante volte ripeto l'azione?</div>
+                <div class="question">Algoritmo: Ripeti "${selectedAction.action}" ${times} volte</div>
+                <div style="font-size: 4rem; margin: 2rem 0;">${selectedAction.emoji}</div>
+                <div style="font-size: 1.2rem; margin: 1rem 0; background: #E3F2FD; padding: 1rem; border-radius: 0.5rem;">
+                    <strong>🔄 Loop:</strong> Per ripetere "${selectedAction.action}" ${times} volte, 
+                    quante volte devo eseguire l'azione?
+                </div>
                 <div class="answers-grid">
                     ${generateNumberOptions(times, 4).map(num => 
                         `<button class="answer-btn" onclick="selectAnswer(${num})">${num}</button>`
@@ -1620,31 +1842,61 @@
             `;
         }
 
-        // Conditional Game (Classe 3+)
+        // Conditional Game (Classe 3+) - Dinamica
         function generateConditionalQuestion() {
             const conditions = [
-                { condition: 'piove', action: 'prendi l\'ombrello', answer: 'ombrello' },
-                { condition: 'c\'è il sole', action: 'metti gli occhiali', answer: 'occhiali' },
-                { condition: 'hai fame', action: 'mangia', answer: 'cibo' },
-                { condition: 'sei stanco', action: 'riposa', answer: 'letto' }
+                { 
+                    condition: 'piove', 
+                    emoji: '🌧️',
+                    actions: ['prendi l\'ombrello', 'metti l\'impermeabile', 'resta in casa'], 
+                    correct: 'prendi l\'ombrello' 
+                },
+                { 
+                    condition: 'c\'è il sole', 
+                    emoji: '☀️',
+                    actions: ['metti gli occhiali da sole', 'prendi l\'ombrello', 'metti il cappotto'], 
+                    correct: 'metti gli occhiali da sole' 
+                },
+                { 
+                    condition: 'hai fame', 
+                    emoji: '😋',
+                    actions: ['mangia qualcosa', 'vai a dormire', 'studia'], 
+                    correct: 'mangia qualcosa' 
+                },
+                { 
+                    condition: 'sei stanco', 
+                    emoji: '😴',
+                    actions: ['riposati', 'corri', 'studia'], 
+                    correct: 'riposati' 
+                },
+                { 
+                    condition: 'è freddo', 
+                    emoji: '🥶',
+                    actions: ['metti il cappotto', 'metti i sandali', 'togli la maglietta'], 
+                    correct: 'metti il cappotto' 
+                }
             ];
             
             const selected = conditions[Math.floor(Math.random() * conditions.length)];
-            gameState.currentQuestion = { correct: selected.answer };
+            gameState.currentQuestion = { correct: selected.correct };
 
-            const options = [selected.answer, 'libro', 'palla', 'computer'].sort(() => Math.random() - 0.5);
+            const shuffledActions = selected.actions.sort(() => Math.random() - 0.5);
 
             document.getElementById('gameContent').innerHTML = `
-                <div class="question">SE ${selected.condition}, ALLORA che cosa fai?</div>
+                <div class="question">🤔 SE ${selected.condition} ${selected.emoji}, ALLORA che cosa fai?</div>
+                <div style="background: #FFF9C4; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0;">
+                    <strong>Regola IF-THEN:</strong><br>
+                    SE (condizione) ALLORA (azione logica)
+                </div>
                 <div class="answers-grid">
-                    ${options.map(option => 
-                        `<button class="answer-btn" onclick="selectAnswer('${option}')">${option}</button>`
+                    ${shuffledActions.map(action => 
+                        `<button class="answer-btn" onclick="selectAnswer('${action}')">${action}</button>`
                     ).join('')}
                 </div>
             `;
         }
 
-        // Fraction Game (Classe 4+)
+        // Fraction Game (Classe 4+) - Già buona, solo piccoli miglioramenti
         function generateFractionQuestion() {
             const denominators = currentClass >= 5 ? [2, 3, 4, 6, 8, 12] : [2, 3, 4, 6, 8];
             const denominator = denominators[Math.floor(Math.random() * denominators.length)];
@@ -1689,116 +1941,246 @@
                 `${selectedCount}/${gameState.currentQuestion.denominator}`;
         }
 
-        // Variable Game (Classe 4+)
+        // RIVOLUZIONATA: Variable Game con scenari interessanti
         function generateVariableQuestion() {
-            const variables = [
-                { name: 'età', value: 9, question: 'Se la variabile "età" contiene il valore 9, qual è il valore?' },
-                { name: 'punti', value: 15, question: 'Se la variabile "punti" contiene il valore 15, qual è il valore?' },
-                { name: 'voto', value: 8, question: 'Se la variabile "voto" contiene il valore 8, qual è il valore?' }
-            ];
+            const scenarios = contentGenerators.variableScenarios;
+            const selectedScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+            const selectedVariable = selectedScenario.variables[Math.floor(Math.random() * selectedScenario.variables.length)];
             
-            const selected = variables[Math.floor(Math.random() * variables.length)];
-            gameState.currentQuestion = { result: selected.value };
-
-            document.getElementById('gameContent').innerHTML = `
-                <div class="question">${selected.question}</div>
-                <div class="answers-grid">
-                    ${generateNumberOptions(selected.value, 4).map(num => 
-                        `<button class="answer-btn" onclick="selectAnswer(${num})">${num}</button>`
-                    ).join('')}
-                </div>
-            `;
-        }
-
-        // Algorithm Game (Classe 4+)
-        function generateAlgorithmQuestion() {
-            const problems = [
+            const value = Math.floor(Math.random() * (selectedVariable.max - selectedVariable.min + 1)) + selectedVariable.min;
+            
+            // Crea operazioni con la variabile
+            const operations = [
                 { 
-                    problem: 'Devi ordinare i numeri: 3, 1, 4, 2. Quale viene per primo?',
-                    answer: 1
+                    question: `Nel ${selectedScenario.context}, la variabile "${selectedVariable.name}" contiene ${selectedVariable.description}. Se "${selectedVariable.name}" = ${value}, quanto vale ${selectedVariable.name} + 5?`,
+                    result: value + 5
                 },
-                {
-                    problem: 'Per trovare il numero più grande tra 5, 8, 3, quale scegli?',
-                    answer: 8
+                { 
+                    question: `Nel ${selectedScenario.context}, se la variabile "${selectedVariable.name}" (${selectedVariable.description}) vale ${value}, quanto vale ${selectedVariable.name} - 3?`,
+                    result: Math.max(0, value - 3)
                 },
-                {
-                    problem: 'Se devi fare una ricerca in [1,2,3,4], da quale numero inizi?',
-                    answer: 2
+                { 
+                    question: `Nel ${selectedScenario.context}, la variabile "${selectedVariable.name}" rappresenta ${selectedVariable.description}. Se "${selectedVariable.name}" = ${value}, qual è il valore di "${selectedVariable.name}"?`,
+                    result: value
                 }
             ];
             
-            const selected = problems[Math.floor(Math.random() * problems.length)];
-            gameState.currentQuestion = { result: selected.answer };
+            const selectedOperation = operations[Math.floor(Math.random() * operations.length)];
+            gameState.currentQuestion = { result: selectedOperation.result };
 
             document.getElementById('gameContent').innerHTML = `
-                <div class="question">${selected.problem}</div>
+                <div class="question">${selectedOperation.question}</div>
+                <div style="background: #E8F5E8; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0;">
+                    <strong>📦 Ricorda:</strong> Una variabile è come una scatola con un nome che contiene un valore!
+                </div>
                 <div class="answers-grid">
-                    ${generateNumberOptions(selected.answer, 4).map(num => 
+                    ${generateNumberOptions(selectedOperation.result, 4).map(num => 
                         `<button class="answer-btn" onclick="selectAnswer(${num})">${num}</button>`
                     ).join('')}
                 </div>
             `;
         }
 
-        // Statistics Game (Classe 5)
-        function generateStatisticsQuestion() {
-            const data = Array.from({length: 5}, () => Math.floor(Math.random() * 10) + 1);
-            const sum = data.reduce((a, b) => a + b, 0);
-            const average = Math.round(sum / data.length);
+        // RIVOLUZIONATA: Algorithm Game con sfide realistiche
+        function generateAlgorithmQuestion() {
+            const challenges = contentGenerators.algorithmChallenges;
+            const selectedType = challenges[Math.floor(Math.random() * challenges.length)];
+            const selectedScenario = selectedType.scenarios[Math.floor(Math.random() * selectedType.scenarios.length)];
             
-            gameState.currentQuestion = { result: average };
+            let question, options, correct;
+            
+            if (selectedType.type === 'ordinamento') {
+                const strategies = [
+                    'Confrontare ogni elemento con il successivo',
+                    'Trovare prima il più piccolo, poi il secondo più piccolo...',
+                    'Dividere in gruppi più piccoli e ordinare',
+                    'Usare le dita per tenere traccia'
+                ];
+                
+                correct = strategies[Math.floor(Math.random() * 2)]; // Prime due sono più corrette
+                options = [correct, ...getRandomElements(strategies.filter(s => s !== correct), 3)];
+                
+                question = `${selectedScenario.task}. Quale strategia è più efficace?`;
+            } else {
+                const strategies = [
+                    selectedScenario.strategy,
+                    'Guardare a caso',
+                    'Chiedere a tutti',
+                    'Aspettare che arrivi da solo'
+                ];
+                
+                correct = selectedScenario.strategy;
+                options = strategies;
+                question = `${selectedScenario.task}. Quale strategia usi?`;
+            }
+            
+            gameState.currentQuestion = { correct: correct };
+            const shuffledOptions = options.sort(() => Math.random() - 0.5);
 
             document.getElementById('gameContent').innerHTML = `
-                <div class="question">Calcola la media dei numeri: ${data.join(', ')}</div>
+                <div class="question">${question}</div>
+                <div style="background: #F0F8F0; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0;">
+                    <strong>🧠 Algoritmo:</strong> Una sequenza di passi logici per risolvere un problema!
+                </div>
+                <div class="sequence-options">
+                    ${shuffledOptions.map(option => 
+                        `<div class="sequence-option" onclick="selectAnswer('${option}')">
+                            ${option}
+                        </div>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        // Statistics Game (Classe 5) - Dinamica
+        function generateStatisticsQuestion() {
+            const dataSize = Math.min(5 + adaptiveData.currentDifficulty, 8);
+            const data = Array.from({length: dataSize}, () => Math.floor(Math.random() * 20) + 1);
+            
+            const operations = [
+                {
+                    type: 'media',
+                    question: `Calcola la media dei voti: ${data.join(', ')}`,
+                    result: Math.round(data.reduce((a, b) => a + b, 0) / data.length)
+                },
+                {
+                    type: 'massimo',
+                    question: `Trova il numero più grande: ${data.join(', ')}`,
+                    result: Math.max(...data)
+                },
+                {
+                    type: 'minimo',
+                    question: `Trova il numero più piccolo: ${data.join(', ')}`,
+                    result: Math.min(...data)
+                },
+                {
+                    type: 'somma',
+                    question: `Calcola la somma totale: ${data.join(', ')}`,
+                    result: data.reduce((a, b) => a + b, 0)
+                }
+            ];
+            
+            const selectedOperation = operations[Math.floor(Math.random() * operations.length)];
+            gameState.currentQuestion = { result: selectedOperation.result };
+
+            document.getElementById('gameContent').innerHTML = `
+                <div class="question">${selectedOperation.question}</div>
+                <div style="background: #E8F5F9; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0;">
+                    <strong>📊 Statistica:</strong> Analizziamo i dati per trovare informazioni utili!
+                    <br><strong>Tipo:</strong> ${selectedOperation.type.toUpperCase()}
+                </div>
+                <div style="background: #F5F5F5; padding: 1rem; border-radius: 0.5rem; margin: 1rem 0; font-family: monospace; font-size: 1.3rem;">
+                    Dati: [${data.join(', ')}]
+                </div>
                 <div class="answers-grid">
-                    ${generateNumberOptions(average, 4).map(num => 
+                    ${generateNumberOptions(selectedOperation.result, 4).map(num => 
                         `<button class="answer-btn" onclick="selectAnswer(${num})">${num}</button>`
                     ).join('')}
                 </div>
             `;
         }
 
-        // Project Game (Classe 5)
+        // RIVOLUZIONATA: Project Game con scenari realistici
         function generateProjectQuestion() {
             const projects = [
-                { project: 'Un gioco di memoria', component: 'pulsanti', answer: 'pulsanti' },
-                { project: 'Un calcolatore', component: 'numeri', answer: 'numeri' },
-                { project: 'Un quiz', component: 'domande', answer: 'domande' }
+                { 
+                    project: 'Un gioco di memoria',
+                    components: ['pulsanti colorati', 'suoni', 'timer', 'grafica'],
+                    correct: 'pulsanti colorati',
+                    explanation: 'I pulsanti sono essenziali per l\'interazione!'
+                },
+                { 
+                    project: 'Un calcolatore',
+                    components: ['numeri e operatori', 'colori', 'musica', 'animazioni'],
+                    correct: 'numeri e operatori',
+                    explanation: 'Senza numeri non puoi fare calcoli!'
+                },
+                { 
+                    project: 'Un quiz educativo',
+                    components: ['domande e risposte', 'effetti speciali', 'mascotte', 'sfondi'],
+                    correct: 'domande e risposte',
+                    explanation: 'Le domande sono il cuore del quiz!'
+                },
+                {
+                    project: 'Un\'app per disegnare',
+                    components: ['strumenti di disegno', 'chat', 'calendario', 'meteo'],
+                    correct: 'strumenti di disegno',
+                    explanation: 'Servono pennelli, colori e canvas!'
+                }
             ];
             
             const selected = projects[Math.floor(Math.random() * projects.length)];
-            gameState.currentQuestion = { correct: selected.answer };
+            gameState.currentQuestion = { 
+                correct: selected.correct,
+                explanation: selected.explanation
+            };
 
-            const options = [selected.answer, 'colori', 'suoni', 'immagini'].sort(() => Math.random() - 0.5);
+            const shuffledComponents = selected.components.sort(() => Math.random() - 0.5);
 
             document.getElementById('gameContent').innerHTML = `
-                <div class="question">Per creare "${selected.project}", quale componente è più importante?</div>
-                <div class="answers-grid">
-                    ${options.map(option => 
-                        `<button class="answer-btn" onclick="selectAnswer('${option}')">${option}</button>`
+                <div class="question">🎮 Per creare "${selected.project}", quale componente è più importante?</div>
+                <div style="background: #FFF3E0; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0;">
+                    <strong>💡 Progettazione:</strong> Ogni progetto ha componenti essenziali e opzionali.
+                    <br>Pensa a cosa serve DAVVERO per far funzionare il progetto!
+                </div>
+                <div class="sequence-options">
+                    ${shuffledComponents.map(component => 
+                        `<div class="sequence-option" onclick="selectAnswer('${component}')">
+                            ${component}
+                        </div>`
                     ).join('')}
                 </div>
             `;
         }
 
-        // Collaboration Game (Classe 5)
+        // MIGLIORATA: Collaboration Game con scenari reali
         function generateCollaborationQuestion() {
             const scenarios = [
-                { scenario: 'Lavori in team su un progetto', tool: 'condivisione', answer: 'condivisione' },
-                { scenario: 'Vuoi ricevere feedback', tool: 'commenti', answer: 'commenti' },
-                { scenario: 'Devi sincronizzare il lavoro', tool: 'versioning', answer: 'versioning' }
+                { 
+                    scenario: 'Stai lavorando in team su un progetto di coding e devi condividere il tuo codice',
+                    tools: ['repository condiviso (Git)', 'email', 'telefono', 'biglietti'],
+                    correct: 'repository condiviso (Git)',
+                    explanation: 'Git permette di collaborare sul codice in sicurezza!'
+                },
+                { 
+                    scenario: 'Il tuo compagno ha fatto delle modifiche al progetto e vuoi vedere cosa ha cambiato',
+                    tools: ['sistema di controllo versioni', 'indovinare', 'chiedere agli altri', 'rifare tutto'],
+                    correct: 'sistema di controllo versioni',
+                    explanation: 'Permette di vedere tutte le modifiche!'
+                },
+                { 
+                    scenario: 'Vuoi lasciare un commento sul lavoro del tuo gruppo per dare un suggerimento',
+                    tools: ['sistema di commenti', 'messaggi privati', 'ignorare', 'cancellare tutto'],
+                    correct: 'sistema di commenti',
+                    explanation: 'I commenti aiutano il team a migliorare!'
+                },
+                {
+                    scenario: 'Due persone del team hanno modificato la stessa parte del codice contemporaneamente',
+                    tools: ['sistema di merge e conflitti', 'scegliere a caso', 'litigare', 'ricominciare'],
+                    correct: 'sistema di merge e conflitti',
+                    explanation: 'I sistemi moderni aiutano a risolvere i conflitti!'
+                }
             ];
             
             const selected = scenarios[Math.floor(Math.random() * scenarios.length)];
-            gameState.currentQuestion = { correct: selected.answer };
+            gameState.currentQuestion = { 
+                correct: selected.correct,
+                explanation: selected.explanation
+            };
 
-            const options = [selected.answer, 'stampa', 'salvataggio', 'eliminazione'].sort(() => Math.random() - 0.5);
+            const shuffledTools = selected.tools.sort(() => Math.random() - 0.5);
 
             document.getElementById('gameContent').innerHTML = `
-                <div class="question">${selected.scenario}. Quale strumento usi?</div>
-                <div class="answers-grid">
-                    ${options.map(option => 
-                        `<button class="answer-btn" onclick="selectAnswer('${option}')">${option}</button>`
+                <div class="question">🤝 ${selected.scenario}. Quale strumento usi?</div>
+                <div style="background: #E8F5E8; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0;">
+                    <strong>👥 Collaborazione:</strong> Nel mondo del coding si lavora spesso in team.
+                    <br>Gli strumenti giusti rendono tutto più facile!
+                </div>
+                <div class="sequence-options">
+                    ${shuffledTools.map(tool => 
+                        `<div class="sequence-option" onclick="selectAnswer('${tool}')">
+                            ${tool}
+                        </div>`
                     ).join('')}
                 </div>
             `;
@@ -1812,7 +2194,7 @@
             gameState.isAnswered = true;
             
             // Disable all answer buttons
-            document.querySelectorAll('.answer-btn').forEach(btn => {
+            document.querySelectorAll('.answer-btn, .sequence-option').forEach(btn => {
                 btn.style.pointerEvents = 'none';
             });
             
@@ -1827,8 +2209,10 @@
             
             switch (currentGame) {
                 case 'sequenze-base':
-                    isCorrect = JSON.stringify(gameState.currentQuestion.userOrder) === 
-                               JSON.stringify(gameState.currentQuestion.correct);
+                    // Verifica che l'ordine sia corretto
+                    const userOrder = gameState.currentQuestion.userOrder.map(item => item.correctIndex);
+                    const correctOrder = gameState.currentQuestion.correct.map((_, index) => index);
+                    isCorrect = JSON.stringify(userOrder) === JSON.stringify(correctOrder);
                     break;
                 case 'frazioni-visual':
                     const selectedSlices = document.querySelectorAll('.pizza-slice.filled').length;
@@ -1868,7 +2252,7 @@
                     isCorrect = gameState.userAnswer === gameState.currentQuestion.error;
                     break;
                 default:
-                    // For other games, assume the answer is stored in currentQuestion.correct
+                    // For other games, assume the answer is stored in currentQuestion.correct or result
                     isCorrect = gameState.userAnswer === (gameState.currentQuestion.correct || gameState.currentQuestion.result);
             }
             
@@ -1885,7 +2269,14 @@
                 adaptiveData.consecutiveWrong = 0;
                 adaptiveData.hintLevel = 0;
                 
-                showMessage('Corretto! Ottimo lavoro! 🎉', 'success');
+                let successMessage = 'Corretto! Ottimo lavoro! 🎉';
+                
+                // Aggiungi spiegazione per giochi più complessi
+                if (gameState.currentQuestion.explanation) {
+                    successMessage += `<br><br>💡 ${gameState.currentQuestion.explanation}`;
+                }
+                
+                showMessage(successMessage, 'success');
                 
                 // Update score based on difficulty and class level
                 const pointsEarned = 10 * adaptiveData.currentDifficulty * currentClass;
@@ -1902,8 +2293,10 @@
                 }
                 
                 // Highlight correct answer
-                document.querySelectorAll('.answer-btn').forEach(btn => {
-                    if (btn.textContent == gameState.userAnswer || btn.onclick?.toString().includes(gameState.userAnswer)) {
+                document.querySelectorAll('.answer-btn, .sequence-option').forEach(btn => {
+                    const btnText = btn.textContent.trim();
+                    const userAnswerText = String(gameState.userAnswer).trim();
+                    if (btnText === userAnswerText || btnText.includes(userAnswerText)) {
                         btn.classList.add('correct');
                     }
                 });
@@ -1913,7 +2306,14 @@
                 adaptiveData.consecutiveCorrect = 0;
                 adaptiveData.hintLevel++;
                 
-                showMessage('Non è corretto. Riprova! 💪', 'error');
+                let errorMessage = 'Non è corretto. Riprova! 💪';
+                
+                // Aggiungi spiegazione per giochi più complessi
+                if (gameState.currentQuestion.explanation) {
+                    errorMessage += `<br><br>💡 Suggerimento: ${gameState.currentQuestion.explanation}`;
+                }
+                
+                showMessage(errorMessage, 'error');
                 
                 // Decrease difficulty if struggling
                 if (adaptiveData.consecutiveWrong >= 3 && adaptiveData.currentDifficulty > 1) {
@@ -1929,8 +2329,10 @@
                 }
                 
                 // Highlight wrong answer
-                document.querySelectorAll('.answer-btn').forEach(btn => {
-                    if (btn.textContent == gameState.userAnswer || btn.onclick?.toString().includes(gameState.userAnswer)) {
+                document.querySelectorAll('.answer-btn, .sequence-option').forEach(btn => {
+                    const btnText = btn.textContent.trim();
+                    const userAnswerText = String(gameState.userAnswer).trim();
+                    if (btnText === userAnswerText || btnText.includes(userAnswerText)) {
                         btn.classList.add('wrong');
                     }
                 });
@@ -1940,29 +2342,29 @@
             saveProgress();
         }
 
-        // Hint system
+        // MIGLIORATO: Hint system con consigli specifici
         function showHint() {
             const hints = {
-                'conteggio': 'Conta lentamente ogni oggetto, uno alla volta. Usa le dita se ti aiuta!',
-                'addizioni-visual': 'Conta prima tutti i cerchi blu, poi tutti i cerchi rossi, infine sommali insieme!',
-                'operazioni-entro-20': 'Per le sottrazioni, parti dal numero più grande e togli quello più piccolo!',
-                'pattern-semplici': 'Guarda attentamente: quale elemento si ripete? Osserva la sequenza dall\'inizio!',
-                'sequenze-base': 'Pensa a cosa fai per primo quando ti svegli, poi cosa fai dopo, e così via...',
-                'debugging-visuale': 'Confronta con quello che dovrebbe essere giusto. Quale elemento è fuori posto?',
-                'tabelline-base': 'Ricorda: moltiplicare significa sommare tante volte lo stesso numero!',
-                'loop-semplici': 'Un loop ripete un\'azione. Conta quante volte devi fare la stessa cosa!',
-                'if-then-base': 'Se succede una cosa, allora devi fare un\'azione. Cosa faresti in quella situazione?',
+                'conteggio': 'Conta lentamente ogni oggetto, uno alla volta. Usa le dita se ti aiuta! Puoi anche raggrupparli per 5.',
+                'addizioni-visual': 'Conta prima tutti gli oggetti del primo gruppo, poi quelli del secondo gruppo, infine sommali insieme!',
+                'operazioni-entro-20': 'Per le sottrazioni, parti dal numero più grande e togli quello più piccolo! Per le addizioni, inizia dal numero più grande e aggiungi.',
+                'pattern-semplici': 'Guarda attentamente: quale elemento si ripete? Osserva la sequenza dall\'inizio e trova il ritmo!',
+                'sequenze-base': 'Pensa passo dopo passo: cosa fai per PRIMO, poi cosa viene DOPO? Segui l\'ordine logico delle azioni!',
+                'debugging-visuale': 'Confronta con quello che dovrebbe essere giusto. Quale elemento è diverso o fuori posto?',
+                'tabelline-base': 'Ricorda: moltiplicare significa sommare tante volte lo stesso numero! 3×4 = 3+3+3+3',
+                'loop-semplici': 'Un loop ripete un\'azione. Se devi fare qualcosa 5 volte, il loop esegue l\'azione esattamente 5 volte!',
+                'if-then-base': 'Se succede una cosa, allora devi fare un\'azione logica. Cosa faresti davvero in quella situazione?',
                 'frazioni-visual': 'Una frazione ti dice quante parti colorare del totale. Se è 2/4, colora 2 parti su 4!',
-                'variabili-semplici': 'Una variabile è come una scatola con un\'etichetta. Cosa c\'è dentro la scatola?',
-                'algoritmi-avanzati': 'Pensa passo dopo passo. Qual è la strategia migliore per risolvere il problema?',
-                'statistica-base': 'La media si calcola sommando tutti i numeri e dividendo per quanti sono!',
-                'progetti-completi': 'Pensa a cosa è più importante per far funzionare quel tipo di progetto!',
-                'collaborazione-digitale': 'Quando lavori con altri, quale strumento ti aiuta di più in quella situazione?',
-                'default': 'Leggi attentamente la domanda e pensa con calma. Puoi farcela!'
+                'variabili-semplici': 'Una variabile è come una scatola con un\'etichetta. Leggi bene la domanda: cosa chiede esattamente?',
+                'algoritmi-avanzati': 'Pensa alla strategia più efficace e logica. Quale approccio risolverebbe davvero il problema?',
+                'statistica-base': 'Media = somma tutti i numeri ÷ quanti sono. Massimo = il più grande. Minimo = il più piccolo.',
+                'progetti-completi': 'Pensa a cosa è INDISPENSABILE per far funzionare quel tipo di progetto. Senza quale componente non funzionerebbe?',
+                'collaborazione-digitale': 'Nel coding moderno si usano strumenti specifici. Quale strumento risolve davvero quel problema nel team?',
+                'default': 'Leggi attentamente la domanda e pensa con calma. Ogni indizio è importante! Puoi farcela!'
             };
             
             const hintText = hints[currentGame] || hints['default'];
-            document.getElementById('hintText').textContent = hintText;
+            document.getElementById('hintText').innerHTML = hintText;
             document.getElementById('hintContainer').style.display = 'flex';
         }
 
@@ -2023,12 +2425,12 @@
         // Message system
         function showMessage(text, type) {
             const container = document.getElementById('messageContainer');
-            container.textContent = text;
+            container.innerHTML = text; // Cambiato da textContent a innerHTML per supportare HTML
             container.className = `message ${type} show`;
             
             setTimeout(() => {
                 hideMessage();
-            }, 3000);
+            }, 5000); // Aumentato tempo per messaggi più lunghi
         }
 
         function hideMessage() {
