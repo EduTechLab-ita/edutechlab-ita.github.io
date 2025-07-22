@@ -509,9 +509,15 @@
             transition: all 0.3s ease;
         }
 
-        .close-update-btn:hover {
-            background: rgba(255,255,255,0.2);
-            transform: scale(1.1);
+        /* Hide scrollbar during video modal */
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        /* Adjust header when update notification is shown */
+        body.update-shown header {
+            top: 72px;
+            transition: top 0.5s ease;
         }
 
         /* Sections */
@@ -1171,10 +1177,14 @@
                 right: 10px;
             }
 
-            .video-play-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 1.5rem;
+            .update-notification-content {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+
+            .update-btn {
+                padding: 0.5rem 1.2rem;
+                font-size: 0.9rem;
             }
         }
 
@@ -1214,6 +1224,14 @@
     </style>
 </head>
 <body>
+    <!-- UPDATE NOTIFICATION BANNER -->
+    <div class="update-notification" id="updateNotification">
+        <div class="update-notification-content">
+            <span>🆕 <strong>Sito aggiornato!</strong> Nuove funzionalità disponibili</span>
+            <button class="update-btn" onclick="updateSite()">Ricarica Ora</button>
+            <button class="close-update-btn" onclick="dismissUpdate()" title="Chiudi notifica">×</button>
+        </div>
+    </div>
     <!-- VIDEO WELCOME MODAL -->
     <div class="video-welcome-modal" id="videoWelcomeModal">
         <div class="video-modal-content">
@@ -1987,6 +2005,64 @@
             const currentYear = new Date().getFullYear();
             document.querySelector('footer p').innerHTML = 
                 `&copy; ${currentYear} EduTechLab - Fabio Rizzotto. Tutti i diritti riservati.`;
+        });
+
+        // ===============================
+        // SISTEMA DI NOTIFICA AGGIORNAMENTI
+        // ===============================
+        
+        // IMPORTANTE: Quando modifichi il sito, incrementa questo numero!
+        const SITE_VERSION = '1.1.0'; // <-- CAMBIA QUESTO QUANDO AGGIORNI IL SITO
+        
+        // Controlla se c'è un aggiornamento disponibile
+        function checkForUpdates() {
+            const lastVersion = localStorage.getItem('siteVersion');
+            const updateDismissed = sessionStorage.getItem('updateDismissed');
+            
+            // Se è la prima visita o c'è una nuova versione e non è stata dismessa
+            if (lastVersion !== SITE_VERSION && !updateDismissed) {
+                // Se non è la prima visita (c'era una versione precedente)
+                if (lastVersion) {
+                    showUpdateNotification();
+                } else {
+                    // Prima visita, salva la versione corrente
+                    localStorage.setItem('siteVersion', SITE_VERSION);
+                }
+            }
+        }
+
+        // Mostra la notifica di aggiornamento
+        function showUpdateNotification() {
+            const notification = document.getElementById('updateNotification');
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 1500); // Appare dopo 1.5 secondi per non interferire con il video
+        }
+
+        // Aggiorna il sito (ricarica la pagina)
+        function updateSite() {
+            localStorage.setItem('siteVersion', SITE_VERSION);
+            sessionStorage.removeItem('updateDismissed');
+            
+            // Forza il ricaricamento senza cache
+            window.location.reload(true);
+        }
+
+        // Nascondi la notifica per questa sessione
+        function dismissUpdate() {
+            const notification = document.getElementById('updateNotification');
+            notification.classList.remove('show');
+            sessionStorage.setItem('updateDismissed', 'true');
+            
+            // Aggiorna comunque la versione in background
+            setTimeout(() => {
+                localStorage.setItem('siteVersion', SITE_VERSION);
+            }, 1000);
+        }
+
+        // Avvia il controllo aggiornamenti al caricamento della pagina
+        document.addEventListener('DOMContentLoaded', function() {
+            checkForUpdates();
         });
 
         // Register Service Worker for PWA
