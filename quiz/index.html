@@ -857,6 +857,49 @@
             }
         }
 
+        /* Download App Button */
+        .download-app {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background: #9C27B0;
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .download-app:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(156, 39, 176, 0.4);
+        }
+
+        /* Back to Site Button */
+        .back-to-site {
+            background: #607D8B;
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-to-site:hover {
+            background: #455A64;
+            transform: translateY(-2px);
+            text-decoration: none;
+            color: white;
+        }
+
         /* Hidden class */
         .hidden {
             display: none !important;
@@ -874,6 +917,9 @@
 
     <!-- PWA Install Button -->
     <button class="pwa-install" id="installBtn" title="Installa l'app">📱</button>
+
+    <!-- Download App Button -->
+    <button class="download-app" id="downloadBtn" title="Scarica l'app">💾</button>
 
     <div class="main-container">
         <!-- Homepage: Scelta Classe -->
@@ -983,6 +1029,11 @@
             </div>
 
             <footer class="footer">
+                <div style="margin-bottom: 1rem;">
+                    <a href="https://edutechlab-ita.github.io" class="back-to-site" target="_blank">
+                        🌐 Torna al Sito EduTech Lab
+                    </a>
+                </div>
                 <h3>🎓 EduTech Lab</h3>
                 <p style="margin-bottom: 0.5rem;">Piattaforma di Pensiero Computazionale per la Scuola Primaria</p>
                 <p style="font-size: 0.9rem; color: #9CA3AF;">
@@ -1293,6 +1344,42 @@
                 }
                 deferredPrompt = null;
             }
+        });
+
+        // Download App functionality
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            // Crea il contenuto HTML completo
+            const htmlContent = `<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTech Lab - Pensiero Computazionale</title>
+    <meta name="description" content="Piattaforma di Pensiero Computazionale per la Scuola Primaria">
+</head>
+<body>
+    ${document.documentElement.innerHTML}
+</body>
+</html>`;
+            
+            // Crea il file blob
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            // Crea link per il download
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+            downloadLink.download = 'edutech-lab-giochi.html';
+            downloadLink.style.display = 'none';
+            
+            // Aggiungi al DOM, clicca e rimuovi
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            URL.revokeObjectURL(url);
+            
+            // Mostra messaggio di successo
+            showMessage('🎉 App scaricata! Apri il file per giocare offline!', 'success');
         });
 
         // Load saved data
