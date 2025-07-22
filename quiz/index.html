@@ -7,316 +7,2121 @@
     <meta name="description" content="Piattaforma di Pensiero Computazionale per la Scuola Primaria">
     <meta name="theme-color" content="#3B82F6">
     
-    <link rel="manifest" href="manifest.json">
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiRWR1VGVjaCBMYWIiLCJzaG9ydF9uYW1lIjoiRWR1VGVjaCIsInN0YXJ0X3VybCI6Ii8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZmZmZmZmIiwidGhlbWVfY29sb3IiOiIjM0I4MkY2IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBQWdBQUFBSUNBWUFBQUREUEdMa0FBQUFBZ0pKUkVGVWVOcGo4RGx2d3pDWUJnOEF3QUpKUkVGVWVOcGo4RGx2d3pDWUJnOEF3QWJKZnR2USIsInNpemVzIjoiMTkyeDE5MiIsInR5cGUiOiJpbWFnZS9wbmcifV19">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="EduTech Lab">
     
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        /* MODIFICA: Assicura che html e body occupino tutta l'altezza per il layout flessibile */
-        html, body { height: 100%; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #1a1a1a; min-height: 100vh; overflow-x: hidden; }
-        .main-container { min-height: 100vh; position: relative; }
-        .animated-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .floating-shape { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.1); animation: float 6s ease-in-out infinite; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #1a1a1a;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .main-container {
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
         .floating-shape:nth-child(1) { top: 20%; left: 10%; width: 80px; height: 80px; animation-delay: 0s; }
         .floating-shape:nth-child(2) { top: 40%; left: 80%; width: 60px; height: 60px; animation-delay: 2s; }
         .floating-shape:nth-child(3) { top: 70%; left: 20%; width: 100px; height: 100px; animation-delay: 4s; }
         .floating-shape:nth-child(4) { top: 80%; left: 60%; width: 40px; height: 40px; animation-delay: 1s; }
-        @keyframes float { 0%, 100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-20px) rotate(180deg); } }
-        .pwa-install { position: fixed; top: 1rem; right: 1rem; background: #4CAF50; color: white; border: none; padding: 0.75rem; border-radius: 50%; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3); z-index: 1000; display: none; transition: all 0.3s ease; }
-        .header { text-align: center; padding: 2rem; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); margin: 1rem; border-radius: 2rem; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); }
-        .header h1 { font-size: 3rem; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; }
-        .classes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; padding: 1rem; max-width: 1200px; margin: 0 auto; }
-        .class-card { background: rgba(255, 255, 255, 0.95); border-radius: 1.5rem; padding: 2rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); text-align: center; }
-        .class-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15); }
-        .card-emoji { font-size: 4rem; margin-bottom: 1rem; display: block; } .card-title { font-size: 1.3rem; font-weight: bold; }
-        .games-section { display: none; padding: 1rem; max-width: 1200px; margin: 0 auto; }
-        .nav-btn { background: rgba(255, 255, 255, 0.9); border: none; padding: 0.75rem 1.5rem; border-radius: 50px; cursor: pointer; font-size: 1rem; font-weight: 600; }
-        .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 1rem; cursor: pointer; font-weight: 600; } .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
-        
-        /** MODIFICA: Layout di gioco flessibile per adattarsi allo schermo (LIM/PC) **/
-        .game-interface { display: none; flex-direction: column; background: rgba(255, 255, 255, 0.98); border-radius: 2rem; margin: 1rem; padding: 2rem; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); height: calc(100vh - 2rem); /* Occupa tutta l'altezza disponibile */ }
-        .game-header { flex-shrink: 0; /* Impedisce all'header di rimpicciolirsi */ }
-        .game-content { flex-grow: 1; /* Fa espandere il contenuto per riempire lo spazio */ overflow-y: auto; /* Aggiunge scroll solo se necessario */ background: #f8f9fa; border-radius: 1rem; padding: 2rem; margin: 1rem 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        div[style*="text-align: center; margin-top: 2rem;"] { flex-shrink: 0; /* Impedisce ai pulsanti di rimpicciolirsi */ }
-        
-        .question { font-size: 2rem; font-weight: bold; text-align: center; margin-bottom: 2rem; color: #333; }
-        .answers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; width: 100%; max-width: 600px; }
-        .answer-btn { padding: 1.5rem; font-size: 1.5rem; border: 2px solid #ddd; border-radius: 1rem; background: white; cursor: pointer; transition: all 0.3s ease; }
-        .answer-btn:hover { background: #f0f4ff; }
-        .answer-btn.correct { background: #4CAF50; color: white; border-color: #45a049; }
-        .answer-btn.wrong { background: #f44336; color: white; border-color: #d32f2f; }
-        .counting-objects { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin: 2rem 0; }
-        .counting-object { font-size: 3rem; }
 
-        /** MODIFICA: Stile per il gioco delle frazioni (pizza) **/
-        .fraction-visual { display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-top: 1rem; }
-        .pizza-container { position: relative; width: 250px; height: 250px; border-radius: 50%; background: #FDEBD0; border: 3px solid #AF601A; }
-        .pizza-slice { position: absolute; width: 125px; height: 125px; background: transparent; transform-origin: 100% 100%; overflow: hidden; }
-        .pizza-slice::before { content: ''; position: absolute; width: 125px; height: 125px; background-color: rgba(255, 107, 53, 0.7); border-radius: 125px 0 0 0; transform-origin: 100% 100%; cursor: pointer; transform: rotate(-90deg); }
-        .pizza-slice.filled::before { background-color: #FF6B35; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
 
-        .message { padding: 1rem; border-radius: 1rem; margin: 1rem 0; text-align: center; font-weight: bold; opacity: 0; transform: translateY(-20px); transition: all 0.3s ease; display: none; }
-        .message.show { opacity: 1; transform: translateY(0); display: block; }
-        .message.success { background: #d4edda; color: #155724; }
-        .message.error { background: #f8d7da; color: #721c24; }
-        .hidden { display: none !important; }
-        @media (max-width: 768px) { .header h1 { font-size: 2rem; } .classes-grid { grid-template-columns: 1fr; } }
+        /* PWA Install Button */
+        .pwa-install {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+            z-index: 1000;
+            display: none;
+            transition: all 0.3s ease;
+        }
+
+        .pwa-install:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 1rem;
+            border-radius: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .header h2 {
+            font-size: 1.5rem;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #6B7280;
+            font-size: 1.1rem;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-stars { background: #FEF3C7; color: #92400E; }
+        .stat-score { background: #D1FAE5; color: #065F46; }
+        .stat-level { background: #E0E7FF; color: #3730A3; }
+
+        /* Classes Grid */
+        .classes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .class-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .class-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-emoji {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1F2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: #6B7280;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .badge.math { background: #EFF6FF; color: #1E40AF; }
+        .badge.coding { background: #ECFDF5; color: #059669; }
+        .badge.thinking { background: #FAF5FF; color: #7C3AED; }
+
+        /* Games Section */
+        .games-section {
+            display: none;
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .game-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Navigation Buttons */
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .reset-btn {
+            background: #FEE2E2;
+            color: #DC2626;
+        }
+
+        .reset-btn:hover {
+            background: #FEF2F2;
+        }
+
+        /* Game Interface */
+        .game-interface {
+            display: none;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 2rem;
+            margin: 1rem;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .game-controls {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-success {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #FF9800;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Fullscreen Button */
+        .fullscreen-btn {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .fullscreen-btn:hover {
+            background: #1976D2;
+            transform: scale(1.1);
+        }
+
+        /* Fullscreen Mode */
+        .fullscreen-mode {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: white;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            overflow: auto;
+        }
+
+        .fullscreen-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exit-fullscreen {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+
+        /* Adaptive Learning Stats */
+        .adaptive-stats {
+            background: linear-gradient(135deg, #E8F5E8, #F0F8F0);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2E7D32;
+        }
+
+        .stat-label {
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        /* Hint System */
+        .hint-container {
+            background: #FFF3CD;
+            border: 1px solid #FFEAA7;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            display: none;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .hint-icon {
+            font-size: 2rem;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Difficulty Indicator */
+        .difficulty-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .difficulty-star {
+            font-size: 1.5rem;
+            color: #ddd;
+            transition: color 0.3s ease;
+        }
+
+        .difficulty-star.active {
+            color: #FFD700;
+        }
+
+        /* Game Content Areas */
+        .game-content {
+            background: #f8f9fa;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 1rem 0;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .question {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .answers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .answer-btn {
+            padding: 1.5rem;
+            font-size: 1.5rem;
+            border: 2px solid #ddd;
+            border-radius: 1rem;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .answer-btn:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: scale(1.05);
+        }
+
+        .answer-btn.correct {
+            background: #4CAF50;
+            color: white;
+            border-color: #45a049;
+        }
+
+        .answer-btn.wrong {
+            background: #f44336;
+            color: white;
+            border-color: #d32f2f;
+        }
+
+        /* Visual Elements */
+        .counting-objects, .visual-objects {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .counting-object {
+            font-size: 3rem;
+            padding: 0.5rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: bounceIn 0.5s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .visual-object {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            transition: transform 0.2s;
+        }
+
+        .visual-object:hover {
+            transform: scale(1.1);
+        }
+
+        /* Pattern Game */
+        .pattern-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+
+        .pattern-item {
+            width: 80px;
+            height: 80px;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            border: 3px solid #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-item.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .pattern-item.correct {
+            background: #4CAF50;
+            color: white;
+            border-color: #45a049;
+        }
+
+        /* Sequence Game */
+        .sequence-area {
+            background: #f3f4f6;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem 0;
+            min-height: 120px;
+        }
+
+        .sequence-items {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .sequence-item {
+            background: #EFF6FF;
+            border: 2px solid #3B82F6;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sequence-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .sequence-option {
+            background: #FEF3C7;
+            border: 3px solid #F59E0B;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .sequence-option:hover {
+            background: #FED7AA;
+            transform: translateY(-2px);
+        }
+
+        /* Fractions Game */
+        .fraction-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .pizza-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        .pizza-slice {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 3px solid #FF6B35;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform-origin: 0 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pizza-slice.filled {
+            background: #FF6B35;
+        }
+
+        .pizza-slice:hover {
+            transform: scale(1.1);
+        }
+
+        /* Info Project Section */
+        .info-project {
+            background: linear-gradient(135deg, white 0%, #EFF6FF 100%);
+            border-radius: 2rem;
+            padding: 3rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin: 2rem 1rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .info-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .info-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .icon-math { background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); }
+        .icon-coding { background: linear-gradient(135deg, #10B981 0%, #059669 100%); }
+        .icon-thinking { background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%); }
+
+        /* Footer */
+        .footer {
+            background: rgba(31, 41, 55, 0.95);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin: 2rem 1rem;
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .footer h3 {
+            color: #60A5FA;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Success/Error Messages */
+        .message {
+            padding: 1rem;
+            border-radius: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+        }
+
+        .message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .message.hint {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .classes-grid {
+                grid-template-columns: 1fr;
+                padding: 0.5rem;
+            }
+            
+            .class-card {
+                padding: 1.5rem;
+            }
+            
+            .game-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .question {
+                font-size: 1.5rem;
+            }
+            
+            .answers-grid {
+                grid-template-columns: 1fr;
+                max-width: 300px;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Hidden class */
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
+    <!-- Animated Background -->
     <div class="animated-bg">
-        <div class="floating-shape"></div><div class="floating-shape"></div><div class="floating-shape"></div><div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
     </div>
+
+    <!-- PWA Install Button -->
     <button class="pwa-install" id="installBtn" title="Installa l'app">📱</button>
 
     <div class="main-container">
+        <!-- Homepage: Scelta Classe -->
         <div id="homepage">
             <header class="header">
                 <h1>🎓 EduTech Lab</h1>
                 <h2>Pensiero Computazionale per la Scuola Primaria</h2>
                 <p>Scegli la tua classe e inizia il viaggio nel mondo del coding!</p>
             </header>
+
+            <!-- Stats Bar (visible when there are points) -->
+            <div id="stats-bar" class="stats-bar" style="display: none;">
+                <div class="stat-item stat-stars">⭐ <span id="stars-count">0</span> stelle</div>
+                <div class="stat-item stat-score">🏆 <span id="score-count">0</span> punti</div>
+                <div class="stat-item stat-level">🧠 Livello <span id="level-count">1</span></div>
+                <button class="nav-btn reset-btn" onclick="resetProgress()">🔄 Reset</button>
+            </div>
+
             <div class="classes-grid">
                 <div class="class-card" onclick="selectClass(1)">
-                    <div class="card-emoji">🌱</div><h3 class="card-title">Classe 1ª</h3><p class="card-description">I primi passi nel mondo digitale (6-7 anni)</p>
-                 </div>
-                 <div class="class-card" onclick="selectClass(2)">
-                    <div class="card-emoji">🌿</div><h3 class="card-title">Classe 2ª</h3><p class="card-description">Esploratori digitali curiosi (7-8 anni)</p>
-                 </div>
-                 <div class="class-card" onclick="selectClass(3)">
-                    <div class="card-emoji">🌳</div><h3 class="card-title">Classe 3ª</h3><p class="card-description">Logica e primi algoritmi (8-9 anni)</p>
-                 </div>
-                 <div class="class-card" onclick="selectClass(4)">
-                    <div class="card-emoji">🌲</div><h3 class="card-title">Classe 4ª</h3><p class="card-description">Algoritmi avanzati (9-10 anni)</p>
-                 </div>
-                 <div class="class-card" onclick="selectClass(5)">
-                    <div class="card-emoji">🌺</div><h3 class="card-title">Classe 5ª</h3><p class="card-description">Programmatori junior (10-11 anni)</p>
-                 </div>
+                    <div class="card-emoji">🌱</div>
+                    <h3 class="card-title">Classe 1ª</h3>
+                    <p class="card-description">I primi passi nel mondo digitale (6-7 anni)</p>
+                    <div class="card-badges">
+                        <span class="badge math">Conteggio</span>
+                        <span class="badge coding">Sequenze</span>
+                        <span class="badge thinking">Pattern</span>
+                    </div>
+                    <div style="color: #059669; font-weight: bold;">✅ 4 Giochi attivi</div>
+                </div>
+
+                <div class="class-card" onclick="selectClass(2)">
+                    <div class="card-emoji">🌿</div>
+                    <h3 class="card-title">Classe 2ª</h3>
+                    <p class="card-description">Esploratori digitali curiosi (7-8 anni)</p>
+                    <div class="card-badges">
+                        <span class="badge math">Operazioni</span>
+                        <span class="badge coding">Debug</span>
+                        <span class="badge thinking">Pattern</span>
+                    </div>
+                    <div style="color: #059669; font-weight: bold;">✅ 6 Giochi attivi</div>
+                </div>
+
+                <div class="class-card" onclick="selectClass(3)">
+                    <div class="card-emoji">🌳</div>
+                    <h3 class="card-title">Classe 3ª</h3>
+                    <p class="card-description">Logica e primi algoritmi (8-9 anni)</p>
+                    <div class="card-badges">
+                        <span class="badge math">Tabelline</span>
+                        <span class="badge coding">Loop</span>
+                        <span class="badge thinking">Condizioni</span>
+                    </div>
+                    <div style="color: #059669; font-weight: bold;">✅ 7 Giochi attivi</div>
+                </div>
+
+                <div class="class-card" onclick="selectClass(4)">
+                    <div class="card-emoji">🌲</div>
+                    <h3 class="card-title">Classe 4ª</h3>
+                    <p class="card-description">Algoritmi avanzati (9-10 anni)</p>
+                    <div class="card-badges">
+                        <span class="badge math">Frazioni</span>
+                        <span class="badge coding">Variabili</span>
+                        <span class="badge thinking">Ottimizzazione</span>
+                    </div>
+                    <div style="color: #059669; font-weight: bold;">✅ 8 Giochi attivi</div>
+                </div>
+
+                <div class="class-card" onclick="selectClass(5)">
+                    <div class="card-emoji">🌺</div>
+                    <h3 class="card-title">Classe 5ª</h3>
+                    <p class="card-description">Programmatori junior (10-11 anni)</p>
+                    <div class="card-badges">
+                        <span class="badge math">Statistiche</span>
+                        <span class="badge coding">Progetti</span>
+                        <span class="badge thinking">Collaborazione</span>
+                    </div>
+                    <div style="color: #059669; font-weight: bold;">✅ 9 Giochi attivi</div>
+                </div>
             </div>
+
+            <!-- Info Project -->
+            <div class="info-project">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h3 style="font-size: 2rem; color: #1F2937; margin-bottom: 1rem;">🚀 EduTech Lab Platform</h3>
+                    <p style="color: #6B7280; max-width: 600px; margin: 0 auto;">
+                        Piattaforma integrata per lo sviluppo del pensiero computazionale nella scuola primaria.
+                    </p>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-icon icon-math">🧮</div>
+                        <h4 style="color: #2563EB; font-size: 1.2rem; margin-bottom: 0.5rem;">Matematica</h4>
+                        <p style="color: #6B7280; font-size: 0.9rem;">Conteggio, operazioni e problem solving</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon icon-coding">💻</div>
+                        <h4 style="color: #059669; font-size: 1.2rem; margin-bottom: 0.5rem;">Coding</h4>
+                        <p style="color: #6B7280; font-size: 0.9rem;">Algoritmi, sequenze e robotica educativa</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon icon-thinking">🧠</div>
+                        <h4 style="color: #7C3AED; font-size: 1.2rem; margin-bottom: 0.5rem;">Pensiero Computazionale</h4>
+                        <p style="color: #6B7280; font-size: 0.9rem;">Pattern recognition e debugging</p>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="footer">
+                <h3>🎓 EduTech Lab</h3>
+                <p style="margin-bottom: 0.5rem;">Piattaforma di Pensiero Computazionale per la Scuola Primaria</p>
+                <p style="font-size: 0.9rem; color: #9CA3AF;">
+                    © 2025 EduTech Lab by <strong style="color: #60A5FA;">Fabio Rizzotto</strong>
+                </p>
+                <p style="font-size: 0.8rem; color: #9CA3AF;">
+                    Insegnante | Animatore Digitale | Formatore Docenti | Esperto PNRR
+                </p>
+            </footer>
         </div>
 
+        <!-- Sezione Giochi per Classe -->
         <div id="gamesSection" class="games-section">
             <div class="game-header">
                 <h2 id="classTitle">Classe selezionata</h2>
                 <button class="nav-btn" onclick="backToHome()">🏠 Torna alla Home</button>
             </div>
-            <div class="games-grid" id="gamesGrid"></div>
+
+            <div class="adaptive-stats">
+                <h3>📊 Le tue statistiche di apprendimento</h3>
+                <div class="stats-grid">
+                    <div style="text-align: center;">
+                        <div class="stat-number" id="totalQuestions">0</div>
+                        <div class="stat-label">Domande totali</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="stat-number" id="correctAnswers">0</div>
+                        <div class="stat-label">Risposte corrette</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="stat-number" id="accuracyRate">0%</div>
+                        <div class="stat-label">Precisione</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="stat-number" id="currentLevel">1</div>
+                        <div class="stat-label">Livello attuale</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="games-grid" id="gamesGrid">
+                <!-- I giochi verranno caricati dinamicamente -->
+            </div>
         </div>
 
+        <!-- Interfaccia Gioco -->
         <div id="gameInterface" class="game-interface">
             <div class="game-header">
-                <h2 id="gameTitle">Gioco</h2>
-                <button class="btn btn-secondary" onclick="backToGames()">🎮 Torna ai Giochi</button>
+                <div>
+                    <h2 id="gameTitle">Gioco</h2>
+                    <div class="difficulty-indicator">
+                        <span>Difficoltà:</span>
+                        <span class="difficulty-star" data-level="1">⭐</span>
+                        <span class="difficulty-star" data-level="2">⭐</span>
+                        <span class="difficulty-star" data-level="3">⭐</span>
+                        <span class="difficulty-star" data-level="4">⭐</span>
+                        <span class="difficulty-star" data-level="5">⭐</span>
+                    </div>
+                </div>
+                <div class="game-controls">
+                    <button class="fullscreen-btn" onclick="toggleFullscreen()" title="Schermo intero">⛶</button>
+                    <button class="btn btn-secondary" onclick="backToGames()">🎮 Torna ai Giochi</button>
+                </div>
             </div>
+
+            <div class="hint-container" id="hintContainer">
+                <span class="hint-icon">💡</span>
+                <div id="hintText">Suggerimento apparirà qui...</div>
+            </div>
+
             <div class="message" id="messageContainer"></div>
-            <div class="game-content" id="gameContent"></div>
+
+            <div class="game-content" id="gameContent">
+                <!-- Il contenuto del gioco verrà caricato qui -->
+            </div>
+
             <div style="text-align: center; margin-top: 2rem;">
                 <button class="btn btn-primary" onclick="nextQuestion()">🔄 Prossima Domanda</button>
-                <button class="btn btn-primary" onclick="checkAnswer()" style="display: none;" id="checkAnswerBtn">✅ Verifica Risposta</button>
+                <button class="btn btn-success" onclick="checkAnswer()" style="display: none;" id="checkAnswerBtn">✅ Verifica Risposta</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Mantenuta la tua struttura originale dello script
+        // Global Variables
         let currentClass = 1;
         let currentGame = '';
-        let gameState = {};
-        let score = 0, stars = 0, level = 1;
-
-        const classesData = {
-            1: { games: [{ id: 'conteggio'}, {id: 'addizioni-visual' }] },
-            2: { games: [{ id: 'conteggio'}, {id: 'addizioni-visual' }] },
-            3: { games: [{ id: 'conteggio'}, {id: 'addizioni-visual' }] },
-            4: { games: [{ id: 'conteggio'}, {id: 'frazioni-visual' }] },
-            5: { games: [{ id: 'conteggio'}, {id: 'frazioni-visual' }] }
+        let adaptiveData = {
+            consecutiveCorrect: 0,
+            consecutiveWrong: 0,
+            totalQuestions: 0,
+            correctAnswers: 0,
+            currentDifficulty: 1,
+            maxDifficulty: 5,
+            hintLevel: 0
         };
 
+        // Game State
+        let gameState = {
+            currentQuestion: null,
+            userAnswer: null,
+            isAnswered: false
+        };
+
+        // Progress tracking
+        let score = parseInt(localStorage.getItem('edutech_score') || '0');
+        let stars = parseInt(localStorage.getItem('edutech_stars') || '0');
+        let level = parseInt(localStorage.getItem('edutech_level') || '1');
+
+        // Classes and Games Data - COMPLETO PER TUTTE LE CLASSI
+        const classesData = {
+            1: {
+                name: "Prima Primaria",
+                emoji: "🌱",
+                description: "I primi passi nel mondo digitale",
+                age: "6-7 anni",
+                games: [
+                    { id: 'conteggio', name: '🔢 Conteggio Magico', description: 'Conta oggetti e associa al numero' },
+                    { id: 'addizioni-visual', name: '➕ Addizioni Visual', description: 'Somme fino a 10 con oggetti colorati' },
+                    { id: 'sequenze-base', name: '📝 Prime Sequenze', description: 'Ordinare azioni quotidiane' },
+                    { id: 'pattern-semplici', name: '🌈 Trova il Pattern', description: 'Riconosci sequenze colorate' }
+                ]
+            },
+            2: {
+                name: "Seconda Primaria",
+                emoji: "🌿",
+                description: "Esploratori digitali curiosi",
+                age: "7-8 anni",
+                games: [
+                    { id: 'conteggio', name: '🔢 Conteggio Avanzato', description: 'Conta oggetti fino a 20' },
+                    { id: 'operazioni-entro-20', name: '🧮 Operazioni entro il 20', description: 'Addizioni e sottrazioni veloci' },
+                    { id: 'addizioni-visual', name: '➕ Addizioni Avanzate', description: 'Somme con raggruppamenti' },
+                    { id: 'pattern-semplici', name: '🎨 Pattern Creativi', description: 'Pattern più complessi' },
+                    { id: 'sequenze-base', name: '📝 Sequenze Avanzate', description: 'Storie più articolate' },
+                    { id: 'debugging-visuale', name: '🐛 Detective del Codice', description: 'Trova gli errori nelle sequenze' }
+                ]
+            },
+            3: {
+                name: "Terza Primaria",
+                emoji: "🌳",
+                description: "Logica e primi algoritmi",
+                age: "8-9 anni",
+                games: [
+                    { id: 'conteggio', name: '🔢 Conteggio Strategico', description: 'Strategie di conteggio efficaci' },
+                    { id: 'operazioni-entro-20', name: '🧮 Operazioni Rapide', description: 'Calcolo mentale veloce' },
+                    { id: 'tabelline-base', name: '✖️ Tabelline Interattive', description: 'Moltiplicazioni fino alla tavola del 5' },
+                    { id: 'addizioni-visual', name: '➕ Operazioni Complesse', description: 'Addizioni e sottrazioni avanzate' },
+                    { id: 'loop-semplici', name: '🔄 I Miei Primi Loop', description: 'Ripetizioni e cicli semplici' },
+                    { id: 'if-then-base', name: '🤔 Se... Allora...', description: 'Prime condizioni logiche' },
+                    { id: 'debugging-visuale', name: '🐛 Debug Master', description: 'Debugging di algoritmi' }
+                ]
+            },
+            4: {
+                name: "Quarta Primaria",
+                emoji: "🌲",
+                description: "Algoritmi avanzati",
+                age: "9-10 anni",
+                games: [
+                    { id: 'conteggio', name: '🔢 Conteggio Professionale', description: 'Strategie avanzate di conteggio' },
+                    { id: 'operazioni-entro-20', name: '🧮 Calcoli Complessi', description: 'Operazioni con numeri grandi' },
+                    { id: 'tabelline-base', name: '✖️ Tabelline Complete', description: 'Tutte le tabelline fino al 10' },
+                    { id: 'frazioni-visual', name: '🍕 Frazioni Interattive', description: 'Visualizza e opera con le frazioni' },
+                    { id: 'addizioni-visual', name: '➕ Aritmetica Avanzata', description: 'Operazioni con numeri decimali' },
+                    { id: 'variabili-semplici', name: '📦 Le Mie Prime Variabili', description: 'Contenitori per i dati' },
+                    { id: 'algoritmi-avanzati', name: '🧠 Algoritmi Intelligenti', description: 'Strategie di risoluzione complesse' },
+                    { id: 'debugging-visuale', name: '🐛 Debug Expert', description: 'Debugging avanzato' }
+                ]
+            },
+            5: {
+                name: "Quinta Primaria",
+                emoji: "🌺",
+                description: "Programmatori junior",
+                age: "10-11 anni",
+                games: [
+                    { id: 'conteggio', name: '🔢 Conteggio Esperto', description: 'Metodi di conteggio combinatorio' },
+                    { id: 'operazioni-entro-20', name: '🧮 Matematica Superiore', description: 'Operazioni con tutti i numeri' },
+                    { id: 'tabelline-base', name: '✖️ Moltiplicazioni Expert', description: 'Calcoli rapidi e trucchi' },
+                    { id: 'frazioni-visual', name: '🍕 Frazioni Master', description: 'Operazioni con frazioni' },
+                    { id: 'statistica-base', name: '📊 I Miei Primi Grafici', description: 'Raccogli e analizza dati' },
+                    { id: 'variabili-semplici', name: '📦 Variabili Avanzate', description: 'Programmazione con variabili' },
+                    { id: 'algoritmi-avanzati', name: '🧠 Algoritmi Pro', description: 'Ottimizzazione e ricerca' },
+                    { id: 'progetti-completi', name: '🎮 Crea il Tuo Gioco', description: 'Progetti completi con interfaccia' },
+                    { id: 'collaborazione-digitale', name: '🤝 Coding di Squadra', description: 'Progetti collaborativi' }
+                ]
+            }
+        };
+
+        // PWA Installation
         let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
             document.getElementById('installBtn').style.display = 'block';
         });
+
         document.getElementById('installBtn').addEventListener('click', async () => {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                await deferredPrompt.userChoice;
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    document.getElementById('installBtn').style.display = 'none';
+                }
                 deferredPrompt = null;
             }
         });
 
+        // Load saved data
+        function loadAdaptiveData() {
+            const saved = localStorage.getItem('edutech_adaptive');
+            if (saved) {
+                adaptiveData = { ...adaptiveData, ...JSON.parse(saved) };
+            }
+            updateStatsDisplay();
+        }
+
+        // Save adaptive data
+        function saveAdaptiveData() {
+            localStorage.setItem('edutech_adaptive', JSON.stringify(adaptiveData));
+            updateStatsDisplay();
+        }
+
+        // Update stats display
+        function updateStatsDisplay() {
+            document.getElementById('totalQuestions').textContent = adaptiveData.totalQuestions;
+            document.getElementById('correctAnswers').textContent = adaptiveData.correctAnswers;
+            
+            const accuracy = adaptiveData.totalQuestions > 0 ? 
+                Math.round((adaptiveData.correctAnswers / adaptiveData.totalQuestions) * 100) : 0;
+            document.getElementById('accuracyRate').textContent = accuracy + '%';
+            document.getElementById('currentLevel').textContent = adaptiveData.currentDifficulty;
+
+            // Update difficulty stars
+            document.querySelectorAll('.difficulty-star').forEach((star, index) => {
+                star.classList.toggle('active', index < adaptiveData.currentDifficulty);
+            });
+
+            // Update all displays
+            document.querySelectorAll('#stars-count, #class-stars').forEach(el => {
+                el.textContent = stars;
+            });
+            document.querySelectorAll('#score-count, #class-score').forEach(el => {
+                el.textContent = score;
+            });
+            document.querySelectorAll('#level-count, #class-level').forEach(el => {
+                el.textContent = level;
+            });
+
+            // Show stats if progress made
+            if (score > 0 || stars > 0) {
+                document.getElementById('stats-bar').style.display = 'flex';
+            }
+        }
+
+        // Class selection
         function selectClass(classNum) {
             currentClass = classNum;
+            const classData = classesData[classNum];
+            
             document.getElementById('homepage').style.display = 'none';
             document.getElementById('gamesSection').style.display = 'block';
-            document.getElementById('classTitle').textContent = `Classe ${classNum}ª`;
+            document.getElementById('classTitle').textContent = 
+                `${classData.emoji} ${classData.name} - ${classData.description}`;
+            
             loadGamesForClass(classNum);
         }
 
+        // Load games for selected class
         function loadGamesForClass(classNum) {
             const games = classesData[classNum].games;
             const gamesGrid = document.getElementById('gamesGrid');
             gamesGrid.innerHTML = '';
+
             games.forEach(game => {
                 const gameCard = document.createElement('div');
-                gameCard.className = 'class-card'; // Usiamo lo stile che già avevi
-                gameCard.onclick = () => startGame(game.id);
-                gameCard.innerHTML = `<h3 class="card-title">${game.id}</h3>`;
+                gameCard.className = 'game-card';
+                gameCard.onclick = () => startGame(game.id, game.name);
+                
+                gameCard.innerHTML = `
+                    <h3>${game.name}</h3>
+                    <p>${game.description}</p>
+                    <div style="margin-top: 1rem; color: #059669; font-weight: bold;">
+                        ✅ Gioco attivo
+                    </div>
+                `;
+                
                 gamesGrid.appendChild(gameCard);
             });
         }
 
-        function startGame(gameId) {
+        // Start a game
+        function startGame(gameId, gameName) {
             currentGame = gameId;
+            
             document.getElementById('gamesSection').style.display = 'none';
-            document.getElementById('gameInterface').style.display = 'flex'; // MODIFICA: display:flex per il layout verticale
-            document.getElementById('gameTitle').textContent = gameId;
+            document.getElementById('gameInterface').style.display = 'block';
+            document.getElementById('gameTitle').textContent = gameName;
+            
+            // Reset game state
+            gameState = {
+                currentQuestion: null,
+                userAnswer: null,
+                isAnswered: false
+            };
+            
+            // Hide hint initially
+            document.getElementById('hintContainer').style.display = 'none';
+            
             generateQuestion();
         }
 
+        // Generate question based on current game and difficulty
         function generateQuestion() {
             gameState.isAnswered = false;
             document.getElementById('checkAnswerBtn').style.display = 'none';
             hideMessage();
+            hideHint();
 
             switch (currentGame) {
-                case 'conteggio': generateCountingQuestion(); break;
-                case 'addizioni-visual': generateAdditionQuestion(); break;
-                case 'frazioni-visual': generateFractionQuestion(); break; // MODIFICA: Attivato il gioco frazioni
-                default: generateCountingQuestion();
+                case 'conteggio':
+                    generateCountingQuestion();
+                    break;
+                case 'addizioni-visual':
+                    generateAdditionQuestion();
+                    break;
+                case 'operazioni-entro-20':
+                    generateOperationsQuestion();
+                    break;
+                case 'sequenze-base':
+                    generateSequenceQuestion();
+                    break;
+                case 'pattern-semplici':
+                    generatePatternQuestion();
+                    break;
+                case 'debugging-visuale':
+                    generateDebuggingQuestion();
+                    break;
+                case 'tabelline-base':
+                    generateMultiplicationQuestion();
+                    break;
+                case 'loop-semplici':
+                    generateLoopQuestion();
+                    break;
+                case 'if-then-base':
+                    generateConditionalQuestion();
+                    break;
+                case 'frazioni-visual':
+                    generateFractionQuestion();
+                    break;
+                case 'variabili-semplici':
+                    generateVariableQuestion();
+                    break;
+                case 'algoritmi-avanzati':
+                    generateAlgorithmQuestion();
+                    break;
+                case 'statistica-base':
+                    generateStatisticsQuestion();
+                    break;
+                case 'progetti-completi':
+                    generateProjectQuestion();
+                    break;
+                case 'collaborazione-digitale':
+                    generateCollaborationQuestion();
+                    break;
+                default:
+                    generateCountingQuestion();
             }
         }
-        
+
+        // Counting Game - Adattato per tutte le classi
         function generateCountingQuestion() {
-            const count = Math.floor(Math.random() * 9) + 1;
-            gameState.correctAnswer = count;
-            const objects = ['🍎', '🌟', '🚗', '🐱', '🎈'];
-            const selectedObject = objects[Math.floor(Math.random() * objects.length)];
-            let visualHTML = '';
-            for(let i=0; i<count; i++) visualHTML += `<span class="counting-object">${selectedObject}</span>`;
-            document.getElementById('gameContent').innerHTML = `
-                <div class="question">Quanti oggetti vedi?</div>
-                <div class="counting-objects">${visualHTML}</div>
-                <div class="answers-grid">${generateNumberOptions(count, 4)}</div>`;
-        }
-        
-        function generateAdditionQuestion(){
-            const a = Math.floor(Math.random() * 9) + 1;
-            const b = Math.floor(Math.random() * 9) + 1;
-            gameState.correctAnswer = a + b;
-            document.getElementById('gameContent').innerHTML = `
-                <div class="question">${a} + ${b} = ?</div>
-                <div class="answers-grid">${generateNumberOptions(a + b, 4)}</div>`;
-        }
-        
-        /** MODIFICA: Funzione per il gioco delle frazioni (pizza cliccabile) **/
-        function generateFractionQuestion() {
-            const d = [2, 3, 4, 6, 8][Math.floor(Math.random() * 5)];
-            const n = Math.floor(Math.random() * d) + 1;
-            gameState.correctAnswer = { n, d };
+            const classLevel = currentClass;
+            let max;
             
-            let slicesHTML = '';
-            const angle = 360 / d;
-            for (let i = 0; i < d; i++) {
-                slicesHTML += `<div class="pizza-slice" style="transform: rotate(${i * angle}deg);"><div class="slice-interactive" style="transform: skew(${90-angle}deg);" onclick="toggleSlice(this)"></div></div>`;
+            switch(classLevel) {
+                case 1: max = Math.min(5 + adaptiveData.currentDifficulty * 2, 10); break;
+                case 2: max = Math.min(8 + adaptiveData.currentDifficulty * 3, 20); break;
+                case 3: max = Math.min(10 + adaptiveData.currentDifficulty * 4, 30); break;
+                case 4: max = Math.min(15 + adaptiveData.currentDifficulty * 5, 50); break;
+                case 5: max = Math.min(20 + adaptiveData.currentDifficulty * 6, 100); break;
+                default: max = 10;
             }
-            if (angle < 90) { // Fix per il rendering di fette piccole
-                const fixStyle = document.createElement('style');
-                fixStyle.id = 'pizza-style-fix';
-                fixStyle.innerHTML = `.pizza-slice .slice-interactive { transform: rotate(${(90-angle)/2}deg) skew(${90-angle}deg); }`;
-                document.head.appendChild(fixStyle);
-            }
+            
+            const count = Math.floor(Math.random() * max) + 1;
+            
+            const objects = ['🍎', '🌟', '🚗', '🐱', '🎈', '🌸', '⚽', '🍓', '🟦', '🟨', '🟩', '🟪'];
+            const selectedObject = objects[Math.floor(Math.random() * objects.length)];
+            
+            gameState.currentQuestion = {
+                count: count,
+                object: selectedObject
+            };
 
             document.getElementById('gameContent').innerHTML = `
-                <div class="question">Seleziona ${n} / ${d}</div>
-                <div class="fraction-visual">
-                    <div class="pizza-container">${slicesHTML}</div>
-                    <div>Fette selezionate: <span id="selectedSlices">0</span>/${d}</div>
-                </div>`;
+                <div class="question">Conta tutti gli oggetti!</div>
+                <div class="counting-objects">
+                    ${Array(count).fill(selectedObject).map((obj, i) => 
+                        `<div class="counting-object" style="animation-delay: ${i * 0.1}s">${obj}</div>`
+                    ).join('')}
+                </div>
+                <div class="answers-grid">
+                    ${generateNumberOptions(count, 4).map(num => 
+                        `<button class="answer-btn" onclick="selectAnswer(${num})">${num}</button>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        // Addition Game - Migliorato per tutte le classi
+        function generateAdditionQuestion() {
+            const classLevel = currentClass;
+            let maxNum;
+            
+            switch(classLevel) {
+                case 1: maxNum = Math.min(5 + adaptiveData.currentDifficulty, 10); break;
+                case 2: maxNum = Math.min(8 + adaptiveData.currentDifficulty * 2, 15); break;
+                case 3: maxNum = Math.min(10 + adaptiveData.currentDifficulty * 3, 20); break;
+                case 4: maxNum = Math.min(15 + adaptiveData.currentDifficulty * 4, 50); break;
+                case 5: maxNum = Math.min(20 + adaptiveData.currentDifficulty * 5, 100); break;
+                default: maxNum = 10;
+            }
+            
+            const a = Math.floor(Math.random() * maxNum) + 1;
+            const b = Math.floor(Math.random() * (maxNum - a)) + 1;
+            const result = a + b;
+            
+            gameState.currentQuestion = {
+                a: a,
+                b: b,
+                result: result
+            };
+
+            const useVisual = classLevel <= 3; // Solo per le prime 3 classi
+            
+            document.getElementById('gameContent').innerHTML = `
+                <div class="question">${a} + ${b} = ?</div>
+                ${useVisual ? `
+                <div class="visual-objects">
+                    <div style="display: flex; gap: 2rem; align-items: center; justify-content: center; flex-wrap: wrap;">
+                        <div>
+                            ${Array(a).fill('🔵').map((obj, i) => 
+                                `<div class="counting-object" style="animation-delay: ${i * 0.1}s; background: #3B82F6;">${i+1}</div>`
+                            ).join('')}
+                        </div>
+                        <div style="font-size: 3rem;">+</div>
+                        <div>
+                            ${Array(b).fill('🔴').map((obj, i) => 
+                                `<div class="counting-object" style="animation-delay: ${(a + i) * 0.1}s; background: #EF4444;">${i+1}</div>`
+                            ).join('')}
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+                <div class="answers-grid">
+                    ${generateNumberOptions(result, 4).map(num => 
+                        `<button class="answer-btn" onclick="selectAnswer(${num})">${num}</button>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        // Operations Question (Classe 2+)
+        function generateOperationsQuestion() {
+            const operations = ['+', '-'];
+            const operation = operations[Math.floor(Math.random() * operations.length)];
+            const max = Math.min(10 + adaptiveData.currentDifficulty * 3, 30);
+            
+            let a, b, result;
+            if (operation === '+') {
+                a = Math.floor(Math.random() * max) + 1;
+                b = Math.floor(Math.random() * (max - a)) + 1;
+                result = a + b;
+            } else {
+                result = Math.floor(Math.random() * max) + 1;
+                b = Math.floor(Math.random() * result) + 1;
+                a = result + b;
+                result = a - b;
+            }
+            
+            gameState.currentQuestion = { result: result };
+
+            document.getElementById('gameContent').innerHTML = `
+                <div class="question">${a} ${operation} ${b} = ?</div>
+                <div class="answers-grid">
+                    ${generateNumberOptions(result, 4).map(num => 
+                        `<button class="answer-btn" onclick="selectAnswer(${num})">${num}</button>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        // Multiplication Question (Classe 3+)
+        function generateMultiplicationQuestion() {
+            const classLevel = currentClass;
+            let maxTable;
+            
+            switch(classLevel) {
+                case 3: maxTable = Math.min(3 + adaptiveData.currentDifficulty, 5); break;
+                case 4: maxTable = Math.min(5 + adaptiveData.currentDifficulty, 8); break;
+                case 5: maxTable = Math.min(7 + adaptiveData.currentDifficulty, 12); break;
+                default: maxTable = 5;
+            }
+            
+            const a = Math.floor(Math.random() * maxTable) + 1;
+            const b = Math.floor(Math.random() * 10) + 1;
+            const result = a * b;
+            
+            gameState.currentQuestion = { result: result };
+
+            document.getElementById('gameContent').innerHTML = `
+                <div class="question">${a} × ${b} = ?</div>
+                ${classLevel <= 4 ? generateMultiplicationVisual(a, b) : ''}
+                <div class="answers-grid">
+                    ${generateNumberOptions(result, 4).map(num => 
+                        `<button class="answer-btn" onclick="selectAnswer(${num})">${num}</button>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        function generateMultiplicationVisual(a, b) {
+            return `
+                <div class="visual-objects">
+                    ${Array(b).fill(0).map((_, groupIndex) => `
+                        <div style="display: flex; flex-direction: column; align-items: center; margin: 0 10px;">
+                            <div style="font-size: 0.8rem; margin-bottom: 5px;">Gruppo ${groupIndex + 1}</div>
+                            <div style="display: flex; flex-wrap: wrap; max-width: 120px; gap: 2px;">
+                                ${Array(a).fill(0).map((_, i) => `
+                                    <div style="width: 25px; height: 25px; background: #F59E0B; border-radius: 50%; 
+                                                display: flex; align-items: center; justify-content: center; 
+                                                color: white; font-size: 0.7rem;">${i + 1}</div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Sequence Game - Esteso per tutte le classi
+        function generateSequenceQuestion() {
+            const sequences = [
+                { 
+                    sequence: ['🌅', '🦷', '🍞', '🎒', '🏠'],
+                    question: 'Ordina la giornata scolastica',
+                    correct: [0, 1, 2, 3, 4]
+                },
+                {
+                    sequence: ['🛌', '👔', '🍳', '🚌', '📚'],
+                    question: 'Sequenza mattutina',
+                    correct: [0, 1, 2, 3, 4]
+                },
+                {
+                    sequence: ['🌱', '🌿', '🌳', '🌲', '🌺'],
+                    question: 'Crescita di una pianta',
+                    correct: [0, 1, 2, 3, 4]
+                }
+            ];
+            
+            const selected = sequences[Math.floor(Math.random() * sequences.length)];
+            const shuffled = [...selected.sequence].sort(() => Math.random() - 0.5);
+            
+            gameState.currentQuestion = {
+                correct: selected.sequence,
+                shuffled: shuffled,
+                userOrder: []
+            };
+
+            document.getElementById('gameContent').innerHTML = `
+                <div class="question">${selected.question}</div>
+                <p>Clicca gli elementi nell'ordine corretto:</p>
+                <div class="pattern-container">
+                    ${shuffled.map((item, index) => 
+                        `<div class="pattern-item" onclick="selectSequenceItem('${item}', this)">${item}</div>`
+                    ).join('')}
+                </div>
+                <div style="margin-top: 2rem;">
+                    <div style="font-weight: bold;">Sequenza selezionata:</div>
+                    <div id="selectedSequence" style="font-size: 2rem; margin-top: 1rem;"></div>
+                </div>
+            `;
+            
             document.getElementById('checkAnswerBtn').style.display = 'inline-block';
         }
 
-        function toggleSlice(sliceElement) {
-            if(gameState.isAnswered) return;
-            sliceElement.parentElement.classList.toggle('filled');
+        function selectSequenceItem(item, element) {
+            if (element.classList.contains('selected')) return;
+            
+            element.classList.add('selected');
+            gameState.currentQuestion.userOrder.push(item);
+            
+            document.getElementById('selectedSequence').textContent = 
+                gameState.currentQuestion.userOrder.join(' → ');
+        }
+
+        // Pattern Game - Avanzato per tutte le classi
+        function generatePatternQuestion() {
+            const classLevel = currentClass;
+            let patterns;
+            
+            if (classLevel <= 2) {
+                patterns = [
+                    { pattern: ['🔴', '🔵'], next: '🔴' },
+                    { pattern: ['⭐', '🌙'], next: '⭐' },
+                    { pattern: ['🍎', '🍌'], next: '🍎' }
+                ];
+            } else if (classLevel <= 3) {
+                patterns = [
+                    { pattern: ['🔴', '🔵', '🔴', '🔵'], next: '🔴' },
+                    { pattern: ['⭐', '⭐', '🌙'], next: '⭐' },
+                    { pattern: ['1', '2', '3'], next: '1' }
+                ];
+            } else {
+                patterns = [
+                    { pattern: ['🔴', '🔵', '🟡', '🔴', '🔵'], next: '🟡' },
+                    { pattern: ['A', 'B', 'A', 'C', 'A', 'B'], next: 'A' },
+                    { pattern: ['1', '2', '4', '1', '2'], next: '4' }
+                ];
+            }
+            
+            const basePattern = patterns[Math.floor(Math.random() * patterns.length)];
+            const difficulty = adaptiveData.currentDifficulty;
+            
+            // Extend pattern based on difficulty
+            let fullPattern = [];
+            for (let i = 0; i < 2 + difficulty; i++) {
+                fullPattern = fullPattern.concat(basePattern.pattern);
+            }
+            
+            const visiblePattern = fullPattern.slice(0, -1);
+            const correctAnswer = fullPattern[fullPattern.length - 1];
+            
+            gameState.currentQuestion = {
+                pattern: visiblePattern,
+                correct: correctAnswer
+            };
+
+            const options = generatePatternOptions(correctAnswer);
+
+            document.getElementById('gameContent').innerHTML = `
+                <div class="question">Completa il pattern!</div>
+                <div class="pattern-container">
+                    ${visiblePattern.map(item => 
+                        `<div class="pattern-item">${item}</div>`
+                    ).join('')}
+                    <div class="pattern-item" style="border: 3px dashed #667eea;">?</div>
+                </div>
+                <div class="answers-grid">
+                    ${options.map(option => 
+                        `<button class="answer-btn" onclick="selectAnswer('${option}')">${option}</button>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        function generatePatternOptions(correct) {
+            const allOptions = ['🔴', '🔵', '🟡', '⭐', '🌙', '🍎', '🍌', '1', '2', '3', 'A', 'B', 'C'];
+            const options = [correct];
+            
+            while (options.length < 4) {
+                const random = allOptions[Math.floor(Math.random() * allOptions.length)];
+                if (!options.includes(random)) {
+                    options.push(random);
+                }
+            }
+            
+            return options.sort(() => Math.random() - 0.5);
+        }
+
+        // Debugging Game (Classe 2+)
+        function generateDebuggingQuestion() {
+            const sequences = [
+                { correct: ['🌅', '🦷', '🍞', '🎒'], wrong: ['🌅', '🍞', '🦷', '🎒'], error: 2 },
+                { correct: ['1', '2', '3', '4'], wrong: ['1', '3', '2', '4'], error: 1 },
+                { correct: ['🔴', '🔵', '🔴', '🔵'], wrong: ['🔴', '🔴', '🔴', '🔵'], error: 1 }
+            ];
+            
+            const selected = sequences[Math.floor(Math.random() * sequences.length)];
+            gameState.currentQuestion = { error: selected.error };
+
+            document.getElementById('gameContent').innerHTML = `
+                <div class="question">Trova l'errore nella sequenza!</div>
+                <div class="pattern-container">
+                    ${selected.wrong.map((item, index) => 
+                        `<div class="pattern-item" onclick="selectAnswer(${index})">${item}</div>`
+                    ).join('')}
+                </div>
+                <p>Clicca sull'elemento che è nella posizione sbagliata!</p>
+            `;
+        }
+
+        // Loop Game (Classe 3+)
+        function generateLoopQuestion() {
+            const actions = ['salta', 'gira', 'cammina', 'ferma'];
+            const action = actions[Math.floor(Math.random() * actions.length)];
+            const times = Math.floor(Math.random() * 5) + 2;
+            
+            gameState.currentQuestion = { result: times };
+
+            document.getElementById('gameContent').innerHTML = `
+                <div class="question">Se devo "${action}" ${times} volte, quante volte ripeto l'azione?</div>
+                <div class="answers-grid">
+                    ${generateNumberOptions(times, 4).map(num => 
+                        `<button class="answer-btn" onclick="selectAnswer(${num})">${num}</button>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        // Conditional Game (Classe 3+)
+        function generateConditionalQuestion() {
+            const conditions = [
+                { condition: 'piove', action: 'prendi l\'ombrello', answer: 'ombrello' },
+                { condition: 'c\'è il sole', action: 'metti gli occhiali', answer: 'occhiali' },
+                { condition: 'hai fame', action: 'mangia', answer: 'cibo' },
+                { condition: 'sei stanco', action: 'riposa', answer: 'letto' }
+            ];
+            
+            const selected = conditions[Math.floor(Math.random() * conditions.length)];
+            gameState.currentQuestion = { correct: selected.answer };
+
+            const options = [selected.answer, 'libro', 'palla', 'computer'].sort(() => Math.random() - 0.5);
+
+            document.getElementById('gameContent').innerHTML = `
+                <div class="question">SE ${selected.condition}, ALLORA che cosa fai?</div>
+                <div class="answers-grid">
+                    ${options.map(option => 
+                        `<button class="answer-btn" onclick="selectAnswer('${option}')">${option}</button>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        // Fraction Game (Classe 4+)
+        function generateFractionQuestion() {
+            const denominators = currentClass >= 5 ? [2, 3, 4, 6, 8, 12] : [2, 3, 4, 6, 8];
+            const denominator = denominators[Math.floor(Math.random() * denominators.length)];
+            const numerator = Math.floor(Math.random() * denominator) + 1;
+            
+            gameState.currentQuestion = {
+                numerator: numerator,
+                denominator: denominator
+            };
+
+            document.getElementById('gameContent').innerHTML = `
+                <div class="question">Seleziona ${numerator}/${denominator} della pizza!</div>
+                <div class="fraction-visual">
+                    <div class="pizza-container" id="pizzaContainer">
+                        ${Array(denominator).fill(0).map((_, i) => 
+                            `<div class="pizza-slice" data-slice="${i}" onclick="toggleSlice(this)"></div>`
+                        ).join('')}
+                    </div>
+                    <div style="margin-top: 2rem;">
+                        <div>Fette selezionate: <span id="selectedSlices">0</span>/${denominator}</div>
+                        <div>Frazione: <span id="currentFraction">0/${denominator}</span></div>
+                    </div>
+                </div>
+            `;
+            
+            // Position pizza slices
+            const slices = document.querySelectorAll('.pizza-slice');
+            slices.forEach((slice, index) => {
+                const angle = (360 / denominator) * index;
+                slice.style.transform = `rotate(${angle}deg)`;
+                slice.style.clipPath = `polygon(0 0, 100% 0, ${50 + 50 * Math.cos((360/denominator) * Math.PI / 180)}% ${50 + 50 * Math.sin((360/denominator) * Math.PI / 180)}%)`;
+            });
+            
+            document.getElementById('checkAnswerBtn').style.display = 'inline-block';
+        }
+
+        function toggleSlice(slice) {
+            slice.classList.toggle('filled');
             const selectedCount = document.querySelectorAll('.pizza-slice.filled').length;
             document.getElementById('selectedSlices').textContent = selectedCount;
+            document.getElementById('currentFraction').textContent = 
+                `${selectedCount}/${gameState.currentQuestion.denominator}`;
         }
 
-        function generateNumberOptions(correct, count) {
-            const options = new Set([correct]);
-            while (options.size < count) {
-                const random = Math.max(1, correct + Math.floor(Math.random() * 7) - 3);
-                options.add(random);
-            }
-            return [...options].sort(() => Math.random() - 0.5)
-                .map(num => `<button class="answer-btn" onclick="selectAnswer(${num})">${num}</button>`).join('');
+        // Variable Game (Classe 4+)
+        function generateVariableQuestion() {
+            const variables = [
+                { name: 'età', value: 9, question: 'Se la variabile "età" contiene il valore 9, qual è il valore?' },
+                { name: 'punti', value: 15, question: 'Se la variabile "punti" contiene il valore 15, qual è il valore?' },
+                { name: 'voto', value: 8, question: 'Se la variabile "voto" contiene il valore 8, qual è il valore?' }
+            ];
+            
+            const selected = variables[Math.floor(Math.random() * variables.length)];
+            gameState.currentQuestion = { result: selected.value };
+
+            document.getElementById('gameContent').innerHTML = `
+                <div class="question">${selected.question}</div>
+                <div class="answers-grid">
+                    ${generateNumberOptions(selected.value, 4).map(num => 
+                        `<button class="answer-btn" onclick="selectAnswer(${num})">${num}</button>`
+                    ).join('')}
+                </div>
+            `;
         }
 
+        // Algorithm Game (Classe 4+)
+        function generateAlgorithmQuestion() {
+            const problems = [
+                { 
+                    problem: 'Devi ordinare i numeri: 3, 1, 4, 2. Quale viene per primo?',
+                    answer: 1
+                },
+                {
+                    problem: 'Per trovare il numero più grande tra 5, 8, 3, quale scegli?',
+                    answer: 8
+                },
+                {
+                    problem: 'Se devi fare una ricerca in [1,2,3,4], da quale numero inizi?',
+                    answer: 2
+                }
+            ];
+            
+            const selected = problems[Math.floor(Math.random() * problems.length)];
+            gameState.currentQuestion = { result: selected.answer };
+
+            document.getElementById('gameContent').innerHTML = `
+                <div class="question">${selected.problem}</div>
+                <div class="answers-grid">
+                    ${generateNumberOptions(selected.answer, 4).map(num => 
+                        `<button class="answer-btn" onclick="selectAnswer(${num})">${num}</button>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        // Statistics Game (Classe 5)
+        function generateStatisticsQuestion() {
+            const data = Array.from({length: 5}, () => Math.floor(Math.random() * 10) + 1);
+            const sum = data.reduce((a, b) => a + b, 0);
+            const average = Math.round(sum / data.length);
+            
+            gameState.currentQuestion = { result: average };
+
+            document.getElementById('gameContent').innerHTML = `
+                <div class="question">Calcola la media dei numeri: ${data.join(', ')}</div>
+                <div class="answers-grid">
+                    ${generateNumberOptions(average, 4).map(num => 
+                        `<button class="answer-btn" onclick="selectAnswer(${num})">${num}</button>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        // Project Game (Classe 5)
+        function generateProjectQuestion() {
+            const projects = [
+                { project: 'Un gioco di memoria', component: 'pulsanti', answer: 'pulsanti' },
+                { project: 'Un calcolatore', component: 'numeri', answer: 'numeri' },
+                { project: 'Un quiz', component: 'domande', answer: 'domande' }
+            ];
+            
+            const selected = projects[Math.floor(Math.random() * projects.length)];
+            gameState.currentQuestion = { correct: selected.answer };
+
+            const options = [selected.answer, 'colori', 'suoni', 'immagini'].sort(() => Math.random() - 0.5);
+
+            document.getElementById('gameContent').innerHTML = `
+                <div class="question">Per creare "${selected.project}", quale componente è più importante?</div>
+                <div class="answers-grid">
+                    ${options.map(option => 
+                        `<button class="answer-btn" onclick="selectAnswer('${option}')">${option}</button>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        // Collaboration Game (Classe 5)
+        function generateCollaborationQuestion() {
+            const scenarios = [
+                { scenario: 'Lavori in team su un progetto', tool: 'condivisione', answer: 'condivisione' },
+                { scenario: 'Vuoi ricevere feedback', tool: 'commenti', answer: 'commenti' },
+                { scenario: 'Devi sincronizzare il lavoro', tool: 'versioning', answer: 'versioning' }
+            ];
+            
+            const selected = scenarios[Math.floor(Math.random() * scenarios.length)];
+            gameState.currentQuestion = { correct: selected.answer };
+
+            const options = [selected.answer, 'stampa', 'salvataggio', 'eliminazione'].sort(() => Math.random() - 0.5);
+
+            document.getElementById('gameContent').innerHTML = `
+                <div class="question">${selected.scenario}. Quale strumento usi?</div>
+                <div class="answers-grid">
+                    ${options.map(option => 
+                        `<button class="answer-btn" onclick="selectAnswer('${option}')">${option}</button>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        // Answer selection
         function selectAnswer(answer) {
-            if(gameState.isAnswered) return;
+            if (gameState.isAnswered) return;
+            
             gameState.userAnswer = answer;
+            gameState.isAnswered = true;
+            
+            // Disable all answer buttons
+            document.querySelectorAll('.answer-btn').forEach(btn => {
+                btn.style.pointerEvents = 'none';
+            });
+            
             checkAnswerLogic();
         }
 
+        // Check answer function
         function checkAnswer() {
-            if(gameState.isAnswered) return;
-            if(currentGame === 'frazioni-visual') {
-                gameState.userAnswer = document.querySelectorAll('.pizza-slice.filled').length;
-                checkAnswerLogic();
-            }
-        }
-        
-        function checkAnswerLogic() {
-            if(gameState.isAnswered) return;
-            gameState.isAnswered = true;
+            if (gameState.isAnswered) return;
+            
             let isCorrect = false;
-
-            if(currentGame === 'frazioni-visual') {
-                isCorrect = gameState.userAnswer === gameState.correctAnswer.n;
-            } else {
-                isCorrect = gameState.userAnswer === gameState.correctAnswer;
+            
+            switch (currentGame) {
+                case 'sequenze-base':
+                    isCorrect = JSON.stringify(gameState.currentQuestion.userOrder) === 
+                               JSON.stringify(gameState.currentQuestion.correct);
+                    break;
+                case 'frazioni-visual':
+                    const selectedSlices = document.querySelectorAll('.pizza-slice.filled').length;
+                    isCorrect = selectedSlices === gameState.currentQuestion.numerator;
+                    break;
+                default:
+                    return;
             }
             
-            if(isCorrect) {
-                showMessage('Corretto!', 'success');
+            gameState.isAnswered = true;
+            processAnswer(isCorrect);
+        }
+
+        function checkAnswerLogic() {
+            let isCorrect = false;
+            
+            switch (currentGame) {
+                case 'conteggio':
+                    isCorrect = gameState.userAnswer === gameState.currentQuestion.count;
+                    break;
+                case 'addizioni-visual':
+                case 'operazioni-entro-20':
+                case 'tabelline-base':
+                case 'loop-semplici':
+                case 'variabili-semplici':
+                case 'algoritmi-avanzati':
+                case 'statistica-base':
+                    isCorrect = gameState.userAnswer === gameState.currentQuestion.result;
+                    break;
+                case 'pattern-semplici':
+                case 'if-then-base':
+                case 'progetti-completi':
+                case 'collaborazione-digitale':
+                    isCorrect = gameState.userAnswer === gameState.currentQuestion.correct;
+                    break;
+                case 'debugging-visuale':
+                    isCorrect = gameState.userAnswer === gameState.currentQuestion.error;
+                    break;
+                default:
+                    // For other games, assume the answer is stored in currentQuestion.correct
+                    isCorrect = gameState.userAnswer === (gameState.currentQuestion.correct || gameState.currentQuestion.result);
+            }
+            
+            processAnswer(isCorrect);
+        }
+
+        // Process answer and update adaptive system
+        function processAnswer(isCorrect) {
+            adaptiveData.totalQuestions++;
+            
+            if (isCorrect) {
+                adaptiveData.correctAnswers++;
+                adaptiveData.consecutiveCorrect++;
+                adaptiveData.consecutiveWrong = 0;
+                adaptiveData.hintLevel = 0;
+                
+                showMessage('Corretto! Ottimo lavoro! 🎉', 'success');
+                
+                // Update score based on difficulty and class level
+                const pointsEarned = 10 * adaptiveData.currentDifficulty * currentClass;
+                score += pointsEarned;
+                stars += adaptiveData.currentDifficulty;
+                
+                // Increase difficulty if performing well
+                if (adaptiveData.consecutiveCorrect >= 3 && 
+                    adaptiveData.currentDifficulty < adaptiveData.maxDifficulty) {
+                    adaptiveData.currentDifficulty++;
+                    level = adaptiveData.currentDifficulty;
+                    adaptiveData.consecutiveCorrect = 0;
+                    showMessage('Livello aumentato! Sei diventato più bravo! ⭐', 'success');
+                }
+                
+                // Highlight correct answer
+                document.querySelectorAll('.answer-btn').forEach(btn => {
+                    if (btn.textContent == gameState.userAnswer || btn.onclick?.toString().includes(gameState.userAnswer)) {
+                        btn.classList.add('correct');
+                    }
+                });
+                
             } else {
-                showMessage('Sbagliato!', 'error');
+                adaptiveData.consecutiveWrong++;
+                adaptiveData.consecutiveCorrect = 0;
+                adaptiveData.hintLevel++;
+                
+                showMessage('Non è corretto. Riprova! 💪', 'error');
+                
+                // Decrease difficulty if struggling
+                if (adaptiveData.consecutiveWrong >= 3 && adaptiveData.currentDifficulty > 1) {
+                    adaptiveData.currentDifficulty--;
+                    level = adaptiveData.currentDifficulty;
+                    adaptiveData.consecutiveWrong = 0;
+                    showMessage('Ho reso il gioco un po\' più semplice per te! 🌟', 'hint');
+                }
+                
+                // Show hint after multiple wrong answers
+                if (adaptiveData.hintLevel >= 2) {
+                    showHint();
+                }
+                
+                // Highlight wrong answer
+                document.querySelectorAll('.answer-btn').forEach(btn => {
+                    if (btn.textContent == gameState.userAnswer || btn.onclick?.toString().includes(gameState.userAnswer)) {
+                        btn.classList.add('wrong');
+                    }
+                });
+            }
+            
+            saveAdaptiveData();
+            saveProgress();
+        }
+
+        // Hint system
+        function showHint() {
+            const hints = {
+                'conteggio': 'Conta lentamente ogni oggetto, uno alla volta. Usa le dita se ti aiuta!',
+                'addizioni-visual': 'Conta prima tutti i cerchi blu, poi tutti i cerchi rossi, infine sommali insieme!',
+                'operazioni-entro-20': 'Per le sottrazioni, parti dal numero più grande e togli quello più piccolo!',
+                'pattern-semplici': 'Guarda attentamente: quale elemento si ripete? Osserva la sequenza dall\'inizio!',
+                'sequenze-base': 'Pensa a cosa fai per primo quando ti svegli, poi cosa fai dopo, e così via...',
+                'debugging-visuale': 'Confronta con quello che dovrebbe essere giusto. Quale elemento è fuori posto?',
+                'tabelline-base': 'Ricorda: moltiplicare significa sommare tante volte lo stesso numero!',
+                'loop-semplici': 'Un loop ripete un\'azione. Conta quante volte devi fare la stessa cosa!',
+                'if-then-base': 'Se succede una cosa, allora devi fare un\'azione. Cosa faresti in quella situazione?',
+                'frazioni-visual': 'Una frazione ti dice quante parti colorare del totale. Se è 2/4, colora 2 parti su 4!',
+                'variabili-semplici': 'Una variabile è come una scatola con un\'etichetta. Cosa c\'è dentro la scatola?',
+                'algoritmi-avanzati': 'Pensa passo dopo passo. Qual è la strategia migliore per risolvere il problema?',
+                'statistica-base': 'La media si calcola sommando tutti i numeri e dividendo per quanti sono!',
+                'progetti-completi': 'Pensa a cosa è più importante per far funzionare quel tipo di progetto!',
+                'collaborazione-digitale': 'Quando lavori con altri, quale strumento ti aiuta di più in quella situazione?',
+                'default': 'Leggi attentamente la domanda e pensa con calma. Puoi farcela!'
+            };
+            
+            const hintText = hints[currentGame] || hints['default'];
+            document.getElementById('hintText').textContent = hintText;
+            document.getElementById('hintContainer').style.display = 'flex';
+        }
+
+        function hideHint() {
+            document.getElementById('hintContainer').style.display = 'none';
+        }
+
+        // Utility functions
+        function generateNumberOptions(correct, count) {
+            const options = [correct];
+            const min = Math.max(1, correct - 5);
+            const max = correct + 5;
+            
+            while (options.length < count) {
+                const random = Math.floor(Math.random() * (max - min + 1)) + min;
+                if (!options.includes(random) && random > 0) {
+                    options.push(random);
+                }
+            }
+            
+            return options.sort(() => Math.random() - 0.5);
+        }
+
+        // Progress saving
+        function saveProgress() {
+            localStorage.setItem('edutech_score', score.toString());
+            localStorage.setItem('edutech_stars', stars.toString());
+            localStorage.setItem('edutech_level', level.toString());
+            updateStatsDisplay();
+        }
+
+        // Reset progress
+        function resetProgress() {
+            if (confirm('Sei sicuro di voler resettare tutti i progressi? (Utile per cambio classe)')) {
+                score = 0;
+                stars = 0;
+                level = 1;
+                adaptiveData = {
+                    consecutiveCorrect: 0,
+                    consecutiveWrong: 0,
+                    totalQuestions: 0,
+                    correctAnswers: 0,
+                    currentDifficulty: 1,
+                    maxDifficulty: 5,
+                    hintLevel: 0
+                };
+                
+                localStorage.removeItem('edutech_score');
+                localStorage.removeItem('edutech_stars');
+                localStorage.removeItem('edutech_level');
+                localStorage.removeItem('edutech_adaptive');
+                
+                updateStatsDisplay();
+                document.getElementById('stats-bar').style.display = 'none';
             }
         }
 
+        // Message system
         function showMessage(text, type) {
             const container = document.getElementById('messageContainer');
             container.textContent = text;
             container.className = `message ${type} show`;
+            
+            setTimeout(() => {
+                hideMessage();
+            }, 3000);
         }
-        function hideMessage() { document.getElementById('messageContainer').classList.remove('show'); }
 
-        function nextQuestion() {
-            const fixStyle = document.getElementById('pizza-style-fix');
-            if(fixStyle) fixStyle.remove(); // Rimuove stili temporanei della pizza
-            generateQuestion(); 
+        function hideMessage() {
+            const container = document.getElementById('messageContainer');
+            container.classList.remove('show');
         }
+
+        // Navigation functions
         function backToHome() {
             document.getElementById('gamesSection').style.display = 'none';
+            document.getElementById('gameInterface').style.display = 'none';
             document.getElementById('homepage').style.display = 'block';
+            exitFullscreen();
         }
+
         function backToGames() {
             document.getElementById('gameInterface').style.display = 'none';
             document.getElementById('gamesSection').style.display = 'block';
+            exitFullscreen();
         }
 
-        /** MODIFICA: Registrazione del Service Worker esterno per la PWA offline **/
+        function nextQuestion() {
+            generateQuestion();
+        }
+
+        // Fullscreen functionality
+        function toggleFullscreen() {
+            const gameInterface = document.getElementById('gameInterface');
+            
+            if (!document.fullscreenElement) {
+                gameInterface.requestFullscreen().then(() => {
+                    gameInterface.classList.add('fullscreen-mode');
+                }).catch(err => {
+                    console.log('Errore fullscreen:', err);
+                });
+            } else {
+                document.exitFullscreen().then(() => {
+                    gameInterface.classList.remove('fullscreen-mode');
+                });
+            }
+        }
+
+        function exitFullscreen() {
+            if (document.fullscreenElement) {
+                document.exitFullscreen().then(() => {
+                    document.getElementById('gameInterface').classList.remove('fullscreen-mode');
+                });
+            }
+        }
+
+        // Handle fullscreen change
+        document.addEventListener('fullscreenchange', () => {
+            const gameInterface = document.getElementById('gameInterface');
+            if (!document.fullscreenElement) {
+                gameInterface.classList.remove('fullscreen-mode');
+            }
+        });
+
+        // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
+            loadAdaptiveData();
+            
+            // Register service worker for PWA
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js')
-                    .then(() => console.log('Service Worker registrato.'))
-                    .catch(err => console.error('Registrazione Service Worker fallita:', err));
+                navigator.serviceWorker.register('data:text/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgZXZlbnQgPT4ge2NvbnNvbGUubG9nKCdTVyBpbnN0YWxsZWQnKX0pOw==');
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (document.fullscreenElement) {
+                    exitFullscreen();
+                } else if (document.getElementById('gameInterface').style.display === 'block') {
+                    backToGames();
+                } else if (document.getElementById('gamesSection').style.display === 'block') {
+                    backToHome();
+                }
+            }
+            
+            if (e.key === 'Enter' && !gameState.isAnswered) {
+                if (document.getElementById('checkAnswerBtn').style.display !== 'none') {
+                    checkAnswer();
+                }
+            }
+            
+            // Number keys for quick answer selection
+            if (e.key >= '1' && e.key <= '4' && !gameState.isAnswered) {
+                const answerBtns = document.querySelectorAll('.answer-btn');
+                const index = parseInt(e.key) - 1;
+                if (answerBtns[index]) {
+                    answerBtns[index].click();
+                }
             }
         });
     </script>
