@@ -4,24 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduTech Lab - Pensiero Computazionale</title>
-    <meta name="description" content="Piattaforma di Pensiero Computazionale per la Scuola Primaria - App Nativa Installabile">
+    <meta name="description" content="Piattaforma di Pensiero Computazionale per la Scuola Primaria">
     <meta name="theme-color" content="#667eea">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="EduTech Lab">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="msapplication-TileColor" content="#667eea">
-    <meta name="msapplication-config" content="/browserconfig.xml">
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.json">
-    
-    <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIiByeD0iNDAiIGZpbGw9InVybCgjZ3JhZGllbnQwKSIvPgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSJncmFkaWVudDAiIHgxPSIwIiB5MT0iMCIgeDI9IjE4MCIgeTI9IjE4MCI+CjxzdG9wIHN0b3AtY29sb3I9IiM2NjdlZWEiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNzY0YmEyIi8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHN2ZyB4PSI0NSIgeT0iNDUiIHdpZHRoPSI5MCIgaGVpZ2h0PSI5MCI+Cjx0ZXh0IHg9IjQ1IiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjQ4IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkVUPC90ZXh0Pgo8dGV4dCB4PSI0NSIgeT0iNzUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkxBQjwvdGV4dD4KPC9zdmc+Cjwvc3ZnPg==">
-    
-    <!-- Favicon ICO -->
-    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAABILAAASCwAAAAAAAAAAAAD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/////wOp3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/////8Dqd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv////8A6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/////AOp3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/////wDqd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv////8A6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/////AOp3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/////wDqd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv////8A6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/////AOp3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/////wDqd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv////8A6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/////AOp3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/////wDqd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv/qd57/6nee/+p3nv////8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==">
-    
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiRWR1VGVjaCBMYWIiLCJzaG9ydF9uYW1lIjoiRWR1VGVjaCIsInN0YXJ0X3VybCI6Ii8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjNjY3ZWVhIiwidGhlbWVfY29sb3IiOiIjNjY3ZWVhIiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1UQXdJaUJvWldsbmFIUTlJakV3TUNJaVBqeDBaWGgwSUhrOUlqVXdJaUIzWVdkcFRrNS9wUzRLVkZQNyIsInNpemVzIjoiMTAweDEwMCIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn1dfQ==">
     <style>
         * {
             margin: 0;
@@ -164,8 +149,99 @@
         .floating-shape:nth-child(4) { top: 80%; left: 60%; width: 40px; height: 40px; animation-delay: 1s; }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* ================ DEVICE DETECTION STYLES ================ */
+        /* Device info indicator */
+        .device-info {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Device-specific adaptations */
+        .device-lim {
+            --button-size: 60px;
+            --font-size-large: 2rem;
+            --font-size-medium: 1.2rem;
+            --spacing: 2rem;
+        }
+
+        .device-tablet {
+            --button-size: 50px;
+            --font-size-large: 1.8rem;
+            --font-size-medium: 1.1rem;
+            --spacing: 1.5rem;
+        }
+
+        .device-desktop {
+            --button-size: 45px;
+            --font-size-large: 1.6rem;
+            --font-size-medium: 1rem;
+            --spacing: 1rem;
+        }
+
+        .device-mobile {
+            --button-size: 40px;
+            --font-size-large: 1.4rem;
+            --font-size-medium: 0.9rem;
+            --spacing: 0.8rem;
+        }
+        /* ================ END DEVICE DETECTION STYLES ================ */
+
+        /* PWA Install Button */
+        .pwa-install {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+            z-index: 1000;
+            display: none;
+            transition: all 0.3s ease;
+        }
+
+        .pwa-install:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+        }
+
+        /* Download App Button */
+        .download-app {
+            position: fixed;
+            top: 1rem;
+            right: 5rem;
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .download-app:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(33, 150, 243, 0.4);
         }
 
         .main-container {
@@ -173,40 +249,6 @@
             z-index: 1;
             max-width: 1400px;
             margin: 0 auto;
-        }
-
-        /* PWA Install Button */
-        .pwa-install-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 12px 20px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            display: none;
-        }
-
-        .pwa-install-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .pwa-install-btn.show {
-            display: block;
-            animation: slideUp 0.5s ease;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
         }
 
         /* Header - Ottimizzato per 16:9 */
@@ -304,38 +346,97 @@
 
         .card-description {
             color: #6B7280;
-            font-size: 1rem;
+            font-size: 0.9rem;
             margin-bottom: 1rem;
             line-height: 1.4;
         }
 
-        .card-age {
-            background: #F3F4F6;
-            color: #4B5563;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            display: inline-block;
+        .card-badges {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
         }
 
-        /* Games Grid */
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        .badge {
+            background: #EFF6FF;
+            color: #1E40AF;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .badge.math { background: #FEF3C7; color: #92400E; }
+        .badge.coding { background: #D1FAE5; color: #065F46; }
+        .badge.thinking { background: #E0E7FF; color: #3730A3; }
+
+        /* Navigation Controls - Ottimizzato */
+        .nav-controls {
+            display: flex;
+            justify-content: center;
             gap: 1rem;
             padding: 1rem;
-            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            margin: 1rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .reset-btn:hover {
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+        }
+
+        /* Games List - Ottimizzato */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
             margin: 0 auto;
+            max-width: 1200px;
         }
 
         .game-card {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 1rem;
+            border-radius: 1.5rem;
             padding: 1.2rem;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
             border: 2px solid transparent;
         }
@@ -428,62 +529,6 @@
             color: white;
         }
 
-        /* Navigation Controls */
-        .nav-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border-radius: 1rem;
-            margin: 1rem;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .nav-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 0.8rem 1.5rem;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .nav-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .nav-btn:disabled {
-            background: #9CA3AF;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .game-info {
-            text-align: center;
-            flex: 1;
-        }
-
-        .game-title {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #1F2937;
-            margin-bottom: 0.3rem;
-        }
-
-        .game-progress {
-            color: #6B7280;
-            font-size: 0.9rem;
-        }
-
         /* Pattern Game */
         .pattern-area {
             background: #f3f4f6;
@@ -498,113 +543,113 @@
             justify-content: center;
             gap: 1rem;
             flex-wrap: wrap;
-            margin-bottom: 1rem;
         }
 
         .pattern-item {
-            font-size: 2rem;
-            padding: 0.5rem;
-            background: white;
+            background: #EFF6FF;
+            border: 2px solid #3B82F6;
             border-radius: 0.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            min-width: 50px;
-            text-align: center;
+            padding: 0.8rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .pattern-options {
-            display: flex;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 1rem;
-            flex-wrap: wrap;
+            margin: 1.5rem 0;
         }
 
         .pattern-option {
-            font-size: 2rem;
-            padding: 0.8rem;
             background: #FEF3C7;
             border: 3px solid #F59E0B;
             border-radius: 1rem;
+            padding: 1rem;
+            font-size: 1.2rem;
             cursor: pointer;
             transition: all 0.2s;
-            min-width: 60px;
-            text-align: center;
         }
 
         .pattern-option:hover {
             background: #FED7AA;
-            transform: translateY(-3px);
+            transform: translateY(-2px);
+        }
+
+        .pattern-option.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .pattern-item.correct {
+            background: #4CAF50;
+            color: white;
+            border-color: #45a049;
         }
 
         /* Sequence Game */
         .sequence-area {
-            background: #f0f9ff;
+            background: #f3f4f6;
             border-radius: 1rem;
             padding: 1.5rem;
             margin: 1.5rem 0;
+            min-height: 100px;
         }
 
         .sequence-items {
             display: flex;
             justify-content: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
+            gap: 1rem;
             flex-wrap: wrap;
         }
 
         .sequence-item {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            background: #EFF6FF;
+            border: 2px solid #3B82F6;
+            border-radius: 0.5rem;
+            padding: 0.8rem;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: white;
-            font-size: 1.2rem;
+            gap: 0.5rem;
         }
 
         .sequence-options {
-            display: flex;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 1rem;
-            flex-wrap: wrap;
+            margin: 1.5rem 0;
         }
 
         .sequence-option {
             background: #FEF3C7;
             border: 3px solid #F59E0B;
             border-radius: 1rem;
-            padding: 1rem 1.5rem;
+            padding: 1rem;
             font-size: 1.2rem;
-            font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .sequence-option:hover {
             background: #FED7AA;
-            transform: translateY(-3px);
+            transform: translateY(-2px);
         }
 
-        /* Fractions Visual */
+        /* Fractions Game - Ottimizzato per 16:9 */
         .fraction-visual {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 1.5rem;
-            padding: 1.5rem;
-            background: #f8fafc;
-            border-radius: 1rem;
-            margin: 1.5rem 0;
         }
 
         .pizza-container {
             position: relative;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: #FEF3C7;
-            border: 4px solid #F59E0B;
+            width: 180px;
+            height: 180px;
         }
 
         .pizza-slice {
@@ -665,30 +710,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Offline Indicator */
-        .offline-indicator {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background: #f44336;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            z-index: 1000;
-            display: none;
-        }
-
-        .offline-indicator.show {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
         /* Responsive optimizations - Potenziato per 16:9 */
         @media (max-width: 768px) {
             .header h1 { font-size: 2rem; }
@@ -697,12 +718,6 @@
             .games-grid { grid-template-columns: 1fr; }
             .options { grid-template-columns: repeat(2, 1fr); }
             .nav-controls { flex-direction: column; }
-            .pwa-install-btn { 
-                bottom: 10px; 
-                right: 10px;
-                padding: 10px 16px;
-                font-size: 12px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -729,38 +744,57 @@
 
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
             margin-top: 1.5rem;
         }
 
         .info-card {
             background: rgba(255, 255, 255, 0.8);
-            border-radius: 1rem;
             padding: 1.5rem;
+            border-radius: 1rem;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
         .info-card h3 {
             color: #1F2937;
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-        }
-
-        .info-card ul {
-            text-align: left;
-            color: #4B5563;
-            line-height: 1.6;
-        }
-
-        .info-card ul li {
             margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .info-card p {
+            color: #6B7280;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* High contrast mode */
+        @media (prefers-contrast: high) {
+            .class-card, .game-card, .game-container {
+                border: 2px solid #000;
+            }
+            
+            .option {
+                border-width: 3px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Background Shapes -->
+    <!-- Device Info Display -->
+    <div class="device-info" id="deviceInfo">Loading...</div>
+
+    <!-- Background Animation -->
     <div class="background-shapes">
         <div class="floating-shape"></div>
         <div class="floating-shape"></div>
@@ -768,680 +802,288 @@
         <div class="floating-shape"></div>
     </div>
 
-    <!-- Offline Indicator -->
-    <div class="offline-indicator" id="offlineIndicator">
-        📶 Modalità Offline - App disponibile senza internet!
-    </div>
-
     <!-- PWA Install Button -->
-    <button class="pwa-install-btn" id="installBtn">
-        📱 Installa App
-    </button>
+    <button class="pwa-install" id="installBtn" title="Installa l'app">📱</button>
+
+    <!-- Download App Button -->
+    <button class="download-app" id="downloadBtn" title="Scarica l'app">💾</button>
 
     <div class="main-container">
-        <!-- Main Screen -->
-        <div id="main-screen">
-            <!-- Header -->
-            <div class="header">
-                <h1>🚀 EduTech Lab</h1>
-                <h2>Pensiero Computazionale Interattivo</h2>
-                <p>Sviluppa le competenze digitali con giochi educativi personalizzati</p>
+        <!-- Homepage: Scelta Classe -->
+        <div id="homepage">
+            <header class="header">
+                <h1>🎓 EduTech Lab</h1>
+                <h2>Pensiero Computazionale per la Scuola Primaria</h2>
+                <p>Scegli la tua classe e inizia il viaggio nel mondo del coding!</p>
+            </header>
+
+            <!-- Stats Bar (visible when there are points) -->
+            <div id="stats-bar" class="stats-bar" style="display: none;">
+                <div class="stat-item stat-stars">⭐ <span id="stars-count">0</span> stelle</div>
+                <div class="stat-item stat-score">🏆 <span id="score-count">0</span> punti</div>
+                <div class="stat-item stat-level">🧠 Livello <span id="level-count">1</span></div>
+                <button class="nav-btn reset-btn" onclick="resetProgress()">🔄 Reset</button>
             </div>
 
-            <!-- Stats Bar -->
-            <div class="stats-bar">
-                <div class="stat-item stat-stars">⭐ <span id="totalStars">0</span> Stelle</div>
-                <div class="stat-item stat-score">🎯 <span id="totalScore">0</span> Punti</div>
-                <div class="stat-item stat-level">🏆 Livello <span id="playerLevel">1</span></div>
-            </div>
-
-            <!-- Classes Grid -->
             <div class="classes-grid">
-                <div class="class-card" onclick="enterClass(1)">
+                <div class="class-card" onclick="selectClass(1)">
                     <div class="card-emoji">🌱</div>
-                    <div class="card-title">Prima Primaria</div>
-                    <div class="card-description">I primi passi nel mondo digitale</div>
-                    <div class="card-age">6-7 anni</div>
+                    <h3 class="card-title">Classe 1ª</h3>
+                    <p class="card-description">I primi passi nel mondo digitale (6-7 anni)</p>
+                    <div class="card-badges">
+                        <span class="badge math">Conteggio</span>
+                        <span class="badge coding">Sequenze</span>
+                        <span class="badge thinking">Pattern</span>
+                    </div>
+                    <div style="color: #059669; font-weight: bold;">✅ 4 Giochi attivi</div>
                 </div>
-                <div class="class-card" onclick="enterClass(2)">
+
+                <div class="class-card" onclick="selectClass(2)">
                     <div class="card-emoji">🌿</div>
-                    <div class="card-title">Seconda Primaria</div>
-                    <div class="card-description">Sviluppo del pensiero logico</div>
-                    <div class="card-age">7-8 anni</div>
+                    <h3 class="card-title">Classe 2ª</h3>
+                    <p class="card-description">Esploratori digitali curiosi (7-8 anni)</p>
+                    <div class="card-badges">
+                        <span class="badge math">Operazioni</span>
+                        <span class="badge coding">Debug</span>
+                        <span class="badge thinking">Pattern</span>
+                    </div>
+                    <div style="color: #059669; font-weight: bold;">✅ 6 Giochi attivi</div>
                 </div>
-                <div class="class-card" onclick="enterClass(3)">
+
+                <div class="class-card" onclick="selectClass(3)">
                     <div class="card-emoji">🌳</div>
-                    <div class="card-title">Terza Primaria</div>
-                    <div class="card-description">Logica e ragionamento</div>
-                    <div class="card-age">8-9 anni</div>
+                    <h3 class="card-title">Classe 3ª</h3>
+                    <p class="card-description">Logica e ragionamento (8-9 anni)</p>
+                    <div class="card-badges">
+                        <span class="badge math">Frazioni</span>
+                        <span class="badge coding">Condizioni</span>
+                        <span class="badge thinking">Debug</span>
+                    </div>
+                    <div style="color: #059669; font-weight: bold;">✅ 7 Giochi attivi</div>
                 </div>
-                <div class="class-card" onclick="enterClass(4)">
+
+                <div class="class-card" onclick="selectClass(4)">
                     <div class="card-emoji">🌲</div>
-                    <div class="card-title">Quarta Primaria</div>
-                    <div class="card-description">Algoritmi avanzati</div>
-                    <div class="card-age">9-10 anni</div>
+                    <h3 class="card-title">Classe 4ª</h3>
+                    <p class="card-description">Algoritmi avanzati (9-10 anni)</p>
+                    <div class="card-badges">
+                        <span class="badge math">Variabili</span>
+                        <span class="badge coding">Algoritmi</span>
+                        <span class="badge thinking">Debug</span>
+                    </div>
+                    <div style="color: #059669; font-weight: bold;">✅ 7 Giochi attivi</div>
                 </div>
-                <div class="class-card" onclick="enterClass(5)">
-                    <div class="card-emoji">🌲</div>
-                    <div class="card-title">Quinta Primaria</div>
-                    <div class="card-description">Problem solving complesso</div>
-                    <div class="card-age">10-11 anni</div>
+
+                <div class="class-card" onclick="selectClass(5)">
+                    <div class="card-emoji">🌺</div>
+                    <h3 class="card-title">Classe 5ª</h3>
+                    <p class="card-description">Programmatori junior (10-11 anni)</p>
+                    <div class="card-badges">
+                        <span class="badge math">Statistiche</span>
+                        <span class="badge coding">Progetti</span>
+                        <span class="badge thinking">Collaborazione</span>
+                    </div>
+                    <div style="color: #059669; font-weight: bold;">✅ 8 Giochi attivi</div>
                 </div>
-                <div class="class-card" onclick="showInfo()">
-                    <div class="card-emoji">ℹ️</div>
-                    <div class="card-title">Info Progetto</div>
-                    <div class="card-description">Scopri EduTech Lab</div>
-                    <div class="card-age">Dettagli</div>
+            </div>
+
+            <!-- Info Project Section -->
+            <div class="info-project">
+                <h2 style="text-align: center; color: #1F2937; margin-bottom: 1rem;">
+                    🚀 Progetto EduTech Lab
+                </h2>
+                <p style="text-align: center; color: #6B7280; margin-bottom: 1.5rem;">
+                    Una piattaforma innovativa per l'apprendimento del Pensiero Computazionale nella Scuola Primaria
+                </p>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>🎯 Obiettivi</h3>
+                        <p>Sviluppare competenze di problem solving, logica e creatività attraverso attività interattive e coinvolgenti</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3>🎮 Metodologia</h3>
+                        <p>Apprendimento basato sul gioco (Game-Based Learning) con progressione graduale delle competenze</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3>📱 Tecnologia</h3>
+                        <p>PWA (Progressive Web App) accessibile da qualsiasi dispositivo, anche offline</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3>👨‍🎓 Autore</h3>
+                        <p>Sviluppato per docenti e formatori di Pensiero Computazionale, Coding e Robotica Educativa</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Class Games Screen -->
+        <!-- Games List for Selected Class -->
         <div id="class-games" class="class-games">
             <div class="nav-controls">
                 <button class="nav-btn" onclick="goHome()">🏠 Home</button>
-                <div class="game-info">
-                    <div class="game-title" id="className">Classe Selezionata</div>
-                    <div class="game-progress">Scegli un gioco per iniziare</div>
-                </div>
-                <button class="nav-btn" onclick="showClassStats()">📊 Statistiche</button>
+                <h2 id="class-title">Classe Selezionata</h2>
             </div>
-
-            <div class="games-grid" id="gamesGrid">
-                <!-- Games will be populated here -->
+            
+            <div id="games-grid" class="games-grid">
+                <!-- Populated by JavaScript -->
             </div>
         </div>
 
         <!-- Game Screen -->
         <div id="game-screen" class="game-screen">
             <div class="nav-controls">
-                <button class="nav-btn" onclick="goBackToClass()">⬅️ Indietro</button>
-                <div class="game-info">
-                    <div class="game-title" id="currentGameTitle">Gioco</div>
-                    <div class="game-progress">Domanda <span id="questionNumber">1</span> di <span id="totalQuestions">10</span></div>
-                </div>
-                <button class="nav-btn" onclick="nextQuestion()" id="nextBtn" disabled>Avanti ➡️</button>
-            </div>
-
-            <div class="game-container">
-                <div id="gameContent">
-                    <!-- Game content will be loaded here -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Info Project Screen -->
-        <div id="info-screen" class="info-project" style="display: none;">
-            <div class="nav-controls">
                 <button class="nav-btn" onclick="goHome()">🏠 Home</button>
-                <div class="game-info">
-                    <div class="game-title">EduTech Lab</div>
-                    <div class="game-progress">Informazioni sul Progetto</div>
-                </div>
-                <button class="nav-btn" onclick="installPWA()">📱 Installa App</button>
-            </div>
-
-            <h2 style="text-align: center; margin-bottom: 1.5rem; color: #1F2937;">🚀 EduTech Lab - Pensiero Computazionale</h2>
-            
-            <div class="info-grid">
-                <div class="info-card">
-                    <h3>🎯 Obiettivo Pedagogico</h3>
-                    <ul>
-                        <li>Sviluppo del pensiero computazionale</li>
-                        <li>Apprendimento progressivo per età</li>
-                        <li>Gamification educativa</li>
-                        <li>Competenze digitali base</li>
-                        <li>Problem solving creativo</li>
-                    </ul>
-                </div>
-                
-                <div class="info-card">
-                    <h3>📚 Competenze Sviluppate</h3>
-                    <ul>
-                        <li>Riconoscimento di pattern</li>
-                        <li>Sequenze logiche</li>
-                        <li>Decomposizione problemi</li>
-                        <li>Astrazione matematica</li>
-                        <li>Algoritmi e procedure</li>
-                    </ul>
-                </div>
-                
-                <div class="info-card">
-                    <h3>🔧 Caratteristiche Tecniche</h3>
-                    <ul>
-                        <li>PWA installabile come app nativa</li>
-                        <li>Funzionamento offline completo</li>
-                        <li>Layout ottimizzato 16:9</li>
-                        <li>Responsive design</li>
-                        <li>Cache intelligente</li>
-                        <li>Aggiornamenti automatici</li>
-                    </ul>
-                </div>
-                
-                <div class="info-card">
-                    <h3>👨‍🏫 Uso Didattico</h3>
-                    <ul>
-                        <li>Attività individuali e di gruppo</li>
-                        <li>Monitoraggio progressi</li>
-                        <li>Differenziazione per età</li>
-                        <li>Supporto per LIM/tablet</li>
-                        <li>Integrazione curricolare</li>
-                    </ul>
-                </div>
+                <button class="nav-btn" onclick="goBackToClass()">📚 Classe</button>
+                <h2 id="game-title">Gioco</h2>
             </div>
             
-            <div style="text-align: center; margin-top: 2rem; padding: 1.5rem; background: rgba(102, 126, 234, 0.1); border-radius: 1rem;">
-                <p style="color: #374151; font-size: 1rem; line-height: 1.6;">
-                    <strong>EduTech Lab</strong> rappresenta un approccio innovativo all'insegnamento del pensiero computazionale nella Scuola Primaria, 
-                    combinando pedagogia moderna e tecnologie web avanzate per creare un'esperienza di apprendimento coinvolgente e progressiva.
-                </p>
+            <div id="game-container" class="game-container">
+                <div id="gameContent">
+                    <!-- Populated by JavaScript -->
+                </div>
+                
+                <div class="nav-controls">
+                    <button id="checkAnswerBtn" class="nav-btn" onclick="checkAnswer()" style="display: none;">✅ Controlla</button>
+                    <button id="nextQuestionBtn" class="nav-btn" onclick="nextQuestion()" style="display: none;">➡️ Prossima</button>
+                    <button id="newGameBtn" class="nav-btn" onclick="startGame(currentGame)" style="display: none;">🔄 Nuovo</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // ================ PWA IMPLEMENTATION ================ 
-        
-        // Service Worker Registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', async () => {
-                try {
-                    const registration = await navigator.serviceWorker.register('/sw.js');
-                    console.log('✅ Service Worker registered successfully:', registration);
-                    
-                    // Listen for updates
-                    registration.addEventListener('updatefound', () => {
-                        const newWorker = registration.installing;
-                        newWorker.addEventListener('statechange', () => {
-                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                showMessage('🔄 Aggiornamento disponibile! Riavvia l\'app per applicare.', 'info');
-                            }
-                        });
-                    });
-                } catch (error) {
-                    console.log('❌ Service Worker registration failed:', error);
+        // ================ DEVICE DETECTION SYSTEM ================
+        class DeviceDetector {
+            constructor() {
+                this.deviceInfo = this.detectDevice();
+                this.displayDeviceInfo();
+                this.applyDeviceStyles();
+            }
+
+            detectDevice() {
+                const userAgent = navigator.userAgent;
+                const screen = window.screen;
+                const viewport = {
+                    width: window.innerWidth,
+                    height: window.innerHeight
+                };
+
+                // Screen size detection
+                const screenSize = Math.max(screen.width, screen.height);
+                let deviceType = 'desktop';
+
+                if (screenSize >= 2048 || (screen.width >= 1600 && screen.height >= 1200)) {
+                    deviceType = 'lim'; // Large Interactive Monitor
+                } else if (screenSize >= 1024 && screenSize < 2048) {
+                    deviceType = 'tablet';
+                } else if (screenSize < 1024) {
+                    deviceType = 'mobile';
                 }
-            });
-        }
 
-        // PWA Install Prompt
-        let deferredPrompt;
-        let installBtn = document.getElementById('installBtn');
+                // Touch support detection
+                const touchSupport = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            console.log('PWA install prompt triggered');
-            e.preventDefault();
-            deferredPrompt = e;
-            installBtn.classList.add('show');
-        });
+                return {
+                    type: deviceType,
+                    screenWidth: screen.width,
+                    screenHeight: screen.height,
+                    viewportWidth: viewport.width,
+                    viewportHeight: viewport.height,
+                    touchSupport: touchSupport,
+                    userAgent: userAgent,
+                    pixelRatio: window.devicePixelRatio || 1,
+                    orientation: viewport.width > viewport.height ? 'landscape' : 'portrait'
+                };
+            }
 
-        async function installPWA() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                console.log(`PWA install outcome: ${outcome}`);
-                deferredPrompt = null;
-                installBtn.classList.remove('show');
+            displayDeviceInfo() {
+                const infoElement = document.getElementById('deviceInfo');
+                infoElement.textContent = `${this.deviceInfo.type.toUpperCase()} - ${this.deviceInfo.screenWidth}×${this.deviceInfo.screenHeight} - ${this.deviceInfo.orientation}`;
+            }
+
+            applyDeviceStyles() {
+                const body = document.body;
+                body.className = `device-${this.deviceInfo.type}`;
                 
-                if (outcome === 'accepted') {
-                    showMessage('🎉 App installata con successo!', 'success');
+                // Apply device-specific CSS custom properties
+                const root = document.documentElement;
+                
+                switch(this.deviceInfo.type) {
+                    case 'lim':
+                        root.style.setProperty('--button-size', '70px');
+                        root.style.setProperty('--font-size-large', '2.5rem');
+                        root.style.setProperty('--font-size-medium', '1.4rem');
+                        root.style.setProperty('--spacing', '2.5rem');
+                        break;
+                    case 'tablet':
+                        root.style.setProperty('--button-size', '55px');
+                        root.style.setProperty('--font-size-large', '2rem');
+                        root.style.setProperty('--font-size-medium', '1.2rem');
+                        root.style.setProperty('--spacing', '1.8rem');
+                        break;
+                    case 'mobile':
+                        root.style.setProperty('--button-size', '45px');
+                        root.style.setProperty('--font-size-large', '1.6rem');
+                        root.style.setProperty('--font-size-medium', '1rem');
+                        root.style.setProperty('--spacing', '1rem');
+                        break;
+                    default: // desktop
+                        root.style.setProperty('--button-size', '50px');
+                        root.style.setProperty('--font-size-large', '1.8rem');
+                        root.style.setProperty('--font-size-medium', '1.1rem');
+                        root.style.setProperty('--spacing', '1.5rem');
                 }
-            } else {
-                showMessage('📱 App già installata o installazione non disponibile', 'info');
+
+                // Touch-specific adjustments
+                if (this.deviceInfo.touchSupport) {
+                    root.style.setProperty('--touch-target-size', '44px');
+                    body.classList.add('touch-device');
+                }
             }
         }
 
-        installBtn.addEventListener('click', installPWA);
+        // Initialize device detection
+        const deviceDetector = new DeviceDetector();
+        // ================ END DEVICE DETECTION ================
 
-        // Online/Offline Detection
-        function updateOnlineStatus() {
-            const offlineIndicator = document.getElementById('offlineIndicator');
-            if (navigator.onLine) {
-                offlineIndicator.classList.remove('show');
-            } else {
-                offlineIndicator.classList.add('show');
-            }
-        }
-
-        window.addEventListener('online', updateOnlineStatus);
-        window.addEventListener('offline', updateOnlineStatus);
-        updateOnlineStatus();
-
-        // Generate Manifest.json dynamically
-        function generateManifest() {
-            const manifest = {
-                "name": "EduTech Lab - Pensiero Computazionale",
-                "short_name": "EduTech Lab",
-                "description": "Piattaforma PWA per lo sviluppo del pensiero computazionale nella Scuola Primaria",
-                "start_url": "/",
-                "display": "standalone",
-                "background_color": "#667eea",
-                "theme_color": "#667eea",
-                "orientation": "landscape-primary",
-                "categories": ["education", "kids", "games"],
-                "lang": "it",
-                "scope": "/",
-                "icons": [
-                    {
-                        "src": generateIcon(72),
-                        "sizes": "72x72",
-                        "type": "image/svg+xml",
-                        "purpose": "any"
-                    },
-                    {
-                        "src": generateIcon(96),
-                        "sizes": "96x96", 
-                        "type": "image/svg+xml",
-                        "purpose": "any"
-                    },
-                    {
-                        "src": generateIcon(128),
-                        "sizes": "128x128",
-                        "type": "image/svg+xml",
-                        "purpose": "any"
-                    },
-                    {
-                        "src": generateIcon(144),
-                        "sizes": "144x144",
-                        "type": "image/svg+xml", 
-                        "purpose": "any"
-                    },
-                    {
-                        "src": generateIcon(152),
-                        "sizes": "152x152",
-                        "type": "image/svg+xml",
-                        "purpose": "any"
-                    },
-                    {
-                        "src": generateIcon(192),
-                        "sizes": "192x192",
-                        "type": "image/svg+xml",
-                        "purpose": "any"
-                    },
-                    {
-                        "src": generateIcon(384),
-                        "sizes": "384x384",
-                        "type": "image/svg+xml",
-                        "purpose": "any"
-                    },
-                    {
-                        "src": generateIcon(512),
-                        "sizes": "512x512",
-                        "type": "image/svg+xml",
-                        "purpose": "any maskable"
-                    }
-                ],
-                "screenshots": [
-                    {
-                        "src": generateScreenshot(1280, 720),
-                        "sizes": "1280x720",
-                        "type": "image/svg+xml",
-                        "form_factor": "wide"
-                    },
-                    {
-                        "src": generateScreenshot(640, 1136),
-                        "sizes": "640x1136", 
-                        "type": "image/svg+xml",
-                        "form_factor": "narrow"
-                    }
-                ],
-                "shortcuts": [
-                    {
-                        "name": "Prima Primaria",
-                        "short_name": "1° Primaria",
-                        "description": "Giochi per la Prima Primaria",
-                        "url": "/?class=1",
-                        "icons": [{ "src": generateIcon(96), "sizes": "96x96" }]
-                    },
-                    {
-                        "name": "Quinta Primaria", 
-                        "short_name": "5° Primaria",
-                        "description": "Giochi per la Quinta Primaria",
-                        "url": "/?class=5",
-                        "icons": [{ "src": generateIcon(96), "sizes": "96x96" }]
-                    }
-                ],
-                "prefer_related_applications": false
-            };
-            
-            return `data:application/json;base64,${btoa(JSON.stringify(manifest))}`;
-        }
-
-        // Generate dynamic SVG icons
-        function generateIcon(size) {
-            const svg = `
-                <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="${size}" height="${size}" rx="${size * 0.2}" fill="url(#gradient0)"/>
-                    <defs>
-                        <linearGradient id="gradient0" x1="0" y1="0" x2="${size}" y2="${size}">
-                            <stop stop-color="#667eea"/>
-                            <stop offset="1" stop-color="#764ba2"/>
-                        </linearGradient>
-                    </defs>
-                    <text x="${size/2}" y="${size*0.4}" font-family="Arial, sans-serif" font-size="${size*0.25}" font-weight="bold" fill="white" text-anchor="middle">ET</text>
-                    <text x="${size/2}" y="${size*0.65}" font-family="Arial, sans-serif" font-size="${size*0.12}" fill="white" text-anchor="middle">LAB</text>
-                    <circle cx="${size*0.8}" cy="${size*0.2}" r="${size*0.08}" fill="white" opacity="0.8"/>
-                </svg>
-            `;
-            return `data:image/svg+xml;base64,${btoa(svg)}`;
-        }
-
-        // Generate dynamic screenshots
-        function generateScreenshot(width, height) {
-            const svg = `
-                <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="${width}" height="${height}" fill="url(#bgGradient)"/>
-                    <defs>
-                        <linearGradient id="bgGradient" x1="0" y1="0" x2="${width}" y2="${height}">
-                            <stop stop-color="#667eea"/>
-                            <stop offset="1" stop-color="#764ba2"/>
-                        </linearGradient>
-                    </defs>
-                    <rect x="${width*0.1}" y="${height*0.1}" width="${width*0.8}" height="${height*0.3}" rx="20" fill="white" opacity="0.95"/>
-                    <text x="${width/2}" y="${height*0.2}" font-family="Arial, sans-serif" font-size="${Math.min(width, height)*0.05}" font-weight="bold" fill="#1F2937" text-anchor="middle">EduTech Lab</text>
-                    <text x="${width/2}" y="${height*0.28}" font-family="Arial, sans-serif" font-size="${Math.min(width, height)*0.03}" fill="#6B7280" text-anchor="middle">Pensiero Computazionale</text>
-                    <rect x="${width*0.1}" y="${height*0.5}" width="${width*0.35}" height="${height*0.35}" rx="15" fill="white" opacity="0.9"/>
-                    <rect x="${width*0.55}" y="${height*0.5}" width="${width*0.35}" height="${height*0.35}" rx="15" fill="white" opacity="0.9"/>
-                    <text x="${width*0.275}" y="${height*0.65}" font-family="Arial, sans-serif" font-size="${Math.min(width, height)*0.025}" fill="#1F2937" text-anchor="middle">🌱 Prima</text>
-                    <text x="${width*0.725}" y="${height*0.65}" font-family="Arial, sans-serif" font-size="${Math.min(width, height)*0.025}" fill="#1F2937" text-anchor="middle">🌲 Quinta</text>
-                </svg>
-            `;
-            return `data:image/svg+xml;base64,${btoa(svg)}`;
-        }
-
-        // Update manifest link
-        document.querySelector('link[rel="manifest"]').href = generateManifest();
-
-        // Service Worker Code (embedded)
-        const swCode = `
-const CACHE_NAME = 'edutech-lab-v1.2.0';
-const STATIC_CACHE = 'edutech-static-v1.2.0';
-const RUNTIME_CACHE = 'edutech-runtime-v1.2.0';
-
-const STATIC_ASSETS = [
-    '/',
-    '/index.html',
-    '/manifest.json'
-];
-
-// Advanced caching strategies
-const CACHE_STRATEGIES = {
-    staleWhileRevalidate: async (request) => {
-        const cache = await caches.open(RUNTIME_CACHE);
-        const cachedResponse = await cache.match(request);
-        
-        const fetchPromise = fetch(request).then(response => {
-            if (response.status === 200) {
-                cache.put(request, response.clone());
-            }
-            return response;
-        }).catch(() => cachedResponse);
-        
-        return cachedResponse || fetchPromise;
-    },
-    
-    cacheFirst: async (request) => {
-        const cache = await caches.open(STATIC_CACHE);
-        const cachedResponse = await cache.match(request);
-        
-        if (cachedResponse) {
-            return cachedResponse;
-        }
-        
-        const response = await fetch(request);
-        if (response.status === 200) {
-            cache.put(request, response.clone());
-        }
-        return response;
-    },
-    
-    networkFirst: async (request) => {
-        try {
-            const response = await fetch(request);
-            const cache = await caches.open(RUNTIME_CACHE);
-            if (response.status === 200) {
-                cache.put(request, response.clone());
-            }
-            return response;
-        } catch (error) {
-            const cache = await caches.open(RUNTIME_CACHE);
-            const cachedResponse = await cache.match(request);
-            if (cachedResponse) {
-                return cachedResponse;
-            }
-            throw error;
-        }
-    }
-};
-
-// Install event - cache static assets
-self.addEventListener('install', event => {
-    console.log('📦 Service Worker installing...');
-    event.waitUntil(
-        caches.open(STATIC_CACHE)
-            .then(cache => {
-                console.log('📋 Caching static assets...');
-                return cache.addAll(STATIC_ASSETS);
-            })
-            .then(() => {
-                console.log('✅ Static assets cached successfully');
-                return self.skipWaiting();
-            })
-    );
-});
-
-// Activate event - clean old caches
-self.addEventListener('activate', event => {
-    console.log('🔄 Service Worker activating...');
-    event.waitUntil(
-        caches.keys()
-            .then(cacheNames => {
-                return Promise.all(
-                    cacheNames.map(cacheName => {
-                        if (cacheName !== CACHE_NAME && 
-                            cacheName !== STATIC_CACHE && 
-                            cacheName !== RUNTIME_CACHE) {
-                            console.log('🗑️ Deleting old cache:', cacheName);
-                            return caches.delete(cacheName);
-                        }
-                    })
-                );
-            })
-            .then(() => {
-                console.log('✅ Service Worker activated');
-                return self.clients.claim();
-            })
-    );
-});
-
-// Fetch event - intelligent routing
-self.addEventListener('fetch', event => {
-    const { request } = event;
-    const url = new URL(request.url);
-    
-    // Skip non-GET requests
-    if (request.method !== 'GET') {
-        return;
-    }
-    
-    // Handle different request types with appropriate strategies
-    if (url.pathname === '/' || url.pathname.endsWith('.html')) {
-        // HTML files: network first with cache fallback
-        event.respondWith(CACHE_STRATEGIES.networkFirst(request));
-    } else if (url.pathname.endsWith('.css') || 
-               url.pathname.endsWith('.js') || 
-               url.pathname.includes('manifest.json')) {
-        // Static assets: cache first
-        event.respondWith(CACHE_STRATEGIES.cacheFirst(request));
-    } else if (url.pathname.startsWith('/api/')) {
-        // API calls: network first
-        event.respondWith(CACHE_STRATEGIES.networkFirst(request));
-    } else {
-        // Everything else: stale while revalidate
-        event.respondWith(CACHE_STRATEGIES.staleWhileRevalidate(request));
-    }
-});
-
-// Background sync for offline actions
-self.addEventListener('sync', event => {
-    console.log('🔄 Background sync triggered:', event.tag);
-    
-    if (event.tag === 'background-sync') {
-        event.waitUntil(
-            // Sync offline actions when connection is restored
-            Promise.resolve()
-                .then(() => console.log('📤 Background sync completed'))
-        );
-    }
-});
-
-// Push notifications (optional)
-self.addEventListener('push', event => {
-    console.log('📱 Push notification received');
-    
-    const options = {
-        body: event.data ? event.data.text() : 'Nuovi contenuti disponibili in EduTech Lab!',
-        icon: '/icon-192x192.png',
-        badge: '/badge-72x72.png',
-        vibrate: [100, 50, 100],
-        data: {
-            dateOfArrival: Date.now(),
-            primaryKey: 1
-        },
-        actions: [
-            {
-                action: 'explore',
-                title: 'Esplora',
-                icon: '/icon-explore.png'
-            },
-            {
-                action: 'close',
-                title: 'Chiudi',
-                icon: '/icon-close.png'
-            }
-        ]
-    };
-    
-    event.waitUntil(
-        self.registration.showNotification('EduTech Lab', options)
-    );
-});
-
-// Notification click handling
-self.addEventListener('notificationclick', event => {
-    console.log('🔔 Notification clicked:', event.action);
-    
-    event.notification.close();
-    
-    if (event.action === 'explore') {
-        event.waitUntil(
-            self.clients.openWindow('/')
-        );
-    }
-});
-
-console.log('🚀 EduTech Lab Service Worker loaded successfully');
-`;
-
-        // Register service worker with embedded code
-        if ('serviceWorker' in navigator) {
-            const swBlob = new Blob([swCode], { type: 'application/javascript' });
-            const swUrl = URL.createObjectURL(swBlob);
-            
-            navigator.serviceWorker.register(swUrl)
-                .then(registration => {
-                    console.log('✅ Service Worker registered with embedded code');
-                })
-                .catch(error => {
-                    console.error('❌ Service Worker registration failed:', error);
-                });
-        }
-
-        // ================ END PWA IMPLEMENTATION ================
-
-        // Game State Management - Enhanced for PWA
+        // Game State and Data
         let gameState = {
-            currentClass: 1,
+            currentClass: null,
             currentGame: null,
-            currentQuestion: null,
-            questionNumber: 1,
-            totalQuestions: 10,
-            score: 0,
-            stars: 0,
-            gameStats: {
-                1: { score: 0, stars: 0, gamesPlayed: 0 },
-                2: { score: 0, stars: 0, gamesPlayed: 0 },
-                3: { score: 0, stars: 0, gamesPlayed: 0 },
-                4: { score: 0, stars: 0, gamesPlayed: 0 },
-                5: { score: 0, stars: 0, gamesPlayed: 0 }
-            },
-            preferences: {
-                soundEnabled: true,
-                animationsEnabled: true,
-                difficulty: 'auto'
-            }
+            score: parseInt(localStorage.getItem('edutech-score') || '0'),
+            stars: parseInt(localStorage.getItem('edutech-stars') || '0'),
+            level: parseInt(localStorage.getItem('edutech-level') || '1'),
+            streakCount: 0,
+            totalQuestions: 0,
+            correctAnswers: 0,
+            currentQuestion: null
         };
 
-        // Load game state from localStorage with PWA compatibility
-        function loadGameState() {
-            try {
-                const saved = localStorage.getItem('eduTechLabState');
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    gameState = { ...gameState, ...parsed };
-                    updateStatsDisplay();
-                }
-            } catch (error) {
-                console.log('Using default game state - first run or storage unavailable');
-            }
-        }
-
-        // Save game state with PWA compatibility
-        function saveGameState() {
-            try {
-                localStorage.setItem('eduTechLabState', JSON.stringify(gameState));
-            } catch (error) {
-                console.log('Unable to save state - storage might be full or unavailable');
-            }
-        }
-
-        // Initialize PWA
-        function initializePWA() {
-            loadGameState();
-            updateStatsDisplay();
-            
-            // Check for URL parameters (deep linking)
-            const urlParams = new URLSearchParams(window.location.search);
-            const classParam = urlParams.get('class');
-            if (classParam && classParam >= 1 && classParam <= 5) {
-                setTimeout(() => enterClass(parseInt(classParam)), 500);
-            }
-            
-            console.log('🚀 EduTech Lab PWA initialized successfully');
-        }
-
-        // Classes Configuration - Enhanced for PWA
-        const classesConfig = {
+        // Classes Configuration
+        const classesData = {
             1: {
                 name: "Prima Primaria",
                 emoji: "🌱",
-                description: "I primi passi nel mondo digitale",
+                description: "I primi passi",
                 age: "6-7 anni",
                 games: [
-                    { id: 'conteggio', name: '🔢 Conto e Imparo', description: 'Primi numeri da 1 a 10' },
-                    { id: 'pattern-semplici', name: '🎨 Pattern Colorati', description: 'Riconosco le sequenze' },
-                    { id: 'addizioni-visual', name: '➕ Prime Addizioni', description: 'Somme fino a 10' },
-                    { id: 'forme-colori', name: '🔺 Forme e Colori', description: 'Riconosco forme base' }
+                    { id: 'conteggio', name: '🔢 Conteggio Visuale', description: 'Conta oggetti fino a 10' },
+                    { id: 'pattern-riconoscimento', name: '🎨 Riconosci il Pattern', description: 'Sequenze semplici di colori e forme' },
+                    { id: 'addizioni-visual', name: '➕ Prime Addizioni', description: 'Somme fino a 10 con supporto visivo' },
+                    { id: 'sequenze-logiche', name: '🔄 Sequenze Logiche', description: 'Ordina e continua le sequenze' }
                 ]
             },
             2: {
-                name: "Seconda Primaria", 
+                name: "Seconda Primaria",
                 emoji: "🌿",
-                description: "Sviluppo del pensiero logico",
+                description: "Esploratori digitali",
                 age: "7-8 anni",
                 games: [
-                    { id: 'conteggio', name: '🔢 Conteggio Avanzato', description: 'Numeri fino a 20' },
-                    { id: 'operazioni-entro-20', name: '🧮 Operazioni Facili', description: 'Addizioni e sottrazioni' },
+                    { id: 'conteggio', name: '🔢 Conteggio Avanzato', description: 'Conta e raggruppa fino a 20' },
+                    { id: 'operazioni-entro-20', name: '🧮 Operazioni Entro 20', description: 'Calcoli più complessi' },
                     { id: 'tabelline-base', name: '✖️ Prime Tabelline', description: 'Tabellina del 2, 5 e 10' },
                     { id: 'frazioni-visual', name: '🍕 Prime Frazioni', description: 'Metà, terzi e quarti' },
                     { id: 'pattern-riconoscimento', name: '🔍 Riconosco i Pattern', description: 'Sequenze più complesse' },
@@ -1466,130 +1108,193 @@ console.log('🚀 EduTech Lab Service Worker loaded successfully');
             4: {
                 name: "Quarta Primaria",
                 emoji: "🌲",
-                description: "Algoritmi avanzati", 
+                description: "Algoritmi avanzati",
                 age: "9-10 anni",
                 games: [
                     { id: 'conteggio', name: '🔢 Conteggio Professionale', description: 'Strategie avanzate di conteggio' },
                     { id: 'operazioni-entro-20', name: '🧮 Calcoli Complessi', description: 'Operazioni con numeri grandi' },
                     { id: 'tabelline-base', name: '✖️ Tabelline Complete', description: 'Tutte le tabelline fino al 10' },
-                    { id: 'frazioni-visual', name: '🍕 Frazioni Interattive', description: 'Visualizzazione avanzata' },
-                    { id: 'addizioni-visual', name: '➕ Somme Strategiche', description: 'Strategie di calcolo' },
-                    { id: 'pattern-riconoscimento', name: '🎯 Pattern Avanzati', description: 'Riconoscimento complesso' },
-                    { id: 'sequenze-numeriche', name: '🔄 Sequenze Numeriche', description: 'Pattern matematici' },
-                    { id: 'condizioni-base', name: '⚡ Logica Condizionale', description: 'If-then avanzato' }
+                    { id: 'frazioni-visual', name: '🍕 Frazioni Interattive', description: 'Visualizza e opera con le frazioni' },
+                    { id: 'addizioni-visual', name: '➕ Aritmetica Avanzata', description: 'Operazioni con numeri decimali' },
+                    { id: 'variabili-semplici', name: '📦 Le Mie Prime Variabili', description: 'Contenitori per i dati' },
+                    { id: 'algoritmi-avanzati', name: '🧠 Algoritmi Intelligenti', description: 'Strategie di risoluzione complesse' },
+                    { id: 'debugging-visuale', name: '🐛 Debug Expert', description: 'Debugging avanzato' }
                 ]
             },
             5: {
                 name: "Quinta Primaria",
-                emoji: "🌲", 
-                description: "Problem solving complesso",
+                emoji: "🌺",
+                description: "Programmatori junior",
                 age: "10-11 anni",
                 games: [
-                    { id: 'conteggio', name: '🔢 Matematica Computazionale', description: 'Algoritmi di conteggio' },
-                    { id: 'operazioni-entro-20', name: '🧮 Calcolo Mentale Pro', description: 'Strategie avanzate' },
-                    { id: 'tabelline-base', name: '✖️ Tabelline Veloci', description: 'Automatizzazione completa' },
-                    { id: 'frazioni-visual', name: '🍕 Frazioni Complesse', description: 'Operazioni avanzate' },
-                    { id: 'addizioni-visual', name: '➕ Algoritmi di Somma', description: 'Metodi computazionali' },
-                    { id: 'pattern-riconoscimento', name: '🔍 Pattern Intelligence', description: 'AI e riconoscimento' },
-                    { id: 'sequenze-numeriche', name: '📈 Sequenze Matematiche', description: 'Fibonacci e serie' },
-                    { id: 'condizioni-base', name: '🔄 Programmazione Base', description: 'Loop e condizioni' },
-                    { id: 'debugging-visuale', name: '🐛 Debug Avanzato', description: 'Risoluzione problemi' },
-                    { id: 'algoritmi-semplici', name: '⚙️ I Miei Algoritmi', description: 'Creazione algoritmi' }
+                    { id: 'conteggio', name: '🔢 Conteggio Esperto', description: 'Metodi di conteggio combinatorio' },
+                    { id: 'operazioni-entro-20', name: '🧮 Matematica Superiore', description: 'Operazioni con tutti i numeri' },
+                    { id: 'tabelline-base', name: '✖️ Moltiplicazioni Expert', description: 'Calcoli rapidi e trucchi' },
+                    { id: 'frazioni-visual', name: '🍕 Frazioni Master', description: 'Operazioni con frazioni' },
+                    { id: 'statistica-base', name: '📊 I Miei Primi Grafici', description: 'Raccogli e analizza dati' },
+                    { id: 'variabili-semplici', name: '📦 Variabili Avanzate', description: 'Programmazione con variabili' },
+                    { id: 'algoritmi-avanzati', name: '🧠 Algoritmi Pro', description: 'Ottimizzazione e ricerca' },
+                    { id: 'progetti-completi', name: '🎮 Crea il Tuo Gioco', description: 'Progetti completi con interfaccia' },
+                    { id: 'collaborazione-digitale', name: '🤝 Coding di Squadra', description: 'Progetti collaborativi' }
                 ]
             }
         };
 
-        // Navigation Functions - Enhanced for PWA
-        function goHome() {
-            document.getElementById('main-screen').style.display = 'block';
-            document.getElementById('class-games').style.display = 'none';
-            document.getElementById('game-screen').style.display = 'none';
-            document.getElementById('info-screen').style.display = 'none';
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStatsDisplay();
             
-            // Update URL for PWA deep linking
-            history.pushState({}, '', '/');
+            // Check if there are saved stats to show stats bar
+            if (gameState.score > 0 || gameState.stars > 0) {
+                document.getElementById('stats-bar').style.display = 'flex';
+            }
+        });
+
+        // PWA Installation
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installBtn').style.display = 'block';
+        });
+
+        document.getElementById('installBtn').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    document.getElementById('installBtn').style.display = 'none';
+                }
+                deferredPrompt = null;
+            }
+        });
+
+        // Download App functionality
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            // Crea il contenuto HTML completo
+            const htmlContent = `<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTech Lab - Pensiero Computazionale</title>
+    <meta name="description" content="Piattaforma di Pensiero Computazionale per la Scuola Primaria">
+</head>
+<body>
+    ${document.documentElement.innerHTML}
+</body>
+</html>`;
+            
+            // Crea il file blob
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            // Crea link per il download
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+            downloadLink.download = 'edutech-lab-giochi.html';
+            downloadLink.style.display = 'none';
+            
+            // Aggiungi al DOM, clicca e rimuovi
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            URL.revokeObjectURL(url);
+            
+            // Mostra messaggio di successo
+            showMessage('🎉 App scaricata! Apri il file per giocare offline!', 'success');
+        });
+
+        // Navigation Functions
+        function selectClass(classNumber) {
+            gameState.currentClass = classNumber;
+            showClassGames(classNumber);
         }
 
-        function enterClass(classNumber) {
-            gameState.currentClass = classNumber;
-            saveGameState();
+        function showClassGames(classNumber) {
+            const classData = classesData[classNumber];
             
-            document.getElementById('main-screen').style.display = 'none';
+            // Hide homepage and show class games
+            document.getElementById('homepage').style.display = 'none';
             document.getElementById('class-games').style.display = 'block';
             document.getElementById('game-screen').style.display = 'none';
-            document.getElementById('info-screen').style.display = 'none';
             
-            loadClassGames(classNumber);
+            // Update title
+            document.getElementById('class-title').textContent = `${classData.emoji} ${classData.name}`;
             
-            // Update URL for PWA deep linking
-            history.pushState({}, '', `/?class=${classNumber}`);
-        }
-
-        function loadClassGames(classNumber) {
-            const config = classesConfig[classNumber];
-            document.getElementById('className').textContent = config.name;
+            // Populate games
+            const gamesContainer = document.getElementById('games-grid');
+            gamesContainer.innerHTML = '';
             
-            const gamesGrid = document.getElementById('gamesGrid');
-            gamesGrid.innerHTML = config.games.map(game => `
-                <div class="game-card" onclick="startGame('${game.id}')">
+            classData.games.forEach(game => {
+                const gameCard = document.createElement('div');
+                gameCard.className = 'game-card';
+                gameCard.onclick = () => startGame(game.id);
+                
+                gameCard.innerHTML = `
                     <h3>${game.name}</h3>
                     <p>${game.description}</p>
-                </div>
-            `).join('');
+                `;
+                
+                gamesContainer.appendChild(gameCard);
+            });
         }
 
-        function startGame(gameId) {
-            gameState.currentGame = gameId;
-            gameState.questionNumber = 1;
-            gameState.score = 0;
-            
+        function goHome() {
+            document.getElementById('homepage').style.display = 'block';
             document.getElementById('class-games').style.display = 'none';
-            document.getElementById('game-screen').style.display = 'block';
-            
-            // Set game title
-            const gameConfig = classesConfig[gameState.currentClass].games.find(g => g.id === gameId);
-            document.getElementById('currentGameTitle').textContent = gameConfig.name;
-            
-            loadGame();
-            updateQuestionDisplay();
+            document.getElementById('game-screen').style.display = 'none';
+            gameState.currentClass = null;
+            gameState.currentGame = null;
         }
 
         function goBackToClass() {
-            document.getElementById('game-screen').style.display = 'none';
-            document.getElementById('class-games').style.display = 'block';
+            if (gameState.currentClass) {
+                showClassGames(gameState.currentClass);
+            } else {
+                goHome();
+            }
         }
 
-        function showInfo() {
-            document.getElementById('main-screen').style.display = 'none';
-            document.getElementById('info-screen').style.display = 'block';
-        }
-
-        function updateStatsDisplay() {
-            const totalStars = Object.values(gameState.gameStats).reduce((sum, stats) => sum + stats.stars, 0);
-            const totalScore = Object.values(gameState.gameStats).reduce((sum, stats) => sum + stats.score, 0);
-            const level = Math.floor(totalStars / 10) + 1;
+        // Game Functions
+        function startGame(gameId) {
+            gameState.currentGame = gameId;
+            gameState.totalQuestions = 0;
+            gameState.correctAnswers = 0;
+            gameState.streakCount = 0;
             
-            document.getElementById('totalStars').textContent = totalStars;
-            document.getElementById('totalScore').textContent = totalScore;
-            document.getElementById('playerLevel').textContent = level;
+            // Show game screen
+            document.getElementById('homepage').style.display = 'none';
+            document.getElementById('class-games').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'block';
+            
+            // Find game name
+            const classData = classesData[gameState.currentClass];
+            const game = classData.games.find(g => g.id === gameId);
+            document.getElementById('game-title').textContent = game.name;
+            
+            // Load appropriate game
+            loadGame(gameId);
         }
 
-        function updateQuestionDisplay() {
-            document.getElementById('questionNumber').textContent = gameState.questionNumber;
-            document.getElementById('totalQuestions').textContent = gameState.totalQuestions;
-        }
-
-        // Game Loading Logic - Enhanced for PWA
-        function loadGame() {
-            switch(gameState.currentGame) {
+        function loadGame(gameId) {
+            // Reset button states
+            document.getElementById('checkAnswerBtn').style.display = 'none';
+            document.getElementById('nextQuestionBtn').style.display = 'none';
+            document.getElementById('newGameBtn').style.display = 'none';
+            
+            switch(gameId) {
                 case 'conteggio':
                     loadCountingGame();
                     break;
                 case 'operazioni-entro-20':
                     loadMathGame();
                     break;
-                case 'tabelline-base':
-                    loadMultiplicationGame();
+                case 'pattern-riconoscimento':
+                    loadPatternGame();
+                    break;
+                case 'sequenze-logiche':
+                    loadSequenceGame();
                     break;
                 case 'frazioni-visual':
                     loadFractionsGame();
@@ -1597,92 +1302,33 @@ console.log('🚀 EduTech Lab Service Worker loaded successfully');
                 case 'addizioni-visual':
                     loadAdditionGame();
                     break;
-                case 'pattern-riconoscimento':
-                case 'pattern-semplici':
-                    loadPatternGame();
-                    break;
-                case 'sequenze-numeriche':
-                    loadSequenceGame();
-                    break;
-                case 'condizioni-base':
-                    loadConditionalGame();
-                    break;
-                case 'debugging-visuale':
-                    loadDebuggingGame();
-                    break;
-                case 'algoritmi-semplici':
-                    loadAlgorithmGame();
-                    break;
-                case 'forme-colori':
-                    loadShapesGame();
+                case 'tabelline-base':
+                    loadMultiplicationGame();
                     break;
                 default:
-                    loadCountingGame();
+                    loadDefaultGame(gameId);
             }
         }
 
-        // Game Implementation Functions - Enhanced for PWA
-
-        // ENHANCED: Counting Game with Visual Support
+        // IMPROVED: Counting Game with visual dots
         function loadCountingGame() {
-            const maxNumber = gameState.currentClass <= 2 ? 20 : 50;
-            const targetNumber = Math.floor(Math.random() * maxNumber) + 1;
-            gameState.currentQuestion = { correct: targetNumber };
+            const count = Math.floor(Math.random() * 10) + 1;
+            gameState.currentQuestion = { correct: count };
 
-            const objects = ['🍎', '🐛', '⭐', '🌸', '🐠', '🦋', '🍓', '🐢', '🌺', '🎈'];
-            const selectedObject = objects[Math.floor(Math.random() * objects.length)];
-            
-            document.getElementById('gameContent').innerHTML = `
-                <div class="question">Conta gli oggetti che vedi!</div>
-                <div class="visual-area">
-                    ${Array(targetNumber).fill(selectedObject).map(obj => `<span style="font-size: 1.5rem; margin: 0.2rem;">${obj}</span>`).join('')}
-                </div>
-                <div style="background: #EFF6FF; padding: 1rem; border-radius: 1rem; margin: 1rem 0; text-align: center;">
-                    <strong>💡 Consiglio:</strong> Conta con attenzione ogni oggetto!
-                </div>
-                <div class="options">
-                    ${[targetNumber-2, targetNumber-1, targetNumber, targetNumber+1].filter(n => n > 0).sort(() => Math.random() - 0.5).map(num => `<div class="option" onclick="selectAnswer(${num})">${num}</div>`).join('')}
-                </div>
-            `;
-        }
-
-        // ENHANCED: Math Operations with Visual Support
-        function loadMathGame() {
-            const difficulty = gameState.currentClass;
-            const maxNum = difficulty <= 2 ? 10 : difficulty <= 3 ? 20 : 50;
-            
-            const num1 = Math.floor(Math.random() * maxNum) + 1;
-            const num2 = Math.floor(Math.random() * maxNum) + 1;
-            const operation = Math.random() > 0.5 ? '+' : '-';
-            
-            let result;
-            let question;
-            
-            if (operation === '+') {
-                result = num1 + num2;
-                question = `${num1} + ${num2} = ?`;
-            } else {
-                if (num1 >= num2) {
-                    result = num1 - num2;
-                    question = `${num1} - ${num2} = ?`;
-                } else {
-                    result = num2 - num1;
-                    question = `${num2} - ${num1} = ?`;
-                }
+            let dots = '';
+            for(let i = 0; i < count; i++) {
+                dots += '<span style="font-size: 2rem; margin: 0.2rem;">🔴</span>';
             }
-            
-            gameState.currentQuestion = { correct: result };
 
-            const wrongAnswers = [result-2, result-1, result+1, result+2].filter(n => n >= 0 && n !== result);
-            const options = [result, ...wrongAnswers.slice(0, 3)].sort(() => Math.random() - 0.5);
+            const options = [count, count + 1, count - 1, count + 2]
+                .filter(n => n > 0)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 4);
 
             document.getElementById('gameContent').innerHTML = `
-                <div class="question">Risolvi l'operazione:</div>
+                <div class="question">Quanti cerchi rossi vedi?</div>
                 <div class="visual-area">
-                    <div style="font-size: 2rem; font-weight: bold; color: #1F2937;">${question}</div>
-                </div>
-                <div style="background: #F0FDF4; padding: 1rem; border-radius: 1rem; margin: 1rem 0; text-align: center;">
-                    <strong>💡 Strategia:</strong> ${operation === '+' ? 'Puoi contare in avanti!' : 'Puoi contare all\'indietro!'}
+                    ${dots}
                 </div>
                 <div class="options">
                     ${options.map(num => `<div class="option" onclick="selectAnswer(${num})">${num}</div>`).join('')}
@@ -1690,67 +1336,34 @@ console.log('🚀 EduTech Lab Service Worker loaded successfully');
             `;
         }
 
-        // ENHANCED: Multiplication Tables with Visual Support
-        function loadMultiplicationGame() {
-            const tables = gameState.currentClass <= 2 ? [2, 5, 10] : gameState.currentClass <= 3 ? [2, 3, 4, 5, 10] : [2, 3, 4, 5, 6, 7, 8, 9, 10];
-            const table = tables[Math.floor(Math.random() * tables.length)];
-            const multiplier = Math.floor(Math.random() * 10) + 1;
-            const result = table * multiplier;
-            
-            gameState.currentQuestion = { correct: result };
+        // IMPROVED: Math Game with visual support
+        function loadMathGame() {
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const num2 = Math.floor(Math.random() * 10) + 1;
+            const sum = num1 + num2;
+            gameState.currentQuestion = { correct: sum };
 
-            const wrongAnswers = [result-table, result+table, result-1, result+1].filter(n => n > 0 && n !== result);
-            const options = [result, ...wrongAnswers.slice(0, 3)].sort(() => Math.random() - 0.5);
+            const visual1 = '🟦'.repeat(num1);
+            const visual2 = '🟨'.repeat(num2);
+
+            const options = [sum, sum + 1, sum - 1, sum + 2]
+                .filter(n => n > 0)
+                .sort(() => Math.random() - 0.5);
 
             document.getElementById('gameContent').innerHTML = `
-                <div class="question">Quanto fa ${table} × ${multiplier}?</div>
+                <div class="question">Calcola la somma:</div>
                 <div class="visual-area">
-                    <div style="display: grid; grid-template-columns: repeat(${table}, 1fr); gap: 0.3rem; max-width: 300px;">
-                        ${Array(table * multiplier).fill('🟦').map(square => `<div style="width: 20px; height: 20px; background: #3B82F6; border-radius: 3px;"></div>`).join('')}
+                    <div style="margin: 1rem 0;">
+                        <div><strong>${num1} quadrati blu:</strong></div>
+                        <div>${visual1}</div>
                     </div>
-                </div>
-                <div style="background: #FEF3C7; padding: 1rem; border-radius: 1rem; margin: 1rem 0; text-align: center;">
-                    <strong>💡 Visualizza:</strong> ${multiplier} gruppi di ${table} quadratini blu!
-                </div>
-                <div class="options">
-                    ${options.map(num => `<div class="option" onclick="selectAnswer(${num})">${num}</div>`).join('')}
-                </div>
-            `;
-        }
-
-        // ENHANCED: Addition Game with Visual Support
-        function loadAdditionGame() {
-            const maxNum = gameState.currentClass <= 2 ? 10 : 20;
-            const num1 = Math.floor(Math.random() * maxNum) + 1;
-            const num2 = Math.floor(Math.random() * maxNum) + 1;
-            const result = num1 + num2;
-            
-            gameState.currentQuestion = { correct: result };
-
-            const wrongAnswers = [result-2, result-1, result+1, result+2].filter(n => n > 0 && n !== result);
-            const options = [result, ...wrongAnswers.slice(0, 3)].sort(() => Math.random() - 0.5);
-
-            document.getElementById('gameContent').innerHTML = `
-                <div class="question">Quanto fa ${num1} + ${num2}?</div>
-                <div class="visual-area">
-                    <div style="display: flex; gap: 2rem; align-items: center; justify-content: center;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">Primo gruppo</div>
-                            <div style="display: flex; flex-wrap: wrap; gap: 0.2rem; max-width: 150px;">
-                                ${Array(num1).fill('🔴').join('')}
-                            </div>
-                        </div>
-                        <div style="font-size: 2rem; color: #059669;">+</div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">Secondo gruppo</div>
-                            <div style="display: flex; flex-wrap: wrap; gap: 0.2rem; max-width: 150px;">
-                                ${Array(num2).fill('🔵').join('')}
-                            </div>
-                        </div>
+                    <div style="font-size: 2rem; margin: 1rem;">➕</div>
+                    <div style="margin: 1rem 0;">
+                        <div><strong>${num2} quadrati gialli:</strong></div>
+                        <div>${visual2}</div>
                     </div>
-                </div>
-                <div style="background: #ECFDF5; padding: 1rem; border-radius: 1rem; margin: 1rem 0; text-align: center;">
-                    <strong>💡 Strategia:</strong> Conta tutti i cerchi insieme!
+                    <div style="font-size: 2rem; margin: 1rem;">🟰</div>
+                    <div><strong>Totale: ?</strong></div>
                 </div>
                 <div class="options">
                     ${options.map(num => `<div class="option" onclick="selectAnswer(${num})">${num}</div>`).join('')}
@@ -1758,37 +1371,73 @@ console.log('🚀 EduTech Lab Service Worker loaded successfully');
             `;
         }
 
-        // ENHANCED: Sequence Game with Numbers
-        function loadSequenceGame() {
-            const sequences = [
-                { sequence: [2, 4, 6, 8], next: 10, description: 'numeri pari' },
-                { sequence: [1, 3, 5, 7], next: 9, description: 'numeri dispari' },
-                { sequence: [5, 10, 15, 20], next: 25, description: 'multipli di 5' },
-                { sequence: [1, 2, 4, 8], next: 16, description: 'raddoppio' },
-                { sequence: [100, 90, 80, 70], next: 60, description: 'sottrazione di 10' }
+        // IMPROVED: Pattern Game with colorful shapes
+        function loadPatternGame() {
+            const patterns = [
+                { sequence: ['🔴', '🔵', '🔴', '🔵'], next: '🔴', description: 'rosso-blu-rosso-blu' },
+                { sequence: ['⭐', '⭐', '🌙', '⭐', '⭐'], next: '🌙', description: 'stella-stella-luna' },
+                { sequence: ['🍎', '🍌', '🍊', '🍎', '🍌'], next: '🍊', description: 'mela-banana-arancia' },
+                { sequence: ['1️⃣', '2️⃣', '3️⃣', '1️⃣', '2️⃣'], next: '3️⃣', description: '1-2-3' },
+                { sequence: ['🔺', '⭕', '🔸', '🔺', '⭕'], next: '🔸', description: 'triangolo-cerchio-rombo' }
             ];
             
-            const selectedSequence = sequences[Math.floor(Math.random() * sequences.length)];
-            gameState.currentQuestion = { correct: selectedSequence.next };
+            const selectedPattern = patterns[Math.floor(Math.random() * patterns.length)];
+            gameState.currentQuestion = { correct: selectedPattern.next };
 
-            const wrongOptions = [selectedSequence.next-5, selectedSequence.next-2, selectedSequence.next+2, selectedSequence.next+5]
-                .filter(item => item > 0 && item !== selectedSequence.next)
+            const wrongOptions = ['🔴', '🔵', '⭐', '🌙', '🍎', '🍌', '🍊', '1️⃣', '2️⃣', '3️⃣', '🔺', '⭕', '🔸']
+                .filter(item => item !== selectedPattern.next)
+                .sort(() => Math.random() - 0.5)
                 .slice(0, 3);
 
-            const options = [selectedSequence.next, ...wrongOptions].sort(() => Math.random() - 0.5);
+            const options = [selectedPattern.next, ...wrongOptions].sort(() => Math.random() - 0.5);
 
             document.getElementById('gameContent').innerHTML = `
-                <div class="question">Quale numero continua la sequenza?</div>
-                <div class="sequence-area">
-                    <div class="sequence-items">
-                        ${selectedSequence.sequence.map(item => 
-                            `<div class="sequence-item" style="background: #3B82F6; color: white;">${item}</div>`
-                        ).join('')}
-                        <div class="sequence-item" style="background: #FEF3C7; border: 2px dashed #F59E0B; color: #92400E;">?</div>
+                <div class="question">Quale elemento continua il pattern?</div>
+                <div class="pattern-area">
+                    <div class="pattern-items">
+                        ${selectedPattern.sequence.map(item => `<div class="pattern-item">${item}</div>`).join('')}
+                        <div class="pattern-item" style="background: #FEF3C7; border: 2px dashed #F59E0B;">❓</div>
                     </div>
                 </div>
                 <div style="background: #EFF6FF; padding: 1rem; border-radius: 1rem; margin: 1rem 0; text-align: center;">
-                    <strong>💡 Suggerimento:</strong> Questa è una sequenza di ${selectedSequence.description}
+                    <strong>💡 Suggerimento:</strong> Osserva la sequenza ${selectedPattern.description}
+                </div>
+                <div class="pattern-options">
+                    ${options.map(item => `<div class="pattern-option" onclick="selectPatternAnswer('${item}')">${item}</div>`).join('')}
+                </div>
+            `;
+        }
+
+        // IMPROVED: Sequence Game with colorful patterns
+        function loadSequenceGame() {
+            const patterns = [
+                { sequence: ['🔴', '🔵', '🔴', '🔵'], next: '🔴', description: 'rosso-blu-rosso-blu' },
+                { sequence: ['⭐', '⭐', '🌙', '⭐', '⭐'], next: '🌙', description: 'stella-stella-luna' },
+                { sequence: ['🍎', '🍌', '🍊', '🍎', '🍌'], next: '🍊', description: 'mela-banana-arancia' },
+                { sequence: ['1️⃣', '2️⃣', '3️⃣', '1️⃣', '2️⃣'], next: '3️⃣', description: '1-2-3' },
+                { sequence: ['🔺', '⭕', '🔸', '🔺', '⭕'], next: '🔸', description: 'triangolo-cerchio-rombo' }
+            ];
+            
+            const selectedPattern = patterns[Math.floor(Math.random() * patterns.length)];
+            gameState.currentQuestion = { correct: selectedPattern.next };
+
+            const wrongOptions = ['🔴', '🔵', '⭐', '🌙', '🍎', '🍌', '🍊', '1️⃣', '2️⃣', '3️⃣', '🔺', '⭕', '🔸']
+                .filter(item => item !== selectedPattern.next)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3);
+
+            const options = [selectedPattern.next, ...wrongOptions].sort(() => Math.random() - 0.5);
+
+            document.getElementById('gameContent').innerHTML = `
+                <div class="question">Completa la sequenza logica!</div>
+                <div class="sequence-area">
+                    <div class="sequence-items">
+                        ${selectedPattern.sequence.map(item => `<div class="sequence-item">${item}</div>`).join('')}
+                        <div class="sequence-item" style="background: #FEF3C7; border: 2px dashed #F59E0B;">❓</div>
+                    </div>
+                </div>
+                <div style="background: #EFF6FF; padding: 1rem; border-radius: 1rem; margin: 1rem 0; text-align: center;">
+                    <strong>💡 Rifletti:</strong> Quale elemento manca nella sequenza ${selectedPattern.description}?
                 </div>
                 <div class="sequence-options">
                     ${options.map(item => `<div class="sequence-option" onclick="selectAnswer('${item}')">${item}</div>`).join('')}
@@ -1823,572 +1472,290 @@ console.log('🚀 EduTech Lab Service Worker loaded successfully');
                 <div style="background: #FEF3C7; padding: 1rem; border-radius: 1rem; margin: 1rem 0; text-align: center;">
                     <strong>💡 Istruzioni:</strong> Clicca sulle fette di pizza per selezionarle. Devi selezionare esattamente ${numerator} fette su ${denominator} totali!
                 </div>
-                <div style="text-align: center; margin-top: 1rem;">
-                    <button class="nav-btn" onclick="checkFractionAnswer()" id="fractionCheckBtn">Verifica Risposta</button>
-                </div>
             `;
-
+            
             // Position pizza slices
-            setTimeout(() => {
-                const container = document.getElementById('pizzaContainer');
-                const slices = container.querySelectorAll('.pizza-slice');
-                slices.forEach((slice, index) => {
-                    const angle = (index * 360 / denominator) * Math.PI / 180;
-                    const radius = 90;
-                    const x = Math.cos(angle) * radius;
-                    const y = Math.sin(angle) * radius;
-                    slice.style.transform = `translate(${x}px, ${y}px) rotate(${index * 360 / denominator}deg)`;
-                });
-            }, 100);
-        }
-
-        // IMPROVED: Pattern Game with colorful shapes
-        function loadPatternGame() {
-            const patterns = [
-                { sequence: ['🔴', '🔵', '🔴', '🔵'], next: '🔴', description: 'rosso-blu-rosso-blu' },
-                { sequence: ['⭐', '⭐', '🌙', '⭐', '⭐'], next: '🌙', description: 'stella-stella-luna' },
-                { sequence: ['🍎', '🍌', '🍊', '🍎', '🍌'], next: '🍊', description: 'mela-banana-arancia' },
-                { sequence: ['1️⃣', '2️⃣', '3️⃣', '1️⃣', '2️⃣'], next: '3️⃣', description: '1-2-3' },
-                { sequence: ['🔺', '⭕', '🔸', '🔺', '⭕'], next: '🔸', description: 'triangolo-cerchio-rombo' }
-            ];
-            
-            const selectedPattern = patterns[Math.floor(Math.random() * patterns.length)];
-            gameState.currentQuery = { correct: selectedPattern.next };
-
-            const wrongOptions = ['🔴', '🔵', '⭐', '🌙', '🍎', '🍌', '🍊', '1️⃣', '2️⃣', '3️⃣', '🔺', '⭕', '🔸']
-                .filter(item => item !== selectedPattern.next)
-                .sort(() => Math.random() - 0.5)
-                .slice(0, 3);
-
-            const options = [selectedPattern.next, ...wrongOptions].sort(() => Math.random() - 0.5);
-
-            document.getElementById('gameContent').innerHTML = `
-                <div class="question">Quale elemento continua il pattern?</div>
-                <div class="pattern-area">
-                    <div class="pattern-items">
-                        ${selectedPattern.sequence.map(item => `<div class="pattern-item">${item}</div>`).join('')}
-                        <div class="pattern-item" style="background: #FEF3C7; border: 2px dashed #F59E0B;">❓</div>
-                    </div>
-                </div>
-                <div style="background: #EFF6FF; padding: 1rem; border-radius: 1rem; margin: 1rem 0; text-align: center;">
-                    <strong>💡 Suggerimento:</strong> Osserva la sequenza ${selectedPattern.description}
-                </div>
-                <div class="pattern-options">
-                    ${options.map(item => `<div class="pattern-option" onclick="selectAnswer('${item}')">${item}</div>`).join('')}
-                </div>
-            `;
-        }
-
-        // Additional Game Functions
-        function loadConditionalGame() {
-            const scenarios = [
-                { condition: 'Se piove', result: 'prendo l\'ombrello', wrong: ['vado al mare', 'gioco fuori', 'faccio picnic'] },
-                { condition: 'Se ho fame', result: 'mangio qualcosa', wrong: ['dormo', 'gioco', 'studio'] },
-                { condition: 'Se è buio', result: 'accendo la luce', wrong: ['esco senza giacca', 'vado a nuotare', 'innaffio i fiori'] },
-                { condition: 'Se fa freddo', result: 'metto la giacca', wrong: ['vado in spiaggia', 'mangio gelato', 'apro finestre'] }
-            ];
-            
-            const scenario = scenarios[Math.floor(Math.random() * scenarios.length)];
-            gameState.currentQuestion = { correct: scenario.result };
-            
-            const options = [scenario.result, ...scenario.wrong.slice(0, 3)].sort(() => Math.random() - 0.5);
-            
-            document.getElementById('gameContent').innerHTML = `
-                <div class="question">${scenario.condition}, allora...</div>
-                <div class="visual-area">
-                    <div style="font-size: 3rem;">🤔</div>
-                </div>
-                <div class="options">
-                    ${options.map(option => `<div class="option" onclick="selectAnswer('${option}')">${option}</div>`).join('')}
-                </div>
-            `;
-        }
-
-        function loadDebuggingGame() {
-            const algorithms = [
-                { 
-                    steps: ['Sveglia', 'Colazione', 'Scuola', 'Pranzo', 'Gioco'],
-                    wrong: 'Pranzo',
-                    correct: 'Vestirsi',
-                    position: 2
-                },
-                {
-                    steps: ['Accendi computer', 'Apri programma', 'Stampa', 'Spegni computer'],
-                    wrong: 'Stampa',
-                    correct: 'Scrivi documento',
-                    position: 2
-                },
-                {
-                    steps: ['Prendi ingredienti', 'Mescola', 'Inforna', 'Mangia'],
-                    wrong: 'Inforna',
-                    correct: 'Cuoci',
-                    position: 2
-                }
-            ];
-            
-            const algorithm = algorithms[Math.floor(Math.random() * algorithms.length)];
-            gameState.currentQuestion = { correct: algorithm.correct };
-            
-            document.getElementById('gameContent').innerHTML = `
-                <div class="question">C'è un errore nell'algoritmo! Cosa manca al posto di "${algorithm.wrong}"?</div>
-                <div class="visual-area">
-                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        ${algorithm.steps.map((step, index) => `
-                            <div style="padding: 0.8rem; background: ${step === algorithm.wrong ? '#FEE2E2' : '#F0F9FF'}; 
-                                 border-radius: 0.5rem; border: 2px solid ${step === algorithm.wrong ? '#DC2626' : '#3B82F6'};">
-                                ${index + 1}. ${step} ${step === algorithm.wrong ? '❌' : '✅'}
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                <div style="background: #FEF3C7; padding: 1rem; border-radius: 1rem; margin: 1rem 0; text-align: center;">
-                    <strong>🐛 Debug:</strong> Il passaggio in rosso è sbagliato!
-                </div>
-                <div class="options">
-                    ${[algorithm.correct, 'Dormi', 'Corri', 'Canta'].sort(() => Math.random() - 0.5).map(option => 
-                        `<div class="option" onclick="selectAnswer('${option}')">${option}</div>`
-                    ).join('')}
-                </div>
-            `;
-        }
-
-        function loadAlgorithmGame() {
-            const tasks = [
-                {
-                    task: 'Preparare uno zaino per la scuola',
-                    steps: ['Prendi lo zaino', 'Metti i libri', 'Metti l\'astuccio', 'Chiudi lo zaino'],
-                    wrongOrder: ['Chiudi lo zaino', 'Prendi lo zaino', 'Metti l\'astuccio', 'Metti i libri']
-                },
-                {
-                    task: 'Fare una torta',
-                    steps: ['Prendi ingredienti', 'Mescola', 'Versa in teglia', 'Inforna'],
-                    wrongOrder: ['Inforna', 'Versa in teglia', 'Prendi ingredienti', 'Mescola']
-                }
-            ];
-            
-            const task = tasks[Math.floor(Math.random() * tasks.length)];
-            gameState.currentQuestion = { correct: task.steps.join(',') };
-            
-            document.getElementById('gameContent').innerHTML = `
-                <div class="question">Ordina i passaggi per: ${task.task}</div>
-                <div class="visual-area">
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
-                        <div>
-                            <h4>❌ Ordine Sbagliato:</h4>
-                            ${task.wrongOrder.map((step, i) => `<div style="padding: 0.5rem; background: #FEE2E2; margin: 0.3rem 0; border-radius: 0.5rem;">${i+1}. ${step}</div>`).join('')}
-                        </div>
-                        <div>
-                            <h4>✅ Ordine Giusto:</h4>
-                            ${task.steps.map((step, i) => `<div style="padding: 0.5rem; background: #DCFCE7; margin: 0.3rem 0; border-radius: 0.5rem;">${i+1}. ${step}</div>`).join('')}
-                        </div>
-                    </div>
-                </div>
-                <div class="options">
-                    <div class="option" onclick="selectAnswer('Giusto')">L'ordine corretto è quello di destra ✅</div>
-                    <div class="option" onclick="selectAnswer('Sbagliato')">L'ordine corretto è quello di sinistra ❌</div>
-                </div>
-            `;
-            
-            gameState.currentQuestion = { correct: 'Giusto' };
-        }
-
-        function loadShapesGame() {
-            const shapes = [
-                { emoji: '🔴', name: 'cerchio', color: 'rosso' },
-                { emoji: '🔵', name: 'cerchio', color: 'blu' },
-                { emoji: '🔺', name: 'triangolo', color: 'rosso' },
-                { emoji: '🟦', name: 'quadrato', color: 'blu' },
-                { emoji: '🟨', name: 'quadrato', color: 'giallo' },
-                { emoji: '🟩', name: 'quadrato', color: 'verde' }
-            ];
-            
-            const targetShape = shapes[Math.floor(Math.random() * shapes.length)];
-            gameState.currentQuestion = { correct: targetShape.emoji };
-            
-            const otherShapes = shapes.filter(s => s.emoji !== targetShape.emoji).slice(0, 3);
-            const options = [targetShape, ...otherShapes].sort(() => Math.random() - 0.5);
-            
-            document.getElementById('gameContent').innerHTML = `
-                <div class="question">Trova il ${targetShape.name} ${targetShape.color}!</div>
-                <div class="visual-area">
-                    <div style="font-size: 4rem; margin: 1rem;">${targetShape.emoji}</div>
-                    <div style="font-size: 1.2rem; color: #374151;">Questo è un <strong>${targetShape.name} ${targetShape.color}</strong></div>
-                </div>
-                <div style="background: #F0FDF4; padding: 1rem; border-radius: 1rem; margin: 1rem 0; text-align: center;">
-                    <strong>👀 Osserva:</strong> Guarda la forma e il colore!
-                </div>
-                <div class="options" style="grid-template-columns: repeat(2, 1fr);">
-                    ${options.map(shape => 
-                        `<div class="option" onclick="selectAnswer('${shape.emoji}')" style="font-size: 2rem;">${shape.emoji}</div>`
-                    ).join('')}
-                </div>
-            `;
-        }
-
-        // Interactive Functions for Games
-
-        function toggleSlice(sliceElement) {
-            sliceElement.classList.toggle('filled');
-            updateFractionDisplay();
-        }
-
-        function updateFractionDisplay() {
-            const container = document.getElementById('pizzaContainer');
-            const filledSlices = container.querySelectorAll('.pizza-slice.filled').length;
-            const totalSlices = container.querySelectorAll('.pizza-slice').length;
-            
-            document.getElementById('selectedSlices').textContent = filledSlices;
-            document.getElementById('currentFraction').textContent = `${filledSlices}/${totalSlices}`;
-        }
-
-        function checkFractionAnswer() {
-            const filledSlices = document.querySelectorAll('.pizza-slice.filled').length;
-            const correctAnswer = filledSlices === gameState.currentQuestion.numerator;
-            
-            if (correctAnswer) {
-                showMessage('🎉 Perfetto! Hai selezionato la frazione corretta!', 'success');
-                gameState.score += 10;
-                setTimeout(() => nextQuestion(), 2000);
-            } else {
-                showMessage(`❌ Non è corretto. Devi selezionare ${gameState.currentQuestion.numerator} fette.`, 'error');
-            }
-        }
-
-        // Universal Answer Selection
-        function selectAnswer(selectedAnswer) {
-            const correct = gameState.currentQuestion.correct;
-            const isCorrect = selectedAnswer == correct || selectedAnswer === correct;
-            
-            // Visual feedback
-            const options = document.querySelectorAll('.option, .pattern-option, .sequence-option');
-            options.forEach(option => {
-                if (option.textContent.trim() === selectedAnswer.toString() || 
-                    option.onclick.toString().includes(selectedAnswer)) {
-                    option.classList.add(isCorrect ? 'correct' : 'wrong');
-                } else if (option.textContent.trim() === correct.toString() || 
-                          option.onclick.toString().includes(correct)) {
-                    option.classList.add('correct');
-                }
-                option.onclick = null; // Disable further clicks
+            const slices = document.querySelectorAll('.pizza-slice');
+            slices.forEach((slice, index) => {
+                const angle = (360 / denominator) * index;
+                slice.style.transform = `rotate(${angle}deg)`;
+                slice.style.clipPath = `polygon(0 0, 100% 0, ${50 + 50 * Math.cos((360/denominator) * Math.PI / 180)}% ${50 + 50 * Math.sin((360/denominator) * Math.PI / 180)}%)`;
             });
             
-            if (isCorrect) {
-                gameState.score += 10;
-                gameState.gameStats[gameState.currentClass].score += 10;
-                gameState.gameStats[gameState.currentClass].stars += 1;
-                showMessage('🎉 Risposta corretta! Ben fatto!', 'success');
-            } else {
-                showMessage(`❌ Risposta sbagliata. La risposta corretta era: ${correct}`, 'error');
+            document.getElementById('checkAnswerBtn').style.display = 'inline-block';
+        }
+
+        function toggleSlice(slice) {
+            slice.classList.toggle('filled');
+            const selectedCount = document.querySelectorAll('.pizza-slice.filled').length;
+            const totalSlices = document.querySelectorAll('.pizza-slice').length;
+            
+            document.getElementById('selectedSlices').textContent = selectedCount;
+            document.getElementById('currentFraction').textContent = `${selectedCount}/${totalSlices}`;
+        }
+
+        // Addition Game with visual support
+        function loadAdditionGame() {
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const num2 = Math.floor(Math.random() * (20 - num1)) + 1;
+            const sum = num1 + num2;
+            gameState.currentQuestion = { correct: sum };
+
+            const visual1 = '🟦'.repeat(num1);
+            const visual2 = '🟨'.repeat(num2);
+
+            const options = [sum, sum + 1, sum - 1, sum + 2]
+                .filter(n => n > 0)
+                .sort(() => Math.random() - 0.5);
+
+            document.getElementById('gameContent').innerHTML = `
+                <div class="question">Risolvi l'addizione visuale:</div>
+                <div class="visual-area">
+                    <div style="margin: 1rem 0;">
+                        <div><strong>${num1} pallini:</strong></div>
+                        <div>${visual1}</div>
+                    </div>
+                    <div style="font-size: 2rem; margin: 1rem;">➕</div>
+                    <div style="margin: 1rem 0;">
+                        <div><strong>${num2} pallini:</strong></div>
+                        <div>${visual2}</div>
+                    </div>
+                    <div style="font-size: 2rem; margin: 1rem;">🟰</div>
+                    <div><strong>Totale: ?</strong></div>
+                </div>
+                <div class="options">
+                    ${options.map(num => `<div class="option" onclick="selectAnswer(${num})">${num}</div>`).join('')}
+                </div>
+            `;
+        }
+
+        // Multiplication Game (Tabelline)
+        function loadMultiplicationGame() {
+            const tables = gameState.currentClass >= 3 ? [2, 3, 4, 5, 6, 7, 8, 9, 10] : [2, 5, 10];
+            const factor1 = tables[Math.floor(Math.random() * tables.length)];
+            const factor2 = Math.floor(Math.random() * 10) + 1;
+            const product = factor1 * factor2;
+            gameState.currentQuestion = { correct: product };
+
+            const options = [product, product + factor1, product - factor1, product + factor2]
+                .filter(n => n > 0)
+                .sort(() => Math.random() - 0.5);
+
+            document.getElementById('gameContent').innerHTML = `
+                <div class="question">Quanto fa ${factor1} × ${factor2}?</div>
+                <div class="visual-area">
+                    <div style="font-size: 2rem; margin: 2rem 0;">${factor1} × ${factor2} = ?</div>
+                    <div style="background: #EFF6FF; padding: 1rem; border-radius: 1rem;">
+                        <strong>💡 Ricorda:</strong> La tabellina del ${factor1}!
+                    </div>
+                </div>
+                <div class="options">
+                    ${options.map(num => `<div class="option" onclick="selectAnswer(${num})">${num}</div>`).join('')}
+                </div>
+            `;
+        }
+
+        // Default game loader for other games
+        function loadDefaultGame(gameId) {
+            document.getElementById('gameContent').innerHTML = `
+                <div class="question">Gioco: ${gameId}</div>
+                <div class="visual-area">
+                    <p>🚧 Questo gioco è in fase di sviluppo!</p>
+                    <p>Torna presto per nuove avventure di apprendimento!</p>
+                </div>
+                <div style="margin: 2rem 0;">
+                    <button class="nav-btn" onclick="goBackToClass()">🔙 Torna ai Giochi</button>
+                </div>
+            `;
+        }
+
+        // Answer Selection Functions
+        function selectAnswer(answer) {
+            if (gameState.currentGame === 'frazioni-visual') {
+                // For fractions game, answer is handled by checkAnswer
+                return;
             }
             
-            saveGameState();
-            updateStatsDisplay();
+            const isCorrect = answer == gameState.currentQuestion.correct;
+            gameState.totalQuestions++;
             
-            // Enable next button
-            document.getElementById('nextBtn').disabled = false;
+            if (isCorrect) {
+                gameState.correctAnswers++;
+                gameState.streakCount++;
+                addScore(10);
+                showFeedback('✅ Corretto! Ottimo lavoro!', 'success');
+            } else {
+                gameState.streakCount = 0;
+                showFeedback(`❌ Non è corretto. La risposta giusta era: ${gameState.currentQuestion.correct}`, 'error');
+            }
             
-            setTimeout(() => {
-                if (gameState.questionNumber < gameState.totalQuestions) {
-                    // Auto-advance after 2 seconds
-                    nextQuestion();
-                } else {
-                    endGame();
+            // Highlight correct/wrong answers
+            const options = document.querySelectorAll('.option, .pattern-option, .sequence-option');
+            options.forEach(option => {
+                if (option.textContent == gameState.currentQuestion.correct) {
+                    option.classList.add('correct');
+                } else if (option.textContent == answer && !isCorrect) {
+                    option.classList.add('wrong');
                 }
-            }, 2000);
+                option.style.pointerEvents = 'none';
+            });
+            
+            document.getElementById('nextQuestionBtn').style.display = 'inline-block';
+            document.getElementById('newGameBtn').style.display = 'inline-block';
+        }
+
+        function selectPatternAnswer(answer) {
+            selectAnswer(answer);
+        }
+
+        function checkAnswer() {
+            if (gameState.currentGame === 'frazioni-visual') {
+                const selectedSlices = document.querySelectorAll('.pizza-slice.filled').length;
+                const targetNumerator = gameState.currentQuestion.numerator;
+                
+                gameState.totalQuestions++;
+                
+                if (selectedSlices === targetNumerator) {
+                    gameState.correctAnswers++;
+                    gameState.streakCount++;
+                    addScore(15); // More points for interactive games
+                    showFeedback('🎉 Perfetto! Hai selezionato la frazione corretta!', 'success');
+                } else {
+                    gameState.streakCount = 0;
+                    showFeedback(`❌ Non è corretto. Dovevi selezionare ${targetNumerator} fette, ne hai selezionate ${selectedSlices}.`, 'error');
+                }
+                
+                document.getElementById('checkAnswerBtn').style.display = 'none';
+                document.getElementById('nextQuestionBtn').style.display = 'inline-block';
+                document.getElementById('newGameBtn').style.display = 'inline-block';
+                
+                // Disable further clicking
+                document.querySelectorAll('.pizza-slice').forEach(slice => {
+                    slice.style.pointerEvents = 'none';
+                });
+            }
         }
 
         function nextQuestion() {
-            if (gameState.questionNumber < gameState.totalQuestions) {
-                gameState.questionNumber++;
-                updateQuestionDisplay();
-                loadGame();
-                document.getElementById('nextBtn').disabled = true;
-            } else {
-                endGame();
+            loadGame(gameState.currentGame);
+        }
+
+        // Scoring System
+        function addScore(points) {
+            gameState.score += points;
+            
+            // Bonus for streak
+            if (gameState.streakCount >= 3) {
+                gameState.score += 5;
+                gameState.stars++;
+            }
+            
+            // Level up system
+            const newLevel = Math.floor(gameState.score / 100) + 1;
+            if (newLevel > gameState.level) {
+                gameState.level = newLevel;
+                gameState.stars += 2;
+                showMessage(`🎊 Congratulazioni! Hai raggiunto il Livello ${newLevel}!`, 'success');
+            }
+            
+            saveProgress();
+            updateStatsDisplay();
+        }
+
+        function saveProgress() {
+            localStorage.setItem('edutech-score', gameState.score.toString());
+            localStorage.setItem('edutech-stars', gameState.stars.toString());
+            localStorage.setItem('edutech-level', gameState.level.toString());
+        }
+
+        function updateStatsDisplay() {
+            document.getElementById('stars-count').textContent = gameState.stars;
+            document.getElementById('score-count').textContent = gameState.score;
+            document.getElementById('level-count').textContent = gameState.level;
+            
+            // Show stats bar if there are points
+            if (gameState.score > 0 || gameState.stars > 0) {
+                document.getElementById('stats-bar').style.display = 'flex';
             }
         }
 
-        function endGame() {
-            const finalScore = gameState.score;
-            const stars = Math.floor(finalScore / 30);
-            const percentage = Math.round((finalScore / (gameState.totalQuestions * 10)) * 100);
-            
-            gameState.gameStats[gameState.currentClass].gamesPlayed++;
-            saveGameState();
-            
-            let performanceMessage = '';
-            let emoji = '';
-            
-            if (percentage >= 90) {
-                performanceMessage = 'Eccellente! Sei un campione!';
-                emoji = '🏆';
-            } else if (percentage >= 70) {
-                performanceMessage = 'Molto bene! Continua così!';
-                emoji = '⭐';
-            } else if (percentage >= 50) {
-                performanceMessage = 'Bene! Puoi migliorare ancora!';
-                emoji = '👍';
-            } else {
-                performanceMessage = 'Continua a esercitarti!';
-                emoji = '💪';
+        function resetProgress() {
+            if (confirm('Sei sicuro di voler azzerare tutti i progressi?')) {
+                gameState.score = 0;
+                gameState.stars = 0;
+                gameState.level = 1;
+                saveProgress();
+                updateStatsDisplay();
+                document.getElementById('stats-bar').style.display = 'none';
+                showMessage('🔄 Progressi azzerati! Ricomincia il tuo viaggio!', 'info');
             }
-            
-            document.getElementById('gameContent').innerHTML = `
-                <div style="text-align: center; padding: 2rem;">
-                    <div style="font-size: 4rem; margin-bottom: 1rem;">${emoji}</div>
-                    <h2 style="color: #1F2937; margin-bottom: 1rem;">Gioco Completato!</h2>
-                    <div style="font-size: 1.3rem; margin-bottom: 2rem; color: #374151;">${performanceMessage}</div>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 2rem 0;">
-                        <div style="background: #FEF3C7; padding: 1rem; border-radius: 1rem;">
-                            <div style="font-size: 2rem;">🎯</div>
-                            <div>Punteggio</div>
-                            <div style="font-size: 1.5rem; font-weight: bold;">${finalScore}</div>
-                        </div>
-                        <div style="background: #DBEAFE; padding: 1rem; border-radius: 1rem;">
-                            <div style="font-size: 2rem;">⭐</div>
-                            <div>Stelle</div>
-                            <div style="font-size: 1.5rem; font-weight: bold;">${stars}</div>
-                        </div>
-                        <div style="background: #DCFCE7; padding: 1rem; border-radius: 1rem;">
-                            <div style="font-size: 2rem;">📊</div>
-                            <div>Precisione</div>
-                            <div style="font-size: 1.5rem; font-weight: bold;">${percentage}%</div>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem;">
-                        <button class="nav-btn" onclick="startGame(gameState.currentGame)">🔄 Gioca Ancora</button>
-                        <button class="nav-btn" onclick="goBackToClass()">🎮 Altri Giochi</button>
-                        <button class="nav-btn" onclick="goHome()">🏠 Home</button>
-                    </div>
+        }
+
+        // Feedback System
+        function showFeedback(message, type) {
+            const feedback = document.createElement('div');
+            feedback.className = `message ${type}`;
+            feedback.innerHTML = `
+                <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">${message}</div>
+                <div style="font-size: 0.9rem; color: #666;">
+                    Domande: ${gameState.totalQuestions} | Corrette: ${gameState.correctAnswers} | Serie: ${gameState.streakCount}
                 </div>
             `;
-        }
-
-        function showMessage(text, type = 'info') {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}`;
-            messageDiv.innerHTML = `
-                <div style="font-size: 1.1rem; margin-bottom: 0.5rem;">${text}</div>
-                <div style="font-size: 0.9rem; color: #6B7280;">Messaggio si chiuderà automaticamente...</div>
-            `;
             
-            document.body.appendChild(messageDiv);
+            document.body.appendChild(feedback);
             
             setTimeout(() => {
-                if (messageDiv.parentElement) {
-                    messageDiv.parentElement.removeChild(messageDiv);
+                if (feedback.parentNode) {
+                    feedback.parentNode.removeChild(feedback);
                 }
             }, 3000);
         }
 
-        function showClassStats() {
-            const classStats = gameState.gameStats[gameState.currentClass];
-            const className = classesConfig[gameState.currentClass].name;
+        function showMessage(message, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
             
-            showMessage(`
-                📊 <strong>${className}</strong><br>
-                🎯 Punti: ${classStats.score}<br>
-                ⭐ Stelle: ${classStats.stars}<br>
-                🎮 Giochi: ${classStats.gamesPlayed}
-            `, 'info');
-        }
-
-        // Enhanced PWA Features
-
-        // Keyboard Navigation Support
-        document.addEventListener('keydown', (e) => {
-            switch(e.key) {
-                case 'Escape':
-                    if (document.getElementById('game-screen').style.display !== 'none') {
-                        goBackToClass();
-                    } else if (document.getElementById('class-games').style.display !== 'none') {
-                        goHome();
-                    }
-                    break;
-                case 'Enter':
-                    const nextBtn = document.getElementById('nextBtn');
-                    if (nextBtn && !nextBtn.disabled) {
-                        nextQuestion();
-                    }
-                    break;
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                    if (document.getElementById('main-screen').style.display !== 'none') {
-                        enterClass(parseInt(e.key));
-                    }
-                    break;
-            }
-        });
-
-        // Touch and Gesture Support
-        let touchStartX = 0;
-        let touchStartY = 0;
-
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-        });
-
-        document.addEventListener('touchend', (e) => {
-            if (!touchStartX || !touchStartY) return;
-            
-            const touchEndX = e.changedTouches[0].clientX;
-            const touchEndY = e.changedTouches[0].clientY;
-            
-            const diffX = touchStartX - touchEndX;
-            const diffY = touchStartY - touchEndY;
-            
-            if (Math.abs(diffX) > Math.abs(diffY)) {
-                if (Math.abs(diffX) > 50) { // Minimum swipe distance
-                    if (diffX > 0) {
-                        // Swipe left - next question
-                        const nextBtn = document.getElementById('nextBtn');
-                        if (nextBtn && !nextBtn.disabled) {
-                            nextQuestion();
-                        }
-                    } else {
-                        // Swipe right - go back
-                        if (document.getElementById('game-screen').style.display !== 'none') {
-                            goBackToClass();
-                        }
-                    }
-                }
-            }
-            
-            touchStartX = 0;
-            touchStartY = 0;
-        });
-
-        // Performance Monitoring
-        function trackPerformance() {
-            if ('performance' in window) {
-                window.addEventListener('load', () => {
-                    setTimeout(() => {
-                        const perfData = performance.getEntriesByType('navigation')[0];
-                        console.log('📊 PWA Performance Metrics:', {
-                            loadTime: Math.round(perfData.loadEventEnd - perfData.loadEventStart),
-                            domReady: Math.round(perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart),
-                            firstPaint: Math.round(performance.getEntriesByType('paint')[0]?.startTime || 0)
-                        });
-                    }, 0);
-                });
-            }
-        }
-
-        // Screen Wake Lock (prevent screen from sleeping during games)
-        let wakeLock = null;
-
-        async function requestWakeLock() {
-            if ('wakeLock' in navigator) {
-                try {
-                    wakeLock = await navigator.wakeLock.request('screen');
-                    console.log('🔒 Screen wake lock active');
-                } catch (err) {
-                    console.log('⚠️ Wake lock not available:', err);
-                }
-            }
-        }
-
-        function releaseWakeLock() {
-            if (wakeLock) {
-                wakeLock.release();
-                wakeLock = null;
-                console.log('🔓 Screen wake lock released');
-            }
-        }
-
-        // Request wake lock when starting a game
-        const originalStartGame = startGame;
-        startGame = function(gameId) {
-            requestWakeLock();
-            return originalStartGame.call(this, gameId);
-        };
-
-        // Release wake lock when going home
-        const originalGoHome = goHome;
-        goHome = function() {
-            releaseWakeLock();
-            return originalGoHome.call(this);
-        };
-
-        // App Lifecycle Management
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                releaseWakeLock();
-                console.log('📱 App went to background');
-            } else {
-                if (document.getElementById('game-screen').style.display !== 'none') {
-                    requestWakeLock();
-                }
-                console.log('📱 App came to foreground');
-            }
-        });
-
-        // Initialize PWA on load
-        document.addEventListener('DOMContentLoaded', () => {
-            initializePWA();
-            trackPerformance();
-            
-            // Add loading indicator
-            const loadingDiv = document.createElement('div');
-            loadingDiv.innerHTML = '<div class="loading"></div><div style="margin-top: 1rem;">Caricamento EduTech Lab...</div>';
-            loadingDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background: rgba(255,255,255,0.95); padding: 2rem; border-radius: 1rem; z-index: 9999;';
-            document.body.appendChild(loadingDiv);
+            document.body.appendChild(messageDiv);
             
             setTimeout(() => {
-                loadingDiv.remove();
-                showMessage('🚀 EduTech Lab caricata con successo! Pronta per l\'uso offline.', 'success');
-            }, 1500);
+                if (messageDiv.parentNode) {
+                    messageDiv.parentNode.removeChild(messageDiv);
+                }
+            }, 3000);
+        }
+
+        // Service Worker Registration for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('data:application/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgZXZlbnQgPT4ge2NvbnNvbGUubG9nKCdTVyBpbnN0YWxsZWQnKTt9KTtzZWxmLmFkZEV2ZW50TGlzdGVuZXIoJ2FjdGl2YXRlJywgZXZlbnQgPT4ge2NvbnNvbGUubG9nKCdTVyBhY3RpdmF0ZWQnKTt9KTs=')
+                    .then(function(registration) {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(function(err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+
+        // Handle orientation changes for better responsive experience
+        window.addEventListener('orientationchange', function() {
+            setTimeout(() => {
+                deviceDetector.deviceInfo = deviceDetector.detectDevice();
+                deviceDetector.displayDeviceInfo();
+                deviceDetector.applyDeviceStyles();
+            }, 100);
         });
 
-        console.log('✅ EduTech Lab PWA - Tutte le funzioni caricate con successo!');
-    </script>
-
-    <!-- PWA Manifest and Service Worker Fallbacks -->
-    <script>
-        // Generate and inject manifest.json content
-        const manifestData = {
-            "name": "EduTech Lab - Pensiero Computazionale",
-            "short_name": "EduTech Lab",
-            "description": "Piattaforma PWA per lo sviluppo del pensiero computazionale nella Scuola Primaria",
-            "start_url": "./",
-            "display": "standalone",
-            "background_color": "#667eea",
-            "theme_color": "#667eea",
-            "orientation": "any",
-            "categories": ["education", "kids", "games"],
-            "lang": "it",
-            "scope": "./",
-            "icons": [
-                {
-                    "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzIiIGhlaWdodD0iNzIiIHZpZXdCb3g9IjAgMCA3MiA3MiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gPHJlY3Qgd2lkdGg9IjcyIiBoZWlnaHQ9IjcyIiByeD0iMTQiIGZpbGw9InVybCgjZ3JhZGllbnQwKSIvPiA8ZGVmcz4gPGxpbmVhckdyYWRpZW50IGlkPSJncmFkaWVudDAiIHgxPSIwIiB5MT0iMCIgeDI9IjcyIiB5Mj0iNzIiPiA8c3RvcCBzdG9wLWNvbG9yPSIjNjY3ZWVhIi8+IDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzc2NGJhMiIvPiA8L2xpbmVhckdyYWRpZW50PiA8L2RlZnM+IDx0ZXh0IHg9IjM2IiB5PSIzMCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkVUPC90ZXh0PiA8dGV4dCB4PSIzNiIgeT0iNDgiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI5IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TEFCPC90ZXh0PiA8L3N2Zz4=",
-                    "sizes": "72x72",
-                    "type": "image/svg+xml"
-                },
-                {
-                    "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+IDxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMzgiIGZpbGw9InVybCgjZ3JhZGllbnQwKSIvPiA8ZGVmcz4gPGxpbmVhckdyYWRpZW50IGlkPSJncmFkaWVudDAiIHgxPSIwIiB5MT0iMCIgeDI9IjE5MiIgeTI9IjE5MiI+IDxzdG9wIHN0b3AtY29sb3I9IiM2NjdlZWEiLz4gPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNzY0YmEyIi8+IDwvbGluZWFyR3JhZGllbnQ+IDwvZGVmcz4gPHRleHQgeD0iOTYiIHk9IjgwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDgiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+RVQ8L3RleHQ+IDx0ZXh0IHg9Ijk2IiB5PSIxMjAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkxBQjwvdGV4dD4gPC9zdmc+",
-                    "sizes": "192x192",
-                    "type": "image/svg+xml",
-                    "purpose": "any"
-                },
-                {
-                    "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+IDxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiByeD0iMTAyIiBmaWxsPSJ1cmwoI2dyYWRpZW50MCkiLz4gPGRlZnM+IDxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZGllbnQwIiB4MT0iMCIgeTE9IjAiIHgyPSI1MTIiIHkyPSI1MTIiPiA8c3RvcCBzdG9wLWNvbG9yPSIjNjY3ZWVhIi8+IDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzc2NGJhMiIvPiA8L2xpbmVhckdyYWRpZW50PiA8L2RlZnM+IDx0ZXh0IHg9IjI1NiIgeT0iMjEwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTI4IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkVUPC90ZXh0PiA8dGV4dCB4PSIyNTYiIHk9IjMyMCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TEFCPC90ZXh0PiA8Y2lyY2xlIGN4PSI0MTAiIGN5PSIxMDIiIHI9IjQxIiBmaWxsPSJ3aGl0ZSIgb3BhY2l0eT0iMC44Ii8+IDwvc3ZnPg==",
-                    "sizes": "512x512",
-                    "type": "image/svg+xml",
-                    "purpose": "any maskable"
-                }
-            ]
-        };
-
-        // Inject manifest as data URL
-        const manifestBlob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
-        const manifestURL = URL.createObjectURL(manifestBlob);
-        document.querySelector('link[rel="manifest"]').href = manifestURL;
+        // Handle window resize for dynamic device detection
+        window.addEventListener('resize', function() {
+            clearTimeout(this.resizeTimeout);
+            this.resizeTimeout = setTimeout(() => {
+                deviceDetector.deviceInfo = deviceDetector.detectDevice();
+                deviceDetector.displayDeviceInfo();
+                deviceDetector.applyDeviceStyles();
+            }, 150);
+        });
     </script>
 </body>
 </html>
