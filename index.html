@@ -1853,7 +1853,10 @@
         let autoplayFailed = false;
 
         function showVideoModal() {
-            if (!videoModalShown && !sessionStorage.getItem('videoModalShown')) {
+            // Non mostrare il video se c'è un aggiornamento da notificare
+            const hasUpdate = localStorage.getItem('siteVersion') !== SITE_VERSION && !sessionStorage.getItem('updateDismissed');
+            
+            if (!videoModalShown && !sessionStorage.getItem('videoModalShown') && !hasUpdate) {
                 const modal = document.getElementById('videoWelcomeModal');
                 const video = document.getElementById('welcomeVideo');
                 
@@ -2012,7 +2015,7 @@
         // ===============================
         
         // IMPORTANTE: Quando modifichi il sito, incrementa questo numero!
-        const SITE_VERSION = '1.1.0'; // <-- CAMBIA QUESTO QUANDO AGGIORNI IL SITO
+        const SITE_VERSION = '1.2.0'; // <-- CAMBIA QUESTO QUANDO AGGIORNI IL SITO
         
         // Controlla se c'è un aggiornamento disponibile
         function checkForUpdates() {
