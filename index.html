@@ -7,7 +7,7 @@
     <meta name="description" content="Formazione STEAM, Pensiero Computazionale, Coding e Robotica Educativa. Strumenti didattici innovativi per docenti e studenti.">
     <meta name="keywords" content="formazione docenti, STEAM, coding, robotica educativa, pensiero computazionale, intelligenza artificiale, PNRR">
     <meta name="author" content="Fabio Rizzotto">
-    <link rel="canonical" href="https://edutechlab.github.io/">
+    <link rel="canonical" href="https://edutechlab-ita.github.io/">
     <style>
         * {
             margin: 0;
@@ -845,9 +845,9 @@
             playsinline
             preload="auto"
         >
-            <!-- Prova prima con il tuo video -->
-            <source src="https://github.com/EduTechLab/EduTechLab.github.io/raw/main/video/EduTechLab-Presentazione.mp4" type="video/mp4">
-            <!-- Video di fallback per test (se il tuo non funziona) -->
+            <!-- Il tuo video aggiornato -->
+            <source src="https://edutechlab-ita.github.io/video/EduTechLab-Video-Presentazione.mp4" type="video/mp4">
+            <!-- Video di fallback -->
             <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
             <!-- Messaggio di fallback -->
             Il tuo browser non supporta il video HTML5.
@@ -893,11 +893,8 @@
             </div>
         </div>
         
-        <!-- Video Controls -->
+        <!-- Video Controls (solo play/pause, senza audio) -->
         <div class="video-controls">
-            <button class="video-control-btn" id="muteBtn" onclick="toggleMute()" title="Audio">
-                🔇
-            </button>
             <button class="video-control-btn" id="playBtn" onclick="togglePlay()" title="Play/Pause">
                 ⏸️
             </button>
@@ -1309,22 +1306,7 @@
             }
         });
 
-        // Video Controls
-        function toggleMute() {
-            const video = document.getElementById('heroVideo');
-            const muteBtn = document.getElementById('muteBtn');
-            
-            if (video.muted) {
-                video.muted = false;
-                muteBtn.textContent = '🔊';
-                muteBtn.title = 'Disattiva audio';
-            } else {
-                video.muted = true;
-                muteBtn.textContent = '🔇';
-                muteBtn.title = 'Attiva audio';
-            }
-        }
-
+        // Video Controls (solo play/pause, senza audio)
         function togglePlay() {
             const video = document.getElementById('heroVideo');
             const playBtn = document.getElementById('playBtn');
