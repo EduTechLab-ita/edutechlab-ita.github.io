@@ -134,6 +134,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
         .video-background {
@@ -144,6 +145,15 @@
             height: 100%;
             object-fit: cover;
             z-index: 1;
+            opacity: 1;
+        }
+
+        .video-background.loaded {
+            opacity: 1;
+        }
+
+        .video-background.error {
+            display: none;
         }
 
         .video-overlay {
@@ -154,9 +164,9 @@
             height: 100%;
             background: linear-gradient(
                 135deg, 
-                rgba(59, 130, 246, 0.3) 0%, 
-                rgba(139, 92, 246, 0.3) 50%,
-                rgba(59, 130, 246, 0.3) 100%
+                rgba(59, 130, 246, 0.2) 0%, 
+                rgba(139, 92, 246, 0.2) 50%,
+                rgba(59, 130, 246, 0.2) 100%
             );
             z-index: 2;
         }
@@ -833,10 +843,31 @@
             muted 
             loop 
             playsinline
-            poster="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiB2aWV3Qm94PSIwIDAgMTkyMCAxMDgwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSJ1cmwoI3BhaW50MF9saW5lYXJfMF8xKSIvPgo8Y2lyY2xlIGN4PSI5NjAiIGN5PSI1NDAiIHI9IjMwMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMSkiIHN0cm9rZS13aWR0aD0iMiIvPgo8Y2lyY2xlIGN4PSI5NjAiIGN5PSI1NDAiIHI9IjIwMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA4KSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMTUpIiBzdHJva2Utd2lkdGg9IjIiLz4KPHN2ZyB4PSI4NjAiIHk9IjQ0MCIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiBmaWxsPSJub25lIj4KPGNpcmNsZSBjeD0iMTAwIiBjeT0iMTAwIiByPSI5MCIgZmlsbD0icmdiYSg1OSwgMTMwLCAyNDYsIDAuNikiIHN0cm9rZT0icmdiYSgyNTUsIDI1NSwgMjU1LCAwLjQpIiBzdHJva2Utd2lkdGg9IjQiLz4KPHBvbHlnb24gcG9pbnRzPSI4MCw3MCA4MCwxMzAgMTQwLDEwMCIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cjx0ZXh0IHg9Ijk2MCIgeT0iNzAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjQ4IiBmb250LXdlaWdodD0iNjAwIj5FZHVUZWNoTGFiPC90ZXh0Pgo8dGV4dCB4PSI5NjAiIHk9Ijc1MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjgpIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjgiPklubm92YXppb25lIERpZGF0dGljYSBEaWdpdGFsZTwvdGV4dD4KPHR4dCB4PSI5NjAiIHk9IjgwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjcpIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjAiPkZhYmlvIFJpenpvdHRvIC0gRm9ybWF0b3JlIERvY2VudGk8L3RleHQ+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MF9saW5lYXJfMF8xIiB4MT0iMCIgeTE9IjAiIHgyPSIxOTIwIiB5Mj0iMTA4MCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjNjY3ZWVhIi8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzc2NGJhMiIvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPgo="
+            preload="auto"
         >
+            <!-- Prova prima con il tuo video -->
             <source src="https://github.com/EduTechLab/EduTechLab.github.io/raw/main/video/EduTechLab-Presentazione.mp4" type="video/mp4">
+            <!-- Video di fallback per test (se il tuo non funziona) -->
+            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+            <!-- Messaggio di fallback -->
+            Il tuo browser non supporta il video HTML5.
         </video>
+        
+        <!-- Loading indicator per il video -->
+        <div id="videoLoading" style="
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            color: white;
+            background: rgba(0,0,0,0.7);
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+        ">
+            🎬 Caricamento video...
+        </div>
         
         <!-- Video Overlay -->
         <div class="video-overlay"></div>
@@ -1346,12 +1377,46 @@
             }
         });
 
-        // Video Error Handling
-        document.getElementById('heroVideo').addEventListener('error', function() {
-            console.log('Video failed to load, falling back to gradient background');
-            this.style.display = 'none';
-            document.querySelector('.hero').style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        // Video Error Handling and Loading
+        const video = document.getElementById('heroVideo');
+        const videoLoading = document.getElementById('videoLoading');
+        
+        video.addEventListener('loadstart', function() {
+            console.log('Video loading started...');
+            videoLoading.style.display = 'block';
         });
+        
+        video.addEventListener('canplay', function() {
+            console.log('Video can start playing');
+            this.classList.add('loaded');
+            videoLoading.style.display = 'none';
+        });
+        
+        video.addEventListener('loadeddata', function() {
+            console.log('Video data loaded');
+            videoLoading.style.display = 'none';
+        });
+        
+        video.addEventListener('error', function(e) {
+            console.log('Video failed to load:', e);
+            console.log('Error details:', this.error);
+            this.classList.add('error');
+            videoLoading.innerHTML = '⚠️ Video non disponibile - modalità background attiva';
+            setTimeout(() => {
+                videoLoading.style.display = 'none';
+            }, 3000);
+        });
+
+        // Prova a forzare il caricamento del video
+        video.load();
+        
+        // Timeout di sicurezza per nascondere il loading
+        setTimeout(() => {
+            if (videoLoading.style.display !== 'none') {
+                videoLoading.style.display = 'none';
+                console.log('Video loading timeout - hiding loader');
+            }
+        }, 10000);
 
         // Smooth Scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
