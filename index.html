@@ -8,6 +8,16 @@
     <meta name="keywords" content="formazione docenti, STEAM, coding, robotica educativa, pensiero computazionale, intelligenza artificiale, PNRR">
     <meta name="author" content="Fabio Rizzotto">
     <link rel="canonical" href="https://edutechlab-ita.github.io/">
+    
+    <!-- PWA Configuration -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e293b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="EduTechLab">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
     <style>
         * {
             margin: 0;
@@ -273,6 +283,69 @@
         }
 
         /* Video controls rimossi - Vimeo gestisce tutto automaticamente */
+
+        /* Update Notification Banner */
+        .update-notification {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(135deg, #059669, #0891b2);
+            color: white;
+            padding: 1rem;
+            z-index: 10001;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .update-notification.show {
+            transform: translateY(0);
+        }
+
+        .update-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 1rem;
+        }
+
+        .update-text {
+            font-weight: 500;
+        }
+
+        .update-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .update-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .update-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .update-btn.primary {
+            background: rgba(255, 255, 255, 0.9);
+            color: #059669;
+        }
+
+        .update-btn.primary:hover {
+            background: white;
+        }
 
         /* About Section */
         .about {
@@ -749,6 +822,21 @@
             .modal-body {
                 padding: 1.5rem;
             }
+
+            .update-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .update-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .update-btn {
+                width: 100%;
+            }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -771,6 +859,19 @@
     </style>
 </head>
 <body>
+    <!-- Update Notification Banner -->
+    <div class="update-notification" id="updateNotification">
+        <div class="update-content">
+            <div class="update-text">
+                🚀 Nuova versione disponibile! Aggiorna per le ultime funzionalità e miglioramenti.
+            </div>
+            <div class="update-buttons">
+                <button class="update-btn primary" onclick="updateSite()">Aggiorna Ora</button>
+                <button class="update-btn" onclick="dismissUpdate()">Più Tardi</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Cookie Banner -->
     <div class="cookie-banner" id="cookieBanner">
         <div class="cookie-content">
@@ -1282,6 +1383,72 @@
         // Vimeo Background Video - gestione automatica
         console.log('Video Vimeo caricato come background');
 
+        // ===============================
+        // SISTEMA DI NOTIFICA AGGIORNAMENTI
+        // ===============================
+        
+        // IMPORTANTE: Quando modifichi il sito, incrementa questo numero!
+        const SITE_VERSION = '2.1.0'; // <-- CAMBIA QUESTO QUANDO AGGIORNI IL SITO
+        
+        // Controlla se c'è un aggiornamento disponibile
+        function checkForUpdates() {
+            const lastVersion = localStorage.getItem('siteVersion');
+            const updateDismissed = sessionStorage.getItem('updateDismissed');
+            
+            // Se è la prima visita o c'è una nuova versione e non è stata dismessa
+            if (lastVersion !== SITE_VERSION && !updateDismissed) {
+                // Se non è la prima visita (c'era una versione precedente)
+                if (lastVersion) {
+                    showUpdateNotification();
+                } else {
+                    // Prima visita, salva la versione corrente
+                    localStorage.setItem('siteVersion', SITE_VERSION);
+                }
+            }
+        }
+
+        // Mostra la notifica di aggiornamento
+        function showUpdateNotification() {
+            const notification = document.getElementById('updateNotification');
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 2000); // Appare dopo 2 secondi
+        }
+
+        // Aggiorna il sito (ricarica la pagina)
+        function updateSite() {
+            localStorage.setItem('siteVersion', SITE_VERSION);
+            sessionStorage.removeItem('updateDismissed');
+            
+            // Forza il ricaricamento senza cache
+            window.location.reload(true);
+        }
+
+        // Nascondi la notifica per questa sessione
+        function dismissUpdate() {
+            const notification = document.getElementById('updateNotification');
+            notification.classList.remove('show');
+            sessionStorage.setItem('updateDismissed', 'true');
+            
+            // Aggiorna comunque la versione in background
+            setTimeout(() => {
+                localStorage.setItem('siteVersion', SITE_VERSION);
+            }, 1000);
+        }
+
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then((registration) => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch((registrationError) => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+
         // Smooth Scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -1323,6 +1490,9 @@
 
         // Initialize animations on load
         window.addEventListener('load', function() {
+            // Avvia il controllo aggiornamenti
+            checkForUpdates();
+            
             setTimeout(() => {
                 document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach((el, index) => {
                     setTimeout(() => {
