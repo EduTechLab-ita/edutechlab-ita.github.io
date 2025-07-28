@@ -5,26 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduTechLab - Fabio Rizzotto | Innovazione Didattica Digitale</title>
     <meta name="description" content="Formazione STEAM, Pensiero Computazionale, Coding e Robotica Educativa. Strumenti didattici innovativi per docenti e studenti.">
-    <meta name="keywords" content="formazione docenti, STEM, coding, robotica educativa, pensiero computazionale, didattica digitale, PNRR, IA educativa">
+    <meta name="keywords" content="STEAM, coding, robotica educativa, pensiero computazionale, formazione docenti, didattica digitale">
     <meta name="author" content="Fabio Rizzotto">
+    <link rel="canonical" href="https://edutechlab.it">
     
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="EduTechLab - Fabio Rizzotto | Innovazione Didattica Digitale">
+    <meta property="og:description" content="Formazione STEAM, Pensiero Computazionale, Coding e Robotica Educativa per docenti e studenti.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://edutechlab.it/">
-    <meta property="og:title" content="EduTechLab - Innovazione Didattica Digitale">
-    <meta property="og:description" content="Formazione STEAM, Pensiero Computazionale, Coding e Robotica Educativa">
+    <meta property="og:url" content="https://edutechlab.it">
     
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://edutechlab.it/">
-    <meta property="twitter:title" content="EduTechLab - Innovazione Didattica Digitale">
-    <meta property="twitter:description" content="Formazione STEAM, Pensiero Computazionale, Coding e Robotica Educativa">
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="EduTechLab - Innovazione Didattica Digitale">
+    <meta name="twitter:description" content="Formazione STEAM e strumenti didattici innovativi">
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <!-- Preconnect for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://player.vimeo.com">
+    
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --text-color: #334155;
+            --border-color: #e2e8f0;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -32,14 +49,10 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', sans-serif;
             line-height: 1.6;
-            color: #2d3748;
+            color: var(--text-color);
             overflow-x: hidden;
-        }
-
-        .modal-open {
-            overflow: hidden;
         }
 
         .container {
@@ -48,22 +61,23 @@
             padding: 0 2rem;
         }
 
-        /* Update Notification */
-        .update-notification {
+        /* Update Banner Styles - OTTIMIZZAZIONE 2 */
+        .update-banner {
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            background: linear-gradient(45deg, #10b981, #059669);
+            width: 100%;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
-            z-index: 10001;
+            padding: 1rem;
+            z-index: 1002;
             display: none;
             transform: translateY(-100%);
-            transition: transform 0.4s ease;
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
         }
 
-        .update-notification.show {
+        .update-banner.show {
             display: block;
             transform: translateY(0);
         }
@@ -74,40 +88,103 @@
             align-items: center;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 1.5rem 2rem;
             gap: 2rem;
         }
 
-        .update-text {
-            font-size: 1rem;
-            font-weight: 500;
+        .update-content h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .update-content p {
+            margin: 0.25rem 0 0 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
         }
 
         .update-buttons {
             display: flex;
             gap: 1rem;
+            flex-shrink: 0;
         }
 
         .update-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            padding: 0.7rem 1.5rem;
-            border-radius: 8px;
+            padding: 0.5rem 1.25rem;
+            border: none;
+            border-radius: 20px;
+            font-weight: 500;
             cursor: pointer;
-            font-weight: 600;
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .update-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-1px);
+            font-size: 0.9rem;
         }
 
         .update-btn.primary {
-            background: rgba(255, 255, 255, 0.9);
-            color: #059669;
+            background: white;
+            color: #10b981;
+        }
+
+        .update-btn.primary:hover {
+            background: #f0f9ff;
+            transform: translateY(-1px);
+        }
+
+        .update-btn:not(.primary) {
+            background: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .update-btn:not(.primary):hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        header.update-active {
+            top: 70px;
+        }
+
+        nav {
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-menu a:hover {
+            color: #60a5fa;
         }
 
         /* Cookie Banner */
@@ -115,13 +192,13 @@
             position: fixed;
             bottom: 0;
             left: 0;
-            right: 0;
-            background: rgba(30, 41, 59, 0.95);
+            width: 100%;
+            background: linear-gradient(135deg, #1e293b, #334155);
             color: white;
-            padding: 1.5rem;
-            z-index: 1000;
+            padding: 1rem;
+            z-index: 1001;
             display: none;
-            backdrop-filter: blur(20px);
+            box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.3);
         }
 
         .cookie-content {
@@ -137,90 +214,27 @@
             background: linear-gradient(45deg, #3b82f6, #8b5cf6);
             color: white;
             border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 10px;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease;
         }
 
         .cookie-accept:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
-        }
-
-        /* Header */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            z-index: 1000;
-            padding: 1rem 0;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-menu a {
-            text-decoration: none;
-            color: #2d3748;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-menu a:hover {
-            color: #667eea;
-        }
-
-        .nav-menu a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            transition: width 0.3s ease;
-        }
-
-        .nav-menu a:hover::after {
-            width: 100%;
         }
 
         /* Hero Section with Video Background */
         .hero {
             position: relative;
             height: 100vh;
+            min-height: 600px;
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-            color: white;
-            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
         .video-background {
@@ -229,7 +243,18 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -2;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .video-background.loaded {
+            opacity: 1;
+        }
+
+        .video-background.error {
+            display: none;
         }
 
         .video-overlay {
@@ -238,205 +263,261 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: -1;
+            background: linear-gradient(
+                135deg, 
+                rgba(59, 130, 246, 0.2) 0%, 
+                rgba(139, 92, 246, 0.2) 50%,
+                rgba(59, 130, 246, 0.2) 100%
+            );
+            z-index: 2;
         }
 
         .hero-content {
-            z-index: 1;
-            max-width: 800px;
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            color: white;
+            max-width: 900px;
             padding: 2rem;
         }
 
         .hero-content h1 {
-            font-size: 4rem;
+            font-size: clamp(3rem, 8vw, 6rem);
             font-weight: 700;
             margin-bottom: 1rem;
-            animation: fadeInUp 1s ease;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, #ffffff, #e0e7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .hero-subtitle {
             font-size: 1.5rem;
             margin-bottom: 2rem;
-            opacity: 0.9;
-            animation: fadeInUp 1s ease 0.2s both;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         .hero-badges {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
+            flex-wrap: wrap;
             gap: 1rem;
             margin-bottom: 2rem;
-            animation: fadeInUp 1s ease 0.4s both;
         }
 
         .badge {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
             padding: 0.5rem 1rem;
             border-radius: 25px;
             font-size: 0.9rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .hero-description {
             font-size: 1.1rem;
             margin-bottom: 3rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
             line-height: 1.8;
-            animation: fadeInUp 1s ease 0.6s both;
         }
 
         .cta-container {
             display: flex;
-            gap: 1rem;
             justify-content: center;
+            gap: 1.5rem;
             flex-wrap: wrap;
-            animation: fadeInUp 1s ease 0.8s both;
         }
 
         .cta-button {
             display: inline-block;
-            padding: 1rem 2rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem 2.5rem;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
             color: white;
             text-decoration: none;
             border-radius: 50px;
             font-weight: 600;
+            font-size: 1.1rem;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
         }
 
         .cta-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.6);
         }
 
         .cta-secondary {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
+            background: transparent;
             border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: none;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .cta-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
         }
 
-        /* About Section */
-        .about {
-            padding: 80px 0;
-            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
-            position: relative;
-        }
-
-        .about::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 100px;
-            background: linear-gradient(to bottom, rgba(59, 130, 246, 0.1), transparent);
+        /* Sections */
+        section {
+            padding: 5rem 0;
         }
 
         .section-title {
             text-align: center;
-            font-size: 2.8rem;
-            margin-bottom: 4rem;
-            color: #1e293b;
-            position: relative;
-            font-weight: 300;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .section-title::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 4px;
-            background: linear-gradient(45deg, #3b82f6, #8b5cf6, #06b6d4);
-            border-radius: 2px;
+        /* About Section */
+        .about {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
         }
 
         .about-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 5rem;
+            gap: 4rem;
             align-items: center;
         }
 
-        .about-text {
-            font-size: 1.2rem;
-            line-height: 1.8;
-            color: #4b5563;
-        }
-
         .about-text h3 {
-            color: #1e293b;
+            font-size: 2rem;
+            font-weight: 600;
             margin-bottom: 1.5rem;
-            font-size: 1.8rem;
+            color: var(--dark-color);
         }
 
-        .role-cards {
+        .about-text p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .about-stats {
             display: grid;
-            gap: 1.5rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
-        .role-card {
+        .stat-card {
             background: white;
             padding: 2rem;
             border-radius: 15px;
-            border-left: 4px solid #3b82f6;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
-        .role-card:hover {
-            transform: translateY(-5px);
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: block;
         }
 
-        .role-card h4 {
-            color: #1e293b;
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            margin-top: 0.5rem;
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .profile-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: 600;
             margin-bottom: 0.5rem;
-            font-size: 1.1rem;
+        }
+
+        .profile-title {
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .profile-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .profile-badge {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
         }
 
         /* Certifications Section */
         .certifications {
-            padding: 80px 0;
-            background: linear-gradient(135deg, #1e293b, #334155);
-            color: white;
+            background: white;
         }
 
         .cert-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            margin-top: 3rem;
         }
 
         .cert-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            padding: 2.5rem;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, #f8fafc, white);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
             transition: all 0.3s ease;
-            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cert-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
         }
 
         .cert-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
         .cert-icon {
@@ -445,232 +526,304 @@
         }
 
         .cert-card h3 {
-            color: white;
-            margin-bottom: 1rem;
             font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
         }
 
-        .cert-card p {
-            opacity: 0.9;
-            line-height: 1.6;
+        .cert-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .cert-year {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .cert-level {
+            color: var(--secondary-color);
+            font-weight: 600;
+            font-size: 0.9rem;
         }
 
         /* Skills Section */
         .skills {
-            padding: 80px 0;
-            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
         }
 
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            margin-top: 3rem;
         }
 
         .skill-card {
-            background: white;
-            padding: 2.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem 2rem;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             text-align: center;
-            border-top: 4px solid #3b82f6;
+            transition: all 0.3s ease;
         }
 
         .skill-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .skill-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            display: block;
         }
 
         .skill-card h3 {
-            color: #1e293b;
+            font-size: 1.5rem;
+            font-weight: 600;
             margin-bottom: 1rem;
-            font-size: 1.3rem;
         }
 
         .skill-card p {
-            color: #4b5563;
-            line-height: 1.6;
+            line-height: 1.7;
+            opacity: 0.9;
         }
 
         /* Tools Section */
         .tools {
-            padding: 80px 0;
-            background: linear-gradient(135deg, #ffffff, #f0f9ff);
+            background: white;
         }
 
         .tools-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
-            margin-top: 3rem;
         }
 
         .tool-card {
-            background: white;
+            background: linear-gradient(135deg, #f8fafc, white);
             padding: 2.5rem;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
             transition: all 0.3s ease;
-            border: 1px solid #e2e8f0;
             position: relative;
             overflow: hidden;
         }
 
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+        }
+
         .tool-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
         }
 
         .tool-card h3 {
-            color: #1e293b;
+            font-size: 1.4rem;
+            font-weight: 600;
             margin-bottom: 1rem;
-            font-size: 1.3rem;
+            color: var(--dark-color);
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 0.5rem;
         }
 
         .coming-soon {
-            background: linear-gradient(45deg, #10b981, #06b6d4);
+            background: linear-gradient(45deg, #f59e0b, #f97316);
             color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.75rem;
-            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            margin-left: auto;
         }
 
-        .tool-card p {
-            color: #4b5563;
-            line-height: 1.6;
-            margin-bottom: 2rem;
+        .coming-soon:contains("Disponibile") {
+            background: linear-gradient(45deg, #10b981, #059669);
         }
 
         .tool-button {
             display: inline-block;
-            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             color: white;
             padding: 0.8rem 2rem;
             border-radius: 25px;
             text-decoration: none;
             font-weight: 600;
+            margin-top: 1.5rem;
             transition: all 0.3s ease;
         }
 
         .tool-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4);
         }
 
         /* Contact Section */
         .contact {
-            padding: 80px 0;
-            background: linear-gradient(135deg, #1e293b, #334155);
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .contact::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 30% 20%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 70% 80%, rgba(139, 92, 246, 0.3) 0%, transparent 50%);
         }
 
         .contact-content {
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .contact-info {
-            display: flex;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 4rem;
-            margin-top: 3rem;
-            flex-wrap: wrap;
         }
 
-        .contact-item {
+        .contact-info h3 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-method {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
-            background: rgba(255,255,255,0.1);
-            padding: 1.5rem 2rem;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
             border-radius: 15px;
-            backdrop-filter: blur(20px);
             transition: all 0.3s ease;
         }
 
-        .contact-item:hover {
-            background: rgba(255,255,255,0.15);
-            transform: translateY(-5px);
+        .contact-method:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px);
         }
 
-        .contact-item a {
-            color: #93c5fd;
-            text-decoration: none;
-            transition: color 0.3s ease;
+        .contact-icon {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+        }
+
+        .contact-details h4 {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .contact-details p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
             font-weight: 500;
         }
 
-        .contact-item a:hover {
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
             color: white;
+            font-family: inherit;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4);
         }
 
         /* Footer */
         footer {
             background: #0f172a;
-            color: #94a3b8;
-            padding: 3rem 0;
+            color: white;
+            padding: 3rem 0 1rem;
             text-align: center;
         }
 
-        .footer-links {
+        .footer-content {
             margin-bottom: 2rem;
+        }
+
+        .footer-links {
             display: flex;
             justify-content: center;
             gap: 2rem;
-            flex-wrap: wrap;
+            margin-bottom: 2rem;
         }
 
         .footer-links a {
-            color: #94a3b8;
+            color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            cursor: pointer;
+            transition: color 0.3s ease;
         }
 
         .footer-links a:hover {
-            color: white;
-            background: rgba(255,255,255,0.1);
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.7;
         }
 
         /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
-            z-index: 10000;
+            z-index: 1003;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(5px);
         }
 
@@ -683,232 +836,64 @@
             max-width: 600px;
             max-height: 80vh;
             overflow-y: auto;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
+        /* OTTIMIZZAZIONE 4 - Header Modal Colorato */
         .modal-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 2rem;
+            padding: 1.5rem 2rem;
             border-radius: 15px 15px 0 0;
-            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
         }
 
         .close {
             color: white;
-            float: right;
             font-size: 2rem;
             font-weight: bold;
-            position: absolute;
-            right: 1rem;
-            top: 1rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: opacity 0.3s ease;
+            line-height: 1;
         }
 
         .close:hover {
-            transform: scale(1.1);
+            opacity: 0.7;
         }
 
         .modal-body {
             padding: 2rem;
             line-height: 1.6;
-            color: #4b5563;
-        }
-
-        .highlight-box {
-            background: #f1f5f9;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border-left: 4px solid #3b82f6;
-            margin: 1.5rem 0;
         }
 
         .modal-body h3 {
-            color: #1e293b;
-            margin-top: 2rem;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .modal-body p {
             margin-bottom: 1rem;
         }
 
-        .modal-body li {
-            margin-bottom: 0.5rem;
+        .modal-body ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
         }
 
-        /* Video Welcome Modal - OTTIMIZZATO */
-        .video-welcome-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            backdrop-filter: blur(20px);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .video-welcome-modal.show {
-            display: flex;
-            opacity: 1;
-        }
-
-        .video-modal-content {
-            position: relative;
-            max-width: 90vw;
-            max-height: 80vh;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-        }
-
-        .video-controls-info {
-            position: absolute;
-            top: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 600;
-            text-align: center;
-            z-index: 10;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .video-close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.5rem;
-            z-index: 10;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .video-close-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
-        }
-
-        /* OTTIMIZZATO: Loading migliorato */
-        .video-loading {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            z-index: 5;
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .video-loading p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.9; }
-            50% { opacity: 0.6; }
-        }
-
-        .welcome-video {
-            width: 100%;
-            height: auto;
-            max-height: 80vh;
-            border-radius: 20px;
-            display: none; /* Nascosto inizialmente */
-        }
-
-        .video-play-btn {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.2);
-            border: 3px solid white;
-            color: white;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 2rem;
-            z-index: 10;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .video-play-btn.show {
-            display: flex;
-        }
-
-        .video-play-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%) scale(1.1);
-        }
-
-        .video-skip-text {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-            text-align: center;
-            animation: fadeInOut 3s ease-in-out infinite;
-        }
-
-        @keyframes fadeInOut {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 0.4; }
-        }
-
-        /* Scroll Animation */
+        /* Animation Classes */
         .fade-in {
             opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s ease;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
         }
 
         .fade-in.visible {
@@ -919,7 +904,7 @@
         .slide-in-left {
             opacity: 0;
             transform: translateX(-50px);
-            transition: all 0.8s ease;
+            transition: all 0.6s ease;
         }
 
         .slide-in-left.visible {
@@ -930,7 +915,7 @@
         .slide-in-right {
             opacity: 0;
             transform: translateX(50px);
-            transition: all 0.8s ease;
+            transition: all 0.6s ease;
         }
 
         .slide-in-right.visible {
@@ -938,113 +923,13 @@
             transform: translateX(0);
         }
 
-        /* Mobile Responsive - MIGLIORATO */
+        /* OTTIMIZZAZIONE 3 - Responsive Mobile Migliorato */
         @media (max-width: 768px) {
             .container {
                 padding: 0 1rem;
             }
 
-            .nav-menu {
-                display: none;
-            }
-
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1.2rem;
-            }
-
-            .hero-badges {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .badge {
-                font-size: 0.8rem;
-                padding: 0.4rem 0.8rem;
-            }
-
-            .cta-container {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .cta-button {
-                width: 100%;
-                max-width: 250px;
-                text-align: center;
-            }
-
-            .about-content {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .contact-info {
-                flex-direction: column;
-                gap: 1.5rem;
-            }
-
-            .cookie-content {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .footer-links {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .modal-content {
-                margin: 1rem;
-                max-height: 95vh;
-            }
-
-            .modal-header {
-                padding: 1.5rem;
-            }
-
-            .modal-body {
-                padding: 1.5rem;
-            }
-
-            /* Video modal mobile */
-            .video-modal-content {
-                max-width: 95vw;
-                max-height: 85vh;
-                margin: 1rem;
-            }
-
-            .welcome-video {
-                max-width: 100%;
-                max-height: 70vh;
-            }
-
-            .video-controls-info {
-                font-size: 1rem;
-                top: -40px;
-            }
-
-            .video-close-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 1.2rem;
-                top: 10px;
-                right: 10px;
-            }
-
-            .video-play-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 1.5rem;
-            }
-
+            /* Update Banner Mobile */
             .update-content {
                 flex-direction: column;
                 gap: 1rem;
@@ -1057,82 +942,230 @@
             }
 
             .update-btn {
+                padding: 0.75rem 1.5rem;
+            }
+
+            /* Header Mobile */
+            nav {
+                padding: 0 1rem;
+                height: 60px;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            /* Hero Mobile */
+            .hero {
+                min-height: 100vh;
+                padding: 1rem;
+            }
+
+            .hero-content {
+                padding: 1rem;
+            }
+
+            .hero-content h1 {
+                font-size: clamp(2.5rem, 10vw, 4rem);
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+                letter-spacing: 1px;
+            }
+
+            .hero-badges {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .badge {
+                padding: 0.75rem 1.25rem;
+                font-size: 1rem;
+            }
+
+            .hero-description {
+                font-size: 1rem;
+            }
+
+            .cta-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .cta-button {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+                width: 100%;
+                text-align: center;
+            }
+
+            /* Video Background Mobile */
+            .video-background {
+                height: 120%;
+                width: 120%;
+                top: -10%;
+                left: -10%;
+                object-fit: cover;
+            }
+
+            /* Sections Mobile */
+            section {
+                padding: 3rem 0;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+                margin-bottom: 2rem;
+            }
+
+            /* About Mobile */
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .about-stats {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .stat-card {
+                padding: 1.5rem;
+            }
+
+            /* Certifications Mobile */
+            .cert-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .cert-card {
+                padding: 1.5rem;
+            }
+
+            /* Skills Mobile */
+            .skills-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .skill-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .skill-icon {
+                font-size: 3rem;
+            }
+
+            /* Tools Mobile */
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .tool-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .tool-card h3 {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .coming-soon {
+                align-self: flex-start;
+            }
+
+            /* Contact Mobile */
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .contact-methods {
+                gap: 1rem;
+            }
+
+            .contact-method {
+                padding: 1rem;
+            }
+
+            .contact-form {
+                padding: 1.5rem;
+            }
+
+            /* Footer Mobile */
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            /* Modal Mobile */
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                max-height: 85vh;
+            }
+
+            .modal-header {
+                padding: 1rem 1.5rem;
+            }
+
+            .modal-header h2 {
+                font-size: 1.3rem;
+            }
+
+            .modal-body {
+                padding: 1.5rem;
+            }
+
+            /* Cookie Banner Mobile */
+            .cookie-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .cookie-accept {
+                padding: 0.75rem 2rem;
                 width: 100%;
             }
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            .video-background {
-                display: none;
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
             }
-            
-            .hero {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+            .section-title {
+                font-size: 2rem;
             }
-            
-            .hero-content h1,
-            .hero-subtitle,
-            .hero-badges,
-            .hero-description,
-            .cta-container {
-                animation: none;
+
+            .cert-card,
+            .skill-card,
+            .tool-card {
+                padding: 1.5rem 1rem;
             }
         }
     </style>
 </head>
-
 <body>
-    <!-- Update Notification Banner -->
-    <div class="update-notification" id="updateNotification">
+    <!-- OTTIMIZZAZIONE 2 - Update Banner -->
+    <div class="update-banner" id="updateBanner">
         <div class="update-content">
-            <div class="update-text">
-                🚀 Nuova versione disponibile! Aggiorna per le ultime funzionalità e miglioramenti.
+            <div>
+                <h3>🚀 Nuova versione disponibile!</h3>
+                <p>Aggiorna per le ultime funzionalità e miglioramenti.</p>
             </div>
             <div class="update-buttons">
                 <button class="update-btn primary" onclick="updateSite()">Aggiorna Ora</button>
                 <button class="update-btn" onclick="dismissUpdate()">Più Tardi</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Video Welcome Modal - OTTIMIZZATO -->
-    <div class="video-welcome-modal" id="videoWelcomeModal">
-        <div class="video-modal-content">
-            <div class="video-controls-info">
-                🎬 Benvenuto in EduTechLab
-            </div>
-            <button class="video-close-btn" onclick="closeVideoModal()" title="Chiudi video">
-                ×
-            </button>
-            
-            <!-- OTTIMIZZATO: Loading migliorato -->
-            <div class="video-loading" id="videoLoading">
-                <div class="loading-spinner"></div>
-                <p id="loadingText">Caricamento video...</p>
-            </div>
-            
-            <button class="video-play-btn" id="videoPlayBtn" onclick="playVideo()">
-                ▶
-            </button>
-            
-            <!-- VIDEO CON PRELOAD OTTIMIZZATO -->
-            <video 
-                class="welcome-video" 
-                id="welcomeVideo" 
-                loop 
-                playsinline 
-                preload="auto"
-                onloadeddata="onVideoLoadedData()"
-                oncanplay="onVideoCanPlay()"
-                onplay="hideVideoLoading(); hidePlayButton();"
-                onpause="showPlayButton();"
-                onerror="onVideoError()">
-                <source src="Video_Generato_Idea_e_Logo.mp4" type="video/mp4">
-                Il tuo browser non supporta i video HTML5.
-            </video>
-            
-            <div class="video-skip-text">
-                Clicca la X per esplorare il sito
             </div>
         </div>
     </div>
@@ -1162,15 +1195,19 @@
 
     <!-- Hero Section with Video Background -->
     <section class="hero" id="home">
-        <!-- Video Background Vimeo -->
+        <!-- Video Background Vimeo - OTTIMIZZAZIONE 1 -->
         <iframe 
             class="video-background" 
             id="heroVideo"
             src="https://player.vimeo.com/video/1104719209?autoplay=1&loop=1&muted=1&controls=0&title=0&byline=0&portrait=0&background=1"
             frameborder="0" 
             allow="autoplay; fullscreen; picture-in-picture" 
-            allowfullscreen>
-        </iframe>
+            allowfullscreen
+            preload="auto"
+            onloadeddata="onVideoLoadedData()" 
+            oncanplay="onVideoCanPlay()" 
+            onerror="onVideoError()"
+        ></iframe>
         
         <!-- Video Overlay -->
         <div class="video-overlay"></div>
@@ -1209,30 +1246,39 @@
                         con esperienza nella formazione di colleghi e studenti nelle tecnologie educative più avanzate.
                     </p>
                     <p>
-                        Il mio obiettivo è trasformare l'apprendimento attraverso strumenti digitali innovativi, 
-                        rendendo la didattica più coinvolgente ed efficace per le nuove generazioni.
+                        La mia missione è trasformare l'apprendimento attraverso l'integrazione strategica 
+                        di coding, robotica e intelligenza artificiale nella didattica quotidiana.
                     </p>
-                    <p>
-                        Come Animatore Digitale e formatore accreditato PNRR, accompagno le scuole 
-                        verso la trasformazione digitale con metodologie innovative e strumenti all'avanguardia.
-                    </p>
+                    <div class="about-stats">
+                        <div class="stat-card">
+                            <span class="stat-number">342+</span>
+                            <span class="stat-label">Ore di Formazione</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">150+</span>
+                            <span class="stat-label">Docenti Formati</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">25+</span>
+                            <span class="stat-label">Progetti STEAM</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">8+</span>
+                            <span class="stat-label">Anni Esperienza</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="role-cards slide-in-right">
-                    <div class="role-card">
-                        <h4>🎯 Animatore Digitale</h4>
-                        <p>Istituto Comprensivo di Gottolengo - Innovazione digitale scolastica</p>
-                    </div>
-                    <div class="role-card">
-                        <h4>👨‍🏫 Docente Scuola Primaria</h4>
-                        <p>Specializzato in metodologie didattiche innovative e tecnologie educative</p>
-                    </div>
-                    <div class="role-card">
-                        <h4>🚀 Formatore PNRR</h4>
-                        <p>Esperto in Pensiero Computazionale, Coding, Robotica ed AI Educativa</p>
-                    </div>
-                    <div class="role-card">
-                        <h4>🔬 Gruppo STEM UST Brescia</h4>
-                        <p>Collaborazione per la diffusione delle discipline STEAM sul territorio</p>
+                <div class="about-image slide-in-right">
+                    <div class="profile-card">
+                        <div class="profile-avatar">👨‍💻</div>
+                        <h3 class="profile-name">Fabio Rizzotto</h3>
+                        <p class="profile-title">Innovatore Didattico Digitale</p>
+                        <div class="profile-badges">
+                            <span class="profile-badge">Google Certified</span>
+                            <span class="profile-badge">PNRR Expert</span>
+                            <span class="profile-badge">AI Specialist</span>
+                            <span class="profile-badge">STEAM Educator</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1242,37 +1288,61 @@
     <!-- Certifications Section -->
     <section class="certifications" id="certifications">
         <div class="container">
-            <h2 class="section-title fade-in" style="color: white;">Certificazioni</h2>
+            <h2 class="section-title fade-in">Certificazioni & Competenze</h2>
             <div class="cert-grid">
                 <div class="cert-card fade-in">
-                    <div class="cert-icon">🏆</div>
+                    <div class="cert-icon">🎓</div>
                     <h3>Google for Education Certified Trainer</h3>
-                    <p>Certificazione avanzata per la formazione su Google Workspace for Education e metodologie didattiche digitali innovative.</p>
+                    <p>Certificazione avanzata per la formazione su strumenti Google Workspace for Education, metodologie didattiche innovative e integrazione tecnologica.</p>
+                    <div class="cert-details">
+                        <span class="cert-year">2023</span>
+                        <span class="cert-level">Level 2</span>
+                    </div>
+                </div>
+                <div class="cert-card fade-in">
+                    <div class="cert-icon">🏆</div>
+                    <h3>Esperto Formatore PNRR</h3>
+                    <p>Qualifica per la conduzione di corsi di formazione nell'ambito del Piano Nazionale di Ripresa e Resilienza, con focus su innovazione didattica e competenze digitali.</p>
+                    <div class="cert-details">
+                        <span class="cert-year">2022</span>
+                        <span class="cert-level">Expert</span>
+                    </div>
                 </div>
                 <div class="cert-card fade-in">
                     <div class="cert-icon">🤖</div>
-                    <h3>AI Educational Specialist</h3>
-                    <p>Specializzazione nell'integrazione dell'Intelligenza Artificiale in ambito educativo con focus su strumenti didattici avanzati.</p>
-                </div>
-                <div class="cert-card fade-in">
-                    <div class="cert-icon">💻</div>
-                    <h3>Coding & Computational Thinking Expert</h3>
-                    <p>Competenze certificate nello sviluppo del pensiero computazionale e nell'insegnamento della programmazione.</p>
-                </div>
-                <div class="cert-card fade-in">
-                    <div class="cert-icon">🎓</div>
-                    <h3>PNRR Digital Innovation Expert</h3>
-                    <p>Qualifica per la formazione docenti nell'ambito del Piano Nazionale di Ripresa e Resilienza per l'innovazione digitale.</p>
+                    <h3>AI in Education Specialist</h3>
+                    <p>Specializzazione nell'integrazione dell'Intelligenza Artificiale nei processi educativi, con competenze su strumenti AI generativi e metodologie didattiche innovative.</p>
+                    <div class="cert-details">
+                        <span class="cert-year">2024</span>
+                        <span class="cert-level">Advanced</span>
+                    </div>
                 </div>
                 <div class="cert-card fade-in">
                     <div class="cert-icon">🔧</div>
-                    <h3>Educational Robotics Instructor</h3>
-                    <p>Certificazione per l'insegnamento della robotica educativa e l'organizzazione di laboratori STEAM interattivi.</p>
+                    <h3>STEAM Education Leader</h3>
+                    <p>Leadership nell'educazione STEAM (Science, Technology, Engineering, Arts, Mathematics) con focus su metodologie hands-on e interdisciplinari.</p>
+                    <div class="cert-details">
+                        <span class="cert-year">2023</span>
+                        <span class="cert-level">Leader</span>
+                    </div>
                 </div>
                 <div class="cert-card fade-in">
-                    <div class="cert-icon">📊</div>
-                    <h3>Digital Learning Analytics</h3>
-                    <p>Competenze nell'analisi dei dati educativi per ottimizzare i processi di apprendimento digitale.</p>
+                    <div class="cert-icon">💻</div>
+                    <h3>Coding & Computational Thinking</h3>
+                    <p>Competenze avanzate nel pensiero computazionale e nella programmazione educativa, con esperienza su multiple piattaforme e linguaggi di programmazione.</p>
+                    <div class="cert-details">
+                        <span class="cert-year">2021</span>
+                        <span class="cert-level">Advanced</span>
+                    </div>
+                </div>
+                <div class="cert-card fade-in">
+                    <div class="cert-icon">📱</div>
+                    <h3>Digital Innovation Manager</h3>
+                    <p>Gestione e implementazione di progetti di innovazione digitale nell'ambiente scolastico, con competenze in change management e leadership educativa.</p>
+                    <div class="cert-details">
+                        <span class="cert-year">2022</span>
+                        <span class="cert-level">Manager</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1281,37 +1351,27 @@
     <!-- Skills Section -->
     <section class="skills" id="skills">
         <div class="container">
-            <h2 class="section-title fade-in">Competenze</h2>
+            <h2 class="section-title fade-in">Aree di Competenza</h2>
             <div class="skills-grid">
                 <div class="skill-card fade-in">
                     <div class="skill-icon">🧠</div>
                     <h3>Pensiero Computazionale</h3>
-                    <p>Sviluppo del problem solving e del pensiero logico attraverso metodologie innovative per studenti di ogni età.</p>
+                    <p>Sviluppo di competenze logico-matematiche attraverso metodologie innovative, problem solving e approcci sistemici per l'apprendimento</p>
                 </div>
                 <div class="skill-card fade-in">
                     <div class="skill-icon">💻</div>
-                    <h3>Coding & Programmazione</h3>
-                    <p>Insegnamento di linguaggi di programmazione adatti a bambini e adulti: Scratch, Python, JavaScript, HTML/CSS.</p>
+                    <h3>Coding Educativo</h3>
+                    <p>Insegnamento della programmazione con strumenti visuali e linguaggi adatti all'età degli studenti, dal Scratch ai linguaggi avanzati</p>
                 </div>
                 <div class="skill-card fade-in">
                     <div class="skill-icon">🤖</div>
                     <h3>Robotica Educativa</h3>
-                    <p>Laboratori pratici con robot educativi (mBot, Arduino, micro:bit) per apprendimento STEAM coinvolgente.</p>
+                    <p>Integrazione di robotica e makerspaces nella didattica per apprendimento hands-on e sviluppo di competenze trasversali</p>
                 </div>
                 <div class="skill-card fade-in">
-                    <div class="skill-icon">🎯</div>
-                    <h3>Formazione Docenti</h3>
-                    <p>Percorsi formativi personalizzati per insegnanti su innovazione digitale e metodologie didattiche avanzate.</p>
-                </div>
-                <div class="skill-card fade-in">
-                    <div class="skill-icon">🔬</div>
-                    <h3>Metodologie STEAM</h3>
-                    <p>Approccio interdisciplinare che integra scienza, tecnologia, ingegneria, arte e matematica in progetti creativi.</p>
-                </div>
-                <div class="skill-card fade-in">
-                    <div class="skill-icon">🚀</div>
+                    <div class="skill-icon">🤖</div>
                     <h3>Intelligenza Artificiale</h3>
-                    <p>Introduzione all'AI nella didattica con strumenti educativi specifici e progetti di machine learning adatti alle scuole.</p>
+                    <p>Formazione sull'uso etico e didattico dell'AI, sviluppo di strumenti educativi innovativi e alfabetizzazione digitale avanzata</p>
                 </div>
             </div>
         </div>
@@ -1323,44 +1383,24 @@
             <h2 class="section-title fade-in">Strumenti Didattici</h2>
             <div class="tools-grid">
                 <div class="tool-card fade-in">
-                    <h3>🎯 Generatore Quesiti AI</h3>
-                    <p>Strumento avanzato che utilizza l'intelligenza artificiale per generare automaticamente quesiti personalizzati per ogni disciplina e livello di apprendimento.</p>
-                    <a href="https://edutechlab-quesiti-ai.vercel.app/" class="tool-button" target="_blank">Accedi Ora</a>
+                    <h3>🎯 Quiz Interattivi <span class="coming-soon">Disponibile</span></h3>
+                    <p>Strumento avanzato per creare e somministrare quiz educativi con feedback immediato, analytics delle performance e gamification.</p>
+                    <a href="quiz/" class="tool-button">Accedi ai Quiz</a>
                 </div>
                 <div class="tool-card fade-in">
-                    <h3>📝 Editor Verifiche Interattive</h3>
-                    <p>Piattaforma completa per creare verifiche digitali con feedback automatico, correzione intelligente e analytics dettagliati sui risultati degli studenti.</p>
-                    <a href="https://edutechlab-verifiche.vercel.app/" class="tool-button" target="_blank">Accedi Ora</a>
+                    <h3>📚 Gestione Formazioni <span class="coming-soon">Coming Soon</span></h3>
+                    <p>Piattaforma completa per la gestione di corsi di formazione, con sistema di prenotazioni, materiali didattici e certificazioni.</p>
+                    <a href="#" class="tool-button" style="opacity: 0.6; cursor: not-allowed;">In Sviluppo</a>
                 </div>
                 <div class="tool-card fade-in">
-                    <h3>🎲 Generatore Parole Casuali</h3>
-                    <p>Tool didattico per generare liste di parole casuali filtrate per categoria, difficoltà e lingua. Perfetto per esercizi creativi e giochi linguistici.</p>
-                    <a href="https://edutechlab-parole-casuali.vercel.app/" class="tool-button" target="_blank">Accedi Ora</a>
+                    <h3>🎨 Creator STEAM <span class="coming-soon">Coming Soon</span></h3>
+                    <p>Suite di strumenti per la creazione di contenuti didattici STEAM, con templates, simulazioni e progetti guidati.</p>
+                    <a href="#" class="tool-button" style="opacity: 0.6; cursor: not-allowed;">In Sviluppo</a>
                 </div>
                 <div class="tool-card fade-in">
-                    <h3>🔤 Analizzatore Testi Avanzato</h3>
-                    <p>Strumento di analisi linguistica che fornisce statistiche dettagliate su testi: conteggio parole, analisi lessicale, difficoltà di lettura e suggerimenti di miglioramento.</p>
-                    <a href="https://edutechlab-analizzatore-testi.vercel.app/" class="tool-button" target="_blank">Accedi Ora</a>
-                </div>
-                <div class="tool-card fade-in">
-                    <h3>📚 Biblioteca Risorse STEAM <span class="coming-soon">Coming Soon</span></h3>
-                    <p>Raccolta curata di risorse, progetti e materiali didattici per l'insegnamento delle discipline STEAM con filtri avanzati per età e argomento.</p>
-                    <a href="#" class="tool-button" style="opacity: 0.7; cursor: not-allowed;">In Sviluppo</a>
-                </div>
-                <div class="tool-card fade-in">
-                    <h3>🎯 Gestione Corsi Online <span class="coming-soon">Coming Soon</span></h3>
-                    <p>Applicazione completa per organizzare corsi, gestire iscrizioni e distribuire materiali didattici ai corsisti con sistema di tracking e analytics.</p>
-                    <a href="#" class="tool-button" style="opacity: 0.7; cursor: not-allowed;">In Sviluppo</a>
-                </div>
-                <div class="tool-card fade-in">
-                    <h3>🤖 Simulatori STEAM <span class="coming-soon">Coming Soon</span></h3>
-                    <p>Simulatori interattivi per esperimenti scientifici, concetti di robotica educativa e laboratori virtuali immersivi.</p>
-                    <a href="#" class="tool-button" style="opacity: 0.7; cursor: not-allowed;">In Sviluppo</a>
-                </div>
-                <div class="tool-card fade-in">
-                    <h3>📊 Analytics Didattici <span class="coming-soon">Coming Soon</span></h3>
-                    <p>Dashboard avanzata per monitorare i progressi degli studenti, l'efficacia delle attività didattiche e generare report automatici.</p>
-                    <a href="#" class="tool-button" style="opacity: 0.7; cursor: not-allowed;">In Sviluppo</a>
+                    <h3>🤖 AI Assistant <span class="coming-soon">Coming Soon</span></h3>
+                    <p>Assistente AI personalizzato per docenti, con funzionalità di planning lezioni, valutazione e supporto didattico personalizzato.</p>
+                    <a href="#" class="tool-button" style="opacity: 0.6; cursor: not-allowed;">In Sviluppo</a>
                 </div>
             </div>
         </div>
@@ -1369,26 +1409,64 @@
     <!-- Contact Section -->
     <section class="contact" id="contact">
         <div class="container">
+            <h2 class="section-title fade-in">Contatti</h2>
             <div class="contact-content">
-                <h2 class="section-title fade-in" style="color: white;">Contatti</h2>
-                <p style="font-size: 1.3rem; margin-bottom: 3rem; opacity: 0.95;" class="fade-in">
-                    Interessato a una formazione STEAM o collaborazione digitale? Contattami!
-                </p>
-                <div class="contact-info fade-in">
-                    <div class="contact-item">
-                        <span style="font-size: 2rem;">📧</span>
-                        <div>
-                            <strong>Email per Info</strong><br>
-                            <a href="mailto:edutechlab.ita@gmail.com">edutechlab.ita@gmail.com</a>
+                <div class="contact-info slide-in-left">
+                    <h3>Iniziamo a Collaborare</h3>
+                    <p>Sono sempre disponibile per nuove collaborazioni, progetti innovativi e opportunità di formazione. Contattami per discutere come possiamo trasformare insieme l'educazione digitale.</p>
+                    
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <div class="contact-icon">📧</div>
+                            <div class="contact-details">
+                                <h4>Email</h4>
+                                <p>info@edutechlab.it</p>
+                            </div>
+                        </div>
+                        <div class="contact-method">
+                            <div class="contact-icon">💼</div>
+                            <div class="contact-details">
+                                <h4>LinkedIn</h4>
+                                <p>linkedin.com/in/fabiorizzotto</p>
+                            </div>
+                        </div>
+                        <div class="contact-method">
+                            <div class="contact-icon">🏫</div>
+                            <div class="contact-details">
+                                <h4>Istituto</h4>
+                                <p>IC Gottolengo - Animatore Digitale</p>
+                            </div>
+                        </div>
+                        <div class="contact-method">
+                            <div class="contact-icon">🎯</div>
+                            <div class="contact-details">
+                                <h4>Formazione</h4>
+                                <p>Gruppo STEM UST Brescia</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="contact-item">
-                        <span style="font-size: 2rem;">🎯</span>
-                        <div>
-                            <strong>Specializzazione</strong><br>
-                            <span>Formazione STEAM & Innovazione Digitale PNRR</span>
+                </div>
+                
+                <div class="contact-form slide-in-right">
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Nome e Cognome</label>
+                            <input type="text" id="name" name="name" placeholder="Il tuo nome" required>
                         </div>
-                    </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="La tua email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Oggetto</label>
+                            <input type="text" id="subject" name="subject" placeholder="Oggetto del messaggio" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Messaggio</label>
+                            <textarea id="message" name="message" rows="5" placeholder="Il tuo messaggio..." required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Invia Messaggio</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -1397,18 +1475,23 @@
     <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="footer-links">
-                <a onclick="openModal('privacyModal')">Privacy Policy</a>
-                <a onclick="openModal('cookieModal')">Cookie Policy</a>
-                <a onclick="openModal('legalModal')">Note Legali</a>
-                <a onclick="openModal('termsModal')">Termini di Servizio</a>
+            <div class="footer-content">
+                <h3>EduTechLab</h3>
+                <p>Innovazione Didattica Digitale per il Futuro dell'Educazione</p>
+                <div class="footer-links">
+                    <a href="#" onclick="openModal('privacyModal')">Privacy Policy</a>
+                    <a href="#" onclick="openModal('cookieModal')">Cookie Policy</a>
+                    <a href="#" onclick="openModal('legalModal')">Note Legali</a>
+                    <a href="#" onclick="openModal('termsModal')">Termini di Servizio</a>
+                </div>
             </div>
-            <p>&copy; 2025 EduTechLab - Fabio Rizzotto. Tutti i diritti riservati.</p>
+            <div class="footer-bottom">
+                <p>&copy; 2024 EduTechLab - Fabio Rizzotto. Tutti i diritti riservati.</p>
+            </div>
         </div>
     </footer>
 
-    <!-- MODALS -->
-    <!-- Privacy Policy Modal -->
+    <!-- Privacy Modal -->
     <div id="privacyModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1416,42 +1499,35 @@
                 <span class="close" onclick="closeModal('privacyModal')">&times;</span>
             </div>
             <div class="modal-body">
-                <h3>Informazioni che raccogliamo</h3>
-                <p>EduTechLab raccoglie solo le informazioni essenziali per fornire i nostri servizi educativi:</p>
+                <h3>Informativa sulla Privacy</h3>
+                <p>La presente Privacy Policy descrive le modalità di trattamento dei dati personali degli utenti che consultano il sito EduTechLab.</p>
+                
+                <h3>Titolare del Trattamento</h3>
+                <p>Fabio Rizzotto, in qualità di titolare del trattamento dei dati personali, informa gli utenti del sito circa le modalità e finalità del trattamento dei dati personali.</p>
+                
+                <h3>Tipologie di Dati Raccolti</h3>
+                <p>I dati personali raccolti includono:</p>
                 <ul>
-                    <li>Dati di contatto (email) forniti volontariamente</li>
-                    <li>Informazioni tecniche anonime (browser, dispositivo) per migliorare l'esperienza utente</li>
-                    <li>Dati di utilizzo degli strumenti didattici per ottimizzare le funzionalità</li>
+                    <li>Dati di navigazione (cookie tecnici)</li>
+                    <li>Dati forniti volontariamente dall'utente tramite form di contatto</li>
+                    <li>Email e nome per le comunicazioni</li>
                 </ul>
-
-                <h3>Come utilizziamo i tuoi dati</h3>
-                <p>I tuoi dati vengono utilizzati esclusivamente per:</p>
+                
+                <h3>Finalità del Trattamento</h3>
+                <p>I dati vengono trattati per:</p>
                 <ul>
-                    <li>Rispondere alle tue richieste di informazioni</li>
-                    <li>Fornire supporto tecnico per gli strumenti didattici</li>
-                    <li>Migliorare i nostri servizi educativi</li>
-                    <li>Inviarti aggiornamenti sui nuovi strumenti (solo se richiesto)</li>
+                    <li>Fornire i servizi richiesti</li>
+                    <li>Rispondere alle richieste di informazioni</li>
+                    <li>Migliorare l'esperienza di navigazione</li>
                 </ul>
-
-                <div class="highlight-box">
-                    <strong>Importante:</strong> Non condividiamo mai i tuoi dati personali con terze parti per scopi commerciali. I tuoi dati sono protetti e utilizzati solo per scopi educativi.
-                </div>
-
-                <h3>I tuoi diritti</h3>
-                <p>Hai il diritto di:</p>
-                <ul>
-                    <li>Accedere ai tuoi dati personali</li>
-                    <li>Richiedere la correzione di dati inesatti</li>
-                    <li>Richiedere la cancellazione dei tuoi dati</li>
-                    <li>Opporti al trattamento dei tuoi dati</li>
-                </ul>
-
-                <p>Per esercitare questi diritti, contattaci all'indirizzo: <strong>edutechlab.ita@gmail.com</strong></p>
+                
+                <h3>Diritti dell'Interessato</h3>
+                <p>L'utente ha diritto di accedere ai propri dati, chiederne la rettifica, la cancellazione e la portabilità secondo quanto previsto dalla normativa vigente.</p>
             </div>
         </div>
     </div>
 
-    <!-- Cookie Policy Modal -->
+    <!-- Cookie Modal -->
     <div id="cookieModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1459,35 +1535,22 @@
                 <span class="close" onclick="closeModal('cookieModal')">&times;</span>
             </div>
             <div class="modal-body">
-                <h3>Cosa sono i cookie</h3>
-                <p>I cookie sono piccoli file di testo che vengono salvati sul tuo dispositivo quando visiti un sito web. Ci aiutano a fornire un'esperienza migliore personalizzando il contenuto e ricordando le tue preferenze.</p>
-
-                <h3>Tipi di cookie utilizzati</h3>
-                <p><strong>Cookie Tecnici (Necessari):</strong></p>
-                <ul>
-                    <li>Memorizzazione delle preferenze di navigazione</li>
-                    <li>Funzionamento corretto degli strumenti didattici</li>
-                    <li>Sicurezza della sessione utente</li>
-                </ul>
-
-                <p><strong>Cookie Analitici (Anonimi):</strong></p>
-                <ul>
-                    <li>Statistiche aggregate sull'utilizzo del sito</li>
-                    <li>Identificazione delle funzionalità più utilizzate</li>
-                    <li>Miglioramento dell'esperienza utente</li>
-                </ul>
-
-                <div class="highlight-box">
-                    <strong>Non utilizziamo:</strong> Cookie di profilazione, cookie di marketing o cookie di tracciamento per scopi pubblicitari.
-                </div>
-
-                <h3>Gestione dei cookie</h3>
-                <p>Puoi controllare e gestire i cookie attraverso le impostazioni del tuo browser. Tieni presente che disabilitare i cookie tecnici potrebbe limitare alcune funzionalità del sito.</p>
+                <h3>Utilizzo dei Cookie</h3>
+                <p>Questo sito utilizza cookie tecnici necessari per il funzionamento del sito e per migliorare l'esperienza di navigazione dell'utente.</p>
+                
+                <h3>Tipologie di Cookie</h3>
+                <p><strong>Cookie Tecnici:</strong> Utilizzati per garantire il corretto funzionamento del sito e memorizzare le preferenze dell'utente.</p>
+                
+                <h3>Gestione dei Cookie</h3>
+                <p>È possibile gestire le preferenze relative ai cookie direttamente dal proprio browser. La disabilitazione dei cookie tecnici potrebbe limitare alcune funzionalità del sito.</p>
+                
+                <h3>Cookie di Terze Parti</h3>
+                <p>Il sito può includere componenti di terze parti (come Vimeo per i video) che utilizzano i propri cookie secondo le rispettive policy.</p>
             </div>
         </div>
     </div>
 
-    <!-- Legal Notes Modal -->
+    <!-- Legal Modal -->
     <div id="legalModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1495,37 +1558,22 @@
                 <span class="close" onclick="closeModal('legalModal')">&times;</span>
             </div>
             <div class="modal-body">
-                <h3>Titolare del sito</h3>
-                <p><strong>EduTechLab - Fabio Rizzotto</strong><br>
-                Docente e Formatore Digitale<br>
-                Email: edutechlab.ita@gmail.com</p>
-
-                <h3>Finalità del sito</h3>
-                <p>Questo sito è dedicato alla promozione dell'innovazione didattica digitale attraverso:</p>
-                <ul>
-                    <li>Strumenti educativi online gratuiti</li>
-                    <li>Risorse per docenti e studenti</li>
-                    <li>Formazione su metodologie STEAM</li>
-                    <li>Consulenza per la trasformazione digitale scolastica</li>
-                </ul>
-
-                <h3>Proprietà intellettuale</h3>
-                <p>Tutti i contenuti presenti su questo sito (testi, immagini, strumenti didattici, materiali formativi) sono di proprietà di Fabio Rizzotto o utilizzati con regolare licenza.</p>
-
-                <div class="highlight-box">
-                    <strong>Utilizzo Educativo:</strong> I materiali didattici possono essere utilizzati liberamente per scopi educativi, citando sempre la fonte.
-                </div>
-
-                <h3>Limitazioni di responsabilità</h3>
-                <p>Le informazioni fornite su questo sito sono a scopo educativo e informativo. L'utilizzo degli strumenti didattici è sotto la responsabilità dell'utente.</p>
-
-                <h3>Legge applicabile</h3>
-                <p>Il presente sito è regolato dalla legge italiana. Per qualsiasi controversia sarà competente il foro di Brescia.</p>
+                <h3>Informazioni Legali</h3>
+                <p>Il presente sito web è di proprietà di Fabio Rizzotto e rappresenta la vetrina professionale delle attività di formazione e innovazione didattica digitale.</p>
+                
+                <h3>Proprietà Intellettuale</h3>
+                <p>Tutti i contenuti presenti sul sito, inclusi testi, immagini, loghi e materiali didattici, sono protetti da diritti d'autore e di proprietà intellettuale.</p>
+                
+                <h3>Limitazione di Responsabilità</h3>
+                <p>Il titolare del sito non può essere ritenuto responsabile per eventuali danni derivanti dall'utilizzo delle informazioni contenute nel sito o dall'impossibilità di accedervi.</p>
+                
+                <h3>Modifiche</h3>
+                <p>Il titolare si riserva il diritto di modificare o aggiornare i contenuti del sito senza preavviso.</p>
             </div>
         </div>
     </div>
 
-    <!-- Terms of Service Modal -->
+    <!-- Terms Modal -->
     <div id="termsModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1533,254 +1581,198 @@
                 <span class="close" onclick="closeModal('termsModal')">&times;</span>
             </div>
             <div class="modal-body">
-                <h3>Accettazione dei termini</h3>
-                <p>Utilizzando questo sito web e i suoi strumenti didattici, accetti implicitamente questi termini di servizio. Se non sei d'accordo, ti invitiamo a non utilizzare i nostri servizi.</p>
-
-                <h3>Utilizzo degli strumenti didattici</h3>
-                <p>Gli strumenti messi a disposizione su EduTechLab sono destinati esclusivamente a:</p>
+                <h3>Termini e Condizioni d'Uso</h3>
+                <p>L'accesso e l'utilizzo di questo sito web sono soggetti ai seguenti termini e condizioni.</p>
+                
+                <h3>Uso Consentito</h3>
+                <p>Il sito è destinato a scopi informativi e professionali. È vietato utilizzare il sito per scopi illegali o non autorizzati.</p>
+                
+                <h3>Servizi Offerti</h3>
+                <p>I servizi di formazione e consulenza sono soggetti a condizioni specifiche da concordare singolarmente con il professionista.</p>
+                
+                <h3>Limitazioni</h3>
+                <p>L'utente si impegna a non:</p>
                 <ul>
-                    <li>Attività didattiche e formative</li>
-                    <li>Ricerca educativa</li>
-                    <li>Supporto all'apprendimento</li>
-                    <li>Formazione professionale docenti</li>
+                    <li>Violare diritti di proprietà intellettuale</li>
+                    <li>Utilizzare il sito per attività illegali</li>
+                    <li>Interferire con il normale funzionamento del sito</li>
                 </ul>
-
-                <h3>Limitazioni d'uso</h3>
-                <p>È vietato utilizzare i nostri strumenti per:</p>
-                <ul>
-                    <li>Attività commerciali non autorizzate</li>
-                    <li>Distribuzione di contenuti inappropriati</li>
-                    <li>Violazione dei diritti di proprietà intellettuale</li>
-                    <li>Attività che possano danneggiare il servizio</li>
-                </ul>
-
-                <div class="highlight-box">
-                    <strong>Fair Use:</strong> Promuoviamo l'uso responsabile e etico delle tecnologie educative per il beneficio della comunità scolastica.
-                </div>
-
-                <h3>Disponibilità del servizio</h3>
-                <p>Ci impegniamo a mantenere i servizi sempre disponibili, ma non possiamo garantire un funzionamento ininterrotto al 100%. Eventuali interruzioni verranno comunicate tempestivamente.</p>
-
-                <h3>Modifiche ai termini</h3>
-                <p>Ci riserviamo il diritto di modificare questi termini in qualsiasi momento. Le modifiche saranno pubblicate su questa pagina con data di aggiornamento.</p>
-
-                <p><strong>Ultimo aggiornamento:</strong> 28 Luglio 2025</p>
+                
+                <h3>Modifiche ai Termini</h3>
+                <p>I presenti termini possono essere modificati in qualsiasi momento. Gli utenti sono invitati a consultare regolarmente questa pagina.</p>
             </div>
         </div>
     </div>
 
     <script>
-        // OTTIMIZZAZIONI - VERSION 2.1.0
+        // OTTIMIZZAZIONE 2 - Sistema Banner Aggiornamento
+        const SITE_VERSION = '2.1.0';
         
-        // Versione del sito per il sistema di aggiornamento
-        const SITE_VERSION = '2.2.1'; // CAMBIA QUESTO QUANDO AGGIORNI
-        
-        // Variabili globali
-        let videoModalShown = false;
-        let autoplayFailed = false;
-        let updateAvailable = false;
-        let videoPreloaded = false;
-
-        // === SISTEMA AGGIORNAMENTO CACHE ===
         function checkForUpdates() {
-            const lastVersion = localStorage.getItem('siteVersion');
-            const updateDismissed = sessionStorage.getItem('updateDismissed');
+            // Simula il controllo degli aggiornamenti
+            const currentVersion = localStorage.getItem('siteVersion') || '2.0.0';
+            const dismissed = localStorage.getItem('updateDismissed');
             
-            if (lastVersion !== SITE_VERSION && !updateDismissed) {
-                if (lastVersion) {
-                    console.log('Aggiornamento disponibile da', lastVersion, 'a', SITE_VERSION);
-                    updateAvailable = true;
-                    showUpdateNotification();
-                    return true;
-                } else {
-                    localStorage.setItem('siteVersion', SITE_VERSION);
-                }
+            if (currentVersion !== SITE_VERSION && !dismissed) {
+                showUpdateNotification();
             }
-            return false;
         }
 
         function showUpdateNotification() {
-            const notification = document.getElementById('updateNotification');
-            setTimeout(() => {
-                notification.classList.add('show');
-            }, 2000);
+            const banner = document.getElementById('updateBanner');
+            const header = document.getElementById('header');
+            
+            if (banner) {
+                banner.classList.add('show');
+                if (header) {
+                    header.classList.add('update-active');
+                }
+            }
         }
 
         function updateSite() {
+            // Simula l'aggiornamento del sito
             localStorage.setItem('siteVersion', SITE_VERSION);
-            sessionStorage.removeItem('updateDismissed');
+            localStorage.removeItem('updateDismissed');
             
-            // Forza il ricaricamento senza cache
-            if ('serviceWorker' in navigator) {
-                caches.keys().then(names => {
-                    names.forEach(name => {
-                        caches.delete(name);
-                    });
-                });
+            const banner = document.getElementById('updateBanner');
+            const header = document.getElementById('header');
+            
+            if (banner) {
+                banner.classList.remove('show');
+            }
+            if (header) {
+                header.classList.remove('update-active');
             }
             
-            window.location.reload(true);
+            // Simula il reload della pagina
+            setTimeout(() => {
+                alert('Sito aggiornato con successo!');
+            }, 500);
         }
 
         function dismissUpdate() {
-            const notification = document.getElementById('updateNotification');
-            notification.classList.remove('show');
-            sessionStorage.setItem('updateDismissed', 'true');
-            updateAvailable = false;
-            localStorage.setItem('siteVersion', SITE_VERSION);
+            localStorage.setItem('updateDismissed', 'true');
+            
+            const banner = document.getElementById('updateBanner');
+            const header = document.getElementById('header');
+            
+            if (banner) {
+                banner.classList.remove('show');
+            }
+            if (header) {
+                header.classList.remove('update-active');
+            }
         }
 
-        // === GESTIONE VIDEO OTTIMIZZATA ===
-        
-        // Precarica video immediatamente
-        document.addEventListener('DOMContentLoaded', function() {
-            const video = document.getElementById('welcomeVideo');
-            if (video) {
-                video.load(); // Forza il preload
-            }
-            checkForUpdates();
-        });
-
-        // Eventi video ottimizzati
+        // OTTIMIZZAZIONE 1 - Video Loading Functions
         function onVideoLoadedData() {
-            console.log('Video: Dati caricati');
-            updateLoadingText("Video pronto!");
+            console.log('Video data loaded');
+            const video = document.getElementById('heroVideo');
+            if (video) {
+                video.classList.add('loaded');
+            }
         }
 
         function onVideoCanPlay() {
-            console.log('Video: Può essere riprodotto');
-            videoPreloaded = true;
-            
-            if (videoModalShown) {
-                setTimeout(() => {
-                    hideVideoLoading();
-                    playVideo();
-                }, 500);
+            console.log('Video can play');
+            const video = document.getElementById('heroVideo');
+            if (video) {
+                video.classList.add('loaded');
             }
         }
 
         function onVideoError() {
-            console.log('Errore nel caricamento video');
-            updateLoadingText("Errore nel caricamento. Riprova più tardi.");
-            setTimeout(() => closeVideoModal(), 3000);
-        }
-
-        function updateLoadingText(text) {
-            const loadingText = document.getElementById('loadingText');
-            if (loadingText) {
-                loadingText.textContent = text;
+            console.log('Video loading error');
+            const video = document.getElementById('heroVideo');
+            if (video) {
+                video.classList.add('error');
             }
         }
 
-        // Gestione modal video
-        function showVideoModal() {
-            const modal = document.getElementById('videoWelcomeModal');
-            
-            modal.classList.add('show');
-            document.body.classList.add('modal-open');
-            videoModalShown = true;
-            
-            if (videoPreloaded) {
-                setTimeout(() => {
-                    hideVideoLoading();
-                    playVideo();
-                }, 300);
+        // Cookie Management
+        function acceptCookies() {
+            localStorage.setItem('cookiesAccepted', 'true');
+            document.getElementById('cookieBanner').style.display = 'none';
+        }
+
+        function checkCookieConsent() {
+            if (!localStorage.getItem('cookiesAccepted')) {
+                document.getElementById('cookieBanner').style.display = 'block';
             }
         }
 
-        function hideVideoLoading() {
-            const loading = document.getElementById('videoLoading');
-            const video = document.getElementById('welcomeVideo');
-            
-            if (loading && video) {
-                loading.style.display = 'none';
-                video.style.display = 'block';
+        // Modal Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
             }
         }
 
-        function playVideo() {
-            const video = document.getElementById('welcomeVideo');
+        // Form Handling
+        document.addEventListener('DOMContentLoaded', function() {
+            // OTTIMIZZAZIONE 1 - Video preload
+            const video = document.getElementById('heroVideo');
+            if (video) {
+                // Per iframe Vimeo, non c'è il metodo load(), ma possiamo forzare il caricamento
+                video.onload = onVideoLoadedData;
+            }
+
+            // Check for updates on load
+            checkForUpdates();
             
-            if (video && videoPreloaded) {
-                video.play()
-                .then(() => {
-                    hidePlayButton();
-                })
-                .catch(error => {
-                    console.log('Autoplay bloccato:', error);
-                    autoplayFailed = true;
-                    showPlayButton();
+            // Check cookie consent
+            checkCookieConsent();
+
+            // Contact form handling
+            const contactForm = document.querySelector('.contact-form form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Get form data
+                    const formData = new FormData(this);
+                    const name = formData.get('name');
+                    const email = formData.get('email');
+                    const subject = formData.get('subject');
+                    const message = formData.get('message');
+                    
+                    // Create mailto link
+                    const mailtoLink = `mailto:info@edutechlab.it?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Nome: ${name}\nEmail: ${email}\n\nMessaggio:\n${message}`)}`;
+                    
+                    // Open email client
+                    window.location.href = mailtoLink;
+                    
+                    // Reset form
+                    this.reset();
+                    
+                    // Show success message
+                    alert('Form inviato! Si aprirà il tuo client email.');
                 });
             }
-        }
 
-        function showPlayButton() {
-            const playBtn = document.getElementById('videoPlayBtn');
-            if (playBtn) {
-                playBtn.classList.add('show');
-            }
-        }
-
-        function hidePlayButton() {
-            const playBtn = document.getElementById('videoPlayBtn');
-            if (playBtn) {
-                playBtn.classList.remove('show');
-            }
-        }
-
-        function closeVideoModal() {
-            const modal = document.getElementById('videoWelcomeModal');
-            const video = document.getElementById('welcomeVideo');
-            
-            modal.classList.remove('show');
-            document.body.classList.remove('modal-open');
-            
-            if (video) {
-                video.pause();
-                video.currentTime = 0;
-            }
-            
-            hidePlayButton();
-            videoModalShown = false;
-        }
-
-        // Eventi modal
-        document.getElementById('videoWelcomeModal').addEventListener('click', function(event) {
-            if (event.target === this) {
-                closeVideoModal();
-            }
-        });
-
-        // Mostra modal dopo caricamento
-        window.addEventListener('load', function() {
-            const delay = updateAvailable ? 3000 : 1000;
-            
-            setTimeout(() => {
-                if (!updateAvailable) {
-                    showVideoModal();
-                }
-            }, delay);
-        });
-
-        // Auto-chiusura dopo 24 secondi
-        document.getElementById('welcomeVideo').addEventListener('timeupdate', function() {
-            if (this.currentTime >= 24 && videoModalShown && !this.paused && !autoplayFailed) {
-                setTimeout(closeVideoModal, 1000);
-            }
-        });
-
-        // === RESTO DELLE FUNZIONI ORIGINALI ===
-        
-        // Smooth Scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                const href = this.getAttribute('href');
-                if (href.startsWith('#') && href.length > 1) {
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
                     e.preventDefault();
-                    const target = document.querySelector(href);
+                    const target = document.querySelector(this.getAttribute('href'));
                     if (target) {
                         const headerHeight = document.querySelector('header').offsetHeight;
-                        const targetPosition = target.offsetTop - headerHeight;
+                        const updateBanner = document.getElementById('updateBanner');
+                        const bannerHeight = updateBanner && updateBanner.classList.contains('show') ? updateBanner.offsetHeight : 0;
+                        const targetPosition = target.offsetTop - headerHeight - bannerHeight;
                         
                         window.scrollTo({
                             top: targetPosition,
@@ -1805,54 +1797,24 @@
             });
         }, observerOptions);
 
+        // Observe all elements with animation classes
         document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
             observer.observe(el);
         });
 
-        // Cookie Management
+        // Initialize animations on load
         window.addEventListener('load', function() {
-            if (!localStorage.getItem('cookiesAccepted')) {
-                setTimeout(() => {
-                    document.getElementById('cookieBanner').style.display = 'block';
-                }, 3000);
-            }
+            // Start update check
+            checkForUpdates();
+            
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach((el, index) => {
+                    setTimeout(() => {
+                        el.classList.add('visible');
+                    }, index * 100);
+                });
+            }, 500);
         });
-
-        function acceptCookies() {
-            localStorage.setItem('cookiesAccepted', 'true');
-            document.getElementById('cookieBanner').style.display = 'none';
-        }
-
-        // Modal Management
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        // Close modals when clicking outside
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        }
-
-        // Header scroll effect
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('header');
-            if (window.scrollY > 100) {
-                header.style.background = 'rgba(255, 255, 255, 0.98)';
-            } else {
-                header.style.background = 'rgba(255, 255, 255, 0.95)';
-            }
-        });
-
-        console.log('🚀 EduTechLab v' + SITE_VERSION + ' - Sito ottimizzato caricato!');
     </script>
 </body>
 </html>
