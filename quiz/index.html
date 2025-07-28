@@ -8,7 +8,7 @@
     <meta name="theme-color" content="#3B82F6">
     
     <!-- PWA Meta Tags COMPLETI -->
-    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiRWR1VGVjaCBMYWIgLSBQZW5zaWVybyBDb21wdXRhemlvbmFsZSIsInNob3J0X25hbWUiOiJFZHVUZWNoIExhYiIsInN0YXJ0X3VybCI6Ii8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZmZmZmZmIiwidGhlbWVfY29sb3IiOiIjM0I4MkY2IiwiZGVzY3JpcHRpb24iOiJQaWF0dGFmb3JtYSBkaSBQZW5zaWVybyBDb21wdXRhemlvbmFsZSBwZXIgbGEgU2N1b2xhIFByaW1hcmlhIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJpY29uYS03Mi5wbmciLCJzaXplcyI6IjcyeDcyIiwidHlwZSI6ImltYWdlL3BuZyJ9LHsic3JjIjoiaWNvbmEtOTYucG5nIiwic2l6ZXMiOiI5Nng5NiIsInR5cGUiOiJpbWFnZS9wbmcifSx7InNyYyI6Imljb25hLTEyOC5wbmciLCJzaXplcyI6IjEyOHgxMjgiLCJ0eXBlIjoiaW1hZ2UvcG5nIn0seyJzcmMiOiJpY29uYS0xNDQucG5nIiwic2l6ZXMiOiIxNDR4MTQ0IiwidHlwZSI6ImltYWdlL3BuZyJ9LHsic3JjIjoiaWNvbmEtMTUyLnBuZyIsInNpemVzIjoiMTUyeDE1MiIsInR5cGUiOiJpbWFnZS9wbmcifSx7InNyYyI6Imljb25hLTE5Mi5wbmciLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2UvcG5nIn0seyJzcmMiOiJpY29uYS0zODQucG5nIiwic2l6ZXMiOiIzODR4Mzg0IiwidHlwZSI6ImltYWdlL3BuZyJ9LHsic3JjIjoiaWNvbmEtNTEyLnBuZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmcifV0sImNhdGVnb3JpZXMiOlsiZWR1Y2F0aW9uIiwiZ2FtZXMiLCJraWRzIl0sImxhbmciOiJpdCJ9">
+    <link rel="manifest" href="manifest.json">
     <link rel="icon" href="icona-72.png" sizes="72x72">
     <link rel="icon" href="icona-96.png" sizes="96x96">
     <link rel="icon" href="icona-128.png" sizes="128x128">
@@ -2871,7 +2871,13 @@
             
             // Register service worker for PWA
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('data:text/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgZXZlbnQgPT4ge2NvbnNvbGUubG9nKCdTVyBpbnN0YWxsZWQnKX0pOw==');
+                navigator.serviceWorker.register('./sw.js')
+                    .then(function(registration) {
+                        console.log('Service Worker registered successfully:', registration.scope);
+                    })
+                    .catch(function(error) {
+                        console.log('Service Worker registration failed:', error);
+                    });
             }
         });
 
