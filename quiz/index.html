@@ -7,12 +7,32 @@
     <meta name="description" content="Piattaforma di Pensiero Computazionale per la Scuola Primaria">
     <meta name="theme-color" content="#3B82F6">
     
-    <!-- PWA Meta Tags MIGLIORATI -->
-    <link rel="manifest" href="#" id="manifest">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <!-- PWA Meta Tags COMPLETI -->
+    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiRWR1VGVjaCBMYWIgLSBQZW5zaWVybyBDb21wdXRhemlvbmFsZSIsInNob3J0X25hbWUiOiJFZHVUZWNoIExhYiIsInN0YXJ0X3VybCI6Ii8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZmZmZmZmIiwidGhlbWVfY29sb3IiOiIjM0I4MkY2IiwiZGVzY3JpcHRpb24iOiJQaWF0dGFmb3JtYSBkaSBQZW5zaWVybyBDb21wdXRhemlvbmFsZSBwZXIgbGEgU2N1b2xhIFByaW1hcmlhIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJpY29uYS03Mi5wbmciLCJzaXplcyI6IjcyeDcyIiwidHlwZSI6ImltYWdlL3BuZyJ9LHsic3JjIjoiaWNvbmEtOTYucG5nIiwic2l6ZXMiOiI5Nng5NiIsInR5cGUiOiJpbWFnZS9wbmcifSx7InNyYyI6Imljb25hLTEyOC5wbmciLCJzaXplcyI6IjEyOHgxMjgiLCJ0eXBlIjoiaW1hZ2UvcG5nIn0seyJzcmMiOiJpY29uYS0xNDQucG5nIiwic2l6ZXMiOiIxNDR4MTQ0IiwidHlwZSI6ImltYWdlL3BuZyJ9LHsic3JjIjoiaWNvbmEtMTUyLnBuZyIsInNpemVzIjoiMTUyeDE1MiIsInR5cGUiOiJpbWFnZS9wbmcifSx7InNyYyI6Imljb25hLTE5Mi5wbmciLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2UvcG5nIn0seyJzcmMiOiJpY29uYS0zODQucG5nIiwic2l6ZXMiOiIzODR4Mzg0IiwidHlwZSI6ImltYWdlL3BuZyJ9LHsic3JjIjoiaWNvbmEtNTEyLnBuZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmcifV0sImNhdGVnb3JpZXMiOlsiZWR1Y2F0aW9uIiwiZ2FtZXMiLCJraWRzIl0sImxhbmciOiJpdCJ9">
+    <link rel="icon" href="icona-72.png" sizes="72x72">
+    <link rel="icon" href="icona-96.png" sizes="96x96">
+    <link rel="icon" href="icona-128.png" sizes="128x128">
+    <link rel="icon" href="icona-144.png" sizes="144x144">
+    <link rel="icon" href="icona-152.png" sizes="152x152">
+    <link rel="icon" href="icona-192.png" sizes="192x192">
+    <link rel="icon" href="icona-384.png" sizes="384x384">
+    <link rel="icon" href="icona-512.png" sizes="512x512">
+    
+    <!-- Apple PWA Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="EduTech Lab">
+    <link rel="apple-touch-icon" href="icona-192.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="icona-72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="icona-96.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="icona-128.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="icona-144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icona-152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icona-192.png">
+    
+    <!-- Microsoft Tiles -->
+    <meta name="msapplication-TileImage" content="icona-144.png">
+    <meta name="msapplication-TileColor" content="#3B82F6">
     
     <style>
         * {
@@ -60,29 +80,6 @@
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-20px) rotate(180deg); }
-        }
-
-        /* PWA Install Button */
-        .pwa-install {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 0.75rem;
-            border-radius: 50%;
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
-            z-index: 1000;
-            display: none;
-            transition: all 0.3s ease;
-        }
-
-        .pwa-install:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
         }
 
         /* Header */
@@ -722,6 +719,188 @@
             font-weight: bold;
         }
 
+        /* RIPARATE: Frazioni Game con visualizzazione completa */
+        .fraction-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .fraction-selector {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .fraction-type {
+            background: #f0f0f0;
+            border: 2px solid #ddd;
+            border-radius: 1rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .fraction-type:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .fraction-type.active {
+            border-color: #4CAF50;
+            background: #E8F5E8;
+        }
+
+        .fraction-display {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        /* Pizza Visualization */
+        .pizza-container {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: #FFF3E0;
+            border: 4px solid #FF6B35;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .pizza-slice {
+            position: absolute;
+            width: 125px;
+            height: 125px;
+            border: 2px solid #FF6B35;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform-origin: 100% 100%;
+            background: #FFF8DC;
+        }
+
+        .pizza-slice:hover {
+            background: #FFE4B5;
+        }
+
+        .pizza-slice.filled {
+            background: #FF6B35;
+            background-image: 
+                radial-gradient(circle at 20% 30%, #FF4500 8px, transparent 8px),
+                radial-gradient(circle at 60% 20%, #DC143C 6px, transparent 6px),
+                radial-gradient(circle at 40% 70%, #228B22 5px, transparent 5px),
+                radial-gradient(circle at 80% 60%, #FFD700 4px, transparent 4px);
+        }
+
+        /* Chocolate Bar Visualization */
+        .chocolate-container {
+            display: grid;
+            gap: 2px;
+            background: #8B4513;
+            padding: 8px;
+            border-radius: 8px;
+            border: 3px solid #654321;
+            margin: 0 auto;
+        }
+
+        .chocolate-piece {
+            background: #D2691E;
+            border: 1px solid #8B4513;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #654321;
+        }
+
+        .chocolate-piece:hover {
+            background: #CD853F;
+        }
+
+        .chocolate-piece.filled {
+            background: #654321;
+            color: #D2691E;
+        }
+
+        /* Cake Visualization */
+        .cake-container {
+            position: relative;
+            width: 200px;
+            height: 100px;
+            background: #FFB6C1;
+            border: 3px solid #FF69B4;
+            border-radius: 0 0 50% 50%;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .cake-slice {
+            position: absolute;
+            height: 100%;
+            border-right: 2px solid #FF69B4;
+            background: #FFC0CB;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #8B008B;
+        }
+
+        .cake-slice:hover {
+            background: #FFB6C1;
+        }
+
+        .cake-slice.filled {
+            background: #FF1493;
+            color: white;
+        }
+
+        /* Fraction Info */
+        .fraction-info {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            min-width: 250px;
+        }
+
+        .fraction-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .fraction-stat {
+            text-align: center;
+        }
+
+        .fraction-stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .fraction-stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
         /* Info Project Section */
         .info-project {
             background: linear-gradient(135deg, white 0%, #EFF6FF 100%);
@@ -811,6 +990,49 @@
             border: 1px solid #ffeaa7;
         }
 
+        /* Download App Button */
+        .download-app {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background: #9C27B0;
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .download-app:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(156, 39, 176, 0.4);
+        }
+
+        /* Back to Site Button */
+        .back-to-site {
+            background: #607D8B;
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-to-site:hover {
+            background: #455A64;
+            transform: translateY(-2px);
+            text-decoration: none;
+            color: white;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .header h1 {
@@ -855,49 +1077,21 @@
                 height: 50px;
                 font-size: 2rem;
             }
-        }
 
-        /* Download App Button */
-        .download-app {
-            position: fixed;
-            bottom: 1rem;
-            right: 1rem;
-            background: #9C27B0;
-            color: white;
-            border: none;
-            padding: 0.75rem;
-            border-radius: 50%;
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
+            .pizza-container {
+                width: 200px;
+                height: 200px;
+            }
 
-        .download-app:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 16px rgba(156, 39, 176, 0.4);
-        }
+            .pizza-slice {
+                width: 100px;
+                height: 100px;
+            }
 
-        /* Back to Site Button */
-        .back-to-site {
-            background: #607D8B;
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .back-to-site:hover {
-            background: #455A64;
-            transform: translateY(-2px);
-            text-decoration: none;
-            color: white;
+            .fraction-selector {
+                flex-direction: column;
+                align-items: center;
+            }
         }
 
         /* Hidden class */
@@ -914,9 +1108,6 @@
         <div class="floating-shape"></div>
         <div class="floating-shape"></div>
     </div>
-
-    <!-- PWA Install Button -->
-    <button class="pwa-install" id="installBtn" title="Installa l'app">📱</button>
 
     <!-- Download App Button -->
     <button class="download-app" id="downloadBtn" title="Scarica l'app">💾</button>
@@ -1121,6 +1312,7 @@
         // Global Variables
         let currentClass = 1;
         let currentGame = '';
+        let currentFractionType = 'pizza'; // pizza, chocolate, cake
         let adaptiveData = {
             consecutiveCorrect: 0,
             consecutiveWrong: 0,
@@ -1321,29 +1513,18 @@
                     { id: 'statistica-base', name: '📊 I Miei Primi Grafici', description: 'Raccogli e analizza dati' },
                     { id: 'variabili-semplici', name: '📦 Variabili Avanzate', description: 'Programmazione con variabili' },
                     { id: 'algoritmi-avanzati', name: '🧠 Algoritmi Pro', description: 'Ottimizzazione e ricerca' },
-                    { id: 'progetti-completi', name: '🎮 Crea il Tuo Gioco', description: 'Progetti completi con interfaccia' },
+                    { id: 'progetti-completti', name: '🎮 Crea il Tuo Gioco', description: 'Progetti completi con interfaccia' },
                     { id: 'collaborazione-digitale', name: '🤝 Coding di Squadra', description: 'Progetti collaborativi' }
                 ]
             }
         };
 
-        // PWA Installation
+        // PWA Installation - AUTOMATICA
         let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
+            // Non preveniamo l'evento, lasciamo che il browser mostri il prompt naturalmente
             deferredPrompt = e;
-            document.getElementById('installBtn').style.display = 'block';
-        });
-
-        document.getElementById('installBtn').addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    document.getElementById('installBtn').style.display = 'none';
-                }
-                deferredPrompt = null;
-            }
+            console.log('PWA installable');
         });
 
         // Download App functionality
@@ -1983,49 +2164,175 @@
             `;
         }
 
-        // Fraction Game (Classe 4+) - Già buona, solo piccoli miglioramenti
+        // CORRETTA: Fraction Game con visualizzazione completa
         function generateFractionQuestion() {
-            const denominators = currentClass >= 5 ? [2, 3, 4, 6, 8, 12] : [2, 3, 4, 6, 8];
+            const denominators = currentClass >= 5 ? [2, 3, 4, 6, 8] : [2, 3, 4, 6];
             const denominator = denominators[Math.floor(Math.random() * denominators.length)];
             const numerator = Math.floor(Math.random() * denominator) + 1;
             
+            // Scegli tipo di visualizzazione casuale
+            const fractionTypes = ['pizza', 'chocolate', 'cake'];
+            currentFractionType = fractionTypes[Math.floor(Math.random() * fractionTypes.length)];
+            
             gameState.currentQuestion = {
                 numerator: numerator,
-                denominator: denominator
+                denominator: denominator,
+                type: currentFractionType
             };
 
+            let visualizationHTML = '';
+            
+            if (currentFractionType === 'pizza') {
+                visualizationHTML = generatePizzaVisualization(denominator);
+            } else if (currentFractionType === 'chocolate') {
+                visualizationHTML = generateChocolateVisualization(denominator);
+            } else {
+                visualizationHTML = generateCakeVisualization(denominator);
+            }
+
             document.getElementById('gameContent').innerHTML = `
-                <div class="question">Seleziona ${numerator}/${denominator} della pizza!</div>
+                <div class="question">Seleziona ${numerator}/${denominator} ${getFractionTypeText(currentFractionType)}!</div>
+                
                 <div class="fraction-visual">
-                    <div class="pizza-container" id="pizzaContainer">
-                        ${Array(denominator).fill(0).map((_, i) => 
-                            `<div class="pizza-slice" data-slice="${i}" onclick="toggleSlice(this)"></div>`
-                        ).join('')}
+                    <div class="fraction-selector">
+                        <div class="fraction-type ${currentFractionType === 'pizza' ? 'active' : ''}" onclick="changeFractionType('pizza')">
+                            🍕 Pizza
+                        </div>
+                        <div class="fraction-type ${currentFractionType === 'chocolate' ? 'active' : ''}" onclick="changeFractionType('chocolate')">
+                            🍫 Cioccolato
+                        </div>
+                        <div class="fraction-type ${currentFractionType === 'cake' ? 'active' : ''}" onclick="changeFractionType('cake')">
+                            🎂 Torta
+                        </div>
                     </div>
-                    <div style="margin-top: 2rem;">
-                        <div>Fette selezionate: <span id="selectedSlices">0</span>/${denominator}</div>
-                        <div>Frazione: <span id="currentFraction">0/${denominator}</span></div>
+                    
+                    <div class="fraction-display">
+                        ${visualizationHTML}
+                    </div>
+                    
+                    <div class="fraction-info">
+                        <div style="font-size: 1.5rem; margin-bottom: 1rem;">
+                            <strong>Frazione target: ${numerator}/${denominator}</strong>
+                        </div>
+                        <div class="fraction-stats">
+                            <div class="fraction-stat">
+                                <div class="fraction-stat-number" id="selectedPieces">0</div>
+                                <div class="fraction-stat-label">Selezionate</div>
+                            </div>
+                            <div class="fraction-stat">
+                                <div class="fraction-stat-number">${denominator}</div>
+                                <div class="fraction-stat-label">Totali</div>
+                            </div>
+                            <div class="fraction-stat">
+                                <div class="fraction-stat-number" id="currentFraction">0/${denominator}</div>
+                                <div class="fraction-stat-label">Frazione attuale</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
             
-            // Position pizza slices
-            const slices = document.querySelectorAll('.pizza-slice');
-            slices.forEach((slice, index) => {
-                const angle = (360 / denominator) * index;
-                slice.style.transform = `rotate(${angle}deg)`;
-                slice.style.clipPath = `polygon(0 0, 100% 0, ${50 + 50 * Math.cos((360/denominator) * Math.PI / 180)}% ${50 + 50 * Math.sin((360/denominator) * Math.PI / 180)}%)`;
-            });
-            
+            setupFractionInteractions();
             document.getElementById('checkAnswerBtn').style.display = 'inline-block';
         }
 
-        function toggleSlice(slice) {
-            slice.classList.toggle('filled');
-            const selectedCount = document.querySelectorAll('.pizza-slice.filled').length;
-            document.getElementById('selectedSlices').textContent = selectedCount;
-            document.getElementById('currentFraction').textContent = 
-                `${selectedCount}/${gameState.currentQuestion.denominator}`;
+        function getFractionTypeText(type) {
+            switch(type) {
+                case 'pizza': return 'della pizza';
+                case 'chocolate': return 'del cioccolato';
+                case 'cake': return 'della torta';
+                default: return 'dell\'oggetto';
+            }
+        }
+
+        function generatePizzaVisualization(denominator) {
+            return `
+                <div class="pizza-container" id="fractionContainer">
+                    ${Array(denominator).fill(0).map((_, i) => 
+                        `<div class="pizza-slice" data-piece="${i}" onclick="toggleFractionPiece(this)"></div>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        function generateChocolateVisualization(denominator) {
+            const rows = Math.ceil(Math.sqrt(denominator));
+            const cols = Math.ceil(denominator / rows);
+            
+            return `
+                <div class="chocolate-container" id="fractionContainer" style="grid-template-columns: repeat(${cols}, 50px); grid-template-rows: repeat(${rows}, 40px);">
+                    ${Array(denominator).fill(0).map((_, i) => 
+                        `<div class="chocolate-piece" data-piece="${i}" onclick="toggleFractionPiece(this)">${i + 1}</div>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        function generateCakeVisualization(denominator) {
+            return `
+                <div class="cake-container" id="fractionContainer">
+                    ${Array(denominator).fill(0).map((_, i) => 
+                        `<div class="cake-slice" data-piece="${i}" onclick="toggleFractionPiece(this)" 
+                             style="left: ${(i * 200 / denominator)}px; width: ${200 / denominator}px;">${i + 1}</div>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        function setupFractionInteractions() {
+            // Setup pizza slices positioning
+            if (currentFractionType === 'pizza') {
+                const slices = document.querySelectorAll('.pizza-slice');
+                const denominator = gameState.currentQuestion.denominator;
+                slices.forEach((slice, index) => {
+                    const angle = (360 / denominator) * index;
+                    const nextAngle = (360 / denominator) * (index + 1);
+                    slice.style.transform = `rotate(${angle}deg)`;
+                    
+                    // Create pie slice using clip-path
+                    const x1 = 50 + 50 * Math.cos((angle - 90) * Math.PI / 180);
+                    const y1 = 50 + 50 * Math.sin((angle - 90) * Math.PI / 180);
+                    const x2 = 50 + 50 * Math.cos((nextAngle - 90) * Math.PI / 180);
+                    const y2 = 50 + 50 * Math.sin((nextAngle - 90) * Math.PI / 180);
+                    
+                    slice.style.clipPath = `polygon(50% 50%, ${x1}% ${y1}%, ${x2}% ${y2}%)`;
+                });
+            }
+        }
+
+        function changeFractionType(newType) {
+            currentFractionType = newType;
+            gameState.currentQuestion.type = newType;
+            
+            // Regenera la visualizzazione
+            let visualizationHTML = '';
+            if (newType === 'pizza') {
+                visualizationHTML = generatePizzaVisualization(gameState.currentQuestion.denominator);
+            } else if (newType === 'chocolate') {
+                visualizationHTML = generateChocolateVisualization(gameState.currentQuestion.denominator);
+            } else {
+                visualizationHTML = generateCakeVisualization(gameState.currentQuestion.denominator);
+            }
+            
+            document.querySelector('.fraction-display').innerHTML = visualizationHTML;
+            
+            // Aggiorna i selettori attivi
+            document.querySelectorAll('.fraction-type').forEach(el => el.classList.remove('active'));
+            document.querySelector(`.fraction-type:nth-child(${['pizza', 'chocolate', 'cake'].indexOf(newType) + 1})`).classList.add('active');
+            
+            // Reset selezioni
+            document.getElementById('selectedPieces').textContent = '0';
+            document.getElementById('currentFraction').textContent = `0/${gameState.currentQuestion.denominator}`;
+            
+            setupFractionInteractions();
+        }
+
+        function toggleFractionPiece(piece) {
+            piece.classList.toggle('filled');
+            const selectedCount = document.querySelectorAll(`#fractionContainer .${currentFractionType === 'pizza' ? 'pizza-slice' : currentFractionType === 'chocolate' ? 'chocolate-piece' : 'cake-slice'}.filled`).length;
+            
+            document.getElementById('selectedPieces').textContent = selectedCount;
+            document.getElementById('currentFraction').textContent = `${selectedCount}/${gameState.currentQuestion.denominator}`;
         }
 
         // RIVOLUZIONATA: Variable Game con scenari interessanti
@@ -2302,8 +2609,8 @@
                     isCorrect = JSON.stringify(userOrder) === JSON.stringify(correctOrder);
                     break;
                 case 'frazioni-visual':
-                    const selectedSlices = document.querySelectorAll('.pizza-slice.filled').length;
-                    isCorrect = selectedSlices === gameState.currentQuestion.numerator;
+                    const selectedPieces = document.querySelectorAll(`#fractionContainer .${currentFractionType === 'pizza' ? 'pizza-slice' : currentFractionType === 'chocolate' ? 'chocolate-piece' : 'cake-slice'}.filled`).length;
+                    isCorrect = selectedPieces === gameState.currentQuestion.numerator;
                     break;
                 default:
                     return;
@@ -2441,7 +2748,7 @@
                 'tabelline-base': 'Ricorda: moltiplicare significa sommare tante volte lo stesso numero! 3×4 = 3+3+3+3',
                 'loop-semplici': 'Un loop ripete un\'azione. Se devi fare qualcosa 5 volte, il loop esegue l\'azione esattamente 5 volte!',
                 'if-then-base': 'Se succede una cosa, allora devi fare un\'azione logica. Cosa faresti davvero in quella situazione?',
-                'frazioni-visual': 'Una frazione ti dice quante parti colorare del totale. Se è 2/4, colora 2 parti su 4!',
+                'frazioni-visual': 'Una frazione ti dice quante parti colorare del totale. Se è 2/4, colora 2 parti su 4! Puoi cambiare tipo di visualizzazione cliccando i pulsanti sopra.',
                 'variabili-semplici': 'Una variabile è come una scatola con un\'etichetta. Leggi bene la domanda: cosa chiede esattamente?',
                 'algoritmi-avanzati': 'Pensa alla strategia più efficace e logica. Quale approccio risolverebbe davvero il problema?',
                 'statistica-base': 'Media = somma tutti i numeri ÷ quanti sono. Massimo = il più grande. Minimo = il più piccolo.',
