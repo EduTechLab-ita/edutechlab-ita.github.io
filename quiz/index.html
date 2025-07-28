@@ -719,7 +719,7 @@
             font-weight: bold;
         }
 
-        /* RIPARATE: Frazioni Game con visualizzazione completa */
+        /* CORRETTE: Frazioni Game con visualizzazione completa */
         .fraction-visual {
             display: flex;
             flex-direction: column;
@@ -765,7 +765,7 @@
             margin: 2rem 0;
         }
 
-        /* Pizza Visualization */
+        /* Pizza Visualization - CORRETTA */
         .pizza-container {
             position: relative;
             width: 250px;
@@ -779,26 +779,29 @@
 
         .pizza-slice {
             position: absolute;
-            width: 125px;
-            height: 125px;
+            width: 50%;
+            height: 50%;
             border: 2px solid #FF6B35;
             cursor: pointer;
             transition: all 0.3s ease;
             transform-origin: 100% 100%;
             background: #FFF8DC;
+            top: 50%;
+            left: 50%;
         }
 
         .pizza-slice:hover {
             background: #FFE4B5;
+            transform: scale(1.05);
         }
 
         .pizza-slice.filled {
             background: #FF6B35;
             background-image: 
-                radial-gradient(circle at 20% 30%, #FF4500 8px, transparent 8px),
-                radial-gradient(circle at 60% 20%, #DC143C 6px, transparent 6px),
-                radial-gradient(circle at 40% 70%, #228B22 5px, transparent 5px),
-                radial-gradient(circle at 80% 60%, #FFD700 4px, transparent 4px);
+                radial-gradient(circle at 30% 40%, #FF4500 8px, transparent 8px),
+                radial-gradient(circle at 70% 30%, #DC143C 6px, transparent 6px),
+                radial-gradient(circle at 40% 80%, #228B22 5px, transparent 5px),
+                radial-gradient(circle at 80% 70%, #FFD700 4px, transparent 4px);
         }
 
         /* Chocolate Bar Visualization */
@@ -955,6 +958,27 @@
             margin-bottom: 0.5rem;
         }
 
+        /* NUOVO: Colophon per pagine interne */
+        .colophon {
+            background: rgba(255, 255, 255, 0.9);
+            color: #666;
+            text-align: center;
+            padding: 1rem;
+            margin: 1rem;
+            border-radius: 1rem;
+            font-size: 0.9rem;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .colophon p {
+            margin-bottom: 0.5rem;
+        }
+
+        .colophon .copyright {
+            font-weight: bold;
+            color: #374151;
+        }
+
         /* Success/Error Messages */
         .message {
             padding: 1rem;
@@ -988,28 +1012,6 @@
             background: #fff3cd;
             color: #856404;
             border: 1px solid #ffeaa7;
-        }
-
-        /* Download App Button */
-        .download-app {
-            position: fixed;
-            bottom: 1rem;
-            right: 1rem;
-            background: #9C27B0;
-            color: white;
-            border: none;
-            padding: 0.75rem;
-            border-radius: 50%;
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .download-app:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 16px rgba(156, 39, 176, 0.4);
         }
 
         /* Back to Site Button */
@@ -1083,11 +1085,6 @@
                 height: 200px;
             }
 
-            .pizza-slice {
-                width: 100px;
-                height: 100px;
-            }
-
             .fraction-selector {
                 flex-direction: column;
                 align-items: center;
@@ -1108,9 +1105,6 @@
         <div class="floating-shape"></div>
         <div class="floating-shape"></div>
     </div>
-
-    <!-- Download App Button -->
-    <button class="download-app" id="downloadBtn" title="Scarica l'app">💾</button>
 
     <div class="main-container">
         <!-- Homepage: Scelta Classe -->
@@ -1268,6 +1262,12 @@
             <div class="games-grid" id="gamesGrid">
                 <!-- I giochi verranno caricati dinamicamente -->
             </div>
+
+            <!-- Colophon per pagina Giochi -->
+            <div class="colophon">
+                <p><strong>EduTech Lab</strong> - Piattaforma di Pensiero Computazionale</p>
+                <p class="copyright">© 2025 Fabio Rizzotto - Tutti i diritti riservati</p>
+            </div>
         </div>
 
         <!-- Interfaccia Gioco -->
@@ -1304,6 +1304,12 @@
             <div style="text-align: center; margin-top: 2rem;">
                 <button class="btn btn-primary" onclick="nextQuestion()">🔄 Prossima Domanda</button>
                 <button class="btn btn-success" onclick="checkAnswer()" style="display: none;" id="checkAnswerBtn">✅ Verifica Risposta</button>
+            </div>
+
+            <!-- Colophon per pagina Gioco -->
+            <div class="colophon">
+                <p><strong>EduTech Lab</strong> - Piattaforma di Pensiero Computazionale</p>
+                <p class="copyright">© 2025 Fabio Rizzotto - Tutti i diritti riservati</p>
             </div>
         </div>
     </div>
@@ -1513,54 +1519,18 @@
                     { id: 'statistica-base', name: '📊 I Miei Primi Grafici', description: 'Raccogli e analizza dati' },
                     { id: 'variabili-semplici', name: '📦 Variabili Avanzate', description: 'Programmazione con variabili' },
                     { id: 'algoritmi-avanzati', name: '🧠 Algoritmi Pro', description: 'Ottimizzazione e ricerca' },
-                    { id: 'progetti-completti', name: '🎮 Crea il Tuo Gioco', description: 'Progetti completi con interfaccia' },
+                    { id: 'progetti-completi', name: '🎮 Crea il Tuo Gioco', description: 'Progetti completi con interfaccia' },
                     { id: 'collaborazione-digitale', name: '🤝 Coding di Squadra', description: 'Progetti collaborativi' }
                 ]
             }
         };
 
-        // PWA Installation - AUTOMATICA
+        // PWA Installation - AUTOMATICA (RIMOSSO pulsante download)
         let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
             // Non preveniamo l'evento, lasciamo che il browser mostri il prompt naturalmente
             deferredPrompt = e;
             console.log('PWA installable');
-        });
-
-        // Download App functionality
-        document.getElementById('downloadBtn').addEventListener('click', function() {
-            // Crea il contenuto HTML completo
-            const htmlContent = `<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduTech Lab - Pensiero Computazionale</title>
-    <meta name="description" content="Piattaforma di Pensiero Computazionale per la Scuola Primaria">
-</head>
-<body>
-    ${document.documentElement.innerHTML}
-</body>
-</html>`;
-            
-            // Crea il file blob
-            const blob = new Blob([htmlContent], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            
-            // Crea link per il download
-            const downloadLink = document.createElement('a');
-            downloadLink.href = url;
-            downloadLink.download = 'edutech-lab-giochi.html';
-            downloadLink.style.display = 'none';
-            
-            // Aggiungi al DOM, clicca e rimuovi
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-            URL.revokeObjectURL(url);
-            
-            // Mostra messaggio di successo
-            showMessage('🎉 App scaricata! Apri il file per giocare offline!', 'success');
         });
 
         // Load saved data
@@ -2164,7 +2134,7 @@
             `;
         }
 
-        // CORRETTA: Fraction Game con visualizzazione completa
+        // CORRETTA: Fraction Game con visualizzazione completa delle pizza slices
         function generateFractionQuestion() {
             const denominators = currentClass >= 5 ? [2, 3, 4, 6, 8] : [2, 3, 4, 6];
             const denominator = denominators[Math.floor(Math.random() * denominators.length)];
@@ -2280,22 +2250,34 @@
         }
 
         function setupFractionInteractions() {
-            // Setup pizza slices positioning
+            // Setup pizza slices positioning - CORRETTA
             if (currentFractionType === 'pizza') {
                 const slices = document.querySelectorAll('.pizza-slice');
                 const denominator = gameState.currentQuestion.denominator;
                 slices.forEach((slice, index) => {
                     const angle = (360 / denominator) * index;
                     const nextAngle = (360 / denominator) * (index + 1);
-                    slice.style.transform = `rotate(${angle}deg)`;
                     
-                    // Create pie slice using clip-path
-                    const x1 = 50 + 50 * Math.cos((angle - 90) * Math.PI / 180);
-                    const y1 = 50 + 50 * Math.sin((angle - 90) * Math.PI / 180);
-                    const x2 = 50 + 50 * Math.cos((nextAngle - 90) * Math.PI / 180);
-                    const y2 = 50 + 50 * Math.sin((nextAngle - 90) * Math.PI / 180);
+                    // Calcola i punti per creare le fette triangolari
+                    const centerX = 50;
+                    const centerY = 50;
+                    const radius = 47; // Leggermente più piccolo del contenitore
                     
-                    slice.style.clipPath = `polygon(50% 50%, ${x1}% ${y1}%, ${x2}% ${y2}%)`;
+                    const startAngle = (angle - 90) * Math.PI / 180; // -90 per iniziare dall'alto
+                    const endAngle = (nextAngle - 90) * Math.PI / 180;
+                    
+                    const x1 = centerX + radius * Math.cos(startAngle);
+                    const y1 = centerY + radius * Math.sin(startAngle);
+                    const x2 = centerX + radius * Math.cos(endAngle);
+                    const y2 = centerY + radius * Math.sin(endAngle);
+                    
+                    // Crea il triangolo usando clip-path
+                    slice.style.clipPath = `polygon(${centerX}% ${centerY}%, ${x1}% ${y1}%, ${x2}% ${y2}%)`;
+                    slice.style.transform = 'none'; // Rimuovi trasformazioni precedenti
+                    slice.style.top = '0';
+                    slice.style.left = '0';
+                    slice.style.width = '100%';
+                    slice.style.height = '100%';
                 });
             }
         }
