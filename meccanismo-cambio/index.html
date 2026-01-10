@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Animazione interattiva per spiegare il cambio tra unità, decine e centinaia">
+    <meta name="theme-color" content="#667eea">
+    <link rel="manifest" href="manifest.json">
+    <title>Il Meccanismo del Cambio</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        /* Messaggio didattico */
+        .message-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            max-width: 600px;
+        }
+
+        .message-box.show {
+            opacity: 1;
+        }
+
+        /* Contenitore principale delle cifre */
+        .counter-container {
+            display: flex;
+            gap: 15px;
+            perspective: 1000px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Stile comune per le tessere */
+        .digit-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+            font-family: Arial, sans-serif;
+            letter-spacing: 1px;
+        }
+
+        /* Colori richiesti */
+        .h-col .label { color: #28a745; } /* Verde - Centinaia */
+        .da-col .label { color: #dc3545; } /* Rosso - Decine */
+        .u-col .label { color: #007bff; }  /* Blu - Unità */
+
+        /* La carta "Flip" */
+        .flip-card {
+            position: relative;
+            width: 120px;
+            height: 160px;
+            background-color: #333;
+            border-radius: 8px;
+            font-size: 100px;
+            line-height: 160px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Applicazione dei colori di sfondo alle carte */
+        .h-col .flip-card { background-color: #28a745; }
+        .da-col .flip-card { background-color: #dc3545; }
+        .u-col .flip-card { background-color: #007bff; }
+
+        /* Linea orizzontale per effetto "flip" */
+        .flip-card::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: rgba(0,0,0,0.2);
+        }
+
+        /* Evidenziazione quando scatta il cambio */
+        .flip-card.highlight {
+            border: 5px solid #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            transform: scale(1.1);
+        }
+
+        /* Animazione scatto */
+        .snap {
+            animation: flipEffect 0.4s ease-in-out;
+        }
+
+        @keyframes flipEffect {
+            0% { transform: rotateX(0deg); opacity: 1; }
+            50% { transform: rotateX(90deg); opacity: 0.5; }
+            100% { transform: rotateX(0deg); opacity: 1; }
+        }
+
+        /* Pannello controlli */
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 800px;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.1s;
+            font-weight: bold;
+            color: white;
+        }
+
+        button:active { transform: scale(0.95); }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-add { background-color: #007bff; }
+        .btn-sub { background-color: #6c757d; }
+        .btn-reset { background-color: #343a40; }
+
+        .input-group {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            margin-left: 20px;
+            border-left: 2px solid #eee;
+            padding-left: 20px;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            font-size: 1.2rem;
+            width: 80px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .btn-go { background-color: #28a745; }
+        .btn-show-cambio { background-color: #ffc107; color: #333; }
+
+        /* Pallina animata per il cambio */
+        .transfer-ball {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            font-weight: bold;
+            color: white;
+            z-index: 1000;
+            pointer-events: none;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            border: 4px solid rgba(255,255,255,0.5);
+        }
+
+        /* Colori fissi per le palline */
+        .transfer-ball.red {
+            background: linear-gradient(135deg, #dc3545, #a71d2a);
+        }
+
+        .transfer-ball.green {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+        }
+
+        .transfer-ball.blue {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+        }
+
+        /* Animazione spostamento e rimpicciolimento (senza cambio colore) */
+        @keyframes moveAndShrink {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--moveX), var(--moveY)) scale(0.2);
+                opacity: 0.8;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .input-group {
+                margin-left: 0;
+                border-left: none;
+                padding-left: 0;
+                border-top: 2px solid #eee;
+                padding-top: 15px;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Il Meccanismo del Cambio</h1>
+
+    <div class="message-box" id="messageBox">
+        Pronto per iniziare!
+    </div>
+
+    <div class="counter-container">
+        <div class="digit-group h-col">
+            <span class="label">h (Verde)</span>
+            <div class="flip-card" id="card-h">0</div>
+        </div>
+
+        <div class="digit-group da-col">
+            <span class="label">da (Rosso)</span>
+            <div class="flip-card" id="card-da">0</div>
+        </div>
+
+        <div class="digit-group u-col">
+            <span class="label">u (Blu)</span>
+            <div class="flip-card" id="card-u">0</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn-sub" id="btnSub" onclick="step(-1)">-1</button>
+        <button class="btn-add" id="btnAdd" onclick="step(1)">+1 Aggiungi Unità</button>
+        <button class="btn-reset" onclick="resetCounter()">Azzera</button>
+
+        <div class="input-group">
+            <input type="number" id="targetNum" placeholder="Es. 20" min="0" max="999">
+            <button class="btn-go" id="btnGo" onclick="goToNumber()">Vai al numero</button>
+            <button class="btn-show-cambio" id="btnShowCambio" onclick="goToNumberWithCambio()">Mostra cambio</button>
+        </div>
+    </div>
+
+    <script>
+        let currentNumber = 0;
+        let isAnimating = false; // Blocca i pulsanti durante l'animazione
+
+        const cardH = document.getElementById('card-h');
+        const cardDa = document.getElementById('card-da');
+        const cardU = document.getElementById('card-u');
+        const messageBox = document.getElementById('messageBox');
+
+        // Funzione per mostrare messaggi didattici
+        function showMessage(text, duration = 2000) {
+            messageBox.innerText = text;
+            messageBox.classList.add('show');
+
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+            }, duration);
+        }
+
+        // Funzione per aggiornare display base (senza animazione cambio)
+        function updateDisplay(num, animate = true) {
+            let h = Math.floor(num / 100) % 10;
+            let da = Math.floor(num / 10) % 10;
+            let u = num % 10;
+
+            if (cardH.innerText != h) triggerFlip(cardH, h, animate);
+            if (cardDa.innerText != da) triggerFlip(cardDa, da, animate);
+            if (cardU.innerText != u) triggerFlip(cardU, u, animate);
+        }
+
+        function triggerFlip(element, newValue, animate) {
+            if (animate) {
+                element.classList.remove('snap');
+                void element.offsetWidth;
+                element.classList.add('snap');
+            }
+            setTimeout(() => {
+                element.innerText = newValue;
+            }, 200);
+        }
+
+        // Evidenzia una carta
+        function highlightCard(card, duration = 1500) {
+            card.classList.add('highlight');
+            setTimeout(() => {
+                card.classList.remove('highlight');
+            }, duration);
+        }
+
+        // Crea e anima la pallina del trasferimento
+        // ballColor: 'red', 'green', 'blue' (colore della pallina)
+        // label: testo da mostrare ('1' o '10')
+        function createTransferBall(fromCard, toCard, ballColor, label) {
+            const ball = document.createElement('div');
+            ball.className = `transfer-ball ${ballColor}`;
+            ball.innerText = label;
+
+            // Posiziona la pallina sulla carta di origine
+            const fromRect = fromCard.getBoundingClientRect();
+            ball.style.left = fromRect.left + fromRect.width / 2 - 50 + 'px';
+            ball.style.top = fromRect.top + fromRect.height / 2 - 50 + 'px';
+
+            // Calcola la distanza verso la carta di destinazione
+            const toRect = toCard.getBoundingClientRect();
+            const moveX = (toRect.left + toRect.width / 2) - (fromRect.left + fromRect.width / 2);
+            const moveY = (toRect.top + toRect.height / 2) - (fromRect.top + fromRect.height / 2);
+
+            ball.style.setProperty('--moveX', moveX + 'px');
+            ball.style.setProperty('--moveY', moveY + 'px');
+
+            document.body.appendChild(ball);
+
+            // Avvia l'animazione (sempre la stessa, solo spostamento e rimpicciolimento)
+            setTimeout(() => {
+                ball.style.animation = 'moveAndShrink 1.5s ease-in-out forwards';
+            }, 100);
+
+            // Rimuovi la pallina dopo l'animazione
+            setTimeout(() => {
+                ball.remove();
+            }, 1700);
+
+            return ball;
+        }
+
+        // Funzione STEP con animazione del cambio
+        async function step(amount) {
+            if (isAnimating) return;
+
+            let nextNum = currentNumber + amount;
+            if (nextNum < 0) nextNum = 0;
+            if (nextNum > 999) nextNum = 999;
+
+            // Se sto aggiungendo e c'è un cambio, mostro l'animazione
+            if (amount > 0 && willCauseCambio(currentNumber, nextNum)) {
+                await animateCambio(currentNumber, nextNum);
+            }
+            // Se sto sottraendo e c'è un "prestito", mostro l'animazione
+            else if (amount < 0 && willCausePrestito(currentNumber, nextNum)) {
+                await animatePrestito(currentNumber, nextNum);
+            }
+            else {
+                // Cambio normale senza cascata
+                currentNumber = nextNum;
+                updateDisplay(currentNumber);
+            }
+        }
+
+        // Controlla se il cambio causerà una cascata
+        function willCauseCambio(from, to) {
+            let uFrom = from % 10;
+            let uTo = to % 10;
+            return uTo < uFrom; // Se le unità diminuiscono, c'è stato un cambio
+        }
+
+        function willCausePrestito(from, to) {
+            let uFrom = from % 10;
+            let uTo = to % 10;
+            return uTo > uFrom; // Se le unità aumentano andando indietro, c'è stato un prestito
+        }
+
+        // Animazione del cambio (da 9 a 10, 99 a 100, ecc.)
+        async function animateCambio(from, to) {
+            isAnimating = true;
+            disableButtons();
+
+            let h = Math.floor(from / 100) % 10;
+            let da = Math.floor(from / 10) % 10;
+            let u = from % 10;
+
+            // STEP 1: Unità arrivano a 10
+            await sleep(300);
+            triggerFlip(cardU, 10, true);
+            highlightCard(cardU, 2500);
+            showMessage("10 unità fanno 1 decina!", 2500);
+            await sleep(1500);
+
+            // STEP 2: Pallina ROSSA (1 decina) si sposta da unità a decine
+            createTransferBall(cardU, cardDa, 'red', '1');
+            await sleep(1800);
+
+            // STEP 3: Azzero unità e aumento decine
+            triggerFlip(cardU, 0, true);
+            await sleep(400);
+
+            da++;
+            if (da === 10) {
+                // CASCATA: anche le decine arrivano a 10
+                triggerFlip(cardDa, 10, true);
+                highlightCard(cardDa, 2500);
+                showMessage("10 decine fanno 1 centinaio!", 2500);
+                await sleep(1500);
+
+                // Pallina VERDE (1 centinaio) si sposta da decine a centinaia
+                createTransferBall(cardDa, cardH, 'green', '1');
+                await sleep(1800);
+
+                triggerFlip(cardDa, 0, true);
+                await sleep(400);
+
+                h++;
+                triggerFlip(cardH, h, true);
+                highlightCard(cardH, 1500);
+            } else {
+                triggerFlip(cardDa, da, true);
+                highlightCard(cardDa, 1500);
+            }
+
+            await sleep(1000);
+
+            currentNumber = to;
+            isAnimating = false;
+            enableButtons();
+            showMessage(`Numero attuale: ${currentNumber}`, 1500);
+        }
+
+        // Animazione del prestito (da 10 a 9, 100 a 99, ecc.)
+        async function animatePrestito(from, to) {
+            isAnimating = true;
+            disableButtons();
+
+            let h = Math.floor(from / 100) % 10;
+            let da = Math.floor(from / 10) % 10;
+            let u = from % 10;
+
+            if (u === 0) {
+                if (da === 0 && h > 0) {
+                    // Prestito dalle centinaia
+                    showMessage("Prendo in prestito 1 centinaio = 10 decine", 2500);
+                    highlightCard(cardH, 2500);
+                    await sleep(1500);
+
+                    // Pallina ROSSA con "10" (10 decine) va da centinaia a decine
+                    createTransferBall(cardH, cardDa, 'red', '10');
+                    await sleep(1800);
+
+                    h--;
+                    triggerFlip(cardH, h, true);
+                    await sleep(800);
+
+                    triggerFlip(cardDa, 10, true);
+                    await sleep(600);
+
+                    showMessage("1 decina = 10 unità", 2000);
+                    highlightCard(cardDa, 2000);
+                    await sleep(1000);
+
+                    // Pallina BLU con "10" (10 unità) va da decine a unità
+                    createTransferBall(cardDa, cardU, 'blue', '10');
+                    await sleep(1800);
+
+                    triggerFlip(cardDa, 9, true);
+                    await sleep(600);
+
+                    triggerFlip(cardU, 9, true);
+                    highlightCard(cardU, 1500);
+
+                } else if (da > 0) {
+                    // Prestito dalle decine
+                    showMessage("Prendo in prestito 1 decina = 10 unità", 2500);
+                    highlightCard(cardDa, 2500);
+                    await sleep(1500);
+
+                    // Pallina BLU con "10" (10 unità) va da decine a unità
+                    createTransferBall(cardDa, cardU, 'blue', '10');
+                    await sleep(1800);
+
+                    da--;
+                    triggerFlip(cardDa, da, true);
+                    await sleep(800);
+
+                    triggerFlip(cardU, 9, true);
+                    highlightCard(cardU, 1500);
+                }
+            } else {
+                u--;
+                triggerFlip(cardU, u, true);
+            }
+
+            await sleep(1000);
+
+            currentNumber = to;
+            isAnimating = false;
+            enableButtons();
+            showMessage(`Numero attuale: ${currentNumber}`, 1500);
+        }
+
+        function resetCounter() {
+            if (isAnimating) return;
+            currentNumber = 0;
+            updateDisplay(0);
+            showMessage("Azzerato!", 1500);
+        }
+
+        // Vai al numero direttamente (senza contare)
+        function goToNumber() {
+            if (isAnimating) return;
+
+            const input = document.getElementById('targetNum');
+            let target = parseInt(input.value);
+
+            if (isNaN(target) || target < 0 || target > 999) {
+                alert("Inserisci un numero valido tra 0 e 999");
+                return;
+            }
+
+            currentNumber = target;
+            updateDisplay(currentNumber, true);
+            showMessage(`Saltato al numero: ${currentNumber}`, 1500);
+        }
+
+        // Vai al numero mostrando tutti i cambi
+        async function goToNumberWithCambio() {
+            if (isAnimating) return;
+
+            const input = document.getElementById('targetNum');
+            let target = parseInt(input.value);
+
+            if (isNaN(target) || target < 0 || target > 999) {
+                alert("Inserisci un numero valido tra 0 e 999");
+                return;
+            }
+
+            isAnimating = true;
+            disableButtons();
+
+            const direction = target > currentNumber ? 1 : -1;
+
+            while (currentNumber !== target) {
+                await step(direction);
+                await sleep(500); // Pausa tra ogni incremento
+            }
+
+            isAnimating = false;
+            enableButtons();
+        }
+
+        // Utility
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function disableButtons() {
+            document.getElementById('btnAdd').disabled = true;
+            document.getElementById('btnSub').disabled = true;
+            document.getElementById('btnGo').disabled = true;
+            document.getElementById('btnShowCambio').disabled = true;
+        }
+
+        function enableButtons() {
+            document.getElementById('btnAdd').disabled = false;
+            document.getElementById('btnSub').disabled = false;
+            document.getElementById('btnGo').disabled = false;
+            document.getElementById('btnShowCambio').disabled = false;
+        }
+
+        // Messaggio iniziale
+        setTimeout(() => {
+            showMessage("Premi +1 per vedere il meccanismo del cambio!", 3000);
+        }, 500);
+    </script>
+</body>
+</html>
