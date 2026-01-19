@@ -4,8 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Animazione interattiva per spiegare il cambio tra unità, decine e centinaia">
-    <meta name="theme-color" content="#667eea">
+    <meta name="author" content="EduTechLab - Fabio Rizzotto">
+
+    <!-- PWA Configuration -->
     <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Meccanismo Cambio">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+
     <title>Il Meccanismo del Cambio</title>
     <style>
         body {
@@ -241,6 +251,24 @@
                 width: 100%;
                 justify-content: center;
             }
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
         }
 
     </style>
@@ -602,6 +630,23 @@
         setTimeout(() => {
             showMessage("Premi +1 per vedere il meccanismo del cambio!", 3000);
         }, 500);
+
+        // Service Worker (PWA)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then((registration) => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch((error) => {
+                        console.log('SW registration failed: ', error);
+                    });
+            });
+        }
     </script>
+
+    <footer>
+        © 2026 <a href="https://edutechlab-ita.github.io/" target="_blank">EduTechLab</a> - Fabio Rizzotto | Tutti i diritti riservati
+    </footer>
 </body>
 </html>
