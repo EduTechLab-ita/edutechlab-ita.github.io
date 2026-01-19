@@ -564,6 +564,10 @@
             font-weight: 600;
         }
 
+        .coming-soon.red {
+            background: linear-gradient(45deg, #dc2626, #ef4444);
+        }
+
         .tool-card p {
             color: #4b5563;
             line-height: 1.6;
@@ -1073,20 +1077,25 @@
                     <p>Animazione interattiva per spiegare il valore posizionale e il cambio tra unità, decine e centinaia. Pallina animata che mostra visivamente il raggruppamento e la scomposizione.</p>
                     <a href="https://edutechlab-ita.github.io/meccanismo-cambio/" class="tool-button" target="_blank">Scopri il Meccanismo</a>
                 </div>
+                <div class="tool-card fade-in">
+                    <h3>🫧 Bolle Aritmetiche <span class="coming-soon">Disponibile</span></h3>
+                    <p>App interattiva con fisica realistica per esplorare il valore posizionale. Trascina palline nelle bolle di unità, decine e centinaia. Cambio automatico (10→1) e scomposizione visiva con effetti pop!</p>
+                    <a href="./bolle-aritmetiche/" class="tool-button" target="_blank">Gioca con le Bolle</a>
+                </div>
 
                 <!-- STRUMENTI IN SVILUPPO -->
                 <div class="tool-card fade-in">
-                    <h3>📚 Gestione Formazioni <span class="coming-soon">Coming Soon</span></h3>
+                    <h3>📚 Gestione Formazioni <span class="coming-soon red">Coming Soon</span></h3>
                     <p>Applicazione completa per organizzare corsi, gestire iscrizioni e distribuire materiali didattici ai corsisti con sistema di tracking e analytics.</p>
                     <a href="#" class="tool-button" style="opacity: 0.7; cursor: not-allowed;">In Sviluppo</a>
                 </div>
                 <div class="tool-card fade-in">
-                    <h3>🤖 Simulatori STEAM <span class="coming-soon">Coming Soon</span></h3>
+                    <h3>🤖 Simulatori STEAM <span class="coming-soon red">Coming Soon</span></h3>
                     <p>Simulatori interattivi per esperimenti scientifici, concetti di robotica educativa e laboratori virtuali immersivi.</p>
                     <a href="#" class="tool-button" style="opacity: 0.7; cursor: not-allowed;">In Sviluppo</a>
                 </div>
                 <div class="tool-card fade-in">
-                    <h3>📊 Analytics Didattici <span class="coming-soon">Coming Soon</span></h3>
+                    <h3>📊 Analytics Didattici <span class="coming-soon red">Coming Soon</span></h3>
                     <p>Dashboard avanzata per monitorare i progressi degli studenti, l'efficacia delle attività didattiche e generare report automatici.</p>
                     <a href="#" class="tool-button" style="opacity: 0.7; cursor: not-allowed;">In Sviluppo</a>
                 </div>
@@ -1421,7 +1430,7 @@
         // ===============================
         
         // IMPORTANTE: Quando modifichi il sito, incrementa questo numero!
-        const SITE_VERSION = '2.1.0'; // <-- CAMBIA QUESTO QUANDO AGGIORNI IL SITO
+        const SITE_VERSION = '2.2.0'; // <-- CAMBIA QUESTO QUANDO AGGIORNI IL SITO
         
         // Controlla se c'è un aggiornamento disponibile
         function checkForUpdates() {

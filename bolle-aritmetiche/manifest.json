@@ -1,0 +1,26 @@
+{
+  "name": "Bolle Aritmetiche - Valore Posizionale",
+  "short_name": "Bolle Aritmetiche",
+  "description": "App interattiva per imparare il valore posizionale con unità, decine e centinaia. Perfetta per la LIM!",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#667eea",
+  "theme_color": "#667eea",
+  "orientation": "any",
+  "categories": ["education", "kids"],
+  "lang": "it",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

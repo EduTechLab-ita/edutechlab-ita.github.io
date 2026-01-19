@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bolle Aritmetiche - Unità, Decine, Centinaia</title>
+    <meta name="description" content="App interattiva per imparare il valore posizionale con unità, decine e centinaia. Perfetta per la LIM!">
+    <meta name="author" content="EduTechLab - Fabio Rizzotto">
+
+    <!-- PWA Configuration -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Bolle Aritmetiche">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Verdana', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        #app {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding: 10px;
+        }
+
+        /* HEADER CON CONTATORI */
+        #header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
+        #counters {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex: 1;
+        }
+
+        .counter {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 25px;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.9);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .counter-label {
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .counter-value {
+            font-size: 2.8rem;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .counter.hundreds { border: 4px solid #27ae60; }
+        .counter.hundreds .counter-label { color: #27ae60; }
+        .counter.hundreds .counter-value { color: #27ae60; }
+
+        .counter.tens { border: 4px solid #e74c3c; }
+        .counter.tens .counter-label { color: #e74c3c; }
+        .counter.tens .counter-value { color: #e74c3c; }
+
+        .counter.units { border: 4px solid #3498db; }
+        .counter.units .counter-label { color: #3498db; }
+        .counter.units .counter-value { color: #3498db; }
+
+        /* PULSANTI HEADER */
+        .header-btn {
+            width: 45px;
+            height: 45px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.9);
+            cursor: pointer;
+            font-size: 1.4rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-btn:hover {
+            background: #fff;
+            transform: scale(1.1);
+        }
+
+        /* CANVAS AREA */
+        #canvas-container {
+            flex: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #physics-canvas {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+        }
+
+        /* LABEL VASSOIO */
+        #tray-label {
+            position: absolute;
+            bottom: 108px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.95);
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: rgba(0,0,0,0.5);
+            padding: 5px 14px;
+            border-radius: 8px;
+            z-index: 10;
+        }
+
+        /* CONTROLLI IN BASSO */
+        #controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);
+            border-radius: 20px;
+        }
+
+        .add-btn {
+            padding: 12px 28px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            color: white;
+        }
+
+        .add-btn:hover {
+            transform: scale(1.08);
+        }
+
+        .add-btn:active {
+            transform: scale(0.95);
+        }
+
+        .add-btn.hundreds {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+
+        .add-btn.tens {
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
+        }
+
+        .add-btn.units {
+            background: linear-gradient(135deg, #2980b9, #3498db);
+        }
+
+        /* MODAL ISTRUZIONI */
+        #modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #modal-overlay.show {
+            display: flex;
+        }
+
+        #modal {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 500px;
+            margin: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        #modal h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        #modal ul {
+            margin-left: 20px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        #modal li {
+            margin: 10px 0;
+        }
+
+        #modal .color-dot {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        #modal .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px 15px;
+            margin-top: 15px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
+        }
+
+        #modal-close {
+            display: block;
+            width: 100%;
+            margin-top: 25px;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        #modal-close:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        /* FOOTER */
+        #footer {
+            text-align: center;
+            padding: 8px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.8rem;
+        }
+
+        #footer a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+        }
+
+        #footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* EFFETTO POP */
+        .pop-effect {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: popAnimation 0.4s ease-out forwards;
+        }
+
+        @keyframes popAnimation {
+            0% {
+                transform: scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- HEADER -->
+        <div id="header">
+            <button class="header-btn" onclick="resetSimulation()" title="Reset">🔄</button>
+
+            <div id="counters">
+                <div class="counter hundreds">
+                    <span class="counter-label">Centinaia (h)</span>
+                    <span class="counter-value" id="count-h">0</span>
+                </div>
+                <div class="counter tens">
+                    <span class="counter-label">Decine (da)</span>
+                    <span class="counter-value" id="count-da">0</span>
+                </div>
+                <div class="counter units">
+                    <span class="counter-label">Unità (u)</span>
+                    <span class="counter-value" id="count-u">0</span>
+                </div>
+            </div>
+
+            <button class="header-btn" onclick="showModal()" title="Istruzioni">ℹ️</button>
+        </div>
+
+        <!-- CANVAS -->
+        <div id="canvas-container">
+            <canvas id="physics-canvas"></canvas>
+            <span id="tray-label">⬇ Vassoio di raccolta ⬇</span>
+        </div>
+
+        <!-- CONTROLLI -->
+        <div id="controls">
+            <button class="add-btn hundreds" onclick="spawnBall('hundreds')">+ h</button>
+            <button class="add-btn tens" onclick="spawnBall('tens')">+ da</button>
+            <button class="add-btn units" onclick="spawnBall('units')">+ u</button>
+        </div>
+
+        <!-- FOOTER -->
+        <div id="footer">
+            © 2026 <a href="https://edutechlab-ita.github.io/" target="_blank">EduTechLab</a> | Bolle Aritmetiche v1.0
+        </div>
+    </div>
+
+    <!-- MODAL ISTRUZIONI -->
+    <div id="modal-overlay" onclick="hideModal(event)">
+        <div id="modal" onclick="event.stopPropagation()">
+            <h2>📚 Come si usa</h2>
+            <ul>
+                <li><b>Aggiungi palline:</b> clicca
+                    <span class="color-dot" style="background:#27ae60"></span>+h,
+                    <span class="color-dot" style="background:#e74c3c"></span>+da,
+                    <span class="color-dot" style="background:#3498db"></span>+u</li>
+                <li><b>Cambio automatico:</b> 10 palline in una bolla → 1 pallina del valore superiore</li>
+                <li><b>Scomposizione:</b> trascina una pallina verso una bolla di valore inferiore → esplode in 10!</li>
+                <li><b>Vassoio:</b> le palline esplose cadono qui. Trascinale nelle bolle per contarle</li>
+                <li><b>Elimina:</b> trascina una pallina sul 🗑️ Cestino (in basso a destra nel canvas)</li>
+            </ul>
+            <div class="note">
+                <b>💡 Nota:</b> I contatori mostrano SOLO le palline dentro le bolle. Le palline nel vassoio sono "in attesa" e non vengono contate.
+            </div>
+            <button id="modal-close" onclick="hideModal()">Ho capito!</button>
+        </div>
+    </div>
+
+    <script>
+        // =====================
+        // CONFIGURAZIONE
+        // =====================
+        const CONFIG = {
+            ballRadius: 18,
+            bubbleRadius: 140,
+            colors: {
+                hundreds: '#27ae60',
+                tens: '#e74c3c',
+                units: '#3498db'
+            },
+            blobSegments: 48,
+            blobDeformStrength: 25,
+            blobDeformRadius: 50
+        };
+
+        // =====================
+        // MATTER.JS SETUP
+        // =====================
+        const { Engine, Render, Runner, Bodies, Body, Composite, Mouse, MouseConstraint, Events } = Matter;
+
+        let engine, render, runner, mouse, mouseConstraint;
+        let bubbleWalls = {};
+        let balls = [];
+        let bubblePositions = {};
+        let trashPosition = null; // Posizione del cestino nel canvas
+        let trashRadius = 45; // Raggio della zona cestino
+        let isExchanging = false;
+        let draggedBall = null;
+        let canvasWidth, canvasHeight;
+        let trayY, trayHeight;
+        let bubblePoints = {};
+
+        function initPhysics() {
+            const container = document.getElementById('canvas-container');
+            canvasWidth = container.clientWidth - 40;
+            canvasHeight = container.clientHeight - 20;
+            trayHeight = 70;
+            trayY = canvasHeight - trayHeight - 15;
+
+            engine = Engine.create({
+                gravity: { x: 0, y: 0.8 }
+            });
+
+            render = Render.create({
+                element: container,
+                canvas: document.getElementById('physics-canvas'),
+                engine: engine,
+                options: {
+                    width: canvasWidth,
+                    height: canvasHeight,
+                    wireframes: false,
+                    background: 'transparent'
+                }
+            });
+
+            const bubbleY = canvasHeight * 0.35;
+            const spacing = canvasWidth / 4;
+
+            bubblePositions = {
+                hundreds: { x: spacing, y: bubbleY },
+                tens: { x: spacing * 2, y: bubbleY },
+                units: { x: spacing * 3, y: bubbleY }
+            };
+
+            // Posizione del cestino: in basso a destra, sopra il vassoio
+            trashPosition = {
+                x: canvasWidth - 70,
+                y: trayY - 60
+            };
+
+            initBubblePoints();
+            createBubbleContainers();
+            createBoundaries();
+            createTrayWalls();
+
+            mouse = Mouse.create(render.canvas);
+            mouseConstraint = MouseConstraint.create(engine, {
+                mouse: mouse,
+                constraint: {
+                    stiffness: 0.8,
+                    render: { visible: false }
+                }
+            });
+            Composite.add(engine.world, mouseConstraint);
+            render.mouse = mouse;
+
+            setupEvents();
+
+            Render.run(render);
+            runner = Runner.create();
+            Runner.run(runner, engine);
+
+            // Aggiorna contatori periodicamente (per quando trascini palline nelle bolle)
+            setInterval(updateCounters, 200);
+
+            requestAnimationFrame(drawOverlay);
+        }
+
+        function createTrayWalls() {
+            const trayLeft = 25;
+            const trayRight = canvasWidth - 25;
+            const trayBottom = trayY + trayHeight - 5;
+            const wallThickness = 15;
+
+            const trayFloor = Bodies.rectangle(
+                canvasWidth / 2, trayBottom,
+                trayRight - trayLeft, wallThickness,
+                { isStatic: true, render: { visible: false }, friction: 0.8, label: 'trayFloor' }
+            );
+
+            const trayLeftWall = Bodies.rectangle(
+                trayLeft, trayY + trayHeight / 2,
+                wallThickness, trayHeight,
+                { isStatic: true, render: { visible: false }, label: 'trayWall' }
+            );
+
+            const trayRightWall = Bodies.rectangle(
+                trayRight, trayY + trayHeight / 2,
+                wallThickness, trayHeight,
+                { isStatic: true, render: { visible: false }, label: 'trayWall' }
+            );
+
+            Composite.add(engine.world, [trayFloor, trayLeftWall, trayRightWall]);
+        }
+
+        // =====================
+        // ANIMAZIONE BLOB - SOLO TOCCO ESTERNO
+        // =====================
+        function initBubblePoints() {
+            ['hundreds', 'tens', 'units'].forEach(type => {
+                const points = [];
+                for (let i = 0; i < CONFIG.blobSegments; i++) {
+                    const angle = (i / CONFIG.blobSegments) * Math.PI * 2;
+                    points.push({
+                        baseX: Math.cos(angle) * CONFIG.bubbleRadius,
+                        baseY: Math.sin(angle) * CONFIG.bubbleRadius,
+                        currentX: Math.cos(angle) * CONFIG.bubbleRadius,
+                        currentY: Math.sin(angle) * CONFIG.bubbleRadius,
+                        deform: 0
+                    });
+                }
+                bubblePoints[type] = points;
+            });
+        }
+
+        function updateBubbleDeformation() {
+            ['hundreds', 'tens', 'units'].forEach(type => {
+                const pos = bubblePositions[type];
+                const points = bubblePoints[type];
+
+                points.forEach(point => {
+                    let totalDeform = 0;
+
+                    balls.forEach(ball => {
+                        if (!ball.position) return;
+
+                        // Distanza della pallina dal centro della bolla
+                        const ballDx = ball.position.x - pos.x;
+                        const ballDy = ball.position.y - pos.y;
+                        const ballDistFromCenter = Math.sqrt(ballDx * ballDx + ballDy * ballDy);
+
+                        // La pallina è considerata COMPLETAMENTE DENTRO se è ben lontana dal bordo
+                        // Usiamo una soglia più generosa: se il centro della pallina è più vicino
+                        // al centro della bolla rispetto al 70% del raggio, NON deforma
+                        const safeInsideDistance = CONFIG.bubbleRadius * 0.75;
+
+                        // Se la pallina è completamente dentro (lontana dal bordo), skip
+                        if (ballDistFromCenter < safeInsideDistance) return;
+
+                        // Posizione del punto del bordo
+                        const pointWorldX = pos.x + point.baseX;
+                        const pointWorldY = pos.y + point.baseY;
+
+                        const dx = ball.position.x - pointWorldX;
+                        const dy = ball.position.y - pointWorldY;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        // Deforma SOLO se:
+                        // 1. La pallina è vicina al punto del bordo E
+                        // 2. La pallina è FUORI dal cerchio (distanza dal centro > raggio - margine)
+                        const isOutside = ballDistFromCenter > CONFIG.bubbleRadius - CONFIG.ballRadius * 2;
+
+                        if (dist < CONFIG.blobDeformRadius && isOutside) {
+                            const strength = 1 - (dist / CONFIG.blobDeformRadius);
+                            const deformAmount = strength * strength * CONFIG.blobDeformStrength;
+                            totalDeform = Math.max(totalDeform, deformAmount);
+                        }
+                    });
+
+                    // Animazione fluida con ritorno più rapido allo stato normale
+                    point.deform += (totalDeform - point.deform) * 0.25;
+
+                    // Azzera piccole deformazioni residue
+                    if (point.deform < 0.5) point.deform = 0;
+
+                    // Applica deformazione
+                    const deformFactor = 1 - (point.deform / CONFIG.bubbleRadius);
+                    point.currentX = point.baseX * deformFactor;
+                    point.currentY = point.baseY * deformFactor;
+                });
+            });
+        }
+
+        function drawBlobBubble(ctx, type) {
+            const pos = bubblePositions[type];
+            const points = bubblePoints[type];
+            const color = CONFIG.colors[type];
+
+            if (!points || points.length === 0) return;
+
+            ctx.beginPath();
+            const firstPoint = points[0];
+            ctx.moveTo(pos.x + firstPoint.currentX, pos.y + firstPoint.currentY);
+
+            for (let i = 0; i < points.length; i++) {
+                const current = points[i];
+                const next = points[(i + 1) % points.length];
+                const cpX = pos.x + (current.currentX + next.currentX) / 2;
+                const cpY = pos.y + (current.currentY + next.currentY) / 2;
+                ctx.quadraticCurveTo(pos.x + current.currentX, pos.y + current.currentY, cpX, cpY);
+            }
+
+            ctx.closePath();
+            ctx.fillStyle = color + '18';
+            ctx.fill();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 7;
+            ctx.stroke();
+
+            // Bordo interno
+            ctx.beginPath();
+            const scale = 0.85;
+            for (let i = 0; i < points.length; i++) {
+                const current = points[i];
+                const next = points[(i + 1) % points.length];
+                const cpX = pos.x + ((current.currentX + next.currentX) / 2) * scale;
+                const cpY = pos.y + ((current.currentY + next.currentY) / 2) * scale;
+                if (i === 0) {
+                    ctx.moveTo(pos.x + current.currentX * scale, pos.y + current.currentY * scale);
+                }
+                ctx.quadraticCurveTo(pos.x + current.currentX * scale, pos.y + current.currentY * scale, cpX, cpY);
+            }
+            ctx.closePath();
+            ctx.strokeStyle = color + '40';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Label
+            ctx.font = 'bold 18px Verdana';
+            ctx.fillStyle = color;
+            ctx.textAlign = 'center';
+            const labels = { hundreds: 'CENTINAIA', tens: 'DECINE', units: 'UNITÀ' };
+            ctx.fillText(labels[type], pos.x, pos.y - CONFIG.bubbleRadius - 15);
+        }
+
+        function createBubbleContainers() {
+            const types = ['hundreds', 'tens', 'units'];
+
+            types.forEach(type => {
+                const pos = bubblePositions[type];
+                const r = CONFIG.bubbleRadius;
+                const wallBodies = [];
+                const segments = 28;
+                const thickness = 12;
+
+                for (let i = 0; i < segments; i++) {
+                    const angle = (i / segments) * Math.PI * 2;
+                    const nextAngle = ((i + 1) / segments) * Math.PI * 2;
+
+                    const angleDeg = (angle * 180 / Math.PI + 360) % 360;
+                    if (angleDeg > 250 && angleDeg < 290) continue; // Apertura in alto
+
+                    const x1 = pos.x + Math.cos(angle) * r;
+                    const y1 = pos.y + Math.sin(angle) * r;
+                    const x2 = pos.x + Math.cos(nextAngle) * r;
+                    const y2 = pos.y + Math.sin(nextAngle) * r;
+
+                    const midX = (x1 + x2) / 2;
+                    const midY = (y1 + y2) / 2;
+                    const length = Math.sqrt((x2-x1)**2 + (y2-y1)**2) + 10;
+                    const wallAngle = Math.atan2(y2 - y1, x2 - x1);
+
+                    const wall = Bodies.rectangle(midX, midY, length, thickness, {
+                        isStatic: true,
+                        angle: wallAngle,
+                        render: { visible: false },
+                        friction: 0.05,
+                        restitution: 0.3,
+                        label: 'bubbleWall_' + type
+                    });
+                    wallBodies.push(wall);
+                }
+
+                bubbleWalls[type] = wallBodies;
+                Composite.add(engine.world, wallBodies);
+            });
+        }
+
+        function createBoundaries() {
+            const ground = Bodies.rectangle(canvasWidth / 2, canvasHeight + 30, canvasWidth + 100, 50, {
+                isStatic: true, render: { visible: false }, friction: 0.8
+            });
+
+            const leftWall = Bodies.rectangle(-20, canvasHeight / 2, 50, canvasHeight * 2, {
+                isStatic: true, render: { visible: false }
+            });
+
+            const rightWall = Bodies.rectangle(canvasWidth + 20, canvasHeight / 2, 50, canvasHeight * 2, {
+                isStatic: true, render: { visible: false }
+            });
+
+            Composite.add(engine.world, [ground, leftWall, rightWall]);
+        }
+
+        // =====================
+        // EFFETTO POP
+        // =====================
+        function createPopEffect(x, y, color) {
+            const canvasContainer = document.getElementById('canvas-container');
+            const canvasEl = document.getElementById('physics-canvas');
+            const containerRect = canvasContainer.getBoundingClientRect();
+            const cRect = canvasEl.getBoundingClientRect();
+
+            const pop = document.createElement('div');
+            pop.className = 'pop-effect';
+            pop.style.left = (cRect.left - containerRect.left + x - 15) + 'px';
+            pop.style.top = (cRect.top - containerRect.top + y - 15) + 'px';
+            pop.style.width = '30px';
+            pop.style.height = '30px';
+            pop.style.background = color;
+            pop.style.boxShadow = `0 0 20px ${color}`;
+
+            canvasContainer.appendChild(pop);
+            setTimeout(() => pop.remove(), 400);
+        }
+
+        function drawOverlay() {
+            const ctx = render.context;
+
+            updateBubbleDeformation();
+
+            // Zona vassoio
+            ctx.fillStyle = 'rgba(255,255,255,0.12)';
+            ctx.fillRect(20, trayY, canvasWidth - 40, trayHeight);
+            ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([8, 4]);
+            ctx.strokeRect(20, trayY, canvasWidth - 40, trayHeight);
+            ctx.setLineDash([]);
+
+            // Bolle
+            ['hundreds', 'tens', 'units'].forEach(type => {
+                drawBlobBubble(ctx, type);
+            });
+
+            // Cestino nel canvas
+            drawTrashZone(ctx);
+
+            requestAnimationFrame(drawOverlay);
+        }
+
+        // =====================
+        // SPAWNING
+        // =====================
+        function spawnBall(type, inTray = false) {
+            const pos = bubblePositions[type];
+            let spawnX, spawnY;
+
+            if (inTray) {
+                spawnX = pos.x + (Math.random() - 0.5) * 100;
+                spawnY = trayY + 25;
+            } else {
+                spawnX = pos.x + (Math.random() - 0.5) * 40;
+                spawnY = pos.y - CONFIG.bubbleRadius - 80;
+            }
+
+            const ball = Bodies.circle(spawnX, spawnY, CONFIG.ballRadius, {
+                restitution: 0.4,
+                friction: 0.03,
+                frictionAir: 0.015,
+                density: 0.001,
+                render: {
+                    fillStyle: CONFIG.colors[type],
+                    strokeStyle: '#fff',
+                    lineWidth: 3
+                },
+                label: 'ball',
+                ballType: type
+            });
+
+            if (inTray) {
+                Body.setVelocity(ball, {
+                    x: (Math.random() - 0.5) * 8,
+                    y: -Math.random() * 2 - 1
+                });
+            }
+
+            balls.push(ball);
+            Composite.add(engine.world, ball);
+            updateCounters();
+            return ball;
+        }
+
+        // =====================
+        // CONTEGGIO PALLINE NELLE BOLLE
+        // =====================
+
+        // Verifica se una pallina è dentro una specifica bolla
+        function isBallInsideBubble(ball, bubbleType) {
+            if (!ball || !ball.position) return false;
+
+            const pos = bubblePositions[bubbleType];
+            const dx = ball.position.x - pos.x;
+            const dy = ball.position.y - pos.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            // La pallina è dentro se il suo centro è entro il raggio della bolla
+            // Usiamo il raggio completo per essere più permissivi
+            return dist < CONFIG.bubbleRadius + CONFIG.ballRadius;
+        }
+
+        // Ritorna tutte le palline di un tipo dentro la bolla corrispondente
+        function getBallsInBubble(type) {
+            return balls.filter(ball => {
+                if (!ball.position || !ball.ballType) return false;
+                // Conta solo palline del tipo corretto nella loro bolla
+                if (ball.ballType !== type) return false;
+                return isBallInsideBubble(ball, type);
+            });
+        }
+
+        // Conta palline di un tipo dentro la loro bolla corretta
+        function countBallsInCorrectBubble(type) {
+            const pos = bubblePositions[type];
+            // Threshold generoso: conta la pallina se il suo centro è dentro il raggio della bolla
+            const threshold = CONFIG.bubbleRadius + 5;
+
+            let count = 0;
+            balls.forEach(ball => {
+                if (!ball.position || ball.ballType !== type) return;
+
+                const dx = ball.position.x - pos.x;
+                const dy = ball.position.y - pos.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < threshold) {
+                    count++;
+                }
+            });
+
+            return count;
+        }
+
+        // =====================
+        // SCAMBIO (10 -> 1)
+        // =====================
+        function checkExchange() {
+            if (isExchanging) return;
+
+            const types = ['units', 'tens'];
+            const nextType = { units: 'tens', tens: 'hundreds' };
+
+            for (const type of types) {
+                const ballsInBubble = getBallsInBubble(type);
+
+                if (ballsInBubble.length >= 10) {
+                    isExchanging = true;
+                    performExchange(type, nextType[type], ballsInBubble.slice(0, 10));
+                    return;
+                }
+            }
+        }
+
+        function performExchange(fromType, toType, ballsToRemove) {
+            let index = 0;
+
+            const removeNext = () => {
+                if (index < ballsToRemove.length) {
+                    const ball = ballsToRemove[index];
+                    const color = CONFIG.colors[fromType];
+
+                    createPopEffect(ball.position.x, ball.position.y, color);
+
+                    if (ball.render) ball.render.fillStyle = '#fff';
+
+                    setTimeout(() => {
+                        removeBall(ball);
+                        index++;
+                        updateCounters();
+
+                        if (index < ballsToRemove.length) {
+                            setTimeout(removeNext, 50);
+                        } else {
+                            setTimeout(() => {
+                                spawnBall(toType, false);
+                                isExchanging = false;
+                            }, 120);
+                        }
+                    }, 30);
+                }
+            };
+
+            removeNext();
+        }
+
+        // =====================
+        // SCOMPOSIZIONE (1 -> 10)
+        // =====================
+        function checkDecomposition(ball) {
+            if (!ball || !ball.ballType) return false;
+
+            const ballType = ball.ballType;
+            const pos = ball.position;
+
+            const decomposeMap = { hundreds: 'tens', tens: 'units' };
+            if (!decomposeMap[ballType]) return false;
+
+            const targetType = decomposeMap[ballType];
+            const targetPos = bubblePositions[targetType];
+
+            const dx = pos.x - targetPos.x;
+            const dy = pos.y - targetPos.y;
+            const distFromCenter = Math.sqrt(dx * dx + dy * dy);
+
+            const touchDistance = CONFIG.bubbleRadius + CONFIG.ballRadius + 5;
+
+            if (distFromCenter < touchDistance && distFromCenter > CONFIG.bubbleRadius - CONFIG.ballRadius - 20) {
+                performDecomposition(ball, targetType, targetPos);
+                return true;
+            }
+
+            return false;
+        }
+
+        function performDecomposition(ball, targetType, targetPos) {
+            const originalColor = CONFIG.colors[ball.ballType];
+            const x = ball.position.x;
+            const y = ball.position.y;
+
+            createPopEffect(x, y, originalColor);
+            createPopEffect(x - 15, y - 10, originalColor);
+            createPopEffect(x + 15, y + 10, originalColor);
+
+            removeBall(ball);
+
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const spread = 80;
+                    const spawnX = targetPos.x + (Math.random() - 0.5) * spread;
+                    const spawnY = trayY + 30;
+
+                    createPopEffect(spawnX, spawnY - 20, CONFIG.colors[targetType]);
+
+                    const newBall = Bodies.circle(spawnX, spawnY, CONFIG.ballRadius, {
+                        restitution: 0.5,
+                        friction: 0.03,
+                        frictionAir: 0.012,
+                        density: 0.001,
+                        render: {
+                            fillStyle: CONFIG.colors[targetType],
+                            strokeStyle: '#fff',
+                            lineWidth: 3
+                        },
+                        label: 'ball',
+                        ballType: targetType
+                    });
+
+                    Body.setVelocity(newBall, {
+                        x: (Math.random() - 0.5) * 10,
+                        y: -Math.random() * 3 - 1
+                    });
+
+                    balls.push(newBall);
+                    Composite.add(engine.world, newBall);
+                }, i * 50);
+            }
+
+            updateCounters();
+        }
+
+        // =====================
+        // CESTINO - COME MINI-BOLLA NEL CANVAS
+        // =====================
+
+        // Verifica se una pallina è nella zona cestino
+        function isBallInTrash(ball) {
+            if (!ball || !ball.position || !trashPosition) return false;
+
+            const dx = ball.position.x - trashPosition.x;
+            const dy = ball.position.y - trashPosition.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            // La pallina è nel cestino se tocca la zona
+            return dist < trashRadius + CONFIG.ballRadius;
+        }
+
+        // Controlla e elimina la pallina se è nel cestino
+        function checkAndDeleteInTrash(ball) {
+            if (!ball) return false;
+
+            if (isBallInTrash(ball)) {
+                // Effetto esplosione
+                createPopEffect(ball.position.x, ball.position.y, CONFIG.colors[ball.ballType] || '#888');
+                createPopEffect(ball.position.x - 10, ball.position.y - 10, '#ff6b6b');
+                createPopEffect(ball.position.x + 10, ball.position.y + 10, '#ff6b6b');
+
+                removeBall(ball);
+                updateCounters();
+                return true;
+            }
+            return false;
+        }
+
+        // Disegna il cestino nel canvas
+        function drawTrashZone(ctx) {
+            if (!trashPosition) return;
+
+            const isActive = draggedBall && isBallInTrash(draggedBall);
+
+            // Cerchio del cestino
+            ctx.beginPath();
+            ctx.arc(trashPosition.x, trashPosition.y, trashRadius, 0, Math.PI * 2);
+
+            if (isActive) {
+                // Attivo: rosso brillante
+                ctx.fillStyle = 'rgba(231, 76, 60, 0.4)';
+                ctx.strokeStyle = '#e74c3c';
+                ctx.lineWidth = 4;
+            } else {
+                // Normale: grigio
+                ctx.fillStyle = 'rgba(127, 140, 141, 0.25)';
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.lineWidth = 3;
+            }
+
+            ctx.fill();
+            ctx.setLineDash([6, 4]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Icona cestino
+            ctx.font = isActive ? 'bold 28px Arial' : '24px Arial';
+            ctx.fillStyle = isActive ? '#fff' : 'rgba(255,255,255,0.8)';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('🗑️', trashPosition.x, trashPosition.y);
+        }
+
+        // =====================
+        // UTILITY
+        // =====================
+        function removeBall(ball) {
+            const index = balls.indexOf(ball);
+            if (index > -1) {
+                balls.splice(index, 1);
+            }
+            Composite.remove(engine.world, ball);
+        }
+
+        // CONTATORI: Conta SOLO le palline DENTRO le bolle (non nel vassoio!)
+        function updateCounters() {
+            const h = countBallsInCorrectBubble('hundreds');
+            const da = countBallsInCorrectBubble('tens');
+            const u = countBallsInCorrectBubble('units');
+
+            document.getElementById('count-h').textContent = h;
+            document.getElementById('count-da').textContent = da;
+            document.getElementById('count-u').textContent = u;
+        }
+
+        function resetSimulation() {
+            balls.forEach(ball => Composite.remove(engine.world, ball));
+            balls = [];
+            isExchanging = false;
+            draggedBall = null;
+            updateCounters();
+        }
+
+        // =====================
+        // MODAL
+        // =====================
+        function showModal() {
+            document.getElementById('modal-overlay').classList.add('show');
+        }
+
+        function hideModal(event) {
+            if (!event || event.target.id === 'modal-overlay') {
+                document.getElementById('modal-overlay').classList.remove('show');
+            }
+        }
+
+        // =====================
+        // EVENTI
+        // =====================
+        function setupEvents() {
+            Events.on(engine, 'afterUpdate', () => {
+                checkExchange();
+            });
+
+            Events.on(mouseConstraint, 'startdrag', (event) => {
+                if (event.body && event.body.label === 'ball') {
+                    draggedBall = event.body;
+                }
+            });
+
+            Events.on(engine, 'beforeUpdate', () => {
+                if (draggedBall && draggedBall.position) {
+                    // Controlla cestino DURANTE il drag
+                    if (checkAndDeleteInTrash(draggedBall)) {
+                        draggedBall = null;
+                        return;
+                    }
+
+                    // Controlla scomposizione
+                    if (draggedBall && draggedBall.ballType && checkDecomposition(draggedBall)) {
+                        draggedBall = null;
+                    }
+                }
+            });
+
+            Events.on(mouseConstraint, 'enddrag', (event) => {
+                const ball = event.body;
+                if (ball && ball.label === 'ball') {
+                    // Ultimo controllo cestino al rilascio
+                    checkAndDeleteInTrash(ball);
+                    // Aggiorna contatori dopo aver rilasciato
+                    setTimeout(updateCounters, 100);
+                    setTimeout(updateCounters, 300);
+                }
+                draggedBall = null;
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') hideModal();
+            });
+        }
+
+        // =====================
+        // RESIZE
+        // =====================
+        function handleResize() {
+            if (engine) {
+                Composite.clear(engine.world, false);
+                Engine.clear(engine);
+                Render.stop(render);
+                Runner.stop(runner);
+            }
+
+            balls = [];
+            bubbleWalls = {};
+            bubblePoints = {};
+            draggedBall = null;
+            trashPosition = null;
+
+            setTimeout(initPhysics, 100);
+        }
+
+        window.addEventListener('resize', () => {
+            clearTimeout(window.resizeTimeout);
+            window.resizeTimeout = setTimeout(handleResize, 300);
+        });
+
+        // =====================
+        // AVVIO
+        // =====================
+        window.onload = () => {
+            setTimeout(initPhysics, 100);
+        };
+
+        // =====================
+        // SERVICE WORKER (PWA)
+        // =====================
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then((registration) => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch((error) => {
+                        console.log('SW registration failed: ', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
