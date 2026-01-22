@@ -71,7 +71,6 @@
         .counter-label {
             font-size: 1rem;
             font-weight: bold;
-            text-transform: uppercase;
             margin-bottom: 3px;
         }
 
@@ -80,6 +79,10 @@
             font-weight: bold;
             line-height: 1;
         }
+
+        .counter.thousands { border: 4px solid #e67e22; }
+        .counter.thousands .counter-label { color: #e67e22; }
+        .counter.thousands .counter-value { color: #e67e22; }
 
         .counter.hundreds { border: 4px solid #27ae60; }
         .counter.hundreds .counter-label { color: #27ae60; }
@@ -112,6 +115,34 @@
         .header-btn:hover {
             background: #fff;
             transform: scale(1.1);
+        }
+
+        /* TOGGLE MODALITÀ CLASSE */
+        .mode-toggle {
+            width: 50px;
+            height: 45px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #d35400, #e67e22);
+            cursor: pointer;
+            font-size: 1.3rem;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .mode-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .mode-toggle.mode-3 {
+            background: linear-gradient(135deg, #1e8449, #27ae60);
+            color: white;
         }
 
         /* CANVAS AREA */
@@ -174,6 +205,10 @@
 
         .add-btn:active {
             transform: scale(0.95);
+        }
+
+        .add-btn.thousands {
+            background: linear-gradient(135deg, #d35400, #e67e22);
         }
 
         .add-btn.hundreds {
@@ -318,21 +353,30 @@
         <div id="header">
             <button class="header-btn" onclick="resetSimulation()" title="Reset">🔄</button>
 
+            <div class="mode-toggle" onclick="toggleClassMode()" title="Clicca per aggiungere/rimuovere le migliaia">
+                <span class="mode-label" id="mode-label">k</span>
+            </div>
+
             <div id="counters">
+                <div class="counter thousands" id="counter-thousands" style="display: none;">
+                    <span class="counter-label">migliaia (k)</span>
+                    <span class="counter-value" id="count-k">0</span>
+                </div>
                 <div class="counter hundreds">
-                    <span class="counter-label">Centinaia (h)</span>
+                    <span class="counter-label">centinaia (h)</span>
                     <span class="counter-value" id="count-h">0</span>
                 </div>
                 <div class="counter tens">
-                    <span class="counter-label">Decine (da)</span>
+                    <span class="counter-label">decine (da)</span>
                     <span class="counter-value" id="count-da">0</span>
                 </div>
                 <div class="counter units">
-                    <span class="counter-label">Unità (u)</span>
+                    <span class="counter-label">unità (u)</span>
                     <span class="counter-value" id="count-u">0</span>
                 </div>
             </div>
 
+            <button class="header-btn" id="sound-toggle" onclick="toggleSound()" title="Audio on/off">🔊</button>
             <button class="header-btn" onclick="showModal()" title="Istruzioni">ℹ️</button>
         </div>
 
@@ -344,6 +388,7 @@
 
         <!-- CONTROLLI -->
         <div id="controls">
+            <button class="add-btn thousands" id="btn-thousands" onclick="spawnBall('thousands')" style="display: none;">+ k</button>
             <button class="add-btn hundreds" onclick="spawnBall('hundreds')">+ h</button>
             <button class="add-btn tens" onclick="spawnBall('tens')">+ da</button>
             <button class="add-btn units" onclick="spawnBall('units')">+ u</button>
@@ -351,7 +396,7 @@
 
         <!-- FOOTER -->
         <div id="footer">
-            © 2026 <a href="https://edutechlab-ita.github.io/" target="_blank">EduTechLab</a> | Bolle Aritmetiche v1.0
+            © 2026 <a href="https://edutechlab-ita.github.io/" target="_blank">EduTechLab</a> | Bolle Aritmetiche v2.0
         </div>
     </div>
 
@@ -361,16 +406,19 @@
             <h2>📚 Come si usa</h2>
             <ul>
                 <li><b>Aggiungi palline:</b> clicca
+                    <span class="color-dot" style="background:#e67e22"></span>+k (solo 3ª),
                     <span class="color-dot" style="background:#27ae60"></span>+h,
                     <span class="color-dot" style="background:#e74c3c"></span>+da,
                     <span class="color-dot" style="background:#3498db"></span>+u</li>
                 <li><b>Cambio automatico:</b> 10 palline in una bolla → 1 pallina del valore superiore</li>
                 <li><b>Scomposizione:</b> trascina una pallina verso una bolla di valore inferiore → esplode in 10!</li>
                 <li><b>Vassoio:</b> le palline esplose cadono qui. Trascinale nelle bolle per contarle</li>
-                <li><b>Elimina:</b> trascina una pallina sul 🗑️ Cestino (in basso a destra nel canvas)</li>
+                <li><b>Elimina:</b> trascina una pallina sul 🗑️ Cestino</li>
+                <li><b>Modalità:</b> clicca <b>k</b> per aggiungere le migliaia, <b>h</b> per tornare alle centinaia</li>
             </ul>
             <div class="note">
-                <b>💡 Nota:</b> I contatori mostrano SOLO le palline dentro le bolle. Le palline nel vassoio sono "in attesa" e non vengono contate.
+                <b>💡 Nota:</b> Ogni pallina può entrare SOLO nella bolla del suo colore!<br>
+                I contatori mostrano solo le palline dentro le bolle.
             </div>
             <button id="modal-close" onclick="hideModal()">Ho capito!</button>
         </div>
@@ -383,7 +431,9 @@
         const CONFIG = {
             ballRadius: 18,
             bubbleRadius: 140,
+            bubbleRadiusSmall: 105, // Per modalità 4 bolle (classe 3ª)
             colors: {
+                thousands: '#e67e22',
                 hundreds: '#27ae60',
                 tens: '#e74c3c',
                 units: '#3498db'
@@ -392,6 +442,68 @@
             blobDeformStrength: 25,
             blobDeformRadius: 50
         };
+
+        // Modalità classe: 2 = seconda (senza migliaia), 3 = terza (con migliaia)
+        let classMode = 2;
+
+        // Ritorna il raggio della bolla in base alla modalità corrente
+        function getCurrentBubbleRadius() {
+            return classMode === 3 ? CONFIG.bubbleRadiusSmall : CONFIG.bubbleRadius;
+        }
+
+        // =====================
+        // AUDIO - SUONO POP
+        // =====================
+        let audioContext = null;
+        let soundEnabled = true;
+
+        function initAudio() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+                console.log('Web Audio API non supportata');
+                soundEnabled = false;
+            }
+        }
+
+        function playPopSound() {
+            if (!soundEnabled || !audioContext) return;
+
+            // Riattiva AudioContext se sospeso (policy browser)
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+
+            // Crea oscillatore per il suono pop
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            // Frequenza che scende rapidamente (effetto pop)
+            oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.1);
+
+            // Volume che scende rapidamente
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+
+            oscillator.type = 'sine';
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.1);
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('sound-toggle');
+            btn.textContent = soundEnabled ? '🔊' : '🔇';
+
+            // Inizializza audio al primo click se non ancora fatto
+            if (soundEnabled && !audioContext) {
+                initAudio();
+            }
+        }
 
         // =====================
         // MATTER.JS SETUP
@@ -434,13 +546,24 @@
             });
 
             const bubbleY = canvasHeight * 0.35;
-            const spacing = canvasWidth / 4;
 
-            bubblePositions = {
-                hundreds: { x: spacing, y: bubbleY },
-                tens: { x: spacing * 2, y: bubbleY },
-                units: { x: spacing * 3, y: bubbleY }
-            };
+            // Calcola posizioni in base alla modalità classe
+            if (classMode === 3) {
+                const spacing = canvasWidth / 5;
+                bubblePositions = {
+                    thousands: { x: spacing, y: bubbleY },
+                    hundreds: { x: spacing * 2, y: bubbleY },
+                    tens: { x: spacing * 3, y: bubbleY },
+                    units: { x: spacing * 4, y: bubbleY }
+                };
+            } else {
+                const spacing = canvasWidth / 4;
+                bubblePositions = {
+                    hundreds: { x: spacing, y: bubbleY },
+                    tens: { x: spacing * 2, y: bubbleY },
+                    units: { x: spacing * 3, y: bubbleY }
+                };
+            }
 
             // Posizione del cestino: in basso a destra, sopra il vassoio
             trashPosition = {
@@ -507,15 +630,17 @@
         // ANIMAZIONE BLOB - SOLO TOCCO ESTERNO
         // =====================
         function initBubblePoints() {
-            ['hundreds', 'tens', 'units'].forEach(type => {
+            const types = classMode === 3 ? ['thousands', 'hundreds', 'tens', 'units'] : ['hundreds', 'tens', 'units'];
+            const radius = getCurrentBubbleRadius();
+            types.forEach(type => {
                 const points = [];
                 for (let i = 0; i < CONFIG.blobSegments; i++) {
                     const angle = (i / CONFIG.blobSegments) * Math.PI * 2;
                     points.push({
-                        baseX: Math.cos(angle) * CONFIG.bubbleRadius,
-                        baseY: Math.sin(angle) * CONFIG.bubbleRadius,
-                        currentX: Math.cos(angle) * CONFIG.bubbleRadius,
-                        currentY: Math.sin(angle) * CONFIG.bubbleRadius,
+                        baseX: Math.cos(angle) * radius,
+                        baseY: Math.sin(angle) * radius,
+                        currentX: Math.cos(angle) * radius,
+                        currentY: Math.sin(angle) * radius,
                         deform: 0
                     });
                 }
@@ -524,7 +649,8 @@
         }
 
         function updateBubbleDeformation() {
-            ['hundreds', 'tens', 'units'].forEach(type => {
+            const types = classMode === 3 ? ['thousands', 'hundreds', 'tens', 'units'] : ['hundreds', 'tens', 'units'];
+            types.forEach(type => {
                 const pos = bubblePositions[type];
                 const points = bubblePoints[type];
 
@@ -542,7 +668,8 @@
                         // La pallina è considerata COMPLETAMENTE DENTRO se è ben lontana dal bordo
                         // Usiamo una soglia più generosa: se il centro della pallina è più vicino
                         // al centro della bolla rispetto al 70% del raggio, NON deforma
-                        const safeInsideDistance = CONFIG.bubbleRadius * 0.75;
+                        const radius = getCurrentBubbleRadius();
+                        const safeInsideDistance = radius * 0.75;
 
                         // Se la pallina è completamente dentro (lontana dal bordo), skip
                         if (ballDistFromCenter < safeInsideDistance) return;
@@ -558,7 +685,7 @@
                         // Deforma SOLO se:
                         // 1. La pallina è vicina al punto del bordo E
                         // 2. La pallina è FUORI dal cerchio (distanza dal centro > raggio - margine)
-                        const isOutside = ballDistFromCenter > CONFIG.bubbleRadius - CONFIG.ballRadius * 2;
+                        const isOutside = ballDistFromCenter > radius - CONFIG.ballRadius * 2;
 
                         if (dist < CONFIG.blobDeformRadius && isOutside) {
                             const strength = 1 - (dist / CONFIG.blobDeformRadius);
@@ -574,7 +701,7 @@
                     if (point.deform < 0.5) point.deform = 0;
 
                     // Applica deformazione
-                    const deformFactor = 1 - (point.deform / CONFIG.bubbleRadius);
+                    const deformFactor = 1 - (point.deform / getCurrentBubbleRadius());
                     point.currentX = point.baseX * deformFactor;
                     point.currentY = point.baseY * deformFactor;
                 });
@@ -629,16 +756,16 @@
             ctx.font = 'bold 18px Verdana';
             ctx.fillStyle = color;
             ctx.textAlign = 'center';
-            const labels = { hundreds: 'CENTINAIA', tens: 'DECINE', units: 'UNITÀ' };
-            ctx.fillText(labels[type], pos.x, pos.y - CONFIG.bubbleRadius - 15);
+            const labels = { thousands: 'migliaia', hundreds: 'centinaia', tens: 'decine', units: 'unità' };
+            ctx.fillText(labels[type], pos.x, pos.y - getCurrentBubbleRadius() - 15);
         }
 
         function createBubbleContainers() {
-            const types = ['hundreds', 'tens', 'units'];
+            const types = classMode === 3 ? ['thousands', 'hundreds', 'tens', 'units'] : ['hundreds', 'tens', 'units'];
 
             types.forEach(type => {
                 const pos = bubblePositions[type];
-                const r = CONFIG.bubbleRadius;
+                const r = getCurrentBubbleRadius();
                 const wallBodies = [];
                 const segments = 28;
                 const thickness = 12;
@@ -695,7 +822,7 @@
         // =====================
         // EFFETTO POP
         // =====================
-        function createPopEffect(x, y, color) {
+        function createPopEffect(x, y, color, withSound = true) {
             const canvasContainer = document.getElementById('canvas-container');
             const canvasEl = document.getElementById('physics-canvas');
             const containerRect = canvasContainer.getBoundingClientRect();
@@ -712,6 +839,11 @@
 
             canvasContainer.appendChild(pop);
             setTimeout(() => pop.remove(), 400);
+
+            // Suono pop
+            if (withSound) {
+                playPopSound();
+            }
         }
 
         function drawOverlay() {
@@ -729,7 +861,8 @@
             ctx.setLineDash([]);
 
             // Bolle
-            ['hundreds', 'tens', 'units'].forEach(type => {
+            const types = classMode === 3 ? ['thousands', 'hundreds', 'tens', 'units'] : ['hundreds', 'tens', 'units'];
+            types.forEach(type => {
                 drawBlobBubble(ctx, type);
             });
 
@@ -751,7 +884,7 @@
                 spawnY = trayY + 25;
             } else {
                 spawnX = pos.x + (Math.random() - 0.5) * 40;
-                spawnY = pos.y - CONFIG.bubbleRadius - 80;
+                spawnY = pos.y - getCurrentBubbleRadius() - 80;
             }
 
             const ball = Bodies.circle(spawnX, spawnY, CONFIG.ballRadius, {
@@ -796,7 +929,7 @@
 
             // La pallina è dentro se il suo centro è entro il raggio della bolla
             // Usiamo il raggio completo per essere più permissivi
-            return dist < CONFIG.bubbleRadius + CONFIG.ballRadius;
+            return dist < getCurrentBubbleRadius() + CONFIG.ballRadius;
         }
 
         // Ritorna tutte le palline di un tipo dentro la bolla corrispondente
@@ -809,11 +942,76 @@
             });
         }
 
+        // Respinge le palline che cercano di entrare nella bolla sbagliata
+        function repelWrongBalls() {
+            const types = classMode === 3 ? ['thousands', 'hundreds', 'tens', 'units'] : ['hundreds', 'tens', 'units'];
+
+            balls.forEach(ball => {
+                if (!ball || !ball.position || !ball.ballType) return;
+
+                // Per ogni bolla, controlla se questa pallina sta cercando di entrare
+                types.forEach(bubbleType => {
+                    // Skip se è la bolla corretta per questa pallina
+                    if (ball.ballType === bubbleType) return;
+
+                    // Skip se è una scomposizione valida (pallina di valore superiore verso bolla inferiore)
+                    // h può andare verso da (scomposizione), da può andare verso u (scomposizione)
+                    // k può andare verso h (scomposizione)
+                    const validDecomposition = (
+                        (ball.ballType === 'hundreds' && bubbleType === 'tens') ||
+                        (ball.ballType === 'tens' && bubbleType === 'units') ||
+                        (ball.ballType === 'thousands' && bubbleType === 'hundreds')
+                    );
+                    if (validDecomposition) return;
+
+                    const pos = bubblePositions[bubbleType];
+                    if (!pos) return;
+
+                    const dx = ball.position.x - pos.x;
+                    const dy = ball.position.y - pos.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    // Usa il raggio effettivo della bolla corrente
+                    const currentBubbleRadius = classMode === 3 ? CONFIG.bubbleRadiusSmall : CONFIG.bubbleRadius;
+
+                    // Se la pallina è dentro o sta entrando nella bolla sbagliata
+                    const entryThreshold = currentBubbleRadius + CONFIG.ballRadius;
+
+                    if (dist < entryThreshold) {
+                        // Forza di repulsione MOLTO più forte
+                        const penetration = entryThreshold - dist;
+                        const strength = Math.min(penetration / 20, 1);
+                        const force = 0.05 * (1 + strength * 2);
+
+                        // Direzione: dal centro della bolla verso la pallina (verso l'esterno)
+                        const dirX = dx / (dist || 1);
+                        const dirY = dy / (dist || 1);
+
+                        // Applica forza immediata
+                        Body.applyForce(ball, ball.position, {
+                            x: dirX * force,
+                            y: dirY * force
+                        });
+
+                        // Se è molto dentro, teletrasportala fuori
+                        if (dist < currentBubbleRadius * 0.7) {
+                            const safeDistance = currentBubbleRadius + CONFIG.ballRadius + 10;
+                            Body.setPosition(ball, {
+                                x: pos.x + dirX * safeDistance,
+                                y: pos.y + dirY * safeDistance
+                            });
+                        }
+                    }
+                });
+            });
+        }
+
         // Conta palline di un tipo dentro la loro bolla corretta
         function countBallsInCorrectBubble(type) {
             const pos = bubblePositions[type];
+            if (!pos) return 0;
             // Threshold generoso: conta la pallina se il suo centro è dentro il raggio della bolla
-            const threshold = CONFIG.bubbleRadius + 5;
+            const threshold = getCurrentBubbleRadius() + 5;
 
             let count = 0;
             balls.forEach(ball => {
@@ -834,21 +1032,224 @@
         // =====================
         // SCAMBIO (10 -> 1)
         // =====================
+        // Verifica se le palline in una bolla sono "stabili" (velocità bassa)
+        function areBallsStable(balls) {
+            if (balls.length === 0) return false;
+            const maxSpeed = 2; // Soglia di velocità
+            for (const ball of balls) {
+                if (!ball.velocity) return false;
+                const speed = Math.sqrt(ball.velocity.x ** 2 + ball.velocity.y ** 2);
+                if (speed > maxSpeed) return false;
+            }
+            return true;
+        }
+
+        // Timer per il delay dello scoppio
+        let exchangeDelayTimer = null;
+        let pendingExchange = null;
+
         function checkExchange() {
             if (isExchanging) return;
 
-            const types = ['units', 'tens'];
-            const nextType = { units: 'tens', tens: 'hundreds' };
+            // Controlla se le centinaia sono scese sotto 10 (per resettare il messaggio)
+            const currentHundreds = getBallsInBubble('hundreds').length;
+            if (currentHundreds < 10 && discoveryMessageShown) {
+                discoveryMessageShown = false;
+            }
+
+            // Controlla se le migliaia sono scese sotto 10 (per resettare il messaggio)
+            if (classMode === 3) {
+                const currentThousands = getBallsInBubble('thousands').length;
+                if (currentThousands < 10 && thousandsLimitShown) {
+                    thousandsLimitShown = false;
+                }
+            }
+
+            const types = classMode === 3 ? ['units', 'tens', 'hundreds', 'thousands'] : ['units', 'tens', 'hundreds'];
+            const nextType = { units: 'tens', tens: 'hundreds', hundreds: 'thousands' };
 
             for (const type of types) {
                 const ballsInBubble = getBallsInBubble(type);
 
                 if (ballsInBubble.length >= 10) {
+                    // Aspetta che le palline siano stabili prima di fare lo scambio
+                    if (!areBallsStable(ballsInBubble)) {
+                        // Le palline si stanno ancora muovendo, ricontrolla dopo
+                        return;
+                    }
+
+                    // Caso speciale: 10 migliaia (limite massimo)
+                    if (type === 'thousands') {
+                        showThousandsLimitMessage();
+                        return;
+                    }
+
+                    // Caso speciale: 10 centinaia
+                    if (type === 'hundreds') {
+                        if (classMode === 3) {
+                            // Modalità 3ª: cambio normale h→k
+                            isExchanging = true;
+                            setTimeout(() => {
+                                performExchange(type, nextType[type], ballsInBubble.slice(0, 10));
+                            }, 300);
+                        } else {
+                            // Modalità 2ª: mostra messaggio scoperta
+                            showThousandsDiscoveryMessage();
+                        }
+                        return;
+                    }
+
                     isExchanging = true;
-                    performExchange(type, nextType[type], ballsInBubble.slice(0, 10));
+                    setTimeout(() => {
+                        performExchange(type, nextType[type], ballsInBubble.slice(0, 10));
+                    }, 300);
                     return;
                 }
             }
+        }
+
+        // Messaggio "scoperta delle migliaia" per classe 2ª
+        let discoveryMessageShown = false;
+        let lastHundredsCount = 0; // Per tracciare quando scende sotto 10
+
+        function showThousandsDiscoveryMessage() {
+            if (discoveryMessageShown) return;
+            discoveryMessageShown = true;
+
+            // Crea un overlay temporaneo con il messaggio
+            const overlay = document.createElement('div');
+            overlay.id = 'discovery-overlay';
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.7);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 2000;
+                animation: fadeIn 0.3s ease;
+            `;
+
+            const message = document.createElement('div');
+            message.style.cssText = `
+                background: linear-gradient(135deg, #e67e22, #f39c12);
+                color: white;
+                padding: 40px 50px;
+                border-radius: 20px;
+                text-align: center;
+                max-width: 500px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+                animation: bounceIn 0.5s ease;
+            `;
+            message.innerHTML = `
+                <div style="font-size: 4rem; margin-bottom: 15px;">🎉</div>
+                <h2 style="font-size: 1.8rem; margin-bottom: 15px;">Hai fatto una scoperta!</h2>
+                <p style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 20px;">
+                    Hai raggiunto <b>10 centinaia</b>!<br>
+                    Servirebbero le <b style="color: #fff5e6;">MIGLIAIA (k)</b>...<br>
+                    ma le studierai più avanti! 🚀
+                </p>
+                <p style="font-size: 1rem; line-height: 1.5; margin-bottom: 20px; opacity: 0.9;">
+                    Per continuare: trascina una <b>h</b> nel cestino 🗑️<br>
+                    oppure clicca <b>k</b> per attivare le migliaia.
+                </p>
+                <button onclick="closeDiscoveryMessage()" style="
+                    padding: 12px 30px;
+                    font-size: 1.1rem;
+                    font-weight: bold;
+                    border: none;
+                    border-radius: 10px;
+                    background: white;
+                    color: #e67e22;
+                    cursor: pointer;
+                    transition: transform 0.2s;
+                ">Ho capito!</button>
+            `;
+
+            overlay.appendChild(message);
+            document.body.appendChild(overlay);
+        }
+
+        function closeDiscoveryMessage() {
+            const overlay = document.getElementById('discovery-overlay');
+            if (overlay) {
+                overlay.remove();
+            }
+            // Il messaggio NON ricompare finché non si scende sotto 10 centinaia
+            // (gestito in checkExchange)
+        }
+
+        // Messaggio "limite migliaia raggiunto" per classe 3ª
+        let thousandsLimitShown = false;
+
+        function showThousandsLimitMessage() {
+            if (thousandsLimitShown) return;
+            thousandsLimitShown = true;
+
+            const overlay = document.createElement('div');
+            overlay.id = 'thousands-limit-overlay';
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.7);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 2000;
+                animation: fadeIn 0.3s ease;
+            `;
+
+            const message = document.createElement('div');
+            message.style.cssText = `
+                background: linear-gradient(135deg, #9b59b6, #8e44ad);
+                color: white;
+                padding: 40px 50px;
+                border-radius: 20px;
+                text-align: center;
+                max-width: 500px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+                animation: bounceIn 0.5s ease;
+            `;
+            message.innerHTML = `
+                <div style="font-size: 4rem; margin-bottom: 15px;">🏆</div>
+                <h2 style="font-size: 1.8rem; margin-bottom: 15px;">Limite raggiunto!</h2>
+                <p style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 20px;">
+                    Hai raggiunto <b>10 migliaia</b>!<br>
+                    Complimenti, hai costruito un numero enorme! 🎊
+                </p>
+                <p style="font-size: 1rem; line-height: 1.5; margin-bottom: 20px; opacity: 0.9;">
+                    Per ora non possiamo andare oltre.<br>
+                    Per continuare: trascina una <b>k</b> nel cestino 🗑️
+                </p>
+                <button onclick="closeThousandsLimitMessage()" style="
+                    padding: 12px 30px;
+                    font-size: 1.1rem;
+                    font-weight: bold;
+                    border: none;
+                    border-radius: 10px;
+                    background: white;
+                    color: #8e44ad;
+                    cursor: pointer;
+                    transition: transform 0.2s;
+                ">Ho capito!</button>
+            `;
+
+            overlay.appendChild(message);
+            document.body.appendChild(overlay);
+        }
+
+        function closeThousandsLimitMessage() {
+            const overlay = document.getElementById('thousands-limit-overlay');
+            if (overlay) {
+                overlay.remove();
+            }
+            // Il messaggio NON ricompare finché non si scende sotto 10 migliaia
         }
 
         function performExchange(fromType, toType, ballsToRemove) {
@@ -859,7 +1260,9 @@
                     const ball = ballsToRemove[index];
                     const color = CONFIG.colors[fromType];
 
-                    createPopEffect(ball.position.x, ball.position.y, color);
+                    // Suono solo ogni 3 palline per non sovraccaricare (0, 3, 6, 9)
+                    const withSound = (index % 3 === 0);
+                    createPopEffect(ball.position.x, ball.position.y, color, withSound);
 
                     if (ball.render) ball.render.fillStyle = '#fff';
 
@@ -892,7 +1295,7 @@
             const ballType = ball.ballType;
             const pos = ball.position;
 
-            const decomposeMap = { hundreds: 'tens', tens: 'units' };
+            const decomposeMap = { thousands: 'hundreds', hundreds: 'tens', tens: 'units' };
             if (!decomposeMap[ballType]) return false;
 
             const targetType = decomposeMap[ballType];
@@ -902,9 +1305,10 @@
             const dy = pos.y - targetPos.y;
             const distFromCenter = Math.sqrt(dx * dx + dy * dy);
 
-            const touchDistance = CONFIG.bubbleRadius + CONFIG.ballRadius + 5;
+            const radius = getCurrentBubbleRadius();
+            const touchDistance = radius + CONFIG.ballRadius + 5;
 
-            if (distFromCenter < touchDistance && distFromCenter > CONFIG.bubbleRadius - CONFIG.ballRadius - 20) {
+            if (distFromCenter < touchDistance && distFromCenter > radius - CONFIG.ballRadius - 20) {
                 performDecomposition(ball, targetType, targetPos);
                 return true;
             }
@@ -917,9 +1321,10 @@
             const x = ball.position.x;
             const y = ball.position.y;
 
-            createPopEffect(x, y, originalColor);
-            createPopEffect(x - 15, y - 10, originalColor);
-            createPopEffect(x + 15, y + 10, originalColor);
+            // Solo il primo effetto con suono
+            createPopEffect(x, y, originalColor, true);
+            createPopEffect(x - 15, y - 10, originalColor, false);
+            createPopEffect(x + 15, y + 10, originalColor, false);
 
             removeBall(ball);
 
@@ -929,7 +1334,9 @@
                     const spawnX = targetPos.x + (Math.random() - 0.5) * spread;
                     const spawnY = trayY + 30;
 
-                    createPopEffect(spawnX, spawnY - 20, CONFIG.colors[targetType]);
+                    // Suono solo per alcune palline nuove (0, 4, 8)
+                    const withSound = (i % 4 === 0);
+                    createPopEffect(spawnX, spawnY - 20, CONFIG.colors[targetType], withSound);
 
                     const newBall = Bodies.circle(spawnX, spawnY, CONFIG.ballRadius, {
                         restitution: 0.5,
@@ -979,10 +1386,10 @@
             if (!ball) return false;
 
             if (isBallInTrash(ball)) {
-                // Effetto esplosione
-                createPopEffect(ball.position.x, ball.position.y, CONFIG.colors[ball.ballType] || '#888');
-                createPopEffect(ball.position.x - 10, ball.position.y - 10, '#ff6b6b');
-                createPopEffect(ball.position.x + 10, ball.position.y + 10, '#ff6b6b');
+                // Effetto esplosione (suono solo sul primo)
+                createPopEffect(ball.position.x, ball.position.y, CONFIG.colors[ball.ballType] || '#888', true);
+                createPopEffect(ball.position.x - 10, ball.position.y - 10, '#ff6b6b', false);
+                createPopEffect(ball.position.x + 10, ball.position.y + 10, '#ff6b6b', false);
 
                 removeBall(ball);
                 updateCounters();
@@ -1039,10 +1446,12 @@
 
         // CONTATORI: Conta SOLO le palline DENTRO le bolle (non nel vassoio!)
         function updateCounters() {
+            const k = countBallsInCorrectBubble('thousands');
             const h = countBallsInCorrectBubble('hundreds');
             const da = countBallsInCorrectBubble('tens');
             const u = countBallsInCorrectBubble('units');
 
+            document.getElementById('count-k').textContent = k;
             document.getElementById('count-h').textContent = h;
             document.getElementById('count-da').textContent = da;
             document.getElementById('count-u').textContent = u;
@@ -1054,6 +1463,33 @@
             isExchanging = false;
             draggedBall = null;
             updateCounters();
+        }
+
+        // Toggle modalità classe: k = aggiungi migliaia, h = torna a solo centinaia
+        function toggleClassMode() {
+            classMode = classMode === 2 ? 3 : 2;
+            const modeLabel = document.getElementById('mode-label');
+            const modeToggle = document.querySelector('.mode-toggle');
+            const counterThousands = document.getElementById('counter-thousands');
+            const btnThousands = document.getElementById('btn-thousands');
+
+            if (classMode === 3) {
+                // Ora siamo in modalità migliaia, mostra "h" per tornare indietro
+                modeLabel.textContent = 'h';
+                modeToggle.classList.add('mode-3');
+                counterThousands.style.display = 'flex';
+                btnThousands.style.display = 'inline-block';
+            } else {
+                // Ora siamo in modalità centinaia, mostra "k" per aggiungere migliaia
+                modeLabel.textContent = 'k';
+                modeToggle.classList.remove('mode-3');
+                counterThousands.style.display = 'none';
+                btnThousands.style.display = 'none';
+            }
+
+            // Reset e reinizializza per mostrare/nascondere la bolla migliaia
+            resetSimulation();
+            handleResize();
         }
 
         // =====================
@@ -1075,6 +1511,7 @@
         function setupEvents() {
             Events.on(engine, 'afterUpdate', () => {
                 checkExchange();
+                repelWrongBalls();
             });
 
             Events.on(mouseConstraint, 'startdrag', (event) => {
@@ -1145,7 +1582,16 @@
         // =====================
         window.onload = () => {
             setTimeout(initPhysics, 100);
+            // L'audio verrà inizializzato al primo click utente (policy browser)
         };
+
+        // Inizializza audio al primo click dell'utente (richiesto dai browser moderni)
+        document.addEventListener('click', function initAudioOnClick() {
+            if (!audioContext) {
+                initAudio();
+            }
+            document.removeEventListener('click', initAudioOnClick);
+        }, { once: true });
 
         // =====================
         // SERVICE WORKER (PWA)
