@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bolle-aritmetiche-v1.0';
+const CACHE_NAME = 'bolle-aritmetiche-v2.0';
 const urlsToCache = [
   './',
   './index.html',
