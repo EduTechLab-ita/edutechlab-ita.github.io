@@ -8,7 +8,7 @@
     <meta name="keywords" content="formazione docenti, STEAM, coding, robotica educativa, pensiero computazionale, intelligenza artificiale, AI scuola, strumenti gratuiti scuola, gestione scolastica, istituto comprensivo, giochi matematici, didattica digitale">
     <meta name="author" content="Fabio Rizzotto">
     <link rel="canonical" href="https://edutechlab-ita.github.io/">
-    
+
     <!-- PWA Configuration -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1e293b">
@@ -35,6 +35,18 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 2rem;
+        }
+
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4, #10b981);
+            z-index: 10002;
+            width: 0%;
+            transition: width 0.1s linear;
         }
 
         /* Header */
@@ -66,6 +78,10 @@
             color: #1e293b;
         }
 
+        header.scrolled .hamburger span {
+            background: #1e293b;
+        }
+
         nav {
             display: flex;
             justify-content: space-between;
@@ -95,6 +111,93 @@
 
         .nav-menu a:hover {
             color: #60a5fa;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 1001;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 28px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -6px);
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.97);
+            backdrop-filter: blur(20px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .mobile-menu-list {
+            list-style: none;
+            text-align: center;
+        }
+
+        .mobile-menu-list li {
+            margin: 1.5rem 0;
+        }
+
+        .mobile-menu-list a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.8rem;
+            font-weight: 300;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .mobile-menu-list a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .mobile-menu-list a:hover::after {
+            width: 100%;
         }
 
         /* Cookie Banner */
@@ -145,20 +248,39 @@
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
         }
 
-        .video-background {
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Video background - object-fit cover per iframe */
+        .video-bg-wrapper {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            overflow: hidden;
             z-index: 1;
-            opacity: 1;
-            pointer-events: none; /* Previene click sul video */
         }
 
-        .video-background.loaded {
+        .video-background {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100vw;
+            height: 100vh;
+            /* Sovradimensiona per coprire qualsiasi ratio (video 4:3 su schermo 16:9) */
+            min-width: 140vw;
+            min-height: 140vh;
+            transform: translate(-50%, -50%) scale(1.2);
+            border: 0;
+            pointer-events: none;
             opacity: 1;
         }
 
@@ -173,10 +295,10 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(
-                135deg, 
-                rgba(59, 130, 246, 0.2) 0%, 
-                rgba(139, 92, 246, 0.2) 50%,
-                rgba(59, 130, 246, 0.2) 100%
+                135deg,
+                rgba(59, 130, 246, 0.25) 0%,
+                rgba(139, 92, 246, 0.3) 50%,
+                rgba(59, 130, 246, 0.25) 100%
             );
             z-index: 2;
         }
@@ -188,6 +310,7 @@
             color: white;
             max-width: 900px;
             padding: 2rem;
+            padding-top: 80px;
         }
 
         .hero-content h1 {
@@ -205,6 +328,22 @@
             opacity: 0.95;
             text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
             animation: fadeInUp 1s ease-out 0.2s both;
+            min-height: 1.5em;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: white;
+            margin-left: 2px;
+            animation: blink 1s infinite;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
         }
 
         .hero-badges {
@@ -282,8 +421,6 @@
             border-color: rgba(255, 255, 255, 0.5);
         }
 
-        /* Video controls rimossi - Vimeo gestisce tutto automaticamente */
-
         /* Update Notification Banner */
         .update-notification {
             position: fixed;
@@ -345,6 +482,58 @@
 
         .update-btn.primary:hover {
             background: white;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 60px 0;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .stat-number {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 700;
+            background: linear-gradient(45deg, #60a5fa, #a78bfa, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         /* About Section */
@@ -415,11 +604,12 @@
             border-radius: 15px;
             border-left: 4px solid #3b82f6;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .role-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.15);
         }
 
         .role-card h4 {
@@ -437,24 +627,46 @@
 
         .cert-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
             margin-top: 3rem;
         }
 
         .cert-card {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(15px);
             padding: 2.5rem;
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.4s ease;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cert-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(59, 130, 246, 0.3) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .cert-card:hover::before {
+            opacity: 1;
         }
 
         .cert-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-10px) perspective(800px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
             background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(96, 165, 250, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 40px rgba(59, 130, 246, 0.2);
         }
 
         .cert-icon {
@@ -481,7 +693,7 @@
 
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 2rem;
             margin-top: 3rem;
         }
@@ -490,15 +702,35 @@
             background: white;
             padding: 2.5rem;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
             text-align: center;
             border-top: 4px solid #3b82f6;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(59, 130, 246, 0.15) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .skill-card:hover::before {
+            opacity: 1;
         }
 
         .skill-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-12px) perspective(800px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+            box-shadow: 0 25px 50px rgba(59, 130, 246, 0.25);
         }
 
         .skill-icon {
@@ -525,7 +757,7 @@
 
         .tools-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
             margin-top: 3rem;
         }
@@ -534,16 +766,35 @@
             background: white;
             padding: 2.5rem;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
             border: 1px solid #e2e8f0;
             position: relative;
             overflow: hidden;
         }
 
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .tool-card:hover::before {
+            opacity: 1;
+        }
+
         .tool-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            transform: translateY(-12px) perspective(800px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+            box-shadow: 0 25px 50px rgba(139, 92, 246, 0.25);
+            border-color: rgba(139, 92, 246, 0.4);
         }
 
         .tool-card h3 {
@@ -603,7 +854,7 @@
 
         .contact-info {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 3rem;
             margin-top: 3rem;
         }
@@ -616,6 +867,12 @@
             padding: 2rem;
             border-radius: 15px;
             backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
         }
 
         .contact-item a {
@@ -636,6 +893,7 @@
             justify-content: center;
             gap: 2rem;
             margin-bottom: 1rem;
+            flex-wrap: wrap;
         }
 
         .footer-links a {
@@ -787,10 +1045,73 @@
             transform: translateX(0);
         }
 
-        /* Responsive Design */
+        .parallax-section {
+            will-change: transform;
+        }
+
+        /* =================== */
+        /* RESPONSIVE DESIGN   */
+        /* =================== */
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-badges {
+                gap: 0.5rem;
+            }
+
+            .badge {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+                margin-bottom: 2.5rem;
+            }
+
+            .cert-grid,
+            .skills-grid,
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .stat-label {
+                font-size: 0.8rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .stat-item {
+                padding: 1rem 0.5rem;
+            }
+        }
+
         @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
             .nav-menu {
                 display: none;
+            }
+
+            .hero {
+                min-height: 100vh;
+                min-height: 100dvh;
             }
 
             .hero-content {
@@ -841,17 +1162,91 @@
             .update-btn {
                 width: 100%;
             }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-links {
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .about-content {
+                gap: 3rem;
+            }
+
+            .cert-grid,
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tools-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1rem;
+            }
+        }
+
+        @media (min-width: 1400px) {
+            .container {
+                max-width: 1400px;
+            }
+
+            .tools-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-height: 500px) and (orientation: landscape) {
+            .hero {
+                min-height: 100vh;
+                padding: 60px 0 20px;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .hero-subtitle {
+                margin-bottom: 1rem;
+            }
+
+            .hero-badges {
+                margin-bottom: 1rem;
+            }
+
+            .hero-description {
+                margin-bottom: 1.5rem;
+                font-size: 0.95rem;
+            }
+
+            .cta-button {
+                padding: 0.8rem 2rem;
+                font-size: 1rem;
+            }
         }
 
         @media (prefers-reduced-motion: reduce) {
             .video-background {
                 display: none;
             }
-            
+
             .hero {
+                animation: none;
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             }
-            
+
             .hero-content h1,
             .hero-subtitle,
             .hero-badges,
@@ -859,19 +1254,26 @@
             .cta-container {
                 animation: none;
             }
+
+            .scroll-progress {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
     <!-- Update Notification Banner -->
     <div class="update-notification" id="updateNotification">
         <div class="update-content">
             <div class="update-text">
-                🚀 Nuova versione disponibile! Aggiorna per le ultime funzionalità e miglioramenti.
+                Nuova versione disponibile! Aggiorna per le ultime funzionalit&agrave; e miglioramenti.
             </div>
             <div class="update-buttons">
                 <button class="update-btn primary" onclick="updateSite()">Aggiorna Ora</button>
-                <button class="update-btn" onclick="dismissUpdate()">Più Tardi</button>
+                <button class="update-btn" onclick="dismissUpdate()">Pi&ugrave; Tardi</button>
             </div>
         </div>
     </div>
@@ -896,81 +1298,118 @@
                 <li><a href="#tools">Strumenti</a></li>
                 <li><a href="#contact">Contatti</a></li>
             </ul>
+            <div class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </nav>
     </header>
 
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenu">
+        <ul class="mobile-menu-list">
+            <li><a href="#home" onclick="closeMobileMenu()">Home</a></li>
+            <li><a href="#about" onclick="closeMobileMenu()">Chi Sono</a></li>
+            <li><a href="#certifications" onclick="closeMobileMenu()">Certificazioni</a></li>
+            <li><a href="#skills" onclick="closeMobileMenu()">Competenze</a></li>
+            <li><a href="#tools" onclick="closeMobileMenu()">Strumenti</a></li>
+            <li><a href="#contact" onclick="closeMobileMenu()">Contatti</a></li>
+        </ul>
+    </div>
+
     <!-- Hero Section with Video Background -->
     <section class="hero" id="home">
-        <!-- Video Background Vimeo -->
-        <iframe 
-            class="video-background" 
-            id="heroVideo"
-            src="https://player.vimeo.com/video/1104719209?autoplay=1&loop=1&muted=1&controls=0&title=0&byline=0&portrait=0&background=1"
-            frameborder="0" 
-            allow="autoplay; fullscreen; picture-in-picture" 
-            allowfullscreen
-        ></iframe>
-        
-        <!-- Video Overlay -->
+        <div class="video-bg-wrapper">
+            <iframe
+                class="video-background"
+                id="heroVideo"
+                src="https://player.vimeo.com/video/1104719209?autoplay=1&loop=1&muted=1&controls=0&title=0&byline=0&portrait=0&background=1"
+                frameborder="0"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowfullscreen
+            ></iframe>
+        </div>
+
         <div class="video-overlay"></div>
-        
-        <!-- Hero Content -->
+
         <div class="hero-content">
             <h1>EduTechLab</h1>
-            <p class="hero-subtitle">innovazione didattica digitale</p>
+            <p class="hero-subtitle" id="typingText"><span class="typing-cursor"></span></p>
             <div class="hero-badges">
-                <span class="badge">🧠 Pensiero Computazionale</span>
-                <span class="badge">💻 Coding</span>
-                <span class="badge">🤖 Robotica Educativa</span>
-                <span class="badge">🤖 Intelligenza Artificiale</span>
+                <span class="badge">&#129504; Pensiero Computazionale</span>
+                <span class="badge">&#128187; Coding</span>
+                <span class="badge">&#129302; Robotica Educativa</span>
+                <span class="badge">&#129302; Intelligenza Artificiale</span>
             </div>
             <p class="hero-description">
                 <strong>Fabio Rizzotto</strong><br>
-                Formatore Docenti - Esperto PNRR • Innovazione Digitale STEAM<br>
-                <em>342+ ore di formazione erogata • Google Certified • AI Educational Specialist</em>
+                Formatore Docenti - Esperto PNRR &bull; Innovazione Digitale STEAM<br>
+                <em>342+ ore di formazione erogata &bull; Google Certified &bull; AI Educational Specialist</em>
             </p>
             <div class="cta-container">
                 <a href="#tools" class="cta-button">Scopri gli Strumenti</a>
                 <a href="#contact" class="cta-button cta-secondary">Contattami</a>
             </div>
         </div>
-        
-        <!-- Video Controls (rimossi per Vimeo) -->
-        <!-- Vimeo gestisce automaticamente il video background -->
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats" id="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item fade-in">
+                    <div class="stat-number" data-target="342" data-suffix="+">0</div>
+                    <div class="stat-label">Ore di Formazione</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-number" data-target="9">0</div>
+                    <div class="stat-label">Istituti Formati</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-number" data-target="11">0</div>
+                    <div class="stat-label">Strumenti Creati</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-number" data-target="4">0</div>
+                    <div class="stat-label">Certificazioni</div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- About Section -->
-    <section class="about" id="about">
+    <section class="about parallax-section" id="about">
         <div class="container">
             <h2 class="section-title fade-in">Chi Sono</h2>
             <div class="about-content">
                 <div class="about-text slide-in-left">
                     <h3>Innovazione e Formazione Digitale</h3>
                     <p>
-                        Sono un docente specializzato nell'innovazione didattica digitale, 
-                        con esperienza nella formazione di colleghi e studenti nelle tecnologie educative più avanzate.
+                        Sono un docente specializzato nell'innovazione didattica digitale,
+                        con esperienza nella formazione di colleghi e studenti nelle tecnologie educative pi&ugrave; avanzate.
                     </p>
                     <p>
-                        Il mio obiettivo è trasformare l'apprendimento attraverso strumenti digitali innovativi, 
-                        rendendo la didattica più coinvolgente ed efficace per le nuove generazioni.
+                        Il mio obiettivo &egrave; trasformare l'apprendimento attraverso strumenti digitali innovativi,
+                        rendendo la didattica pi&ugrave; coinvolgente ed efficace per le nuove generazioni.
                     </p>
                     <p>
-                        Attraverso il Piano Nazionale di Ripresa e Resilienza (PNRR), contribuisco alla 
-                        digitalizzazione del sistema educativo italiano, formando docenti e sviluppando 
+                        Attraverso il Piano Nazionale di Ripresa e Resilienza (PNRR), contribuisco alla
+                        digitalizzazione del sistema educativo italiano, formando docenti e sviluppando
                         competenze digitali avanzate.
                     </p>
                 </div>
                 <div class="role-cards slide-in-right">
                     <div class="role-card">
-                        <h4>🎓 Docente Scuola Primaria</h4>
+                        <h4>&#127891; Docente Scuola Primaria</h4>
                         <p>Insegnamento innovativo con integrazione tecnologica e metodologie STEAM</p>
                     </div>
                     <div class="role-card">
-                        <h4>💻 Animatore Digitale</h4>
+                        <h4>&#128187; Animatore Digitale</h4>
                         <p>Coordinamento e sviluppo delle competenze digitali dell'Istituto</p>
                     </div>
                     <div class="role-card">
-                        <h4>🔬 Formatore Docenti - Esperto PNRR</h4>
+                        <h4>&#128300; Formatore Docenti - Esperto PNRR</h4>
                         <p>Esperienza avanzata in metodologie STEAM e innovazione didattica digitale</p>
                     </div>
                 </div>
@@ -979,56 +1418,56 @@
     </section>
 
     <!-- Certifications Section -->
-    <section class="certifications" id="certifications">
+    <section class="certifications parallax-section" id="certifications">
         <div class="container">
             <h2 class="section-title fade-in" style="color: white;">Certificazioni e Competenze</h2>
             <div class="cert-grid">
                 <div class="cert-card fade-in">
-                    <div class="cert-icon">🤖</div>
+                    <div class="cert-icon">&#129302;</div>
                     <h3>Generative AI for Educators</h3>
                     <p>Certificazione Google 2024 - Livello 8 QEQ per l'implementazione etica dell'Intelligenza Artificiale nella didattica</p>
                 </div>
                 <div class="cert-card fade-in">
-                    <div class="cert-icon">🎓</div>
+                    <div class="cert-icon">&#127891;</div>
                     <h3>Google for Education Certified</h3>
                     <p>Certificazioni complete Google Ads, Workspace Premium e competenze amministrative avanzate per l'ecosistema educativo</p>
                 </div>
                 <div class="cert-card fade-in">
-                    <div class="cert-icon">💻</div>
+                    <div class="cert-icon">&#128187;</div>
                     <h3>DigiCompEU Livello 6 Avanzato</h3>
                     <p>Competenze digitali certificate a livello avanzato in tutte le aree: elaborazione, comunicazione, creazione, sicurezza, problem solving</p>
                 </div>
                 <div class="cert-card fade-in">
-                    <div class="cert-icon">🔬</div>
+                    <div class="cert-icon">&#128300;</div>
                     <h3>Esperto Formatore PNRR</h3>
-                    <p>342+ ore di formazione erogata DM66 • Coding, Robotica Educativa, AI, Digital Storytelling • 9 Istituti Lombardia</p>
+                    <p>342+ ore di formazione erogata DM66 &bull; Coding, Robotica Educativa, AI, Digital Storytelling &bull; 9 Istituti Lombardia</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Skills Section -->
-    <section class="skills" id="skills">
+    <section class="skills parallax-section" id="skills">
         <div class="container">
             <h2 class="section-title fade-in">Le Mie Competenze</h2>
             <div class="skills-grid">
                 <div class="skill-card fade-in">
-                    <div class="skill-icon">🧠</div>
+                    <div class="skill-icon">&#129504;</div>
                     <h3>Pensiero Computazionale</h3>
                     <p>Sviluppo delle competenze di problem solving e logica algoritmica attraverso metodologie innovative e approcci interdisciplinari</p>
                 </div>
                 <div class="skill-card fade-in">
-                    <div class="skill-icon">💻</div>
+                    <div class="skill-icon">&#128187;</div>
                     <h3>Coding Educativo</h3>
-                    <p>Insegnamento della programmazione con strumenti visuali e linguaggi adatti all'età degli studenti, dal Scratch ai linguaggi avanzati</p>
+                    <p>Insegnamento della programmazione con strumenti visuali e linguaggi adatti all'et&agrave; degli studenti, dal Scratch ai linguaggi avanzati</p>
                 </div>
                 <div class="skill-card fade-in">
-                    <div class="skill-icon">🤖</div>
+                    <div class="skill-icon">&#129302;</div>
                     <h3>Robotica Educativa</h3>
                     <p>Integrazione di robotica e makerspaces nella didattica per apprendimento hands-on e sviluppo di competenze trasversali</p>
                 </div>
                 <div class="skill-card fade-in">
-                    <div class="skill-icon">🤖</div>
+                    <div class="skill-icon">&#129302;</div>
                     <h3>Intelligenza Artificiale</h3>
                     <p>Formazione sull'uso etico e didattico dell'AI, sviluppo di strumenti educativi innovativi e alfabetizzazione digitale avanzata</p>
                 </div>
@@ -1037,66 +1476,64 @@
     </section>
 
     <!-- Tools Section -->
-    <section class="tools" id="tools">
+    <section class="tools parallax-section" id="tools">
         <div class="container">
             <h2 class="section-title fade-in">Strumenti Didattici</h2>
             <div class="tools-grid">
-                <!-- STRUMENTI DISPONIBILI -->
                 <div class="tool-card fade-in">
-                    <h3>🎯 Quiz Interattivi <span class="coming-soon">Disponibile</span></h3>
+                    <h3>&#127919; Quiz Interattivi <span class="coming-soon">Disponibile</span></h3>
                     <p>Strumento avanzato per creare e somministrare quiz educativi con feedback immediato, analytics delle performance e gamification.</p>
                     <a href="https://edutechlab-ita.github.io/edutechlab-quiz/" class="tool-button" target="_blank">Accedi ai Quiz</a>
                 </div>
                 <div class="tool-card fade-in">
-                    <h3>📄 CV Editor Europass <span class="coming-soon">Disponibile</span></h3>
-                    <p>Editor avanzato per creare CV in formato Europass con template moderni, export PDF/HTML e funzionalità PWA offline-ready.</p>
+                    <h3>&#128196; CV Editor Europass <span class="coming-soon">Disponibile</span></h3>
+                    <p>Editor avanzato per creare CV in formato Europass con template moderni, export PDF/HTML e funzionalit&agrave; PWA offline-ready.</p>
                     <a href="https://edutechlab-ita.github.io/cv-pwa-editor/" class="tool-button" target="_blank">Crea il tuo CV</a>
                 </div>
                 <div class="tool-card fade-in">
-                    <h3>📊 Valutazione Primaria <span class="coming-soon">Disponibile</span></h3>
+                    <h3>&#128202; Valutazione Primaria <span class="coming-soon">Disponibile</span></h3>
                     <p>Sistema completo per la valutazione degli apprendimenti nella scuola primaria con criteri personalizzabili, rubric e report dettagliati.</p>
                     <a href="https://edutechlab-ita.github.io/valutazione-primaria/" class="tool-button" target="_blank">Accedi alla Valutazione</a>
                 </div>
                 <div class="tool-card fade-in">
-                    <h3>🎭 Comportamento Scuola <span class="coming-soon">Disponibile</span></h3>
+                    <h3>&#127917; Comportamento Scuola <span class="coming-soon">Disponibile</span></h3>
                     <p>Strumento per la gestione e valutazione del comportamento degli studenti con sistema di tracking e comunicazioni automatiche.</p>
                     <a href="https://edutechlab-ita.github.io/comportamento-scuola-primaria/" class="tool-button" target="_blank">Gestisci Comportamenti</a>
                 </div>
                 <div class="tool-card fade-in">
-                    <h3>🖼️ Lavagna Interattiva <span class="coming-soon">Disponibile</span></h3>
+                    <h3>&#128444;&#65039; Lavagna Interattiva <span class="coming-soon">Disponibile</span></h3>
                     <p>Lavagna digitale multimediale per lezioni interattive con strumenti di disegno, annotazioni e condivisione in tempo reale.</p>
                     <a href="https://edutechlab-ita.github.io/lavagna/" class="tool-button" target="_blank">Apri la Lavagna</a>
                 </div>
                 <div class="tool-card fade-in">
-                    <h3>🦘 Kangourou Trainer <span class="coming-soon">Disponibile</span></h3>
-                    <p>Allenamento interattivo per le gare nazionali di matematica Kangourou e Koala. 3 modalità (allenamento, simulazione, a tempo) con feedback motivazionale e griglia risposte.</p>
+                    <h3>&#129432; Kangourou Trainer <span class="coming-soon">Disponibile</span></h3>
+                    <p>Allenamento interattivo per le gare nazionali di matematica Kangourou e Koala. 3 modalit&agrave; (allenamento, simulazione, a tempo) con feedback motivazionale e griglia risposte.</p>
                     <a href="https://edutechlab-ita.github.io/kangourou-gare/" class="tool-button" target="_blank">Inizia l'Allenamento</a>
                 </div>
                 <div class="tool-card fade-in">
-                    <h3>🔢 Meccanismo del Cambio <span class="coming-soon">Disponibile</span></h3>
-                    <p>Animazione interattiva per spiegare il valore posizionale e il cambio tra unità, decine e centinaia. Pallina animata che mostra visivamente il raggruppamento e la scomposizione.</p>
+                    <h3>&#128290; Meccanismo del Cambio <span class="coming-soon">Disponibile</span></h3>
+                    <p>Animazione interattiva per spiegare il valore posizionale e il cambio tra unit&agrave;, decine e centinaia. Pallina animata che mostra visivamente il raggruppamento e la scomposizione.</p>
                     <a href="https://edutechlab-ita.github.io/meccanismo-cambio/" class="tool-button" target="_blank">Scopri il Meccanismo</a>
                 </div>
                 <div class="tool-card fade-in">
-                    <h3>🫧 Bolle Aritmetiche <span class="coming-soon">Disponibile</span></h3>
-                    <p>App interattiva con fisica realistica per esplorare il valore posizionale. Trascina palline nelle bolle di unità, decine e centinaia. Cambio automatico (10→1) e scomposizione visiva con effetti pop!</p>
+                    <h3>&#129515; Bolle Aritmetiche <span class="coming-soon">Disponibile</span></h3>
+                    <p>App interattiva con fisica realistica per esplorare il valore posizionale. Trascina palline nelle bolle di unit&agrave;, decine e centinaia. Cambio automatico (10&rarr;1) e scomposizione visiva con effetti pop!</p>
                     <a href="./bolle-aritmetiche/" class="tool-button" target="_blank">Gioca con le Bolle</a>
                 </div>
 
-                <!-- STRUMENTI IN SVILUPPO -->
                 <div class="tool-card fade-in">
-                    <h3>📚 Gestione Formazioni <span class="coming-soon red">Coming Soon</span></h3>
+                    <h3>&#128218; Gestione Formazioni <span class="coming-soon red">Coming Soon</span></h3>
                     <p>Applicazione completa per organizzare corsi, gestire iscrizioni e distribuire materiali didattici ai corsisti con sistema di tracking e analytics.</p>
                     <a href="#" class="tool-button" style="opacity: 0.7; cursor: not-allowed;">In Sviluppo</a>
                 </div>
                 <div class="tool-card fade-in">
-                    <h3>🤖 Simulatori STEAM <span class="coming-soon red">Coming Soon</span></h3>
+                    <h3>&#129302; Simulatori STEAM <span class="coming-soon red">Coming Soon</span></h3>
                     <p>Simulatori interattivi per esperimenti scientifici, concetti di robotica educativa e laboratori virtuali immersivi.</p>
                     <a href="#" class="tool-button" style="opacity: 0.7; cursor: not-allowed;">In Sviluppo</a>
                 </div>
                 <div class="tool-card fade-in">
-                    <h3>📊 Analytics Didattici <span class="coming-soon red">Coming Soon</span></h3>
-                    <p>Dashboard avanzata per monitorare i progressi degli studenti, l'efficacia delle attività didattiche e generare report automatici.</p>
+                    <h3>&#128202; Analytics Didattici <span class="coming-soon red">Coming Soon</span></h3>
+                    <p>Dashboard avanzata per monitorare i progressi degli studenti, l'efficacia delle attivit&agrave; didattiche e generare report automatici.</p>
                     <a href="#" class="tool-button" style="opacity: 0.7; cursor: not-allowed;">In Sviluppo</a>
                 </div>
             </div>
@@ -1113,17 +1550,17 @@
                 </p>
                 <div class="contact-info fade-in">
                     <div class="contact-item">
-                        <span style="font-size: 2rem;">📧</span>
+                        <span style="font-size: 2rem;">&#128231;</span>
                         <div>
                             <strong>Email per Info</strong><br>
                             <a href="mailto:edutechlab.ita@gmail.com">edutechlab.ita@gmail.com</a>
                         </div>
                     </div>
                     <div class="contact-item">
-                        <span style="font-size: 2rem;">🎯</span>
+                        <span style="font-size: 2rem;">&#127919;</span>
                         <div>
                             <strong>Specializzazione</strong><br>
-                            <span>Formazione STEAM & Innovazione Digitale PNRR</span>
+                            <span>Formazione STEAM &amp; Innovazione Digitale PNRR</span>
                         </div>
                     </div>
                 </div>
@@ -1142,8 +1579,8 @@
             </div>
             <p>&copy; 2025 EduTechLab - Fabio Rizzotto. Tutti i diritti riservati.</p>
             <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 1rem;">
-                Sito web per attività di formazione e divulgazione didattica digitale<br>
-                Formatore Docenti Esperto PNRR • Google Certified • Innovazione STEAM
+                Sito web per attivit&agrave; di formazione e divulgazione didattica digitale<br>
+                Formatore Docenti Esperto PNRR &bull; Google Certified &bull; Innovazione STEAM
             </p>
         </div>
     </footer>
@@ -1157,10 +1594,8 @@
             </div>
             <div class="modal-body">
                 <p><strong>Ultimo aggiornamento:</strong> 21 luglio 2025</p>
-                
                 <h3>1. Titolare del Trattamento</h3>
-                <p>Il titolare del trattamento dei dati personali è <strong>Fabio Rizzotto</strong>, con sede presso l'indirizzo email: edutechlab.ita@gmail.com</p>
-
+                <p>Il titolare del trattamento dei dati personali &egrave; <strong>Fabio Rizzotto</strong>, con sede presso l'indirizzo email: edutechlab.ita@gmail.com</p>
                 <h3>2. Tipologie di Dati Raccolti</h3>
                 <p>Questo sito raccoglie i seguenti dati:</p>
                 <ul>
@@ -1168,28 +1603,24 @@
                     <li><strong>Cookie tecnici:</strong> necessari per il funzionamento del sito</li>
                     <li><strong>Dati di contatto:</strong> solo se forniti volontariamente tramite email</li>
                 </ul>
-
-                <h3>3. Finalità del Trattamento</h3>
+                <h3>3. Finalit&agrave; del Trattamento</h3>
                 <p>I dati vengono trattati per:</p>
                 <ul>
                     <li>Garantire il corretto funzionamento del sito web</li>
                     <li>Rispondere alle richieste di informazioni</li>
                     <li>Adempimenti di legge</li>
                 </ul>
-
                 <h3>4. Base Giuridica</h3>
                 <ul>
                     <li><strong>Legittimo interesse</strong> (art. 6, co. 1, lett. f GDPR) per cookie tecnici e analytics</li>
                     <li><strong>Consenso</strong> (art. 6, co. 1, lett. a GDPR) per contatti volontari</li>
                 </ul>
-
                 <h3>5. Conservazione dei Dati</h3>
                 <p>I dati sono conservati per il tempo strettamente necessario:</p>
                 <ul>
                     <li><strong>Cookie tecnici:</strong> durata della sessione</li>
-                    <li><strong>Dati di contatto:</strong> fino a revoca del consenso o cessazione dell'attività</li>
+                    <li><strong>Dati di contatto:</strong> fino a revoca del consenso o cessazione dell'attivit&agrave;</li>
                 </ul>
-
                 <h3>6. Diritti dell'Interessato</h3>
                 <p>Ai sensi del GDPR, hai diritto a:</p>
                 <ul>
@@ -1197,20 +1628,17 @@
                     <li>Rettifica di dati inesatti</li>
                     <li>Cancellazione dei dati</li>
                     <li>Limitazione del trattamento</li>
-                    <li>Portabilità dei dati</li>
+                    <li>Portabilit&agrave; dei dati</li>
                     <li>Opposizione al trattamento</li>
                     <li>Reclamo al Garante Privacy</li>
                 </ul>
-
                 <h3>7. Sicurezza</h3>
                 <p>Adottiamo misure tecniche e organizzative adeguate per proteggere i dati personali da accessi non autorizzati, perdita o distruzione.</p>
-
                 <h3>8. Modifiche</h3>
-                <p>Questa Privacy Policy può essere aggiornata. Le modifiche saranno pubblicate su questa pagina con indicazione della data di aggiornamento.</p>
-
+                <p>Questa Privacy Policy pu&ograve; essere aggiornata. Le modifiche saranno pubblicate su questa pagina con indicazione della data di aggiornamento.</p>
                 <div class="highlight-box">
                     <strong>Per esercitare i tuoi diritti o per informazioni, contatta:</strong><br>
-                    📧 edutechlab.ita@gmail.com
+                    &#128231; edutechlab.ita@gmail.com
                 </div>
             </div>
         </div>
@@ -1225,12 +1653,9 @@
             </div>
             <div class="modal-body">
                 <p><strong>Ultimo aggiornamento:</strong> 21 luglio 2025</p>
-                
                 <h3>1. Cosa sono i Cookie</h3>
                 <p>I cookie sono piccoli file di testo che vengono memorizzati sul tuo dispositivo quando visiti un sito web. Vengono utilizzati per migliorare l'esperienza di navigazione e fornire servizi personalizzati.</p>
-
                 <h3>2. Tipologie di Cookie Utilizzati</h3>
-                
                 <h4>Cookie Tecnici (sempre attivi)</h4>
                 <div class="highlight-box">
                     <p>Questi cookie sono essenziali per il funzionamento del sito e non richiedono consenso:</p>
@@ -1240,13 +1665,10 @@
                         <li><strong>Cookie di preferenze:</strong> memorizzano le impostazioni scelte (es. consenso cookie)</li>
                     </ul>
                 </div>
-
                 <h4>Cookie di Terze Parti</h4>
-                <p>Attualmente il sito non utilizza cookie di terze parti per analytics o pubblicità.</p>
-
+                <p>Attualmente il sito non utilizza cookie di terze parti per analytics o pubblicit&agrave;.</p>
                 <h3>3. Gestione dei Cookie</h3>
                 <p>Puoi gestire i cookie attraverso:</p>
-
                 <h4>Impostazioni del Browser</h4>
                 <ul>
                     <li><strong>Chrome:</strong> Impostazioni > Privacy e sicurezza > Cookie</li>
@@ -1254,9 +1676,8 @@
                     <li><strong>Safari:</strong> Preferenze > Privacy > Cookie</li>
                     <li><strong>Edge:</strong> Impostazioni > Privacy > Cookie</li>
                 </ul>
-
                 <div class="highlight-box">
-                    <strong>Importante:</strong> Disabilitare i cookie tecnici potrebbe compromettere alcune funzionalità del sito.
+                    <strong>Importante:</strong> Disabilitare i cookie tecnici potrebbe compromettere alcune funzionalit&agrave; del sito.
                 </div>
             </div>
         </div>
@@ -1271,47 +1692,38 @@
             </div>
             <div class="modal-body">
                 <p><strong>Ultimo aggiornamento:</strong> 21 luglio 2025</p>
-                
                 <h3>1. Informazioni sul Sito</h3>
-                <p>Il presente sito web è di proprietà di <strong>Fabio Rizzotto</strong>, utilizzato per attività di formazione e divulgazione didattica digitale.</p>
-
+                <p>Il presente sito web &egrave; di propriet&agrave; di <strong>Fabio Rizzotto</strong>, utilizzato per attivit&agrave; di formazione e divulgazione didattica digitale.</p>
                 <h3>2. Contatti</h3>
                 <div class="highlight-box">
                     <strong>Responsabile del sito:</strong> Fabio Rizzotto<br>
                     <strong>Email:</strong> edutechlab.ita@gmail.com<br>
-                    <strong>Attività:</strong> Formazione Docenti - Innovazione Didattica Digitale
+                    <strong>Attivit&agrave;:</strong> Formazione Docenti - Innovazione Didattica Digitale
                 </div>
-
                 <h3>3. Scopo del Sito</h3>
-                <p>Il sito ha finalità informative e di promozione delle attività di formazione STEAM, pensiero computazionale, coding e robotica educativa.</p>
-
+                <p>Il sito ha finalit&agrave; informative e di promozione delle attivit&agrave; di formazione STEAM, pensiero computazionale, coding e robotica educativa.</p>
                 <h3>4. Diritti d'Autore</h3>
-                <p>Tutti i contenuti del sito (testi, immagini, grafici, loghi) sono protetti da diritto d'autore e proprietà intellettuale di Fabio Rizzotto, salvo dove diversamente indicato.</p>
-
+                <p>Tutti i contenuti del sito (testi, immagini, grafici, loghi) sono protetti da diritto d'autore e propriet&agrave; intellettuale di Fabio Rizzotto, salvo dove diversamente indicato.</p>
                 <h3>5. Utilizzo dei Contenuti</h3>
-                <p>È consentito:</p>
+                <p>&Egrave; consentito:</p>
                 <ul>
-                    <li>Consultare il sito per finalità informative</li>
+                    <li>Consultare il sito per finalit&agrave; informative</li>
                     <li>Condividere i link alle pagine del sito</li>
                     <li>Citare i contenuti indicando la fonte</li>
                 </ul>
-
-                <p>È vietato:</p>
+                <p>&Egrave; vietato:</p>
                 <ul>
                     <li>Riprodurre integralmente i contenuti senza autorizzazione</li>
                     <li>Utilizzare il materiale per scopi commerciali non autorizzati</li>
                     <li>Modificare o alterare i contenuti</li>
                 </ul>
-
                 <h3>6. Disclaimer</h3>
-                <p>Le informazioni contenute nel sito sono fornite "così come sono" senza garanzie di alcun tipo. Il titolare si riserva il diritto di modificare o rimuovere contenuti senza preavviso.</p>
-
+                <p>Le informazioni contenute nel sito sono fornite "cos&igrave; come sono" senza garanzie di alcun tipo. Il titolare si riserva il diritto di modificare o rimuovere contenuti senza preavviso.</p>
                 <h3>7. Legge Applicabile</h3>
-                <p>Le presenti note legali sono regolate dalla legge italiana. Per controversie è competente il foro di Brescia.</p>
-
+                <p>Le presenti note legali sono regolate dalla legge italiana. Per controversie &egrave; competente il foro di Brescia.</p>
                 <div class="highlight-box">
                     <strong>Per comunicazioni legali:</strong><br>
-                    📧 edutechlab.ita@gmail.com
+                    &#128231; edutechlab.ita@gmail.com
                 </div>
             </div>
         </div>
@@ -1326,34 +1738,28 @@
             </div>
             <div class="modal-body">
                 <p><strong>Ultimo aggiornamento:</strong> 21 luglio 2025</p>
-                
                 <h3>1. Accettazione dei Termini</h3>
                 <p>Utilizzando questo sito web accetti integralmente i presenti Termini di Servizio. Se non accetti questi termini, ti preghiamo di non utilizzare il sito.</p>
-
                 <h3>2. Descrizione del Servizio</h3>
                 <p>EduTechLab fornisce informazioni e risorse per la formazione digitale, metodologie STEAM e innovazione didattica.</p>
-
-                <h3>3. Responsabilità dell'Utente</h3>
+                <h3>3. Responsabilit&agrave; dell'Utente</h3>
                 <p>L'utente si impegna a:</p>
                 <ul>
                     <li>Utilizzare il sito in modo lecito e rispettoso</li>
                     <li>Non compromettere la sicurezza del sistema</li>
-                    <li>Rispettare i diritti di proprietà intellettuale</li>
+                    <li>Rispettare i diritti di propriet&agrave; intellettuale</li>
                     <li>Fornire informazioni veritiere negli eventuali contatti</li>
                 </ul>
-
-                <h3>4. Limitazione di Responsabilità</h3>
-                <p>Il servizio è fornito "così com'è" senza garanzie. Non siamo responsabili per:</p>
+                <h3>4. Limitazione di Responsabilit&agrave;</h3>
+                <p>Il servizio &egrave; fornito "cos&igrave; com'&egrave;" senza garanzie. Non siamo responsabili per:</p>
                 <ul>
                     <li>Danni diretti o indiretti dall'uso del sito</li>
                     <li>Interruzioni del servizio</li>
                     <li>Perdita di dati</li>
                     <li>Contenuti di siti collegati</li>
                 </ul>
-
                 <h3>5. Modifiche ai Termini</h3>
                 <p>Ci riserviamo il diritto di modificare questi termini. Le modifiche saranno pubblicate su questa pagina e entreranno in vigore immediatamente.</p>
-
                 <div class="highlight-box">
                     <strong>Accettazione:</strong> Continuando a utilizzare il sito dichiari di aver letto e accettato integralmente questi Termini di Servizio.
                 </div>
@@ -1362,7 +1768,132 @@
     </div>
 
     <script>
-        // Cookie Banner Management
+        // ==========================================
+        // MOBILE MENU
+        // ==========================================
+        function toggleMobileMenu() {
+            var hamburger = document.getElementById('hamburger');
+            var mobileMenu = document.getElementById('mobileMenu');
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : 'auto';
+        }
+
+        function closeMobileMenu() {
+            var hamburger = document.getElementById('hamburger');
+            var mobileMenu = document.getElementById('mobileMenu');
+            hamburger.classList.remove('active');
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // ==========================================
+        // SCROLL PROGRESS BAR
+        // ==========================================
+        window.addEventListener('scroll', function() {
+            var scrollProgress = document.getElementById('scrollProgress');
+            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            var scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            var progress = (scrollTop / scrollHeight) * 100;
+            scrollProgress.style.width = progress + '%';
+        });
+
+        // ==========================================
+        // TYPING EFFECT
+        // ==========================================
+        function typeWriter(element, text, speed) {
+            var i = 0;
+            element.innerHTML = '<span class="typing-cursor"></span>';
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML = text.substring(0, i + 1) + '<span class="typing-cursor"></span>';
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    setTimeout(function() {
+                        element.innerHTML = text;
+                    }, 2000);
+                }
+            }
+            setTimeout(type, 800);
+        }
+
+        // ==========================================
+        // ANIMATED COUNTERS
+        // ==========================================
+        function animateCounters() {
+            var counters = document.querySelectorAll('.stat-number');
+            counters.forEach(function(counter) {
+                var target = parseInt(counter.getAttribute('data-target'));
+                var suffix = counter.getAttribute('data-suffix') || '';
+                var duration = 2000;
+                var startTime = performance.now();
+
+                function updateCounter(currentTime) {
+                    var elapsed = currentTime - startTime;
+                    var progress = Math.min(elapsed / duration, 1);
+                    var eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                    var current = Math.floor(eased * target);
+                    counter.textContent = current + suffix;
+                    if (progress < 1) {
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target + suffix;
+                    }
+                }
+                requestAnimationFrame(updateCounter);
+            });
+        }
+
+        // ==========================================
+        // 3D TILT + GLOW EFFECT ON CARDS
+        // ==========================================
+        function initTiltEffect() {
+            var cards = document.querySelectorAll('.tool-card, .skill-card, .cert-card');
+            cards.forEach(function(card) {
+                card.addEventListener('mousemove', function(e) {
+                    var rect = card.getBoundingClientRect();
+                    var x = e.clientX - rect.left;
+                    var y = e.clientY - rect.top;
+                    var centerX = rect.width / 2;
+                    var centerY = rect.height / 2;
+                    var tiltX = ((y - centerY) / centerY) * -7;
+                    var tiltY = ((x - centerX) / centerX) * 7;
+                    card.style.setProperty('--tilt-x', tiltX + 'deg');
+                    card.style.setProperty('--tilt-y', tiltY + 'deg');
+                    var percentX = (x / rect.width) * 100;
+                    var percentY = (y / rect.height) * 100;
+                    card.style.setProperty('--mouse-x', percentX + '%');
+                    card.style.setProperty('--mouse-y', percentY + '%');
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    card.style.setProperty('--tilt-x', '0deg');
+                    card.style.setProperty('--tilt-y', '0deg');
+                });
+            });
+        }
+
+        // ==========================================
+        // PARALLAX LEGGERO
+        // ==========================================
+        function initParallax() {
+            window.addEventListener('scroll', function() {
+                var sections = document.querySelectorAll('.parallax-section');
+                sections.forEach(function(section) {
+                    var rect = section.getBoundingClientRect();
+                    var speed = 0.03;
+                    if (rect.top < window.innerHeight && rect.bottom > 0) {
+                        var offset = (rect.top - window.innerHeight / 2) * speed;
+                        section.style.transform = 'translateY(' + offset + 'px)';
+                    }
+                });
+            });
+        }
+
+        // ==========================================
+        // COOKIE BANNER
+        // ==========================================
         function acceptCookies() {
             document.getElementById('cookieBanner').style.display = 'none';
             localStorage.setItem('cookiesAccepted', 'true');
@@ -1372,9 +1903,11 @@
             document.getElementById('cookieBanner').style.display = 'block';
         }
 
-        // Header Scroll Effect
+        // ==========================================
+        // HEADER SCROLL EFFECT
+        // ==========================================
         window.addEventListener('scroll', function() {
-            const header = document.getElementById('header');
+            var header = document.getElementById('header');
             if (window.scrollY > 100) {
                 header.classList.add('scrolled');
             } else {
@@ -1382,126 +1915,110 @@
             }
         });
 
-        // Vimeo Video Background - no controls needed
-        // Vimeo gestisce automaticamente autoplay, loop e muted
-
-        // Modal Functions
+        // ==========================================
+        // MODAL FUNCTIONS
+        // ==========================================
         function openModal(modalId) {
-            const modal = document.getElementById(modalId);
+            var modal = document.getElementById(modalId);
             modal.classList.add('show');
             document.body.style.overflow = 'hidden';
         }
 
         function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
+            var modal = document.getElementById(modalId);
             modal.classList.remove('show');
             document.body.style.overflow = 'auto';
         }
 
-        // Close modal when clicking outside
         window.onclick = function(event) {
-            const modals = document.getElementsByClassName('modal');
-            for (let modal of modals) {
-                if (event.target === modal) {
-                    modal.classList.remove('show');
+            var modals = document.getElementsByClassName('modal');
+            for (var i = 0; i < modals.length; i++) {
+                if (event.target === modals[i]) {
+                    modals[i].classList.remove('show');
                     document.body.style.overflow = 'auto';
                 }
             }
-        }
+        };
 
-        // Close modal with Escape key
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
-                const modals = document.getElementsByClassName('modal');
-                for (let modal of modals) {
-                    if (modal.classList.contains('show')) {
-                        modal.classList.remove('show');
+                var modals = document.getElementsByClassName('modal');
+                for (var i = 0; i < modals.length; i++) {
+                    if (modals[i].classList.contains('show')) {
+                        modals[i].classList.remove('show');
                         document.body.style.overflow = 'auto';
                     }
                 }
+                closeMobileMenu();
             }
         });
 
-        // Vimeo Background Video - gestione automatica
-        console.log('Video Vimeo caricato come background');
+        // ==========================================
+        // UPDATE NOTIFICATION SYSTEM
+        // ==========================================
+        var SITE_VERSION = '3.0.0';
 
-        // ===============================
-        // SISTEMA DI NOTIFICA AGGIORNAMENTI
-        // ===============================
-        
-        // IMPORTANTE: Quando modifichi il sito, incrementa questo numero!
-        const SITE_VERSION = '2.2.0'; // <-- CAMBIA QUESTO QUANDO AGGIORNI IL SITO
-        
-        // Controlla se c'è un aggiornamento disponibile
         function checkForUpdates() {
-            const lastVersion = localStorage.getItem('siteVersion');
-            const updateDismissed = sessionStorage.getItem('updateDismissed');
-            
-            // Se è la prima visita o c'è una nuova versione e non è stata dismessa
+            var lastVersion = localStorage.getItem('siteVersion');
+            var updateDismissed = sessionStorage.getItem('updateDismissed');
             if (lastVersion !== SITE_VERSION && !updateDismissed) {
-                // Se non è la prima visita (c'era una versione precedente)
                 if (lastVersion) {
                     showUpdateNotification();
                 } else {
-                    // Prima visita, salva la versione corrente
                     localStorage.setItem('siteVersion', SITE_VERSION);
                 }
             }
         }
 
-        // Mostra la notifica di aggiornamento
         function showUpdateNotification() {
-            const notification = document.getElementById('updateNotification');
-            setTimeout(() => {
+            var notification = document.getElementById('updateNotification');
+            setTimeout(function() {
                 notification.classList.add('show');
-            }, 2000); // Appare dopo 2 secondi
+            }, 2000);
         }
 
-        // Aggiorna il sito (ricarica la pagina)
         function updateSite() {
             localStorage.setItem('siteVersion', SITE_VERSION);
             sessionStorage.removeItem('updateDismissed');
-            
-            // Forza il ricaricamento senza cache
             window.location.reload(true);
         }
 
-        // Nascondi la notifica per questa sessione
         function dismissUpdate() {
-            const notification = document.getElementById('updateNotification');
+            var notification = document.getElementById('updateNotification');
             notification.classList.remove('show');
             sessionStorage.setItem('updateDismissed', 'true');
-            
-            // Aggiorna comunque la versione in background
-            setTimeout(() => {
+            setTimeout(function() {
                 localStorage.setItem('siteVersion', SITE_VERSION);
             }, 1000);
         }
 
-        // Register Service Worker for PWA
+        // ==========================================
+        // SERVICE WORKER
+        // ==========================================
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
+            window.addEventListener('load', function() {
                 navigator.serviceWorker.register('sw.js')
-                    .then((registration) => {
+                    .then(function(registration) {
                         console.log('SW registered: ', registration);
                     })
-                    .catch((registrationError) => {
+                    .catch(function(registrationError) {
                         console.log('SW registration failed: ', registrationError);
                     });
             });
         }
 
-        // Smooth Scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                const href = this.getAttribute('href');
+        // ==========================================
+        // SMOOTH SCROLLING
+        // ==========================================
+        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+            anchor.addEventListener('click', function(e) {
+                var href = this.getAttribute('href');
                 if (href.startsWith('#') && href.length > 1) {
                     e.preventDefault();
-                    const target = document.querySelector(href);
+                    var target = document.querySelector(href);
                     if (target) {
-                        const headerHeight = document.querySelector('header').offsetHeight;
-                        const targetPosition = target.offsetTop - headerHeight;
-                        
+                        var headerHeight = document.querySelector('header').offsetHeight;
+                        var targetPosition = target.offsetTop - headerHeight;
                         window.scrollTo({
                             top: targetPosition,
                             behavior: 'smooth'
@@ -1511,40 +2028,51 @@
             });
         });
 
-        // Scroll Animations
-        const observerOptions = {
+        // ==========================================
+        // SCROLL ANIMATIONS + COUNTER TRIGGER
+        // ==========================================
+        var counterAnimated = false;
+
+        var observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
         };
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
+                    if (entry.target.closest('.stats') && !counterAnimated) {
+                        counterAnimated = true;
+                        animateCounters();
+                    }
                 }
             });
         }, observerOptions);
 
-        // Observe all elements with animation classes
-        document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
+        document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(function(el) {
             observer.observe(el);
         });
 
-        // Initialize animations on load
+        // ==========================================
+        // INIT ON LOAD
+        // ==========================================
         window.addEventListener('load', function() {
-            // Avvia il controllo aggiornamenti
             checkForUpdates();
-            
-            setTimeout(() => {
-                document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach((el, index) => {
-                    setTimeout(() => {
+            initTiltEffect();
+            initParallax();
+
+            var typingEl = document.getElementById('typingText');
+            typeWriter(typingEl, 'innovazione didattica digitale', 80);
+
+            setTimeout(function() {
+                document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(function(el, index) {
+                    setTimeout(function() {
                         el.classList.add('visible');
                     }, index * 100);
                 });
             }, 500);
         });
-
-        // Vimeo gestisce automaticamente reduced motion e mobile optimization
     </script>
 </body>
 </html>
