@@ -1,0 +1,7 @@
+# EduTechLab - Fabio Rizzotto
+# Permetti a tutti i motori di ricerca di indicizzare tutto il sito
+
+User-agent: *
+Allow: /
+
+Sitemap: https://edutechlab-ita.github.io/sitemap.xml
