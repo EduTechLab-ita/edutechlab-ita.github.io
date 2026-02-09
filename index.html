@@ -273,9 +273,9 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            /* 200% del wrapper (= 200% della hero) centrato, overflow hidden dal wrapper */
-            width: 200%;
-            height: 200%;
+            /* Quadrato enorme basato su vmax: copre qualsiasi ratio/device */
+            width: 300vmax;
+            height: 300vmax;
             transform: translate(-50%, -50%);
             border: 0;
             pointer-events: none;
