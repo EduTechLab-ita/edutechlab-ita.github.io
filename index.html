@@ -273,9 +273,9 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            /* Cover qualsiasi viewport: ratio 4:3 + 30% overflow per padding Vimeo */
-            width: max(130vw, calc(130vh * 4 / 3));
-            height: max(130vh, calc(130vw * 3 / 4));
+            /* 200% del wrapper (= 200% della hero) centrato, overflow hidden dal wrapper */
+            width: 200%;
+            height: 200%;
             transform: translate(-50%, -50%);
             border: 0;
             pointer-events: none;
@@ -1110,12 +1110,6 @@
             .hero {
                 min-height: 100vh;
                 min-height: 100dvh;
-            }
-
-            /* Video più grande su mobile: la hero si espande col contenuto impilato */
-            .video-background {
-                width: max(200vw, calc(200vh * 4 / 3));
-                height: max(200vh, calc(200vw * 3 / 4));
             }
 
             .hero-content {
