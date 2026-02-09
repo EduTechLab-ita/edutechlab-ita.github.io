@@ -1112,6 +1112,12 @@
                 min-height: 100dvh;
             }
 
+            /* Video più grande su mobile: la hero si espande col contenuto impilato */
+            .video-background {
+                width: max(200vw, calc(200vh * 4 / 3));
+                height: max(200vh, calc(200vw * 3 / 4));
+            }
+
             .hero-content {
                 padding: 1rem;
             }
