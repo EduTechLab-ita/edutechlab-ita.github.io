@@ -273,12 +273,10 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 100vw;
-            height: 100vh;
-            /* Sovradimensiona per coprire qualsiasi ratio (video 4:3 su schermo 16:9) */
-            min-width: 140vw;
-            min-height: 140vh;
-            transform: translate(-50%, -50%) scale(1.2);
+            /* Cover qualsiasi viewport: ratio 4:3 + 30% overflow per padding Vimeo */
+            width: max(130vw, calc(130vh * 4 / 3));
+            height: max(130vh, calc(130vw * 3 / 4));
+            transform: translate(-50%, -50%);
             border: 0;
             pointer-events: none;
             opacity: 1;
