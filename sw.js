@@ -1,6 +1,6 @@
 // Service Worker per EduTechLab PWA
 // Versione semplice per principianti
-const CACHE_NAME = 'edutechlab-v3.0.4';
+const CACHE_NAME = 'edutechlab-v3.1.0';
 const urlsToCache = [
   '/',
   '/index.html',
