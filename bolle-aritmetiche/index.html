@@ -96,6 +96,12 @@
         .counter.units .counter-label { color: #3498db; }
         .counter.units .counter-value { color: #3498db; }
 
+        @media (max-width: 480px) {
+            .counter { padding: 6px 10px; }
+            .counter-value { font-size: 1.8rem; }
+            #counters { gap: 10px; }
+        }
+
         /* PULSANTI HEADER */
         .header-btn {
             width: 45px;
@@ -528,6 +534,16 @@
             canvasHeight = container.clientHeight - 20;
             trayHeight = 70;
             trayY = canvasHeight - trayHeight - 15;
+
+            // Scala raggi in base alla larghezza disponibile
+            const numBubbles = classMode === 3 ? 4 : 3;
+            const spacing = canvasWidth / (numBubbles + 1);
+            const maxRadius = Math.floor(spacing * 0.45);
+            CONFIG.bubbleRadius = Math.min(140, maxRadius);
+            CONFIG.bubbleRadiusSmall = Math.min(105, Math.floor(maxRadius * 0.75));
+            CONFIG.ballRadius = Math.max(8, Math.min(18, Math.floor(CONFIG.bubbleRadius * 0.13)));
+            CONFIG.blobDeformRadius = Math.floor(CONFIG.bubbleRadius * 0.36);
+            CONFIG.blobDeformStrength = Math.floor(CONFIG.bubbleRadius * 0.18);
 
             engine = Engine.create({
                 gravity: { x: 0, y: 0.8 }
