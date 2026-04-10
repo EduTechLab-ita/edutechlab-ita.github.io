@@ -2931,20 +2931,15 @@
             messaggio: document.getElementById('demoMessaggio').value
         };
 
+        // no-cors evita il preflight OPTIONS (non supportato da Apps Script)
+        // con text/plain la richiesta arriva sempre al server
         fetch(DEMO_ENDPOINT, {
             method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain' },
             body: JSON.stringify(payload)
         })
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-            document.getElementById('demoForm').style.display = 'none';
-            document.getElementById('modalSuccess').style.display = 'block';
-        })
-        .catch(function() {
-            // Fallback mailto se fetch fallisce
-            var subject = encodeURIComponent('Richiesta Demo: ' + payload.appName);
-            var body = encodeURIComponent('App: ' + payload.appName + '\nNome: ' + payload.nome + '\nEmail: ' + payload.email + '\nIstituto: ' + payload.istituto + (payload.messaggio ? '\nMessaggio: ' + payload.messaggio : ''));
-            window.location.href = 'mailto:edutechlab.ita@gmail.com?subject=' + subject + '&body=' + body;
+        .finally(function() {
             document.getElementById('demoForm').style.display = 'none';
             document.getElementById('modalSuccess').style.display = 'block';
         });
