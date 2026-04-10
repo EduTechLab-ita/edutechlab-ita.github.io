@@ -2915,27 +2915,39 @@
     });
 
     // ===================== FORM DEMO =====================
+    var DEMO_ENDPOINT = 'https://script.google.com/macros/s/AKfycbz2dPpasB2768J82TmKCm6qwmrojVheyzIrrpH_mtR4bzhW1k8mZilJ1jjenYyxVpt-ig/exec';
+
     function sendDemoRequest(e) {
         e.preventDefault();
-        var appName = document.getElementById('demoAppName').value;
-        var nome    = document.getElementById('demoNome').value;
-        var email   = document.getElementById('demoEmail').value;
-        var istituto= document.getElementById('demoIstituto').value;
-        var msg     = document.getElementById('demoMessaggio').value;
+        var btn = e.target.querySelector('.modal-submit-btn');
+        btn.textContent = '⏳ Invio in corso...';
+        btn.disabled = true;
 
-        var subject = encodeURIComponent('Richiesta Demo: ' + appName);
-        var body = encodeURIComponent(
-            'App richiesta: ' + appName + '\n' +
-            'Nome: ' + nome + '\n' +
-            'Email: ' + email + '\n' +
-            'Istituto: ' + istituto + '\n' +
-            (msg ? 'Messaggio: ' + msg : '')
-        );
+        var payload = {
+            appName:   document.getElementById('demoAppName').value,
+            nome:      document.getElementById('demoNome').value,
+            email:     document.getElementById('demoEmail').value,
+            istituto:  document.getElementById('demoIstituto').value,
+            messaggio: document.getElementById('demoMessaggio').value
+        };
 
-        window.location.href = 'mailto:edutechlab.ita@gmail.com?subject=' + subject + '&body=' + body;
-
-        document.getElementById('demoForm').style.display = 'none';
-        document.getElementById('modalSuccess').style.display = 'block';
+        fetch(DEMO_ENDPOINT, {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            document.getElementById('demoForm').style.display = 'none';
+            document.getElementById('modalSuccess').style.display = 'block';
+        })
+        .catch(function() {
+            // Fallback mailto se fetch fallisce
+            var subject = encodeURIComponent('Richiesta Demo: ' + payload.appName);
+            var body = encodeURIComponent('App: ' + payload.appName + '\nNome: ' + payload.nome + '\nEmail: ' + payload.email + '\nIstituto: ' + payload.istituto + (payload.messaggio ? '\nMessaggio: ' + payload.messaggio : ''));
+            window.location.href = 'mailto:edutechlab.ita@gmail.com?subject=' + subject + '&body=' + body;
+            document.getElementById('demoForm').style.display = 'none';
+            document.getElementById('modalSuccess').style.display = 'block';
+        });
     }
     </script>
 </body>
