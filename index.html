@@ -2201,7 +2201,7 @@
     <div id="privacyModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <span class="close" onclick="closeModal('privacyModal')">&times;</span>
+                <span class="close" onclick="closeLegalModal('privacyModal')">&times;</span>
                 <h2>Privacy Policy</h2>
             </div>
             <div class="modal-body">
@@ -2260,7 +2260,7 @@
     <div id="cookieModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <span class="close" onclick="closeModal('cookieModal')">&times;</span>
+                <span class="close" onclick="closeLegalModal('cookieModal')">&times;</span>
                 <h2>Cookie Policy</h2>
             </div>
             <div class="modal-body">
@@ -2299,7 +2299,7 @@
     <div id="legalModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <span class="close" onclick="closeModal('legalModal')">&times;</span>
+                <span class="close" onclick="closeLegalModal('legalModal')">&times;</span>
                 <h2>Note Legali</h2>
             </div>
             <div class="modal-body">
@@ -2345,7 +2345,7 @@
     <div id="termsModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <span class="close" onclick="closeModal('termsModal')">&times;</span>
+                <span class="close" onclick="closeLegalModal('termsModal')">&times;</span>
                 <h2>Termini di Servizio</h2>
             </div>
             <div class="modal-body">
@@ -2536,7 +2536,7 @@
             document.body.style.overflow = 'hidden';
         }
 
-        function closeModal(modalId) {
+        function closeLegalModal(modalId) {
             var modal = document.getElementById(modalId);
             modal.classList.remove('show');
             document.body.style.overflow = 'auto';
@@ -2867,24 +2867,26 @@
         document.getElementById('modalTitle').textContent = app.title;
         document.getElementById('modalTagline').textContent = app.tagline;
 
-        // Screenshots
+        // Screenshots — nascosti se c'è già la demo interattiva
         var screenshotsEl = document.getElementById('modalScreenshots');
         screenshotsEl.innerHTML = '';
-        if (app.screenshots && app.screenshots.length > 0) {
-            app.screenshots.forEach(function(src) {
-                var slot = document.createElement('div');
-                slot.className = 'screenshot-slot';
-                slot.innerHTML = '<img src="' + src + '" alt="Screenshot ' + app.title + '">';
-                screenshotsEl.appendChild(slot);
-            });
-        } else {
-            // Placeholder colorati
-            var colors = ['linear-gradient(135deg,#0ea5e9,#6366f1)', 'linear-gradient(135deg,#10b981,#06b6d4)', 'linear-gradient(135deg,#f59e0b,#ef4444)'];
-            for (var i = 0; i < 3; i++) {
-                var slot = document.createElement('div');
-                slot.className = 'screenshot-slot';
-                slot.innerHTML = '<div class="screenshot-placeholder" style="background:' + colors[i] + '"><span>📱</span>Screenshot in arrivo</div>';
-                screenshotsEl.appendChild(slot);
+        screenshotsEl.style.display = app.demoUrl ? 'none' : '';
+        if (!app.demoUrl) {
+            if (app.screenshots && app.screenshots.length > 0) {
+                app.screenshots.forEach(function(src) {
+                    var slot = document.createElement('div');
+                    slot.className = 'screenshot-slot';
+                    slot.innerHTML = '<img src="' + src + '" alt="Screenshot ' + app.title + '">';
+                    screenshotsEl.appendChild(slot);
+                });
+            } else {
+                var colors = ['linear-gradient(135deg,#0ea5e9,#6366f1)', 'linear-gradient(135deg,#10b981,#06b6d4)', 'linear-gradient(135deg,#f59e0b,#ef4444)'];
+                for (var i = 0; i < 3; i++) {
+                    var slot = document.createElement('div');
+                    slot.className = 'screenshot-slot';
+                    slot.innerHTML = '<div class="screenshot-placeholder" style="background:' + colors[i] + '"><span>📱</span>Screenshot in arrivo</div>';
+                    screenshotsEl.appendChild(slot);
+                }
             }
         }
 
