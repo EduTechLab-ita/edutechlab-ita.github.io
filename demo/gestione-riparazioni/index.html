@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestione Riparazioni — Demo Interattiva</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Banner demo fisso */
+    .demo-banner {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      color: white; text-align: center; padding: 10px 16px;
+      font-size: 14px; font-weight: 700; letter-spacing: 0.5px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .demo-banner a { color: white; font-weight: 600; text-decoration: underline; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh; padding: 20px; padding-top: 60px;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    .header {
+      background: white; padding: 25px; border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-bottom: 30px; text-align: center;
+    }
+    .header h1 { color: #667eea; font-size: 28px; margin-bottom: 10px; }
+    .header p { color: #666; font-size: 14px; }
+
+    .card {
+      background: white; border-radius: 15px;
+      padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-bottom: 20px;
+    }
+
+    .table-container { overflow-x: auto; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    thead { background: linear-gradient(135deg,#667eea,#764ba2); color: white; }
+    th { padding: 15px; text-align: left; font-weight: 600; font-size: 14px; }
+    td { padding: 15px; border-bottom: 1px solid #eee; font-size: 14px; }
+    tbody tr:hover { background-color: #f8f9ff; cursor: pointer; transition: background-color 0.3s; }
+
+    .badge {
+      display: inline-block; padding: 6px 12px; border-radius: 20px;
+      font-size: 12px; font-weight: 600; white-space: nowrap;
+    }
+    .badge-nuovo { background-color: #fff; color: #ea4335; border: 2px solid #ea4335; font-weight: 700; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+    .badge-preso { background-color: #d9d9d9; color: #000; }
+    .badge-lavorazione { background-color: #ffe599; color: #000; }
+    .badge-ricambio { background-color: #a4c2f4; color: #000; }
+    .badge-attesa { background-color: #d9d2e9; color: #000; }
+    .badge-rimandato { background-color: #f4cccc; color: #000; }
+    .badge-risolto { background-color: #b6d7a8; color: #000; }
+    .badge-irreparabile { background-color: #ea9999; color: #000; }
+
+    .btn-gestisci {
+      background: linear-gradient(135deg,#667eea,#764ba2); color: white;
+      border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer;
+      font-size: 13px; font-weight: 600; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-gestisci:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.4); }
+
+    /* MODAL */
+    .modal {
+      display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+      width: 100%; height: 100%; background-color: rgba(0,0,0,0.6);
+      backdrop-filter: blur(5px); animation: fadeIn 0.3s;
+    }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .modal-content {
+      background-color: white; margin: 5% auto; padding: 0;
+      border-radius: 20px; width: 90%; max-width: 700px;
+      max-height: 85vh; overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: slideDown 0.3s;
+    }
+    @keyframes slideDown { from{transform:translateY(-50px);opacity:0} to{transform:translateY(0);opacity:1} }
+    .modal-header {
+      background: linear-gradient(135deg,#667eea,#764ba2); color: white;
+      padding: 25px; border-radius: 20px 20px 0 0; position: relative;
+    }
+    .modal-header h2 { font-size: 24px; margin-bottom: 5px; }
+    .close {
+      position: absolute; right: 20px; top: 20px;
+      color: white; font-size: 32px; font-weight: bold; cursor: pointer; transition: transform 0.2s;
+    }
+    .close:hover { transform: scale(1.2); }
+    .modal-body { padding: 30px; }
+
+    .info-section {
+      background: #f8f9ff; padding: 20px; border-radius: 12px;
+      margin-bottom: 25px; border-left: 4px solid #667eea;
+    }
+    .info-row { display: flex; margin-bottom: 12px; align-items: flex-start; }
+    .info-label { font-weight: 600; color: #667eea; min-width: 160px; font-size: 14px; }
+    .info-value { color: #333; flex: 1; font-size: 14px; }
+
+    .form-group { margin-bottom: 25px; }
+    .form-group label { display: block; font-weight: 600; color: #333; margin-bottom: 10px; font-size: 14px; }
+    .form-group select, .form-group textarea {
+      width: 100%; padding: 12px; border: 2px solid #e0e0e0;
+      border-radius: 10px; font-size: 14px; font-family: inherit; transition: border-color 0.3s;
+    }
+    .form-group select:focus, .form-group textarea:focus {
+      outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+    }
+    .form-group textarea { min-height: 100px; resize: vertical; }
+
+    .btn-salva {
+      background: linear-gradient(135deg,#34a853,#0f9d58); color: white;
+      border: none; padding: 15px 30px; border-radius: 10px;
+      font-size: 16px; font-weight: 600; cursor: pointer; width: 100%;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-salva:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(52,168,83,0.4); }
+
+    /* Modal successo */
+    .success-modal {
+      position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center;
+    }
+    .success-modal.active { display: flex; }
+    .success-modal-content {
+      background: white; padding: 40px; border-radius: 20px;
+      text-align: center; max-width: 500px; animation: bounceIn 0.5s;
+    }
+    @keyframes bounceIn { 0%{transform:scale(0.3);opacity:0} 50%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+    .success-modal h2 { color: #34a853; font-size: 32px; margin-bottom: 20px; }
+    .success-modal p { color: #666; font-size: 18px; margin-bottom: 30px; }
+    .success-modal button {
+      background: linear-gradient(135deg,#34a853,#0f9d58); color: white;
+      border: none; padding: 15px 40px; border-radius: 10px;
+      font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s;
+    }
+    .success-modal button:hover { transform: scale(1.05); }
+
+    @media (max-width: 768px) {
+      .modal-content { width: 95%; margin: 10% auto; }
+      table { font-size: 12px; }
+      th, td { padding: 10px 8px; }
+      .info-row { flex-direction: column; }
+      .info-label { margin-bottom: 5px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Banner DEMO -->
+  <div class="demo-banner">
+    🎮 MODALITÀ DEMO — Nessun dato viene salvato &nbsp;|&nbsp;
+    <a href="https://edutechlab.it">Torna al sito EduTechLab</a>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <h1>🔧 Gestione Riparazioni</h1>
+      <p>IC Demo — Sistema Tecnico</p>
+    </div>
+
+    <div class="card">
+      <h2 style="color:#667eea; margin-bottom:20px;">📋 Segnalazioni Attive</h2>
+      <div class="table-container">
+        <table id="guastiTable">
+          <thead>
+            <tr>
+              <th>#</th><th>Data</th><th>Stato</th><th>Segnalatore</th>
+              <th>Carrello</th><th>Codice PC</th><th>Problema</th><th>Plesso</th><th>Gestito da</th><th>Azione</th>
+            </tr>
+          </thead>
+          <tbody id="guastiTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Successo -->
+  <div id="successModal" class="success-modal">
+    <div class="success-modal-content">
+      <h2>✅ Operazione Completata!</h2>
+      <p>Lo stato della riparazione è stato aggiornato con successo.<br>Le email di notifica sono state inviate automaticamente.</p>
+      <p style="font-size:14px; color:#999;">🎮 <em>Demo — nessun dato reale modificato</em></p>
+      <button onclick="chiudiSuccessModal()">OK, Torna alla Lista</button>
+    </div>
+  </div>
+
+  <!-- Modal Gestione Guasto -->
+  <div id="modalGuasto" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close" onclick="chiudiModal()">&times;</span>
+        <h2>🔧 Gestione Intervento</h2>
+        <p id="modalCarrelloNome" style="opacity:0.9; margin-top:5px;"></p>
+      </div>
+      <div class="modal-body">
+        <div class="info-section">
+          <h3 style="color:#667eea; margin-bottom:15px;">📋 Dettagli Segnalazione</h3>
+          <div class="info-row"><span class="info-label">📅 Data Segnalazione:</span><span class="info-value" id="detailData"></span></div>
+          <div class="info-row"><span class="info-label">👤 Segnalato da:</span><span class="info-value" id="detailEmail"></span></div>
+          <div class="info-row"><span class="info-label">🛒 Carrello:</span><span class="info-value" id="detailCarrello"></span></div>
+          <div class="info-row"><span class="info-label">💻 Codice PC:</span><span class="info-value" id="detailCodice"></span></div>
+          <div class="info-row"><span class="info-label">⚠️ Tipo Problema:</span><span class="info-value" id="detailTipoProblema"></span></div>
+          <div class="info-row"><span class="info-label">📍 Dove:</span><span class="info-value" id="detailDove"></span></div>
+          <div class="info-row"><span class="info-label">🏫 Plesso:</span><span class="info-value" id="detailPlesso"></span></div>
+          <div class="info-row"><span class="info-label">🚪 Classe:</span><span class="info-value" id="detailClasse"></span></div>
+          <div class="info-row"><span class="info-label">📝 Descrizione:</span><span class="info-value" id="detailDescrizione"></span></div>
+        </div>
+
+        <form id="formAggiornamento" onsubmit="salvaModifiche(event)">
+          <input type="hidden" id="rigaCorrente">
+          <div class="form-group">
+            <label for="selectStato">🔄 Aggiorna Stato Lavorazione:</label>
+            <select id="selectStato" required>
+              <option value="">-- Seleziona nuovo stato --</option>
+              <option value="PRESO IN CARICO">👀 PRESO IN CARICO</option>
+              <option value="IN LAVORAZIONE">🔧 IN LAVORAZIONE</option>
+              <option value="IN ATTESA DI RICAMBIO">📦 IN ATTESA DI RICAMBIO</option>
+              <option value="IN ATTESA DI AGGIORNAMENTO">❓ IN ATTESA DI AGGIORNAMENTO</option>
+              <option value="RIMANDATO">⏸️ RIMANDATO</option>
+              <option value="RISOLTO">✅ RISOLTO</option>
+              <option value="IRREPARABILE">❌ IRREPARABILE</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="textNote">💬 Note Intervento:</label>
+            <textarea id="textNote" placeholder="Aggiungi note sull'intervento effettuato..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="textMessaggioDocente">📩 Messaggio per chi ha segnalato il guasto:</label>
+            <textarea id="textMessaggioDocente" placeholder="Es: Il dispositivo è pronto, puoi passare a ritirarlo."></textarea>
+            <p style="font-size:12px; color:#666; margin-top:8px;">ℹ️ Questo messaggio sarà inviato via email al docente</p>
+          </div>
+          <button type="submit" class="btn-salva">💾 Salva Modifiche e Invia Email</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var guastiData = [
+      {
+        riga: 1, data: '24/04/2026', stato: '',
+        email: 'mario.rossi@icdemo.edu.it', carrello: 'Carrello C', codice: 'PC-CAR3-012',
+        tipoProblema: 'Hardware — Non si accende', dove: 'Sala Computer', plesso: 'Gottolengo',
+        classe: '4B', descrizione: 'Il notebook non si avvia, nessun LED di alimentazione acceso. Già provato con altro alimentatore.', gestitoDa: null
+      },
+      {
+        riga: 2, data: '23/04/2026', stato: 'PRESO IN CARICO',
+        email: 'laura.bianchi@icdemo.edu.it', carrello: 'Carrello A', codice: 'PC-CAR1-005',
+        tipoProblema: 'Hardware — Schermo danneggiato', dove: 'Aula 12', plesso: 'Remedello',
+        classe: '2A', descrizione: 'Schermo rotto, probabilmente caduto. Verticale nero sul lato destro.', gestitoDa: 'tecnico.ferrari@icdemo.edu.it'
+      },
+      {
+        riga: 3, data: '22/04/2026', stato: 'IN LAVORAZIONE',
+        email: 'giulio.verdi@icdemo.edu.it', carrello: 'Carrello B', codice: 'PC-CAR2-008',
+        tipoProblema: 'Hardware — Tastiera non risponde', dove: 'Aula LIM', plesso: 'Gottolengo',
+        classe: '3C', descrizione: 'Alcuni tasti non rispondono (lettere A, S, D). Probabile infiltrazione di liquido.', gestitoDa: 'tecnico.ferrari@icdemo.edu.it'
+      },
+      {
+        riga: 4, data: '20/04/2026', stato: 'IN ATTESA DI RICAMBIO',
+        email: 'anna.neri@icdemo.edu.it', carrello: 'Carrello D', codice: 'PC-CAR4-015',
+        tipoProblema: 'Hardware — Batteria non carica', dove: 'Aula 7', plesso: 'Calvisano',
+        classe: '1A', descrizione: 'La batteria si scarica in 10 minuti. Necessario sostituzione batteria.', gestitoDa: 'tecnico.ferrari@icdemo.edu.it'
+      },
+      {
+        riga: 5, data: '18/04/2026', stato: 'RIMANDATO',
+        email: 'paolo.conti@icdemo.edu.it', carrello: 'Carrello A', codice: 'PC-CAR1-003',
+        tipoProblema: 'Software — Windows Update loop', dove: 'Laboratorio Informatica', plesso: 'Gottolengo',
+        classe: '', descrizione: 'Il PC si blocca durante gli aggiornamenti Windows e si riavvia in loop. Rinviato alla prossima sessione di manutenzione.', gestitoDa: 'tecnico.ferrari@icdemo.edu.it'
+      },
+      {
+        riga: 6, data: '15/04/2026', stato: 'RISOLTO',
+        email: 'chiara.russo@icdemo.edu.it', carrello: 'Carrello E', codice: 'PC-CAR5-021',
+        tipoProblema: 'Hardware — Cavo di ricarica rotto', dove: 'Aula 5', plesso: 'Remedello',
+        classe: '5B', descrizione: 'Cavo di ricarica strappato vicino al connettore. Sostituito con cavo nuovo.', gestitoDa: 'tecnico.ferrari@icdemo.edu.it'
+      }
+    ];
+
+    var badgeMap = {
+      '': 'badge-nuovo',
+      'PRESO IN CARICO': 'badge-preso',
+      'IN LAVORAZIONE': 'badge-lavorazione',
+      'IN ATTESA DI RICAMBIO': 'badge-ricambio',
+      'IN ATTESA DI AGGIORNAMENTO': 'badge-attesa',
+      'RIMANDATO': 'badge-rimandato',
+      'RISOLTO': 'badge-risolto',
+      'IRREPARABILE': 'badge-irreparabile'
+    };
+
+    function getNomeDaEmail(email) {
+      if (!email || !email.includes('@')) return email || '-';
+      var parte = email.split('@')[0];
+      return parte.split('.').map(function(n) { return n.charAt(0).toUpperCase() + n.slice(1); }).join(' ');
+    }
+
+    function renderGuasti() {
+      var tbody = document.getElementById('guastiTableBody');
+      tbody.innerHTML = '';
+      guastiData.forEach(function(g, i) {
+        var stato = g.stato || 'NUOVA SEGNALAZIONE';
+        var tr = document.createElement('tr');
+        tr.id = 'riga-' + g.riga;
+        tr.innerHTML =
+          '<td><strong>#' + (i+1) + '</strong></td>' +
+          '<td>' + g.data + '</td>' +
+          '<td><span class="badge ' + (badgeMap[g.stato] || 'badge-nuovo') + '" id="badge-' + g.riga + '">' + stato + '</span></td>' +
+          '<td>' + getNomeDaEmail(g.email) + '</td>' +
+          '<td>' + g.carrello + '</td>' +
+          '<td>' + g.codice + '</td>' +
+          '<td>' + g.tipoProblema + '</td>' +
+          '<td>' + g.plesso + '</td>' +
+          '<td>' + (g.gestitoDa ? getNomeDaEmail(g.gestitoDa) : '-') + '</td>' +
+          '<td><button class="btn-gestisci" onclick="apriModal(' + g.riga + ')">🔧 Gestisci</button></td>';
+        tbody.appendChild(tr);
+      });
+    }
+
+    function apriModal(riga) {
+      var g = guastiData.find(function(x) { return x.riga === riga; });
+      if (!g) return;
+
+      document.getElementById('modalGuasto').style.display = 'block';
+      document.getElementById('modalCarrelloNome').textContent = g.carrello + ' — ' + g.codice;
+      document.getElementById('detailData').textContent = g.data;
+      document.getElementById('detailEmail').textContent = g.email;
+      document.getElementById('detailCarrello').textContent = g.carrello;
+      document.getElementById('detailCodice').textContent = g.codice;
+      document.getElementById('detailTipoProblema').textContent = g.tipoProblema;
+      document.getElementById('detailDove').textContent = g.dove;
+      document.getElementById('detailPlesso').textContent = g.plesso;
+      document.getElementById('detailClasse').textContent = g.classe || '—';
+      document.getElementById('detailDescrizione').textContent = g.descrizione;
+      document.getElementById('rigaCorrente').value = riga;
+      document.getElementById('selectStato').value = g.stato || '';
+      document.getElementById('textNote').value = '';
+      document.getElementById('textMessaggioDocente').value = '';
+    }
+
+    function chiudiModal() {
+      document.getElementById('modalGuasto').style.display = 'none';
+    }
+
+    window.onclick = function(e) {
+      if (e.target === document.getElementById('modalGuasto')) chiudiModal();
+    };
+
+    function salvaModifiche(event) {
+      event.preventDefault();
+      var riga = parseInt(document.getElementById('rigaCorrente').value);
+      var nuovoStato = document.getElementById('selectStato').value;
+      if (!nuovoStato) { alert('Seleziona uno stato prima di salvare!'); return; }
+
+      // Aggiorna dati in memoria e badge nella tabella
+      var g = guastiData.find(function(x) { return x.riga === riga; });
+      if (g) {
+        g.stato = nuovoStato;
+        g.gestitoDa = g.gestitoDa || 'tecnico.ferrari@icdemo.edu.it';
+        var badge = document.getElementById('badge-' + riga);
+        if (badge) {
+          badge.textContent = nuovoStato;
+          badge.className = 'badge ' + (badgeMap[nuovoStato] || 'badge-default');
+        }
+      }
+
+      chiudiModal();
+      document.getElementById('successModal').classList.add('active');
+    }
+
+    function chiudiSuccessModal() {
+      document.getElementById('successModal').classList.remove('active');
+    }
+
+    // Init
+    renderGuasti();
+  </script>
+</body>
+</html>

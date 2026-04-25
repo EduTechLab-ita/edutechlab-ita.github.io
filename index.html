@@ -2184,12 +2184,12 @@
     <footer>
         <div class="container">
             <div class="footer-links">
-                <a onclick="openModal('privacyModal')">Privacy Policy</a>
-                <a onclick="openModal('cookieModal')">Cookie Policy</a>
-                <a onclick="openModal('legalModal')">Note Legali</a>
-                <a onclick="openModal('termsModal')">Termini di Servizio</a>
+                <a onclick="openLegalModal('privacyModal')">Privacy Policy</a>
+                <a onclick="openLegalModal('cookieModal')">Cookie Policy</a>
+                <a onclick="openLegalModal('legalModal')">Note Legali</a>
+                <a onclick="openLegalModal('termsModal')">Termini di Servizio</a>
             </div>
-            <p>&copy; 2025 EduTechLab - Fabio Rizzotto. Tutti i diritti riservati.</p>
+            <p>&copy; 2026 EduTechLab - Fabio Rizzotto. Tutti i diritti riservati.</p>
             <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 1rem;">
                 Sito web per attivit&agrave; di formazione e divulgazione didattica digitale<br>
                 Formatore Docenti Esperto PNRR &bull; Google Certified &bull; Innovazione STEAM
@@ -2530,7 +2530,7 @@
         // ==========================================
         // MODAL FUNCTIONS
         // ==========================================
-        function openModal(modalId) {
+        function openLegalModal(modalId) {
             var modal = document.getElementById(modalId);
             modal.classList.add('show');
             document.body.style.overflow = 'hidden';
@@ -2702,6 +2702,11 @@
                     <h4>Funzionalità principali</h4>
                     <ul id="modalFeatures"></ul>
                 </div>
+                <div id="modalDemoSection" style="display:none; padding:16px 0 8px; text-align:center; border-top:1px solid #f0f0f0; border-bottom:1px solid #f0f0f0; margin:8px 0 16px;">
+                    <p style="font-size:13px; color:#666; margin-bottom:10px;">Vuoi esplorare l'interfaccia prima di contattarci?</p>
+                    <a id="modalDemoLink" href="#" target="_blank" style="display:inline-flex; align-items:center; gap:8px; background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:12px 24px; border-radius:8px; text-decoration:none; font-weight:600; font-size:15px; transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 20px rgba(102,126,234,0.4)'" onmouseout="this.style.transform='';this.style.boxShadow=''">🎮 Prova la Demo Interattiva</a>
+                    <p style="font-size:12px; color:#999; margin-top:8px;">Nessun dato viene salvato — solo un'anteprima dell'interfaccia</p>
+                </div>
                 <div class="modal-form-section">
                     <h4>🚀 Richiedi una Demo Gratuita</h4>
                     <form class="modal-form" id="demoForm" onsubmit="sendDemoRequest(event)">
@@ -2736,7 +2741,8 @@
                 'Invio conferme via email agli istituti',
                 'Dashboard con numeri in tempo reale'
             ],
-            screenshots: []
+            screenshots: [],
+            demoUrl: './demo/kangourou-adesioni/'
         },
         'gestaccount': {
             emoji: '👤',
@@ -2840,7 +2846,8 @@
                 'Storico completo per aula, plesso e tipo di guasto',
                 'Dashboard per DS e referente tecnico con priorità'
             ],
-            screenshots: []
+            screenshots: [],
+            demoUrl: './demo/gestione-riparazioni/'
         }
     };
 
@@ -2889,6 +2896,15 @@
             li.textContent = f;
             featuresEl.appendChild(li);
         });
+
+        // Demo interattiva
+        var demoSection = document.getElementById('modalDemoSection');
+        if (app.demoUrl) {
+            document.getElementById('modalDemoLink').href = app.demoUrl;
+            demoSection.style.display = 'block';
+        } else {
+            demoSection.style.display = 'none';
+        }
 
         // Reset form
         document.getElementById('demoForm').style.display = 'flex';
