@@ -864,6 +864,15 @@
             columns: 2;
             column-gap: 0;
         }
+        /* Ponte invisibile: colma il gap tra navbar e dropdown mantenendo il hover */
+        .nav-dropdown::before {
+            content: '';
+            position: absolute;
+            top: -0.7rem;
+            left: 0;
+            right: 0;
+            height: 0.7rem;
+        }
         .nav-menu li.has-dropdown:hover .nav-dropdown {
             display: block;
             opacity: 1;
@@ -1716,23 +1725,23 @@
                         <div class="nav-dropdown-section">
                             <div class="nav-dropdown-label">🏆 Gare Matematiche</div>
                             <a href="https://edutechlab-ita.github.io/logikron-gare/" target="_blank">LogiKron Gare</a>
-                            <a href="#tools" onclick="toggleCat('cat-gare')">Kangourou Adesioni</a>
+                            <a href="#tools" onclick="navToTool('cat-gare')">Kangourou Adesioni</a>
                         </div>
                         <div class="nav-dropdown-divider"></div>
                         <div class="nav-dropdown-section">
                             <div class="nav-dropdown-label">🏫 Gestione Scolastica</div>
-                            <a href="#tools" onclick="toggleCat('cat-segreteria')">GestAccount</a>
-                            <a href="#tools" onclick="toggleCat('cat-segreteria')">GestClassroom</a>
-                            <a href="#tools" onclick="toggleCat('cat-segreteria')">Classroom Rollover</a>
-                            <a href="#tools" onclick="toggleCat('cat-segreteria')">Gestione Diplomati</a>
-                            <a href="#tools" onclick="toggleCat('cat-segreteria')">Gruppi Docenti</a>
-                            <a href="#tools" onclick="toggleCat('cat-segreteria')">Libreria · Materiali · Riparazioni</a>
+                            <a href="#tools" onclick="navToTool('cat-segreteria')">GestAccount</a>
+                            <a href="#tools" onclick="navToTool('cat-segreteria')">GestClassroom</a>
+                            <a href="#tools" onclick="navToTool('cat-segreteria')">Classroom Rollover</a>
+                            <a href="#tools" onclick="navToTool('cat-segreteria')">Gestione Diplomati</a>
+                            <a href="#tools" onclick="navToTool('cat-segreteria')">Gruppi Docenti</a>
+                            <a href="#tools" onclick="navToTool('cat-segreteria')">Libreria · Materiali · Riparazioni</a>
                         </div>
                         <div class="nav-dropdown-divider"></div>
                         <div class="nav-dropdown-section">
                             <div class="nav-dropdown-label">⏳ In Arrivo</div>
-                            <a href="#tools" onclick="toggleCat('cat-arrivo')">Orario Scolastico</a>
-                            <a href="#tools" onclick="toggleCat('cat-arrivo')">Orario Sostegno</a>
+                            <a href="#tools" onclick="navToTool('cat-arrivo')">Orario Scolastico</a>
+                            <a href="#tools" onclick="navToTool('cat-arrivo')">Orario Sostegno</a>
                         </div>
                     </div>
                 </li>
@@ -2855,6 +2864,20 @@
     function toggleCat(id) {
         var el = document.getElementById(id);
         el.classList.toggle('open');
+    }
+
+    // Navigazione dal dropdown navbar: forza apertura accordion e scrolla alla categoria
+    function navToTool(catId) {
+        var cat = document.getElementById(catId);
+        if (cat) cat.classList.add('open');
+        setTimeout(function() {
+            var header = cat ? cat.previousElementSibling : null;
+            var scrollEl = header || document.getElementById('tools');
+            if (scrollEl) {
+                var top = scrollEl.getBoundingClientRect().top + window.scrollY - 80;
+                window.scrollTo({ top: top, behavior: 'smooth' });
+            }
+        }, 50);
     }
 
     // ===================== MODAL =====================
