@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Libreria Sottovoce — Demo Interattiva</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* DEMO BANNER */
+    #demo-banner {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 9999;
+      height: 44px;
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      gap: 12px;
+      padding: 0 16px;
+      font-family: system-ui, sans-serif;
+    }
+    #demo-banner a { color: #fff; text-decoration: underline; }
+
+    body {
+      padding-top: 60px;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f0fdf4;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, #059669, #047857);
+      color: white;
+      padding: 32px 24px 24px;
+      text-align: center;
+    }
+    .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+    .header .subtitle { font-size: 14px; opacity: 0.85; }
+
+    /* TABS */
+    .tabs-bar {
+      background: white;
+      border-bottom: 2px solid #d1fae5;
+      padding: 0 24px;
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+    }
+    .tab-btn {
+      padding: 14px 22px;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      background: none;
+      color: #64748b;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s;
+    }
+    .tab-btn.active { color: #059669; border-bottom-color: #059669; }
+    .tab-btn:hover:not(.active) { color: #047857; background: #f0fdf4; }
+
+    /* MAIN */
+    .main { max-width: 1000px; margin: 0 auto; padding: 28px 16px; }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* SEARCH */
+    .search-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .search-input {
+      flex: 1;
+      padding: 10px 16px;
+      border: 2px solid #a7f3d0;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-input:focus { border-color: #059669; }
+
+    /* TABLE */
+    .table-wrap { overflow-x: auto; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    thead tr { background: #ecfdf5; }
+    th { padding: 12px 14px; text-align: left; font-size: 12px; font-weight: 700; color: #065f46; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #d1fae5; }
+    td { padding: 11px 14px; border-bottom: 1px solid #f0fdf4; color: #334155; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f0fdf4; }
+
+    .badge-avail {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .badge-avail.green { background: #d1fae5; color: #065f46; }
+    .badge-avail.red { background: #fee2e2; color: #991b1b; }
+
+    .btn-presta {
+      background: linear-gradient(135deg, #059669, #047857);
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-presta:hover { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(5,150,105,0.35); }
+    .btn-presta:disabled { background: #d1d5db; color: #9ca3af; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* BADGE STATO PRESTITO */
+    .badge-status {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .badge-status.active { background: #d1fae5; color: #065f46; }
+    .badge-status.expiring { background: #fef3c7; color: #92400e; }
+
+    .btn-rientrato {
+      background: #ecfdf5;
+      color: #059669;
+      border: 1px solid #6ee7b7;
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-rientrato:hover { background: #d1fae5; }
+
+    /* REPORT CARDS */
+    .report-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      border-top: 4px solid #059669;
+    }
+    .stat-number { font-size: 36px; font-weight: 800; color: #059669; margin-bottom: 6px; }
+    .stat-label { font-size: 13px; color: #64748b; font-weight: 500; }
+    .stat-card.yellow { border-top-color: #f59e0b; }
+    .stat-card.yellow .stat-number { color: #d97706; }
+    .stat-card.red { border-top-color: #ef4444; }
+    .stat-card.red .stat-number { color: #dc2626; }
+
+    .report-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 600px) { .report-lists { grid-template-columns: 1fr; } }
+
+    .report-list-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+    .report-list-card h3 { font-size: 15px; color: #065f46; margin-bottom: 14px; font-weight: 700; }
+    .rank-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0fdf4;
+      font-size: 14px;
+    }
+    .rank-item:last-child { border-bottom: none; }
+    .rank-num { width: 26px; height: 26px; border-radius: 50%; background: #d1fae5; color: #065f46; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .rank-name { flex: 1; font-weight: 600; color: #1e293b; }
+    .rank-count { font-size: 12px; color: #64748b; font-weight: 500; }
+
+    /* MODAL */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-backdrop.active { display: flex; }
+    .modal {
+      background: white;
+      border-radius: 14px;
+      padding: 28px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid #e2e8f0; }
+    .modal-header h3 { font-size: 16px; color: #059669; font-weight: 700; }
+    .btn-close-modal { background: #f1f5f9; border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #64748b; }
+    .btn-close-modal:hover { background: #e2e8f0; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 5px; }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 9px 12px;
+      border: 2px solid #d1fae5;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: #059669; }
+
+    .btn-confirm {
+      width: 100%;
+      background: linear-gradient(135deg, #059669, #047857);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: all 0.2s;
+    }
+    .btn-confirm:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(5,150,105,0.4); }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #059669;
+      color: white;
+      padding: 13px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(5,150,105,0.4);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 3000;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    .no-results { text-align: center; padding: 40px; color: #94a3b8; font-size: 15px; }
+  </style>
+</head>
+<body>
+
+<!-- BANNER DEMO -->
+<div id="demo-banner">
+  🎮 MODALITÀ DEMO — Nessun dato viene salvato &nbsp;|&nbsp;
+  <a href="https://edutechlab.it">Torna al sito EduTechLab</a>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>📚 Libreria Sottovoce</h1>
+  <div class="subtitle">IC Demo — Biblioteca Scolastica</div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="showTab('catalogo')">🔍 Catalogo</button>
+  <button class="tab-btn" onclick="showTab('prestiti')">📋 Prestiti Attivi</button>
+  <button class="tab-btn" onclick="showTab('report')">📊 Report</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- TAB CATALOGO -->
+  <div id="tab-catalogo" class="tab-panel active">
+    <div class="search-box">
+      <input type="text" class="search-input" id="search-input" placeholder="🔍 Cerca per titolo, autore o categoria..." oninput="filterBooks()">
+    </div>
+    <div class="table-wrap">
+      <table id="books-table">
+        <thead>
+          <tr>
+            <th>Codice</th>
+            <th>Titolo</th>
+            <th>Autore</th>
+            <th>Categoria</th>
+            <th>Copie</th>
+            <th>Disponibili</th>
+            <th>Azioni</th>
+          </tr>
+        </thead>
+        <tbody id="books-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB PRESTITI -->
+  <div id="tab-prestiti" class="tab-panel">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Codice</th>
+            <th>Titolo</th>
+            <th>Alunno</th>
+            <th>Classe</th>
+            <th>Prestito</th>
+            <th>Restituzione</th>
+            <th>Stato</th>
+            <th>Azioni</th>
+          </tr>
+        </thead>
+        <tbody id="loans-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB REPORT -->
+  <div id="tab-report" class="tab-panel">
+    <div class="report-stats" id="report-stats"></div>
+    <div class="report-lists">
+      <div class="report-list-card">
+        <h3>📖 Libri più richiesti</h3>
+        <div id="top-books"></div>
+      </div>
+      <div class="report-list-card">
+        <h3>🌟 Lettori più attivi</h3>
+        <div id="top-readers"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL PRESTITO -->
+<div class="modal-backdrop" id="loan-modal-backdrop" onclick="closeLoanModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="loan-modal-title">Prestito libro</h3>
+      <button class="btn-close-modal" onclick="closeLoanModalDirect()">✕</button>
+    </div>
+    <div class="form-group">
+      <label>Nome alunno</label>
+      <input type="text" id="loan-student" placeholder="Es. Marco Rossi">
+    </div>
+    <div class="form-group">
+      <label>Classe</label>
+      <select id="loan-class">
+        <option value="">— Seleziona —</option>
+        <option>1A</option><option>1B</option>
+        <option>2A</option><option>2B</option>
+        <option>3A</option><option>3B</option>
+        <option>4A</option><option>4B</option>
+        <option>5A</option><option>5B</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Data restituzione prevista</label>
+      <input type="date" id="loan-date">
+    </div>
+    <button class="btn-confirm" onclick="confirmLoan()">📖 Conferma Prestito</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // =====================
+  // DATI LIBRI
+  // =====================
+  const books = [
+    { id: 'SOTTOVOCE-001', title: 'Pinocchio', author: 'C. Collodi', category: 'Narrativa', total: 3, available: 2 },
+    { id: 'SOTTOVOCE-002', title: 'Il Piccolo Principe', author: 'A. de Saint-Exupéry', category: 'Narrativa', total: 2, available: 0 },
+    { id: 'SOTTOVOCE-003', title: "Charlotte's Web", author: 'E. B. White', category: 'Narrativa', total: 2, available: 1 },
+    { id: 'SOTTOVOCE-004', title: 'Il Meraviglioso Mago di Oz', author: 'L. F. Baum', category: 'Fantastico', total: 2, available: 2 },
+    { id: 'SOTTOVOCE-005', title: 'Robinson Crusoe', author: 'D. Defoe', category: 'Avventura', total: 1, available: 1 },
+    { id: 'SOTTOVOCE-006', title: 'I Viaggi di Gulliver', author: 'J. Swift', category: 'Avventura', total: 2, available: 1 },
+    { id: 'SOTTOVOCE-007', title: 'I Tre Moschettieri', author: 'A. Dumas', category: 'Avventura', total: 2, available: 2 },
+    { id: 'SOTTOVOCE-008', title: 'Cuore', author: 'E. De Amicis', category: 'Narrativa', total: 3, available: 3 },
+    { id: 'SOTTOVOCE-009', title: 'Il Conte di Montecristo', author: 'A. Dumas', category: 'Avventura', total: 1, available: 0 },
+    { id: 'SOTTOVOCE-010', title: 'Le Avventure di Tom Sawyer', author: 'M. Twain', category: 'Avventura', total: 2, available: 1 },
+  ];
+
+  // =====================
+  // DATI PRESTITI
+  // =====================
+  let loans = [
+    { id: 'P001', bookId: 'SOTTOVOCE-002', title: 'Il Piccolo Principe', student: 'Lucia Bianchi', class: '3A', loanDate: '01/04/2025', returnDate: '01/05/2025', status: 'expiring' },
+    { id: 'P002', bookId: 'SOTTOVOCE-007', title: 'I Tre Moschettieri', student: 'Mario Rossi', class: '2B', loanDate: '10/04/2025', returnDate: '10/05/2025', status: 'active' },
+    { id: 'P003', bookId: 'SOTTOVOCE-009', title: 'Il Conte di Montecristo', student: 'Sofia Neri', class: '4A', loanDate: '05/04/2025', returnDate: '05/05/2025', status: 'active' },
+    { id: 'P004', bookId: 'SOTTOVOCE-001', title: 'Pinocchio', student: 'Andrea Verdi', class: '1A', loanDate: '15/04/2025', returnDate: '15/05/2025', status: 'active' },
+    { id: 'P005', bookId: 'SOTTOVOCE-003', title: "Charlotte's Web", student: 'Chiara Esposito', class: '5B', loanDate: '20/04/2025', returnDate: '20/05/2025', status: 'active' },
+  ];
+
+  let currentLoanBookId = null;
+  let loanCounter = 6;
+
+  // =====================
+  // TABS
+  // =====================
+  function showTab(name) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    const idx = ['catalogo', 'prestiti', 'report'].indexOf(name);
+    document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+    if (name === 'report') renderReport();
+    if (name === 'prestiti') renderLoans();
+  }
+
+  // =====================
+  // RENDER CATALOGO
+  // =====================
+  function renderBooks(list) {
+    const tbody = document.getElementById('books-tbody');
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="no-results">Nessun libro trovato per questa ricerca.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(b => {
+      const avBadge = b.available === 0
+        ? `<span class="badge-avail red">🔴 Esaurito</span>`
+        : `<span class="badge-avail green">✅ ${b.available} / ${b.total}</span>`;
+      const btnDisabled = b.available === 0 ? 'disabled' : '';
+      return `
+        <tr>
+          <td><code style="font-size:11px;color:#6b7280;">${b.id}</code></td>
+          <td><strong>${b.title}</strong></td>
+          <td>${b.author}</td>
+          <td><span style="background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:10px;font-size:12px;">${b.category}</span></td>
+          <td style="text-align:center;">${b.total}</td>
+          <td>${avBadge}</td>
+          <td><button class="btn-presta" ${btnDisabled} onclick="openLoanModal('${b.id}')">📖 Presta</button></td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function filterBooks() {
+    const q = document.getElementById('search-input').value.toLowerCase().trim();
+    if (!q) { renderBooks(books); return; }
+    const filtered = books.filter(b =>
+      b.title.toLowerCase().includes(q) ||
+      b.author.toLowerCase().includes(q) ||
+      b.category.toLowerCase().includes(q) ||
+      b.id.toLowerCase().includes(q)
+    );
+    renderBooks(filtered);
+  }
+
+  // =====================
+  // MODAL PRESTITO
+  // =====================
+  function openLoanModal(bookId) {
+    const b = books.find(x => x.id === bookId);
+    if (!b || b.available === 0) return;
+    currentLoanBookId = bookId;
+    document.getElementById('loan-modal-title').textContent = `📖 Prestito — ${b.title}`;
+    document.getElementById('loan-student').value = '';
+    document.getElementById('loan-class').value = '';
+    // Default +30 giorni
+    const d = new Date();
+    d.setDate(d.getDate() + 30);
+    document.getElementById('loan-date').value = d.toISOString().split('T')[0];
+    document.getElementById('loan-modal-backdrop').classList.add('active');
+  }
+
+  function closeLoanModal(event) {
+    if (event.target === document.getElementById('loan-modal-backdrop')) {
+      document.getElementById('loan-modal-backdrop').classList.remove('active');
+    }
+  }
+
+  function closeLoanModalDirect() {
+    document.getElementById('loan-modal-backdrop').classList.remove('active');
+  }
+
+  function confirmLoan() {
+    const student = document.getElementById('loan-student').value.trim();
+    const cls = document.getElementById('loan-class').value;
+    const dateVal = document.getElementById('loan-date').value;
+
+    if (!student) { alert('Inserisci il nome dell\'alunno.'); return; }
+    if (!cls) { alert('Seleziona la classe.'); return; }
+    if (!dateVal) { alert('Inserisci la data di restituzione.'); return; }
+
+    const b = books.find(x => x.id === currentLoanBookId);
+    if (!b) return;
+    b.available--;
+
+    const today = new Date();
+    const loanDateStr = `${String(today.getDate()).padStart(2,'0')}/${String(today.getMonth()+1).padStart(2,'0')}/${today.getFullYear()}`;
+    const retD = new Date(dateVal);
+    const retDateStr = `${String(retD.getDate()).padStart(2,'0')}/${String(retD.getMonth()+1).padStart(2,'0')}/${retD.getFullYear()}`;
+
+    const newLoan = {
+      id: 'P' + String(loanCounter++).padStart(3,'0'),
+      bookId: b.id,
+      title: b.title,
+      student,
+      class: cls,
+      loanDate: loanDateStr,
+      returnDate: retDateStr,
+      status: 'active'
+    };
+    loans.push(newLoan);
+
+    closeLoanModalDirect();
+    filterBooks();
+    showToast(`✅ Prestito registrato per ${student}!`);
+  }
+
+  // =====================
+  // RENDER PRESTITI
+  // =====================
+  function renderLoans() {
+    const tbody = document.getElementById('loans-tbody');
+    if (loans.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="no-results">Nessun prestito attivo.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = loans.map(l => {
+      const badge = l.status === 'expiring'
+        ? `<span class="badge-status expiring">⏳ In scadenza</span>`
+        : `<span class="badge-status active">✅ Attivo</span>`;
+      return `
+        <tr id="loan-row-${l.id}">
+          <td><code style="font-size:11px;color:#6b7280;">${l.bookId}</code></td>
+          <td><strong>${l.title}</strong></td>
+          <td>${l.student}</td>
+          <td>${l.class}</td>
+          <td>${l.loanDate}</td>
+          <td>${l.returnDate}</td>
+          <td>${badge}</td>
+          <td><button class="btn-rientrato" onclick="returnBook('${l.id}', '${l.bookId}')">✅ Rientrato</button></td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function returnBook(loanId, bookId) {
+    loans = loans.filter(l => l.id !== loanId);
+    const b = books.find(x => x.id === bookId);
+    if (b) b.available = Math.min(b.available + 1, b.total);
+    renderLoans();
+    filterBooks();
+    showToast('📚 Libro segnato come rientrato!');
+  }
+
+  // =====================
+  // REPORT
+  // =====================
+  function renderReport() {
+    const totalLoans = loans.length;
+    const expiring = loans.filter(l => l.status === 'expiring').length;
+    const exhausted = books.filter(b => b.available === 0).length;
+
+    document.getElementById('report-stats').innerHTML = `
+      <div class="stat-card">
+        <div class="stat-number">10</div>
+        <div class="stat-label">📚 Libri nel catalogo</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">${totalLoans}</div>
+        <div class="stat-label">📖 Prestiti attivi</div>
+      </div>
+      <div class="stat-card yellow">
+        <div class="stat-number">${expiring}</div>
+        <div class="stat-label">⏳ In scadenza</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-number">${exhausted}</div>
+        <div class="stat-label">🔴 Libri esauriti</div>
+      </div>
+    `;
+
+    const topBooks = [
+      { title: 'Il Piccolo Principe', count: 8 },
+      { title: 'I Tre Moschettieri', count: 6 },
+      { title: 'Pinocchio', count: 5 },
+    ];
+    document.getElementById('top-books').innerHTML = topBooks.map((item, i) => `
+      <div class="rank-item">
+        <div class="rank-num">${i+1}</div>
+        <div class="rank-name">${item.title}</div>
+        <div class="rank-count">${item.count} prestiti</div>
+      </div>
+    `).join('');
+
+    const topReaders = [
+      { name: 'Mario Rossi', count: 12 },
+      { name: 'Lucia Bianchi', count: 10 },
+      { name: 'Sofia Neri', count: 8 },
+    ];
+    document.getElementById('top-readers').innerHTML = topReaders.map((item, i) => `
+      <div class="rank-item">
+        <div class="rank-num">${i+1}</div>
+        <div class="rank-name">${item.name}</div>
+        <div class="rank-count">${item.count} libri</div>
+      </div>
+    `).join('');
+  }
+
+  // =====================
+  // TOAST
+  // =====================
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // =====================
+  // INIT
+  // =====================
+  renderBooks(books);
+  renderLoans();
+</script>
+</body>
+</html>

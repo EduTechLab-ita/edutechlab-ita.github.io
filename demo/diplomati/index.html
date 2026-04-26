@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestione Diplomati — Demo Interattiva | EduTechLab</title>
+  <style>
+    /* ── Reset & base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f5f3ff;
+      color: #1c1917;
+      padding-top: 60px;
+      min-height: 100vh;
+    }
+
+    /* ── Demo banner ──────────────────────────────────────────── */
+    #demo-banner {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 44px;
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      z-index: 9999;
+      letter-spacing: 0.02em;
+      padding: 0 16px;
+    }
+    #demo-banner a { color: #fff; text-underline-offset: 3px; }
+    #demo-banner a:hover { opacity: 0.85; }
+
+    /* ── Wrapper ──────────────────────────────────────────────── */
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+
+    /* ── App header ───────────────────────────────────────────── */
+    .app-header {
+      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+      border-radius: 20px;
+      padding: 32px 36px;
+      color: #fff;
+      margin-bottom: 28px;
+      box-shadow: 0 8px 32px rgba(109, 40, 217, 0.28);
+    }
+    .app-header .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .app-header h1 { font-size: 1.9rem; font-weight: 800; margin-bottom: 6px; line-height: 1.2; }
+    .app-header p  { font-size: 0.95rem; opacity: 0.88; }
+
+    /* ── Tabs ─────────────────────────────────────────────────── */
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 24px;
+      background: #ede9fe;
+      border-radius: 14px;
+      padding: 6px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 11px 20px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      color: #6d28d9;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+    .tab-btn:hover { background: #ddd6fe; }
+    .tab-btn.active {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(109,40,217,0.3);
+    }
+
+    /* ── Info banner ──────────────────────────────────────────── */
+    .info-banner {
+      background: #ede9fe;
+      border: 1.5px solid #c4b5fd;
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-size: 0.88rem;
+      color: #4c1d95;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ── Bulk toolbar ─────────────────────────────────────────── */
+    .bulk-toolbar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* ── Buttons ──────────────────────────────────────────────── */
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 9px 18px;
+      font-size: 0.83rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-purple {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(109,40,217,0.3);
+    }
+    .btn-purple:hover { box-shadow: 0 5px 16px rgba(109,40,217,0.42); transform: translateY(-1px); }
+    .btn-purple:disabled { background: #e5e7eb; color: #9ca3af; box-shadow: none; cursor: not-allowed; transform: none; }
+    .btn-indigo {
+      background: linear-gradient(135deg, #4f46e5, #4338ca);
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(79,70,229,0.28);
+    }
+    .btn-indigo:hover { box-shadow: 0 5px 16px rgba(79,70,229,0.4); transform: translateY(-1px); }
+    .btn-indigo:disabled { background: #e5e7eb; color: #9ca3af; box-shadow: none; cursor: not-allowed; transform: none; }
+    .btn-slate {
+      background: linear-gradient(135deg, #475569, #334155);
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(71,85,105,0.28);
+    }
+    .btn-slate:hover { box-shadow: 0 5px 16px rgba(71,85,105,0.4); transform: translateY(-1px); }
+    .btn-slate:disabled { background: #e5e7eb; color: #9ca3af; box-shadow: none; cursor: not-allowed; transform: none; }
+    .btn-row-sm {
+      padding: 6px 12px;
+      font-size: 0.77rem;
+      border-radius: 8px;
+    }
+
+    /* ── Table ────────────────────────────────────────────────── */
+    .table-wrap {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    thead tr {
+      background: linear-gradient(90deg, #7c3aed, #6d28d9);
+      color: #fff;
+    }
+    thead th {
+      padding: 14px 16px;
+      text-align: left;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    tbody tr {
+      border-bottom: 1px solid #f3f0ff;
+      transition: background 0.15s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #faf5ff; }
+    tbody td {
+      padding: 13px 16px;
+      font-size: 0.87rem;
+      vertical-align: middle;
+    }
+    .td-email { color: #6b7280; font-size: 0.8rem; font-family: 'Consolas', monospace; }
+    .td-actions { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+
+    /* ── Status badges ────────────────────────────────────────── */
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.73rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    .badge-active   { background: #dcfce7; color: #15803d; border: 1.5px solid #86efac; }
+    .badge-suspended{ background: #fef3c7; color: #b45309; border: 1.5px solid #fcd34d; }
+    .badge-removed  { background: #f1f5f9; color: #64748b; border: 1.5px solid #cbd5e1; }
+
+    /* ── Log panel ────────────────────────────────────────────── */
+    .log-panel {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      overflow: hidden;
+    }
+    .log-header {
+      background: linear-gradient(90deg, #7c3aed, #6d28d9);
+      color: #fff;
+      padding: 14px 20px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      letter-spacing: 0.03em;
+    }
+    .log-body { padding: 16px 20px; min-height: 160px; }
+    .log-empty { color: #9ca3af; font-size: 0.88rem; font-style: italic; }
+    .log-entry {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f3f0ff;
+      animation: fade-in 0.3s ease;
+    }
+    .log-entry:last-child { border-bottom: none; }
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .log-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+    .log-text { flex: 1; font-size: 0.85rem; color: #374151; }
+    .log-ts   { font-size: 0.75rem; color: #9ca3af; font-family: monospace; flex-shrink: 0; }
+
+    /* ── Toast ────────────────────────────────────────────────── */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: #16a34a;
+      color: #fff;
+      padding: 13px 22px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      box-shadow: 0 6px 24px rgba(22,163,74,0.35);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      pointer-events: none;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- Demo banner -->
+  <div id="demo-banner">
+    🎮 MODALITÀ DEMO — Nessun dato viene salvato
+    <span>|</span>
+    <a href="https://edutechlab.it" target="_blank" rel="noopener">Torna al sito EduTechLab</a>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast"></div>
+
+  <div class="container">
+
+    <!-- App header -->
+    <div class="app-header">
+      <div class="badge">🏫 Google Workspace for Education</div>
+      <h1>Gestione Diplomati</h1>
+      <p>IC Demo — Anno 2024/25 — Classe 5A</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" id="tab-alunni" onclick="switchTab('alunni')">👤 Alunni Uscenti</button>
+      <button class="tab-btn" id="tab-log" onclick="switchTab('log')">📋 Log Operazioni</button>
+    </div>
+
+    <!-- ─── TAB: Alunni ───────────────────────────────────────── -->
+    <div id="panel-alunni">
+
+      <div class="info-banner">
+        ℹ️ <span>12 alunni da processare. Operazioni consigliate: <strong>Sospendi</strong> → <strong>Reset Password</strong> → <strong>Rimuovi da Classroom</strong></span>
+      </div>
+
+      <!-- Bulk actions -->
+      <div class="bulk-toolbar">
+        <button class="btn btn-purple" id="bulk-sospendi" onclick="bulkAction('sospendi')">🔒 Sospendi Tutti</button>
+        <button class="btn btn-indigo" id="bulk-reset"    onclick="bulkAction('reset')">🔑 Reset Password Tutti</button>
+        <button class="btn btn-slate"  id="bulk-rimuovi"  onclick="bulkAction('rimuovi')">🚪 Rimuovi da Classroom Tutti</button>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nome</th>
+              <th>Cognome</th>
+              <th>Email</th>
+              <th>Stato</th>
+              <th>Azioni</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ─── TAB: Log ──────────────────────────────────────────── -->
+    <div id="panel-log" class="hidden">
+      <div class="log-panel">
+        <div class="log-header">📋 Log Operazioni — Sessione corrente</div>
+        <div class="log-body" id="log-body">
+          <div class="log-empty" id="log-empty">Nessuna operazione eseguita in questa sessione.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ── Dati alunni ────────────────────────────────────────────
+    var ALUNNI = [
+      { id:1,  nome:'Mario',     cognome:'Rossi',     stato:'attivo' },
+      { id:2,  nome:'Lucia',     cognome:'Bianchi',   stato:'attivo' },
+      { id:3,  nome:'Andrea',    cognome:'Verdi',     stato:'attivo' },
+      { id:4,  nome:'Sofia',     cognome:'Neri',      stato:'attivo' },
+      { id:5,  nome:'Luca',      cognome:'Conti',     stato:'attivo' },
+      { id:6,  nome:'Giulia',    cognome:'Mari',      stato:'attivo' },
+      { id:7,  nome:'Marco',     cognome:'Sala',      stato:'attivo' },
+      { id:8,  nome:'Anna',      cognome:'Galli',     stato:'attivo' },
+      { id:9,  nome:'Paolo',     cognome:'Ricci',     stato:'attivo' },
+      { id:10, nome:'Elena',     cognome:'Russo',     stato:'attivo' },
+      { id:11, nome:'Francesco', cognome:'Bruno',     stato:'attivo' },
+      { id:12, nome:'Chiara',    cognome:'Esposito',  stato:'attivo' },
+    ];
+
+    var logOps = [];
+    var toastTimer = null;
+
+    // ── Util ───────────────────────────────────────────────────
+    function makeEmail(a) {
+      return a.nome.toLowerCase().replace(/\s+/g,'') + '.' +
+             a.cognome.toLowerCase().replace(/\s+/g,'') +
+             '@studenti.icdemo.edu.it';
+    }
+
+    function fakeTime() {
+      var now = new Date();
+      var base = 8 * 3600 + 30 * 60 + logOps.length * 73;
+      var ts = base % 86400;
+      var hh = Math.floor(ts / 3600);
+      var mm = Math.floor((ts % 3600) / 60);
+      var ss = ts % 60;
+      return String(hh).padStart(2,'0') + ':' + String(mm).padStart(2,'0') + ':' + String(ss).padStart(2,'0');
+    }
+
+    // ── Tabs ───────────────────────────────────────────────────
+    function switchTab(tab) {
+      document.getElementById('panel-alunni').classList.toggle('hidden', tab !== 'alunni');
+      document.getElementById('panel-log').classList.toggle('hidden', tab !== 'log');
+      document.getElementById('tab-alunni').classList.toggle('active', tab === 'alunni');
+      document.getElementById('tab-log').classList.toggle('active', tab === 'log');
+    }
+
+    // ── Toast ──────────────────────────────────────────────────
+    function showToast(msg) {
+      var t = document.getElementById('toast');
+      t.innerHTML = '✅ ' + msg;
+      t.classList.add('show');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(function() { t.classList.remove('show'); }, 3000);
+    }
+
+    // ── Badge ──────────────────────────────────────────────────
+    function badgeHtml(stato) {
+      if (stato === 'attivo')   return '<span class="badge-status badge-active">🟢 Attivo</span>';
+      if (stato === 'sospeso')  return '<span class="badge-status badge-suspended">🟡 Sospeso</span>';
+      if (stato === 'rimosso')  return '<span class="badge-status badge-removed">✅ Completato</span>';
+      return '';
+    }
+
+    function actionsHtml(a) {
+      if (a.stato === 'attivo') {
+        return '<button class="btn btn-purple btn-row-sm" onclick="doSospendi(' + a.id + ')">🔒 Sospendi</button>';
+      }
+      if (a.stato === 'sospeso') {
+        return '<button class="btn btn-indigo btn-row-sm" onclick="doReset(' + a.id + ')">🔑 Reset Password</button>' +
+               '<button class="btn btn-slate btn-row-sm"  onclick="doRimuovi(' + a.id + ')">🚪 Rimuovi da Classroom</button>';
+      }
+      return '<span style="color:#9ca3af;font-size:0.8rem;">—</span>';
+    }
+
+    // ── Render table ───────────────────────────────────────────
+    function renderTable() {
+      var tbody = document.getElementById('table-body');
+      tbody.innerHTML = '';
+      ALUNNI.forEach(function(a) {
+        var tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td style="color:#9ca3af;font-size:0.8rem;">' + a.id + '</td>' +
+          '<td><strong>' + a.nome + '</strong></td>' +
+          '<td>' + a.cognome + '</td>' +
+          '<td class="td-email">' + makeEmail(a) + '</td>' +
+          '<td>' + badgeHtml(a.stato) + '</td>' +
+          '<td><div class="td-actions">' + actionsHtml(a) + '</div></td>';
+        tbody.appendChild(tr);
+      });
+      updateBulkButtons();
+    }
+
+    // ── Bulk button state ──────────────────────────────────────
+    function updateBulkButtons() {
+      var hasAttivi   = ALUNNI.some(function(a) { return a.stato === 'attivo'; });
+      var hasSospesi  = ALUNNI.some(function(a) { return a.stato === 'sospeso'; });
+      document.getElementById('bulk-sospendi').disabled = !hasAttivi;
+      document.getElementById('bulk-reset').disabled    = !hasSospesi;
+      document.getElementById('bulk-rimuovi').disabled  = !hasSospesi;
+    }
+
+    // ── Log entry ──────────────────────────────────────────────
+    function addLog(icon, text) {
+      var ts = fakeTime();
+      logOps.push({ icon: icon, text: text, ts: ts });
+      renderLog();
+    }
+
+    function renderLog() {
+      var body = document.getElementById('log-body');
+      var empty = document.getElementById('log-empty');
+      if (logOps.length === 0) {
+        empty.style.display = 'block';
+        // rimuovi vecchie entry
+        var entries = body.querySelectorAll('.log-entry');
+        entries.forEach(function(e) { e.remove(); });
+        return;
+      }
+      empty.style.display = 'none';
+      body.innerHTML = '';
+      logOps.forEach(function(op) {
+        var div = document.createElement('div');
+        div.className = 'log-entry';
+        div.innerHTML =
+          '<span class="log-icon">' + op.icon + '</span>' +
+          '<span class="log-text">' + op.text + '</span>' +
+          '<span class="log-ts">' + op.ts + '</span>';
+        body.appendChild(div);
+      });
+    }
+
+    // ── Azioni singole ─────────────────────────────────────────
+    function doSospendi(id) {
+      var a = ALUNNI.find(function(x) { return x.id === id; });
+      if (!a || a.stato !== 'attivo') return;
+      a.stato = 'sospeso';
+      addLog('🔒', 'Account sospeso — ' + a.nome + ' ' + a.cognome + ' (' + makeEmail(a) + ')');
+      renderTable();
+      showToast('Account sospeso: ' + a.nome + ' ' + a.cognome);
+    }
+
+    function doReset(id) {
+      var a = ALUNNI.find(function(x) { return x.id === id; });
+      if (!a || a.stato !== 'sospeso') return;
+      addLog('🔑', 'Password reimpostata — ' + a.nome + ' ' + a.cognome + ' (' + makeEmail(a) + ')');
+      renderTable();
+      showToast('Password resettata: ' + a.nome + ' ' + a.cognome);
+    }
+
+    function doRimuovi(id) {
+      var a = ALUNNI.find(function(x) { return x.id === id; });
+      if (!a || a.stato !== 'sospeso') return;
+      a.stato = 'rimosso';
+      addLog('🚪', 'Rimosso da Classroom — ' + a.nome + ' ' + a.cognome + ' (' + makeEmail(a) + ')');
+      renderTable();
+      showToast('Rimosso da Classroom: ' + a.nome + ' ' + a.cognome);
+    }
+
+    // ── Azioni bulk ────────────────────────────────────────────
+    function bulkAction(type) {
+      var count = 0;
+      ALUNNI.forEach(function(a) {
+        if (type === 'sospendi' && a.stato === 'attivo') {
+          a.stato = 'sospeso';
+          addLog('🔒', 'Account sospeso — ' + a.nome + ' ' + a.cognome + ' (' + makeEmail(a) + ')');
+          count++;
+        } else if (type === 'reset' && a.stato === 'sospeso') {
+          addLog('🔑', 'Password reimpostata — ' + a.nome + ' ' + a.cognome + ' (' + makeEmail(a) + ')');
+          count++;
+        } else if (type === 'rimuovi' && a.stato === 'sospeso') {
+          a.stato = 'rimosso';
+          addLog('🚪', 'Rimosso da Classroom — ' + a.nome + ' ' + a.cognome + ' (' + makeEmail(a) + ')');
+          count++;
+        }
+      });
+      renderTable();
+      if (count > 0) {
+        var label = type === 'sospendi' ? 'Account sospesi' : type === 'reset' ? 'Password resettate' : 'Rimossi da Classroom';
+        showToast(label + ': ' + count + ' alunni');
+      }
+    }
+
+    // ── Init ───────────────────────────────────────────────────
+    renderTable();
+    renderLog();
+  </script>
+</body>
+</html>
