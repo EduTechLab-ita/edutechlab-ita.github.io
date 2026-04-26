@@ -24,6 +24,8 @@
       min-height: 100vh;
     }
 
+    body.modal-open { overflow: hidden; }
+
     /* ── HEADER ── */
     .header {
       position: fixed;
@@ -88,6 +90,24 @@
       .badge-school { display: none; }
     }
 
+    .btn-info-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.5);
+      border-radius: 50%;
+      color: #ffffff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .btn-info-header:hover { background: rgba(255,255,255,0.18); }
+
     #installBtn {
       display: none;
       align-items: center;
@@ -110,158 +130,284 @@
     /* ── HERO ── */
     .hero {
       text-align: center;
-      padding: 36px 24px 24px;
+      padding: 40px 24px 32px;
     }
 
-    .hero p {
-      color: #475569;
-      font-size: 1.1rem;
-      max-width: 600px;
-      margin: 0 auto;
-      line-height: 1.6;
-    }
-
-    /* ── MAIN CONTENT ── */
-    main {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 20px 60px;
-    }
-
-    /* ── SECTION ── */
-    .category-section {
-      margin-bottom: 48px;
-    }
-
-    .category-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 2px solid #e2e8f0;
-    }
-
-    .category-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #1e293b;
-    }
-
-    .category-count {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #64748b;
-      background: #e2e8f0;
-      padding: 2px 10px;
-      border-radius: 20px;
-    }
-
-    /* ── GRID ── */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
-    }
-
-    /* ── CARD ── */
-    .card {
-      background: #ffffff;
-      border-radius: 16px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.07), 0 2px 8px rgba(0,0,0,0.05);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
-    }
-
-    .card-top-bar {
-      height: 4px;
-      width: 100%;
-      flex-shrink: 0;
-    }
-
-    .card-body {
-      padding: 20px 20px 16px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .card-icon-row {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .card-icon-badge {
-      width: 60px;
-      height: 60px;
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5rem;
-      flex-shrink: 0;
-      line-height: 1;
-    }
-
-    .card-name-block {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      flex: 1;
-      min-width: 0;
-    }
-
-    .card-name {
-      font-size: 1.1rem;
+    .hero h1 {
+      font-size: 1.8rem;
       font-weight: 700;
       color: #1e293b;
       line-height: 1.3;
     }
 
-    .card-missing-badge {
-      display: none;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: #92400e;
-      background: #fef3c7;
-      border: 1px solid #fcd34d;
-      border-radius: 6px;
-      padding: 2px 8px;
-      width: fit-content;
+    .hero p {
+      color: #64748b;
+      font-size: 1rem;
+      margin-top: 8px;
+      line-height: 1.6;
     }
 
-    .card.missing .card-missing-badge { display: flex; }
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 1.4rem; }
+    }
 
-    .card-desc {
-      font-size: 0.875rem;
+    /* ── CATEGORIES GRID ── */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    @media (max-width: 480px) {
+      .categories-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ── CATEGORY CARD ── */
+    .cat-card {
+      background: #ffffff;
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .cat-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    }
+
+    .cat-card-bar {
+      height: 6px;
+      width: 100%;
+    }
+
+    .cat-card-body {
+      padding: 32px;
+    }
+
+    .cat-card-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      line-height: 1;
+    }
+
+    .cat-card-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-top: 20px;
+    }
+
+    .cat-card-count {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-top: 8px;
+    }
+
+    .cat-card-desc {
+      font-size: 0.95rem;
       color: #64748b;
-      line-height: 1.55;
+      line-height: 1.6;
+      margin-top: 12px;
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
+    }
+
+    .cat-card-btn {
+      display: block;
+      width: 100%;
+      padding: 14px 24px;
+      margin-top: 24px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-align: center;
+      cursor: pointer;
+      transition: filter 0.2s ease;
+      pointer-events: none; /* click gestito dal card */
+    }
+
+    .cat-card:hover .cat-card-btn { filter: brightness(1.1); }
+
+    /* ── MODAL OVERLAY ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.7);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── MODAL BOX ── */
+    .modal-box {
+      background: #ffffff;
+      border-radius: 24px;
+      max-width: 860px;
+      width: 94%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      animation: slideUp 0.3s ease;
+    }
+
+    .modal-box.modal-narrow {
+      max-width: 540px;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    /* ── MODAL HEADER ── */
+    .modal-header {
+      position: sticky;
+      top: 0;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      z-index: 10;
+      border-radius: 24px 24px 0 0;
+    }
+
+    .modal-header-icon {
+      font-size: 2.2rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .modal-header-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .modal-header-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .modal-header-subtitle {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .modal-close {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: #f1f5f9;
+      color: #64748b;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .modal-close:hover {
+      background: #e2e8f0;
+      color: #1e293b;
+    }
+
+    /* ── MODAL BODY ── */
+    .modal-body {
+      padding: 28px;
+    }
+
+    /* ── APPS GRID (nel modal) ── */
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    /* ── APP CARD (nel modal) ── */
+    .app-card {
+      border: 2px solid #f1f5f9;
+      border-radius: 16px;
+      padding: 24px;
+      background: #fafafa;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .app-card:hover {
+      background: #ffffff;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    .app-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .app-card-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-top: 14px;
+    }
+
+    .app-card-desc {
+      font-size: 0.85rem;
+      color: #64748b;
+      line-height: 1.5;
+      margin-top: 8px;
       flex: 1;
     }
 
-    .card-footer {
-      padding: 0 20px 20px;
-    }
-
-    .btn-open {
+    .app-card-btn {
       display: block;
       width: 100%;
-      padding: 12px 16px;
+      padding: 11px 18px;
+      margin-top: 16px;
       border: none;
       border-radius: 10px;
       font-size: 0.9rem;
@@ -270,35 +416,119 @@
       text-align: center;
       text-decoration: none;
       cursor: pointer;
-      transition: filter 0.2s ease, transform 0.15s ease;
-      letter-spacing: 0.2px;
+      transition: filter 0.2s ease;
     }
 
-    .btn-open:hover:not(:disabled) {
-      filter: brightness(1.1);
-      transform: translateY(-1px);
+    .app-card-btn:hover { filter: brightness(1.1); }
+
+    /* ── INFO / PRIVACY MODAL CONTENT ── */
+    .info-section {
+      margin-bottom: 20px;
     }
 
-    .btn-open:disabled,
-    .btn-open.disabled {
-      background: #cbd5e1 !important;
-      color: #94a3b8 !important;
-      cursor: not-allowed;
-      pointer-events: none;
+    .info-section:last-child { margin-bottom: 0; }
+
+    .info-section h3 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #94a3b8;
+      margin-bottom: 6px;
+    }
+
+    .info-section p {
+      font-size: 0.95rem;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+
+    .info-note {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 0.875rem;
+      color: #475569;
+      line-height: 1.6;
+      margin-top: 16px;
     }
 
     /* ── FOOTER ── */
     footer {
-      background: #1e3a8a;
-      color: rgba(255,255,255,0.75);
-      text-align: center;
-      padding: 20px 24px;
-      font-size: 0.82rem;
+      background: #0f172a;
+      color: #94a3b8;
+      padding: 40px 24px;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .footer-brand {
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+    }
+
+    .footer-tagline {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-bottom: 10px;
+    }
+
+    .footer-dev {
+      font-size: 0.875rem;
       line-height: 1.6;
     }
 
-    footer strong {
-      color: #ffffff;
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .footer-version {
+      font-size: 0.8rem;
+      color: #475569;
+    }
+
+    .footer-links a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: #e2e8f0; }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid #1e293b;
+      font-size: 0.8rem;
+      color: #475569;
+    }
+
+    @media (max-width: 600px) {
+      .footer-links { align-items: flex-start; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
@@ -308,17 +538,18 @@
   <header class="header" role="banner">
     <div class="header-left">
       <div class="header-logo" aria-hidden="true">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <rect x="1" y="1" width="7" height="7" rx="2" fill="white"/>
-          <rect x="12" y="1" width="7" height="7" rx="2" fill="white"/>
-          <rect x="1" y="12" width="7" height="7" rx="2" fill="white"/>
-          <rect x="12" y="12" width="7" height="7" rx="2" fill="white"/>
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="1" y="1" width="11" height="11" rx="2.5" fill="white"/>
+          <rect x="16" y="1" width="11" height="11" rx="2.5" fill="white"/>
+          <rect x="1" y="16" width="11" height="11" rx="2.5" fill="white"/>
+          <rect x="16" y="16" width="11" height="11" rx="2.5" fill="white"/>
         </svg>
       </div>
       <span class="header-title">Scrivania Digitale IC</span>
     </div>
     <div class="header-right">
       <span class="badge-school">IC Gottolengo</span>
+      <button class="btn-info-header" onclick="openInfoModal()" aria-label="Informazioni sull'applicazione">ℹ️</button>
       <button id="installBtn" aria-label="Installa l'app Scrivania Digitale IC">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
@@ -332,152 +563,320 @@
 
   <!-- HERO -->
   <section class="hero" aria-label="Benvenuto">
-    <p>Tutte le tue applicazioni in un unico posto</p>
+    <h1>Le tue applicazioni, sempre a portata di mano</h1>
+    <p>Seleziona una categoria per accedere alle applicazioni</p>
   </section>
 
-  <!-- MAIN -->
-  <main id="app" role="main" aria-label="Applicazioni scolastiche">
+  <!-- CATEGORIES GRID -->
+  <div class="categories-grid" id="categoriesGrid" role="main" aria-label="Categorie applicazioni">
     <!-- Renderizzato via JS -->
-  </main>
+  </div>
+
+  <!-- MODAL CATEGORIA -->
+  <div class="modal-overlay" id="categoryModal" role="dialog" aria-modal="true" aria-labelledby="modalCatTitle">
+    <div class="modal-box" id="categoryModalBox">
+      <div class="modal-header">
+        <div class="modal-header-icon" id="modalCatIcon" aria-hidden="true"></div>
+        <div class="modal-header-text">
+          <div class="modal-header-title" id="modalCatTitle"></div>
+          <div class="modal-header-subtitle" id="modalCatSubtitle"></div>
+        </div>
+        <button class="modal-close" onclick="closeModal('categoryModal')" aria-label="Chiudi modal">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="apps-grid" id="modalAppsGrid" role="list">
+          <!-- Renderizzato via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL INFO -->
+  <div class="modal-overlay" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="infoModalTitle">
+    <div class="modal-box modal-narrow">
+      <div class="modal-header">
+        <div class="modal-header-icon" aria-hidden="true">ℹ️</div>
+        <div class="modal-header-text">
+          <div class="modal-header-title" id="infoModalTitle">Informazioni</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('infoModal')" aria-label="Chiudi modal">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="info-section">
+          <h3>Descrizione</h3>
+          <p><strong>Scrivania Digitale IC</strong> è il launcher centralizzato per le applicazioni di gestione scolastica dell'IC Gottolengo. Raggruppa in un'unica interfaccia tutti gli strumenti digitali dell'Istituto, accessibili con un semplice click.</p>
+        </div>
+        <div class="info-section">
+          <h3>Sviluppatore</h3>
+          <p><strong>Fabio Rizzotto</strong><br>Animatore Digitale · IC Gottolengo</p>
+        </div>
+        <div class="info-section">
+          <h3>Versione</h3>
+          <p>v1.0 — Aprile 2026</p>
+        </div>
+        <div class="info-section">
+          <h3>Tecnologia</h3>
+          <p>PWA installabile — funziona su desktop, tablet e smartphone</p>
+        </div>
+        <div class="info-note">
+          Questa applicazione non raccoglie dati. Funge da launcher: i link aprono le applicazioni originali in una nuova scheda.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PRIVACY -->
+  <div class="modal-overlay" id="privacyModal" role="dialog" aria-modal="true" aria-labelledby="privacyModalTitle">
+    <div class="modal-box modal-narrow">
+      <div class="modal-header">
+        <div class="modal-header-icon" aria-hidden="true">🔒</div>
+        <div class="modal-header-text">
+          <div class="modal-header-title" id="privacyModalTitle">Privacy e Dati</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('privacyModal')" aria-label="Chiudi modal">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="info-section">
+          <p>Questa applicazione non raccoglie, non trasmette e non memorizza dati personali.</p>
+        </div>
+        <div class="info-section">
+          <p>Funge esclusivamente da pannello di accesso rapido (launcher) alle applicazioni scolastiche dell'IC Gottolengo.</p>
+        </div>
+        <div class="info-section">
+          <p>I dati inseriti nelle singole applicazioni sono gestiti secondo le rispettive informative, conformemente al D.Lgs. 196/2003 e al GDPR (Regolamento UE 2016/679).</p>
+        </div>
+        <div class="info-section">
+          <h3>Responsabile del trattamento</h3>
+          <p>IC Gottolengo</p>
+        </div>
+        <div class="info-section">
+          <h3>Sviluppatore</h3>
+          <p>Fabio Rizzotto — Animatore Digitale IC Gottolengo</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- FOOTER -->
   <footer role="contentinfo">
-    <strong>Scrivania Digitale IC</strong> &nbsp;·&nbsp; IC Gottolengo &nbsp;·&nbsp; Fabio Rizzotto
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <div class="footer-brand">Scrivania Digitale IC</div>
+          <p class="footer-tagline">Strumento interno di gestione scolastica</p>
+          <p class="footer-dev">Sviluppato da <strong style="color:#e2e8f0">Fabio Rizzotto</strong><br>Animatore Digitale · IC Gottolengo</p>
+        </div>
+        <div class="footer-links">
+          <span class="footer-version">v1.0 · Aprile 2026</span>
+          <a href="#" onclick="openInfoModal(); return false;">ℹ️ Informazioni</a>
+          <a href="#" onclick="openPrivacyModal(); return false;">🔒 Privacy</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Fabio Rizzotto · IC Gottolengo · Tutti i diritti riservati</span>
+        <span>Uso interno — Applicazione non distribuita</span>
+      </div>
+    </div>
   </footer>
 
   <script>
     /* ─────────────────────────────────────────
-       DATI
+       DATI CATEGORIE
     ───────────────────────────────────────── */
-    const APPS = [
+    const CATEGORIES = [
       {
-        id: 'gestaccount', emoji: '👤', name: 'GestAccount',
-        desc: 'Crea, aggiorna e archivia gli account Google Workspace degli alunni. Gestisce nuovi iscritti, trasferiti e uscenti in modo automatico.',
-        url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbw6vJudSmpskx0LBz5DNdMocb7bhRF_yjEmnuI7Nc_GBE9d4EZWeF35W4U_FYjAkPJL/exec',
-        category: 'account'
+        id: 'account',
+        emoji: '🔑',
+        name: 'Gestione Account',
+        subtitle: 'Google Workspace',
+        desc: 'Crea, aggiorna e archivia gli account alunni. Gestisci le classi Classroom e automatizza il passaggio di anno scolastico.',
+        color: '#4f46e5',
+        colorLight: '#ede9fe',
+        count: 4
       },
       {
-        id: 'gestclassroom', emoji: '🏫', name: 'GestClassroom',
-        desc: 'Pannello centralizzato per creare, popolare e archiviare le classi Google Classroom dell\'intero Istituto senza entrare in ogni classroom.',
-        url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbzj7OUOS77nDqTeOuhMT6DdjY0LWcoZJ8KqONNN25mGb9tBxjeGE5781ibZkk2D1zZE/exec',
-        category: 'account'
+        id: 'risorse',
+        emoji: '📦',
+        name: 'Risorse e Materiali',
+        subtitle: 'Biblioteca · Attrezzature · Riparazioni',
+        desc: 'Gestisci la biblioteca scolastica, traccia i prestiti di materiali e attrezzature con QR Code, e tieni sotto controllo le segnalazioni di guasto.',
+        color: '#059669',
+        colorLight: '#d1fae5',
+        count: 3
       },
       {
-        id: 'rollover', emoji: '🔄', name: 'Classroom Rollover',
-        desc: 'Automazione del passaggio di anno scolastico: ricrea le classi, sposta gli studenti e archivia le vecchie Classroom con un click.',
-        url: 'https://script.google.com/macros/s/AKfycbzzxkhmwWyIgTXtZpwunPFX-xLN9nkP9FIxKsz3KFgJZXV_cqvdUbPWoxp2ZRQXJzlX/exec',
-        category: 'account'
-      },
-      {
-        id: 'workspace', emoji: '⚙️', name: 'Workspace Admin',
-        desc: 'Pannello amministrazione Google Workspace: sospensione account, gestione unità organizzative e operazioni massive sul dominio IC.',
-        url: null,
-        category: 'account'
-      },
-      {
-        id: 'libreria', emoji: '📚', name: 'Libreria Sottovoce',
-        desc: 'Sistema digitale per la biblioteca scolastica: catalogo, prestiti, rientri, storico per alunno e solleciti automatici. Semplice per tutti.',
-        url: 'https://script.google.com/a/icgottolengo.edu.it/macros/s/AKfycbyoEg8gPsw_AQVZ4mPmt_50o0DUoszqliPXiv8fXM0vFFXV79PKe_3-EAU5val_jbUTBg/exec',
-        category: 'risorse'
-      },
-      {
-        id: 'materiali', emoji: '📦', name: 'Gestione Materiali',
-        desc: 'Tracciamento prestiti dei materiali scolastici condivisi: carrelli, tablet e attrezzature. Con QR Code universale per ogni dispositivo.',
-        url: null,
-        category: 'risorse'
-      },
-      {
-        id: 'riparazioni', emoji: '🔧', name: 'Gestione Riparazioni',
-        desc: 'Registro digitale segnalazioni guasti: i docenti segnalano da qualsiasi device, il tecnico aggiorna lo stato. Storico completo per plesso.',
-        url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbwtmtACn6rWt9vigJBTL-wLYAJw2qLjBy01OyTwrhIuhL3Lv5VbFI8m2z_fXc1CbV7j/exec',
-        category: 'risorse'
-      },
-      {
-        id: 'kangourou', emoji: '🦘', name: 'Kangourou — Adesioni',
-        desc: 'Raccolta adesioni e iscrizioni alla gara Kangourou. Pannello admin per gestire classi, docenti, report e invio comunicazioni.',
-        url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbyDkLCtBXJ50c1GAVPXB6CF6dVquB_f8PgpDN4XVPOOnrusD4P6wdwLAHzXbIoc2AGSzA/exec?page=admin',
-        category: 'gare'
-      },
-      {
-        id: 'corso', emoji: '📋', name: 'Corso Management',
-        desc: 'Gestione iscrizioni corsi di formazione: corsisti, materiali formativi, QR code di accesso e reportistica completa per il formatore.',
-        url: 'https://script.google.com/macros/s/AKfycbzYn9xzSUom1V1tlnQPcMXDhvxy-fEUKgtVVlROHrZat9PD1Y3vXU0ynFj4Y8PjdyH85A/exec',
-        category: 'gare'
-      },
-      {
-        id: 'logikron', emoji: '⏱️', name: 'LogiKron — Gare',
-        desc: 'Gestione gare matematiche in classe: configurazione squadre, admin panel, tabellone live e archivio classifiche storico.',
-        url: 'https://edutechlab.it/logikron-gare/admin.html',
-        category: 'gare'
-      },
+        id: 'gare',
+        emoji: '🏆',
+        name: 'Gare e Formazione',
+        subtitle: 'Kangourou · Corsi · LogiKron',
+        desc: 'Gestisci le iscrizioni alle gare matematiche, coordina i corsi di formazione docenti e amministra le gare LogiKron in classe.',
+        color: '#d97706',
+        colorLight: '#fef3c7',
+        count: 3
+      }
     ];
 
-    const CAT_COLORS = {
-      account: { primary: '#4f46e5', light: '#ede9fe', label: '🔑 Gestione Account Google Workspace' },
-      risorse: { primary: '#059669', light: '#d1fae5', label: '📦 Risorse e Materiali' },
-      gare:    { primary: '#d97706', light: '#fef3c7', label: '🏆 Gare e Formazione' },
+    /* ─────────────────────────────────────────
+       DATI APP
+    ───────────────────────────────────────── */
+    const APPS = {
+      account: [
+        {
+          emoji: '👤', name: 'GestAccount',
+          desc: 'Crea, aggiorna e archivia gli account Google Workspace degli alunni: nuovi iscritti, trasferiti e uscenti con invio automatico credenziali.',
+          url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbw6vJudSmpskx0LBz5DNdMocb7bhRF_yjEmnuI7Nc_GBE9d4EZWeF35W4U_FYjAkPJL/exec'
+        },
+        {
+          emoji: '🏫', name: 'GestClassroom',
+          desc: 'Pannello centralizzato per creare, popolare e archiviare le classi Google Classroom dell\'intero Istituto senza entrare in ogni classroom.',
+          url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbzj7OUOS77nDqTeOuhMT6DdjY0LWcoZJ8KqONNN25mGb9tBxjeGE5781ibZkk2D1zZE/exec'
+        },
+        {
+          emoji: '🔄', name: 'Classroom Rollover',
+          desc: 'Automazione del passaggio di anno scolastico: ricrea le classi, sposta gli studenti e archivia le vecchie Classroom con un click.',
+          url: 'https://script.google.com/macros/s/AKfycbzzxkhmwWyIgTXtZpwunPFX-xLN9nkP9FIxKsz3KFgJZXV_cqvdUbPWoxp2ZRQXJzlX/exec'
+        },
+        {
+          emoji: '⚙️', name: 'Workspace Admin',
+          desc: 'Pannello di amministrazione globale Google Workspace: gestione account, unità organizzative e configurazione dell\'istituto. Usato a inizio anno.',
+          url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbzRo2mVJAdPJyY9u_roKiE7mhRPCNjWBBmsYIF9Ygik-qkLAnTrHPM4B3HheCEh1vCnMg/exec'
+        }
+      ],
+      risorse: [
+        {
+          emoji: '📚', name: 'Libreria Sottovoce',
+          desc: 'Sistema digitale per la biblioteca scolastica: catalogo, prestiti con date restituzione, rientri, storico per alunno e solleciti automatici.',
+          url: 'https://script.google.com/a/icgottolengo.edu.it/macros/s/AKfycbyoEg8gPsw_AQVZ4mPmt_50o0DUoszqliPXiv8fXM0vFFXV79PKe_3-EAU5val_jbUTBg/exec'
+        },
+        {
+          emoji: '📦', name: 'Gestione Materiali',
+          desc: 'Tracciamento e prestiti dei materiali scolastici: carrelli, tablet e attrezzature con QR Code universale. Pannello amministratore.',
+          url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbzs8sPN2qMusX_MR13CCTNTh6T848g774kDIbGeuqgc8kSpBS4oGz9YLEcaoOEYoTIz/exec?page=admin'
+        },
+        {
+          emoji: '🔧', name: 'Gestione Riparazioni',
+          desc: 'Registro digitale segnalazioni guasti: i docenti segnalano dal proprio device, il tecnico aggiorna lo stato. Storico completo per plesso.',
+          url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbwtmtACn6rWt9vigJBTL-wLYAJw2qLjBy01OyTwrhIuhL3Lv5VbFI8m2z_fXc1CbV7j/exec'
+        }
+      ],
+      gare: [
+        {
+          emoji: '🦘', name: 'Kangourou — Adesioni',
+          desc: 'Raccolta adesioni e iscrizioni alla gara Kangourou. Pannello admin per gestire classi partecipanti, docenti referenti e comunicazioni.',
+          url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbyDkLCtBXJ50c1GAVPXB6CF6dVquB_f8PgpDN4XVPOOnrusD4P6wdwLAHzXbIoc2AGSzA/exec?page=admin'
+        },
+        {
+          emoji: '📋', name: 'Corso Management',
+          desc: 'Gestione iscrizioni corsi di formazione docenti: corsisti, materiali formativi, QR code di accesso e reportistica completa per il formatore.',
+          url: 'https://script.google.com/macros/s/AKfycbzYn9xzSUom1V1tlnQPcMXDhvxy-fEUKgtVVlROHrZat9PD1Y3vXU0ynFj4Y8PjdyH85A/exec'
+        },
+        {
+          emoji: '⏱️', name: 'LogiKron — Gare',
+          desc: 'Gestione gare matematiche in classe: configurazione squadre, tabellone live con cronometro e archivio classifiche storico per anno.',
+          url: 'https://edutechlab.it/logikron-gare/admin.html'
+        }
+      ]
     };
 
-    const CATEGORY_ORDER = ['account', 'risorse', 'gare'];
+    /* ─────────────────────────────────────────
+       RENDER CATEGORIE
+    ───────────────────────────────────────── */
+    function renderCategories() {
+      const grid = document.getElementById('categoriesGrid');
+      grid.innerHTML = CATEGORIES.map(cat => `
+        <div class="cat-card" onclick="openCategory('${cat.id}')" role="button" tabindex="0"
+             aria-label="Apri categoria ${cat.name}"
+             onkeydown="if(event.key==='Enter'||event.key===' '){openCategory('${cat.id}')}">
+          <div class="cat-card-bar" style="background:${cat.color};"></div>
+          <div class="cat-card-body">
+            <div class="cat-card-icon" style="background:${cat.colorLight};">${cat.emoji}</div>
+            <div class="cat-card-name">${cat.name}</div>
+            <div class="cat-card-count" style="background:${cat.colorLight};color:${cat.color};">${cat.count} applicazioni</div>
+            <p class="cat-card-desc">${cat.desc}</p>
+            <div class="cat-card-btn" style="background:linear-gradient(135deg,${cat.color} 0%,${cat.color}cc 100%);">Esplora →</div>
+          </div>
+        </div>
+      `).join('');
+    }
 
     /* ─────────────────────────────────────────
-       RENDER
+       APRI MODAL CATEGORIA
     ───────────────────────────────────────── */
-    function buildCard(app) {
-      const cat = CAT_COLORS[app.category];
-      const missing = !app.url;
+    function openCategory(catId) {
+      const cat = CATEGORIES.find(c => c.id === catId);
+      if (!cat) return;
 
-      const btnAttrs = missing
-        ? `class="btn-open disabled" disabled aria-disabled="true" aria-label="${app.name} — URL non ancora configurato"`
-        : `class="btn-open" href="${app.url}" target="_blank" rel="noopener noreferrer" aria-label="Apri ${app.name} in una nuova scheda"`;
+      document.getElementById('modalCatIcon').textContent = cat.emoji;
+      document.getElementById('modalCatTitle').textContent = cat.name;
+      document.getElementById('modalCatTitle').style.color = cat.color;
+      document.getElementById('modalCatSubtitle').textContent = cat.subtitle;
 
-      const btnTag = missing ? 'button' : 'a';
-      const btnLabel = missing ? '⚠️ URL da configurare' : 'Apri App →';
+      const apps = APPS[catId] || [];
+      document.getElementById('modalAppsGrid').innerHTML = apps.map(app => `
+        <div class="app-card" role="listitem"
+             style="--cat-color:${cat.color};"
+             onmouseenter="this.style.borderColor='${cat.color}'"
+             onmouseleave="this.style.borderColor=''">
+          <div class="app-card-icon" style="background:${cat.colorLight};">${app.emoji}</div>
+          <div class="app-card-name">${app.name}</div>
+          <p class="app-card-desc">${app.desc}</p>
+          <a class="app-card-btn"
+             href="${app.url}"
+             target="_blank"
+             rel="noopener noreferrer"
+             style="background:linear-gradient(135deg,${cat.color} 0%,${cat.color}cc 100%);"
+             aria-label="Apri ${app.name} in una nuova scheda">Apri App →</a>
+        </div>
+      `).join('');
 
-      return `
-        <article class="card${missing ? ' missing' : ''}" aria-label="${app.name}">
-          <div class="card-top-bar" style="background:${cat.primary};" aria-hidden="true"></div>
-          <div class="card-body">
-            <div class="card-icon-row">
-              <div class="card-icon-badge" style="background:${cat.light};" role="img" aria-label="Icona ${app.name}">${app.emoji}</div>
-              <div class="card-name-block">
-                <span class="card-name">${app.name}</span>
-                <span class="card-missing-badge" aria-label="URL non configurato">⚠️ URL da configurare</span>
-              </div>
-            </div>
-            <p class="card-desc">${app.desc}</p>
-          </div>
-          <div class="card-footer">
-            <${btnTag} ${btnAttrs} style="${missing ? '' : `background: linear-gradient(135deg, ${cat.primary} 0%, ${cat.primary}cc 100%);`}">${btnLabel}</${btnTag}>
-          </div>
-        </article>`;
+      openModal('categoryModal');
     }
 
-    function render() {
-      const main = document.getElementById('app');
-      let html = '';
+    /* ─────────────────────────────────────────
+       GESTIONE MODAL GENERICA
+    ───────────────────────────────────────── */
+    function openModal(id) {
+      const overlay = document.getElementById(id);
+      overlay.classList.add('active');
+      document.body.classList.add('modal-open');
 
-      for (const catKey of CATEGORY_ORDER) {
-        const cat = CAT_COLORS[catKey];
-        const apps = APPS.filter(a => a.category === catKey);
-        if (!apps.length) continue;
+      // Rianimazione modal box
+      const box = overlay.querySelector('.modal-box');
+      box.style.animation = 'none';
+      box.offsetHeight; // reflow
+      box.style.animation = '';
+    }
 
-        html += `
-          <section class="category-section" aria-labelledby="cat-${catKey}">
-            <div class="category-header">
-              <h2 class="category-title" id="cat-${catKey}">${cat.label}</h2>
-              <span class="category-count" aria-label="${apps.length} applicazioni">${apps.length}</span>
-            </div>
-            <div class="cards-grid" role="list">
-              ${apps.map(a => `<div role="listitem">${buildCard(a)}</div>`).join('')}
-            </div>
-          </section>`;
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+      // Rimuovi modal-open solo se nessun altro modal è aperto
+      const anyOpen = document.querySelectorAll('.modal-overlay.active').length > 0;
+      if (!anyOpen) document.body.classList.remove('modal-open');
+    }
+
+    function openInfoModal()    { openModal('infoModal'); }
+    function openPrivacyModal() { openModal('privacyModal'); }
+
+    // Click backdrop → chiudi
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', function(e) {
+        if (e.target === this) closeModal(this.id);
+      });
+    });
+
+    // ESC → chiudi modal aperto
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(overlay => {
+          closeModal(overlay.id);
+        });
       }
+    });
 
-      main.innerHTML = html;
-    }
-
-    render();
+    /* ─────────────────────────────────────────
+       INIT
+    ───────────────────────────────────────── */
+    renderCategories();
 
     /* ─────────────────────────────────────────
        PWA — INSTALL PROMPT
@@ -512,7 +911,7 @@
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').catch(() => {
-          // sw.js non presente: modalita offline non disponibile
+          // sw.js non presente: modalità offline non disponibile
         });
       });
     }
