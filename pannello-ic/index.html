@@ -152,9 +152,62 @@
     }
 
     /* ── CATEGORIES GRID ── */
+    /* ── ACCOUNT BANNER ── */
+    .account-banner {
+      max-width: 1100px;
+      margin: 0 auto 24px;
+      padding: 0 24px;
+    }
+
+    .account-banner-inner {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: #fffbeb;
+      border: 1.5px solid #f59e0b;
+      border-radius: 14px;
+      padding: 16px 20px;
+    }
+
+    .account-banner-icon {
+      font-size: 1.3rem;
+      line-height: 1;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+
+    .account-banner-text {
+      flex: 1;
+      font-size: 0.875rem;
+      color: #78350f;
+      line-height: 1.55;
+    }
+
+    .account-banner-text strong {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 3px;
+      color: #92400e;
+    }
+
+    .account-banner-close {
+      background: transparent;
+      border: none;
+      color: #d97706;
+      font-size: 1.2rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      flex-shrink: 0;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .account-banner-close:hover { opacity: 1; }
+
     .categories-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 24px;
       max-width: 1100px;
       margin: 0 auto;
@@ -165,6 +218,39 @@
       .categories-grid {
         grid-template-columns: 1fr;
       }
+    }
+
+    /* ── APP CARD BROKEN ── */
+    .app-card.broken {
+      opacity: 0.75;
+    }
+
+    .app-card-broken-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fbbf24;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      margin-top: 8px;
+    }
+
+    .app-card-broken-note {
+      font-size: 0.78rem;
+      color: #b45309;
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+
+    .app-card-btn.btn-broken {
+      background: #e2e8f0 !important;
+      color: #94a3b8;
+      cursor: not-allowed;
+      pointer-events: none;
     }
 
     /* ── CATEGORY CARD ── */
@@ -216,6 +302,18 @@
       padding: 4px 12px;
       border-radius: 20px;
       margin-top: 8px;
+    }
+
+    .cat-card-org-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fcd34d;
+      white-space: nowrap;
     }
 
     .cat-card-desc {
@@ -567,6 +665,18 @@
     <p>Seleziona una categoria per accedere alle applicazioni</p>
   </section>
 
+  <!-- BANNER AVVISO ACCOUNT -->
+  <div class="account-banner" id="accountBanner" role="alert">
+    <div class="account-banner-inner">
+      <span class="account-banner-icon" aria-hidden="true">⚠️</span>
+      <div class="account-banner-text">
+        <strong>Usa l'account @icgottolengo.edu.it</strong>
+        Le app segnate con 🔒 richiedono l'account Google dell'istituto per aprirsi correttamente. Se sei loggato con un account personale potrebbero non funzionare.
+      </div>
+      <button class="account-banner-close" onclick="dismissBanner()" aria-label="Chiudi avviso">×</button>
+    </div>
+  </div>
+
   <!-- CATEGORIES GRID -->
   <div class="categories-grid" id="categoriesGrid" role="main" aria-label="Categorie applicazioni">
     <!-- Renderizzato via JS -->
@@ -686,13 +796,25 @@
     const CATEGORIES = [
       {
         id: 'account',
-        emoji: '🔑',
+        emoji: '👤',
         name: 'Gestione Account',
-        subtitle: 'Google Workspace',
-        desc: 'Crea, aggiorna e archivia gli account alunni. Gestisci le classi Classroom e automatizza il passaggio di anno scolastico.',
+        subtitle: 'Operazioni durante l\'anno',
+        desc: 'Crea, aggiorna e archivia gli account Google Workspace degli alunni. Gestisci le classi Classroom dell\'intero Istituto.',
         color: '#4f46e5',
         colorLight: '#ede9fe',
-        count: 4
+        count: 2,
+        orgRequired: true
+      },
+      {
+        id: 'setup',
+        emoji: '📅',
+        name: 'Setup Inizio Anno',
+        subtitle: 'Operazioni annuali · Workspace Admin',
+        desc: 'Automazione passaggio anno scolastico e amministrazione globale Google Workspace. Da eseguire una volta a settembre.',
+        color: '#0f172a',
+        colorLight: '#e2e8f0',
+        count: 2,
+        orgRequired: true
       },
       {
         id: 'risorse',
@@ -702,7 +824,8 @@
         desc: 'Gestisci la biblioteca scolastica, traccia i prestiti di materiali e attrezzature con QR Code, e tieni sotto controllo le segnalazioni di guasto.',
         color: '#059669',
         colorLight: '#d1fae5',
-        count: 3
+        count: 3,
+        orgRequired: true
       },
       {
         id: 'gare',
@@ -730,11 +853,15 @@
           emoji: '🏫', name: 'GestClassroom',
           desc: 'Pannello centralizzato per creare, popolare e archiviare le classi Google Classroom dell\'intero Istituto senza entrare in ogni classroom.',
           url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbzj7OUOS77nDqTeOuhMT6DdjY0LWcoZJ8KqONNN25mGb9tBxjeGE5781ibZkk2D1zZE/exec'
-        },
+        }
+      ],
+      setup: [
         {
           emoji: '🔄', name: 'Classroom Rollover',
           desc: 'Automazione del passaggio di anno scolastico: ricrea le classi, sposta gli studenti e archivia le vecchie Classroom con un click.',
-          url: 'https://script.google.com/macros/s/AKfycbzzxkhmwWyIgTXtZpwunPFX-xLN9nkP9FIxKsz3KFgJZXV_cqvdUbPWoxp2ZRQXJzlX/exec'
+          url: 'https://script.google.com/macros/s/AKfycbzzxkhmwWyIgTXtZpwunPFX-xLN9nkP9FIxKsz3KFgJZXV_cqvdUbPWoxp2ZRQXJzlX/exec',
+          broken: true,
+          brokenNote: 'Deployment obsoleto — ri-deploya da Apps Script e aggiorna il link'
         },
         {
           emoji: '⚙️', name: 'Workspace Admin',
@@ -763,7 +890,9 @@
         {
           emoji: '🦘', name: 'Kangourou — Adesioni',
           desc: 'Raccolta adesioni e iscrizioni alla gara Kangourou. Pannello admin per gestire classi partecipanti, docenti referenti e comunicazioni.',
-          url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbyDkLCtBXJ50c1GAVPXB6CF6dVquB_f8PgpDN4XVPOOnrusD4P6wdwLAHzXbIoc2AGSzA/exec?page=admin'
+          url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbyDkLCtBXJ50c1GAVPXB6CF6dVquB_f8PgpDN4XVPOOnrusD4P6wdwLAHzXbIoc2AGSzA/exec?page=admin',
+          broken: true,
+          brokenNote: 'Deployment obsoleto — ri-deploya da Apps Script e aggiorna il link'
         },
         {
           emoji: '📋', name: 'Corso Management',
@@ -791,7 +920,10 @@
           <div class="cat-card-body">
             <div class="cat-card-icon" style="background:${cat.colorLight};">${cat.emoji}</div>
             <div class="cat-card-name">${cat.name}</div>
-            <div class="cat-card-count" style="background:${cat.colorLight};color:${cat.color};">${cat.count} applicazioni</div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;">
+              <div class="cat-card-count" style="margin-top:0;background:${cat.colorLight};color:${cat.color};">${cat.count} applicazioni</div>
+              ${cat.orgRequired ? `<div class="cat-card-org-badge">🔒 @icgottolengo.edu.it</div>` : ''}
+            </div>
             <p class="cat-card-desc">${cat.desc}</p>
             <div class="cat-card-btn" style="background:linear-gradient(135deg,${cat.color} 0%,${cat.color}cc 100%);">Esplora →</div>
           </div>
@@ -813,19 +945,23 @@
 
       const apps = APPS[catId] || [];
       document.getElementById('modalAppsGrid').innerHTML = apps.map(app => `
-        <div class="app-card" role="listitem"
-             style="--cat-color:${cat.color};"
-             onmouseenter="this.style.borderColor='${cat.color}'"
-             onmouseleave="this.style.borderColor=''">
+        <div class="app-card${app.broken ? ' broken' : ''}" role="listitem"
+             onmouseenter="${app.broken ? '' : `this.style.borderColor='${cat.color}'`}"
+             onmouseleave="${app.broken ? '' : `this.style.borderColor=''`}">
           <div class="app-card-icon" style="background:${cat.colorLight};">${app.emoji}</div>
           <div class="app-card-name">${app.name}</div>
           <p class="app-card-desc">${app.desc}</p>
-          <a class="app-card-btn"
-             href="${app.url}"
-             target="_blank"
-             rel="noopener noreferrer"
-             style="background:linear-gradient(135deg,${cat.color} 0%,${cat.color}cc 100%);"
-             aria-label="Apri ${app.name} in una nuova scheda">Apri App →</a>
+          ${app.broken
+            ? `<div class="app-card-broken-badge">⚠️ Link non funzionante</div>
+               <p class="app-card-broken-note">${app.brokenNote}</p>
+               <span class="app-card-btn btn-broken" aria-disabled="true">Non disponibile</span>`
+            : `<a class="app-card-btn"
+                 href="${app.url}"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 style="background:linear-gradient(135deg,${cat.color} 0%,${cat.color}cc 100%);"
+                 aria-label="Apri ${app.name} in una nuova scheda">Apri App →</a>`
+          }
         </div>
       `).join('');
 
@@ -856,6 +992,21 @@
 
     function openInfoModal()    { openModal('infoModal'); }
     function openPrivacyModal() { openModal('privacyModal'); }
+
+    /* ── BANNER DISMISS ── */
+    function dismissBanner() {
+      const b = document.getElementById('accountBanner');
+      if (b) { b.style.display = 'none'; }
+      try { localStorage.setItem('scrivaniaBannerDismissed', '1'); } catch(e) {}
+    }
+    (function() {
+      try {
+        if (localStorage.getItem('scrivaniaBannerDismissed') === '1') {
+          const b = document.getElementById('accountBanner');
+          if (b) b.style.display = 'none';
+        }
+      } catch(e) {}
+    })();
 
     // Click backdrop → chiudi
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
