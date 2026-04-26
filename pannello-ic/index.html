@@ -3,70 +3,161 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#1e3a8a">
+  <meta name="theme-color" content="#0f172a">
   <meta name="description" content="Scrivania Digitale IC — Tutte le applicazioni della segreteria e gestione scolastica dell'IC Gottolengo in un unico posto.">
+  <meta name="robots" content="noindex, nofollow">
   <meta property="og:title" content="Scrivania Digitale IC — IC Gottolengo">
   <meta property="og:description" content="Tutte le tue applicazioni scolastiche in un unico posto.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Scrivania IC">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
   <title>Scrivania Digitale IC — IC Gottolengo</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --bg:        #0f172a;
+      --surface:   rgba(255,255,255,0.04);
+      --surface-2: rgba(255,255,255,0.07);
+      --border:    rgba(255,255,255,0.08);
+      --border-h:  rgba(255,255,255,0.18);
+      --text-1:    #f1f5f9;
+      --text-2:    #94a3b8;
+      --text-3:    #475569;
+    }
+
+    html { scroll-behavior: smooth; }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-      background: #f1f5f9;
-      color: #1e293b;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text-1);
       padding-top: 72px;
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
     body.modal-open { overflow: hidden; }
+
+    /* ── BACKGROUND DECORATIONS ── */
+    .bg-blob {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(80px);
+    }
+
+    .bg-blob-1 {
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(79,70,229,0.18) 0%, transparent 70%);
+      top: -250px;
+      right: -200px;
+      animation: blobFloat 18s ease-in-out infinite alternate;
+    }
+
+    .bg-blob-2 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(5,150,105,0.12) 0%, transparent 70%);
+      bottom: 0;
+      left: -150px;
+      animation: blobFloat 24s ease-in-out infinite alternate-reverse;
+    }
+
+    .bg-blob-3 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(217,119,6,0.1) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: blobFloat 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes blobFloat {
+      0%   { transform: translate(0, 0) scale(1); }
+      50%  { transform: translate(-30px, 40px) scale(1.05); }
+      100% { transform: translate(40px, -30px) scale(0.96); }
+    }
+
+    .bg-blob-1,
+    .bg-blob-2 { animation: blobFloat var(--dur, 18s) ease-in-out infinite alternate; }
+
+    /* Griglia dots di sfondo */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle, rgba(148,163,184,0.07) 1px, transparent 1px);
+      background-size: 36px 36px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* tutto il contenuto sopra al bg */
+    header, main, section, footer, .account-banner, .categories-grid, .modal-overlay {
+      position: relative;
+      z-index: 1;
+    }
 
     /* ── HEADER ── */
     .header {
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+      z-index: 200;
       height: 72px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 24px;
-      box-shadow: 0 2px 12px rgba(30,58,138,0.4);
+      padding: 0 28px;
+      background: rgba(15,23,42,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
     }
 
     .header-left {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
 
     .header-logo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      background: rgba(255,255,255,0.15);
+      width: 38px;
+      height: 38px;
       border-radius: 10px;
+      overflow: hidden;
       flex-shrink: 0;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
     }
 
+    .header-logo img { width: 100%; height: 100%; }
+
+    .header-title-group { display: flex; flex-direction: column; gap: 1px; }
+
     .header-title {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 700;
-      color: #ffffff;
+      color: #f1f5f9;
       letter-spacing: -0.3px;
-      white-space: nowrap;
+      line-height: 1.2;
+    }
+
+    .header-subtitle {
+      font-size: 0.7rem;
+      color: var(--text-2);
+      letter-spacing: 0.02em;
     }
 
     @media (max-width: 480px) {
-      .header-title { font-size: 0.95rem; }
+      .header-subtitle { display: none; }
+      .header-title { font-size: 0.92rem; }
     }
 
     .header-right {
@@ -76,86 +167,161 @@
     }
 
     .badge-school {
-      background: rgba(255,255,255,0.18);
-      color: #ffffff;
-      font-size: 0.75rem;
+      background: rgba(255,255,255,0.08);
+      color: var(--text-2);
+      font-size: 0.72rem;
       font-weight: 600;
       padding: 5px 12px;
       border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.25);
+      border: 1px solid var(--border);
       white-space: nowrap;
+      letter-spacing: 0.02em;
     }
 
-    @media (max-width: 400px) {
-      .badge-school { display: none; }
-    }
+    @media (max-width: 420px) { .badge-school { display: none; } }
 
-    .btn-info-header {
+    .btn-icon {
       display: flex;
       align-items: center;
       justify-content: center;
       width: 36px;
       height: 36px;
-      background: transparent;
-      border: 1.5px solid rgba(255,255,255,0.5);
-      border-radius: 50%;
-      color: #ffffff;
-      font-size: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-2);
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
       flex-shrink: 0;
     }
 
-    .btn-info-header:hover { background: rgba(255,255,255,0.18); }
+    .btn-icon:hover {
+      background: var(--surface-2);
+      border-color: var(--border-h);
+      color: var(--text-1);
+    }
 
     #installBtn {
       display: none;
       align-items: center;
       gap: 6px;
-      background: rgba(255,255,255,0.22);
-      color: #ffffff;
-      border: 1px solid rgba(255,255,255,0.4);
-      border-radius: 8px;
+      background: rgba(79,70,229,0.25);
+      color: #a5b4fc;
+      border: 1px solid rgba(99,102,241,0.4);
+      border-radius: 10px;
       padding: 7px 14px;
-      font-size: 0.8rem;
-      font-weight: 600;
+      font-size: 0.78rem;
+      font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.2s, border-color 0.2s;
       white-space: nowrap;
+      letter-spacing: 0.02em;
     }
 
-    #installBtn:hover { background: rgba(255,255,255,0.32); }
+    #installBtn:hover {
+      background: rgba(79,70,229,0.4);
+      border-color: rgba(99,102,241,0.6);
+    }
+
     #installBtn.visible { display: flex; }
 
     /* ── HERO ── */
     .hero {
       text-align: center;
-      padding: 40px 24px 32px;
+      padding: 52px 24px 40px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(99,102,241,0.15);
+      border: 1px solid rgba(99,102,241,0.3);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #a5b4fc;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero-eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #818cf8;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(0.75); }
     }
 
     .hero h1 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #1e293b;
-      line-height: 1.3;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #f1f5f9 0%, #a5b4fc 55%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .hero p {
-      color: #64748b;
+      color: var(--text-2);
       font-size: 1rem;
-      margin-top: 8px;
+      margin-top: 12px;
       line-height: 1.6;
     }
 
-    @media (max-width: 480px) {
-      .hero h1 { font-size: 1.4rem; }
+    .hero-stats {
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      margin-top: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
     }
 
-    /* ── CATEGORIES GRID ── */
-    /* ── ACCOUNT BANNER ── */
+    .hero-stat {
+      padding: 12px 24px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+
+    .hero-stat:last-child { border-right: none; }
+
+    .hero-stat-num {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #f1f5f9;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-stat-label {
+      font-size: 0.7rem;
+      color: var(--text-2);
+      margin-top: 2px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    @media (max-width: 480px) {
+      .hero-stat { padding: 10px 14px; }
+      .hero-stat-num { font-size: 1.1rem; }
+    }
+
+    /* ── BANNER AVVISO ACCOUNT ── */
     .account-banner {
       max-width: 1100px;
-      margin: 0 auto 24px;
+      margin: 0 auto 28px;
       padding: 0 24px;
     }
 
@@ -163,14 +329,14 @@
       display: flex;
       align-items: flex-start;
       gap: 14px;
-      background: #fffbeb;
-      border: 1.5px solid #f59e0b;
+      background: rgba(245,158,11,0.1);
+      border: 1px solid rgba(245,158,11,0.3);
       border-radius: 14px;
-      padding: 16px 20px;
+      padding: 14px 18px;
     }
 
     .account-banner-icon {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       line-height: 1;
       flex-shrink: 0;
       padding-top: 2px;
@@ -178,147 +344,142 @@
 
     .account-banner-text {
       flex: 1;
-      font-size: 0.875rem;
-      color: #78350f;
-      line-height: 1.55;
+      font-size: 0.85rem;
+      color: #fcd34d;
+      line-height: 1.5;
     }
 
     .account-banner-text strong {
       display: block;
-      font-size: 0.9rem;
-      margin-bottom: 3px;
-      color: #92400e;
+      font-size: 0.875rem;
+      margin-bottom: 2px;
+      color: #fde68a;
     }
 
     .account-banner-close {
       background: transparent;
       border: none;
-      color: #d97706;
+      color: #f59e0b;
       font-size: 1.2rem;
       cursor: pointer;
       line-height: 1;
       padding: 0;
       flex-shrink: 0;
-      opacity: 0.7;
+      opacity: 0.6;
       transition: opacity 0.2s;
     }
 
     .account-banner-close:hover { opacity: 1; }
 
+    /* ── CATEGORIES GRID ── */
     .categories-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 24px;
+      gap: 20px;
       max-width: 1100px;
       margin: 0 auto;
-      padding: 0 24px 80px;
+      padding: 0 24px 100px;
     }
 
     @media (max-width: 480px) {
-      .categories-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* ── APP CARD BROKEN ── */
-    .app-card.broken {
-      opacity: 0.75;
-    }
-
-    .app-card-broken-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: #fef3c7;
-      color: #92400e;
-      border: 1px solid #fbbf24;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 3px 8px;
-      margin-top: 8px;
-    }
-
-    .app-card-broken-note {
-      font-size: 0.78rem;
-      color: #b45309;
-      margin-top: 8px;
-      line-height: 1.4;
-    }
-
-    .app-card-btn.btn-broken {
-      background: #e2e8f0 !important;
-      color: #94a3b8;
-      cursor: not-allowed;
-      pointer-events: none;
+      .categories-grid { grid-template-columns: 1fr; gap: 16px; }
     }
 
     /* ── CATEGORY CARD ── */
     .cat-card {
-      background: #ffffff;
-      border-radius: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
       overflow: hidden;
       cursor: pointer;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      position: relative;
+      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1),
+                  box-shadow 0.3s ease,
+                  border-color 0.3s ease;
+      animation: cardEntry 0.65s cubic-bezier(.22,1,.36,1) both;
+    }
+
+    @keyframes cardEntry {
+      from { opacity: 0; transform: translateY(36px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Shine interno */
+    .cat-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 55%);
+      pointer-events: none;
+      border-radius: 22px;
     }
 
     .cat-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+      transform: translateY(-8px) scale(1.01);
+      border-color: var(--border-h);
     }
 
-    .cat-card-bar {
-      height: 6px;
+    .cat-card-accent {
+      height: 4px;
       width: 100%;
     }
 
     .cat-card-body {
-      padding: 32px;
+      padding: 28px;
     }
 
     .cat-card-icon {
-      width: 80px;
-      height: 80px;
-      border-radius: 20px;
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.8rem;
+      font-size: 2.4rem;
       line-height: 1;
+      border: 1px solid rgba(255,255,255,0.08);
     }
 
     .cat-card-name {
-      font-size: 1.4rem;
+      font-size: 1.25rem;
       font-weight: 700;
-      color: #1e293b;
-      margin-top: 20px;
+      color: var(--text-1);
+      margin-top: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .cat-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
     }
 
     .cat-card-count {
       display: inline-block;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 700;
-      padding: 4px 12px;
+      padding: 4px 11px;
       border-radius: 20px;
-      margin-top: 8px;
+      letter-spacing: 0.02em;
     }
 
     .cat-card-org-badge {
       display: inline-block;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 600;
       padding: 4px 10px;
       border-radius: 20px;
-      background: #fef3c7;
-      color: #92400e;
-      border: 1px solid #fcd34d;
+      background: rgba(245,158,11,0.12);
+      color: #fbbf24;
+      border: 1px solid rgba(245,158,11,0.25);
       white-space: nowrap;
     }
 
     .cat-card-desc {
-      font-size: 0.95rem;
-      color: #64748b;
+      font-size: 0.875rem;
+      color: var(--text-2);
       line-height: 1.6;
       margin-top: 12px;
       display: -webkit-box;
@@ -328,267 +489,286 @@
     }
 
     .cat-card-btn {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       width: 100%;
-      padding: 14px 24px;
-      margin-top: 24px;
+      padding: 13px 18px;
+      margin-top: 22px;
       border: none;
       border-radius: 12px;
-      font-size: 1rem;
+      font-size: 0.9rem;
       font-weight: 700;
       color: #ffffff;
-      text-align: center;
       cursor: pointer;
-      transition: filter 0.2s ease;
-      pointer-events: none; /* click gestito dal card */
+      pointer-events: none;
+      letter-spacing: 0.01em;
+      transition: filter 0.2s;
     }
 
-    .cat-card:hover .cat-card-btn { filter: brightness(1.1); }
+    .cat-card-btn-arrow {
+      font-size: 1rem;
+      transition: transform 0.25s ease;
+    }
+
+    .cat-card:hover .cat-card-btn-arrow { transform: translateX(5px); }
 
     /* ── MODAL OVERLAY ── */
     .modal-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(15,23,42,0.7);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       z-index: 1000;
       align-items: center;
       justify-content: center;
       padding: 20px;
-      animation: fadeIn 0.25s ease;
     }
 
-    .modal-overlay.active { display: flex; }
+    .modal-overlay.active { display: flex; animation: overlayIn 0.25s ease; }
 
-    @keyframes fadeIn {
+    @keyframes overlayIn {
       from { opacity: 0; }
       to   { opacity: 1; }
     }
 
     /* ── MODAL BOX ── */
     .modal-box {
-      background: #ffffff;
+      background: #1a2236;
+      border: 1px solid var(--border);
       border-radius: 24px;
       max-width: 860px;
       width: 94%;
       max-height: 90vh;
       overflow-y: auto;
       position: relative;
-      animation: slideUp 0.3s ease;
+      animation: modalUp 0.3s cubic-bezier(.22,1,.36,1);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
     }
 
-    .modal-box.modal-narrow {
-      max-width: 540px;
-    }
+    .modal-box.modal-narrow { max-width: 520px; }
 
-    @keyframes slideUp {
-      from { transform: translateY(40px); opacity: 0; }
-      to   { transform: translateY(0);    opacity: 1; }
+    @keyframes modalUp {
+      from { transform: translateY(40px) scale(0.97); opacity: 0; }
+      to   { transform: translateY(0) scale(1); opacity: 1; }
     }
 
     /* ── MODAL HEADER ── */
     .modal-header {
       position: sticky;
       top: 0;
-      background: #ffffff;
-      border-bottom: 1px solid #e2e8f0;
-      padding: 24px 28px;
+      background: #1a2236;
+      border-bottom: 1px solid var(--border);
+      padding: 22px 26px;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       z-index: 10;
       border-radius: 24px 24px 0 0;
     }
 
-    .modal-header-icon {
-      font-size: 2.2rem;
-      line-height: 1;
-      flex-shrink: 0;
-    }
+    .modal-header-icon { font-size: 2rem; line-height: 1; flex-shrink: 0; }
 
-    .modal-header-text {
-      flex: 1;
-      min-width: 0;
-    }
+    .modal-header-text { flex: 1; min-width: 0; }
 
     .modal-header-title {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 700;
       line-height: 1.2;
+      letter-spacing: -0.02em;
     }
 
     .modal-header-subtitle {
-      font-size: 0.85rem;
-      color: #64748b;
+      font-size: 0.8rem;
+      color: var(--text-2);
       margin-top: 2px;
     }
 
     .modal-close {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: none;
-      background: #f1f5f9;
-      color: #64748b;
-      font-size: 1.3rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-2);
+      font-size: 1.2rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      transition: background 0.2s, color 0.2s;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
     }
 
     .modal-close:hover {
-      background: #e2e8f0;
-      color: #1e293b;
+      background: var(--surface-2);
+      border-color: var(--border-h);
+      color: var(--text-1);
     }
 
     /* ── MODAL BODY ── */
-    .modal-body {
-      padding: 28px;
-    }
+    .modal-body { padding: 24px 26px; }
 
     /* ── APPS GRID (nel modal) ── */
     .apps-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 16px;
+      gap: 14px;
     }
 
     /* ── APP CARD (nel modal) ── */
     .app-card {
-      border: 2px solid #f1f5f9;
+      border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 24px;
-      background: #fafafa;
+      padding: 22px;
+      background: var(--surface);
       display: flex;
       flex-direction: column;
-      transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .app-card:hover {
-      background: #ffffff;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    .app-card:hover:not(.broken) {
+      background: var(--surface-2);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
     }
+
+    .app-card.broken { opacity: 0.6; }
 
     .app-card-icon {
       width: 48px;
       height: 48px;
-      border-radius: 14px;
+      border-radius: 13px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1.6rem;
       line-height: 1;
       flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.06);
     }
 
     .app-card-name {
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
-      color: #1e293b;
+      color: var(--text-1);
       margin-top: 14px;
+      letter-spacing: -0.01em;
     }
 
     .app-card-desc {
-      font-size: 0.85rem;
-      color: #64748b;
+      font-size: 0.82rem;
+      color: var(--text-2);
       line-height: 1.5;
-      margin-top: 8px;
+      margin-top: 7px;
       flex: 1;
     }
 
     .app-card-btn {
       display: block;
       width: 100%;
-      padding: 11px 18px;
+      padding: 11px 16px;
       margin-top: 16px;
       border: none;
       border-radius: 10px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 700;
       color: #ffffff;
       text-align: center;
       text-decoration: none;
       cursor: pointer;
-      transition: filter 0.2s ease;
+      transition: filter 0.2s ease, transform 0.15s ease;
+      letter-spacing: 0.01em;
     }
 
-    .app-card-btn:hover { filter: brightness(1.1); }
+    .app-card-btn:hover { filter: brightness(1.15); transform: translateY(-1px); }
+
+    .app-card-broken-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(245,158,11,0.12);
+      color: #fbbf24;
+      border: 1px solid rgba(245,158,11,0.25);
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      margin-top: 10px;
+    }
+
+    .app-card-broken-note {
+      font-size: 0.75rem;
+      color: #f59e0b;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    .app-card-btn.btn-broken {
+      background: rgba(255,255,255,0.06) !important;
+      color: var(--text-3);
+      cursor: not-allowed;
+      pointer-events: none;
+    }
 
     /* ── INFO / PRIVACY MODAL CONTENT ── */
-    .info-section {
-      margin-bottom: 20px;
-    }
-
+    .info-section { margin-bottom: 18px; }
     .info-section:last-child { margin-bottom: 0; }
 
     .info-section h3 {
-      font-size: 0.8rem;
+      font-size: 0.72rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #94a3b8;
+      letter-spacing: 0.07em;
+      color: var(--text-3);
       margin-bottom: 6px;
     }
 
     .info-section p {
-      font-size: 0.95rem;
-      color: #1e293b;
+      font-size: 0.9rem;
+      color: var(--text-2);
       line-height: 1.6;
     }
 
+    .info-section p strong { color: var(--text-1); }
+
     .info-note {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.2);
       border-radius: 10px;
-      padding: 14px 16px;
-      font-size: 0.875rem;
-      color: #475569;
+      padding: 13px 15px;
+      font-size: 0.83rem;
+      color: #a5b4fc;
       line-height: 1.6;
-      margin-top: 16px;
+      margin-top: 14px;
     }
 
     /* ── FOOTER ── */
     footer {
-      background: #0f172a;
-      color: #94a3b8;
-      padding: 40px 24px;
+      background: rgba(255,255,255,0.02);
+      border-top: 1px solid var(--border);
+      color: var(--text-2);
+      padding: 36px 24px;
+      position: relative;
+      z-index: 1;
     }
 
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
+    .footer-inner { max-width: 1100px; margin: 0 auto; }
 
     .footer-top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 32px;
+      gap: 24px;
       flex-wrap: wrap;
     }
 
-    .footer-brand {
-      color: #ffffff;
-      font-weight: 700;
-      font-size: 1.1rem;
-      margin-bottom: 6px;
-    }
-
-    .footer-tagline {
-      font-size: 0.85rem;
-      color: #64748b;
-      margin-bottom: 10px;
-    }
-
-    .footer-dev {
-      font-size: 0.875rem;
-      line-height: 1.6;
-    }
+    .footer-brand { color: var(--text-1); font-weight: 700; font-size: 1rem; margin-bottom: 5px; }
+    .footer-tagline { font-size: 0.8rem; color: var(--text-3); margin-bottom: 8px; }
+    .footer-dev { font-size: 0.83rem; line-height: 1.6; }
+    .footer-dev strong { color: var(--text-1); }
 
     .footer-links {
       display: flex;
@@ -597,19 +777,16 @@
       gap: 8px;
     }
 
-    .footer-version {
-      font-size: 0.8rem;
-      color: #475569;
-    }
+    .footer-version { font-size: 0.75rem; color: var(--text-3); }
 
     .footer-links a {
-      color: #94a3b8;
+      color: var(--text-2);
       text-decoration: none;
-      font-size: 0.875rem;
+      font-size: 0.83rem;
       transition: color 0.2s;
     }
 
-    .footer-links a:hover { color: #e2e8f0; }
+    .footer-links a:hover { color: var(--text-1); }
 
     .footer-bottom {
       display: flex;
@@ -617,39 +794,54 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 32px;
-      padding-top: 20px;
-      border-top: 1px solid #1e293b;
-      font-size: 0.8rem;
-      color: #475569;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      font-size: 0.77rem;
+      color: var(--text-3);
     }
 
     @media (max-width: 600px) {
       .footer-links { align-items: flex-start; }
       .footer-bottom { flex-direction: column; align-items: flex-start; }
     }
+
+    /* Scrollbar dark */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
   </style>
 </head>
 <body>
 
+  <!-- BACKGROUND BLOBS -->
+  <div class="bg-blob bg-blob-1" aria-hidden="true"></div>
+  <div class="bg-blob bg-blob-2" aria-hidden="true"></div>
+  <div class="bg-blob bg-blob-3" aria-hidden="true"></div>
+
   <!-- HEADER -->
   <header class="header" role="banner">
     <div class="header-left">
-      <div class="header-logo" aria-hidden="true">
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <rect x="1" y="1" width="11" height="11" rx="2.5" fill="white"/>
-          <rect x="16" y="1" width="11" height="11" rx="2.5" fill="white"/>
-          <rect x="1" y="16" width="11" height="11" rx="2.5" fill="white"/>
-          <rect x="16" y="16" width="11" height="11" rx="2.5" fill="white"/>
-        </svg>
+      <div class="header-logo">
+        <img src="icon.svg" alt="Scrivania Digitale IC">
       </div>
-      <span class="header-title">Scrivania Digitale IC</span>
+      <div class="header-title-group">
+        <span class="header-title">Scrivania Digitale IC</span>
+        <span class="header-subtitle">IC Gottolengo · Gestione Scolastica</span>
+      </div>
     </div>
     <div class="header-right">
       <span class="badge-school">IC Gottolengo</span>
-      <button class="btn-info-header" onclick="openInfoModal()" aria-label="Informazioni sull'applicazione">ℹ️</button>
-      <button id="installBtn" aria-label="Installa l'app Scrivania Digitale IC">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <button class="btn-icon" onclick="openInfoModal()" aria-label="Informazioni">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+      </button>
+      <button id="installBtn" aria-label="Installa l'app">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
           <polyline points="7 10 12 15 17 10"/>
           <line x1="12" y1="15" x2="12" y2="3"/>
@@ -661,8 +853,26 @@
 
   <!-- HERO -->
   <section class="hero" aria-label="Benvenuto">
-    <h1>Le tue applicazioni, sempre a portata di mano</h1>
-    <p>Seleziona una categoria per accedere alle applicazioni</p>
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-dot" aria-hidden="true"></span>
+      Pannello Interno · Solo uso autorizzato
+    </div>
+    <h1>Le tue app sempre a portata di mano</h1>
+    <p>Accedi a tutti gli strumenti di gestione scolastica dell'IC Gottolengo</p>
+    <div class="hero-stats" role="list">
+      <div class="hero-stat" role="listitem">
+        <div class="hero-stat-num">10</div>
+        <div class="hero-stat-label">App</div>
+      </div>
+      <div class="hero-stat" role="listitem">
+        <div class="hero-stat-num">4</div>
+        <div class="hero-stat-label">Categorie</div>
+      </div>
+      <div class="hero-stat" role="listitem">
+        <div class="hero-stat-num">PWA</div>
+        <div class="hero-stat-label">Installabile</div>
+      </div>
+    </div>
   </section>
 
   <!-- BANNER AVVISO ACCOUNT -->
@@ -671,7 +881,7 @@
       <span class="account-banner-icon" aria-hidden="true">⚠️</span>
       <div class="account-banner-text">
         <strong>Usa l'account @icgottolengo.edu.it</strong>
-        Le app segnate con 🔒 richiedono l'account Google dell'istituto per aprirsi correttamente. Se sei loggato con un account personale potrebbero non funzionare.
+        Le app contrassegnate con 🔒 richiedono l'account Google dell'istituto per aprirsi correttamente.
       </div>
       <button class="account-banner-close" onclick="dismissBanner()" aria-label="Chiudi avviso">×</button>
     </div>
@@ -691,12 +901,10 @@
           <div class="modal-header-title" id="modalCatTitle"></div>
           <div class="modal-header-subtitle" id="modalCatSubtitle"></div>
         </div>
-        <button class="modal-close" onclick="closeModal('categoryModal')" aria-label="Chiudi modal">×</button>
+        <button class="modal-close" onclick="closeModal('categoryModal')" aria-label="Chiudi">×</button>
       </div>
       <div class="modal-body">
-        <div class="apps-grid" id="modalAppsGrid" role="list">
-          <!-- Renderizzato via JS -->
-        </div>
+        <div class="apps-grid" id="modalAppsGrid" role="list"></div>
       </div>
     </div>
   </div>
@@ -705,16 +913,22 @@
   <div class="modal-overlay" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="infoModalTitle">
     <div class="modal-box modal-narrow">
       <div class="modal-header">
-        <div class="modal-header-icon" aria-hidden="true">ℹ️</div>
+        <div class="modal-header-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="16" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12.01" y2="8"/>
+          </svg>
+        </div>
         <div class="modal-header-text">
           <div class="modal-header-title" id="infoModalTitle">Informazioni</div>
         </div>
-        <button class="modal-close" onclick="closeModal('infoModal')" aria-label="Chiudi modal">×</button>
+        <button class="modal-close" onclick="closeModal('infoModal')" aria-label="Chiudi">×</button>
       </div>
       <div class="modal-body">
         <div class="info-section">
           <h3>Descrizione</h3>
-          <p><strong>Scrivania Digitale IC</strong> è il launcher centralizzato per le applicazioni di gestione scolastica dell'IC Gottolengo. Raggruppa in un'unica interfaccia tutti gli strumenti digitali dell'Istituto, accessibili con un semplice click.</p>
+          <p><strong>Scrivania Digitale IC</strong> è il launcher centralizzato per le applicazioni di gestione scolastica dell'IC Gottolengo. Raggruppa in un'unica interfaccia tutti gli strumenti digitali dell'Istituto, accessibili con un click.</p>
         </div>
         <div class="info-section">
           <h3>Sviluppatore</h3>
@@ -722,7 +936,7 @@
         </div>
         <div class="info-section">
           <h3>Versione</h3>
-          <p>v1.0 — Aprile 2026</p>
+          <p>v2.0 — Aprile 2026</p>
         </div>
         <div class="info-section">
           <h3>Tecnologia</h3>
@@ -743,7 +957,7 @@
         <div class="modal-header-text">
           <div class="modal-header-title" id="privacyModalTitle">Privacy e Dati</div>
         </div>
-        <button class="modal-close" onclick="closeModal('privacyModal')" aria-label="Chiudi modal">×</button>
+        <button class="modal-close" onclick="closeModal('privacyModal')" aria-label="Chiudi">×</button>
       </div>
       <div class="modal-body">
         <div class="info-section">
@@ -774,12 +988,12 @@
         <div>
           <div class="footer-brand">Scrivania Digitale IC</div>
           <p class="footer-tagline">Strumento interno di gestione scolastica</p>
-          <p class="footer-dev">Sviluppato da <strong style="color:#e2e8f0">Fabio Rizzotto</strong><br>Animatore Digitale · IC Gottolengo</p>
+          <p class="footer-dev">Sviluppato da <strong>Fabio Rizzotto</strong><br>Animatore Digitale · IC Gottolengo</p>
         </div>
         <div class="footer-links">
-          <span class="footer-version">v1.0 · Aprile 2026</span>
-          <a href="#" onclick="openInfoModal(); return false;">ℹ️ Informazioni</a>
-          <a href="#" onclick="openPrivacyModal(); return false;">🔒 Privacy</a>
+          <span class="footer-version">v2.0 · Aprile 2026</span>
+          <a href="#" onclick="openInfoModal(); return false;">Informazioni</a>
+          <a href="#" onclick="openPrivacyModal(); return false;">Privacy</a>
         </div>
       </div>
       <div class="footer-bottom">
@@ -800,8 +1014,7 @@
         name: 'Gestione Account',
         subtitle: 'Operazioni durante l\'anno',
         desc: 'Crea, aggiorna e archivia gli account Google Workspace degli alunni. Gestisci le classi Classroom dell\'intero Istituto.',
-        color: '#4f46e5',
-        colorLight: '#ede9fe',
+        color: '#3b82f6',
         count: 2,
         orgRequired: true
       },
@@ -811,8 +1024,7 @@
         name: 'Setup Inizio Anno',
         subtitle: 'Operazioni annuali · Workspace Admin',
         desc: 'Automazione passaggio anno scolastico e amministrazione globale Google Workspace. Da eseguire una volta a settembre.',
-        color: '#0f172a',
-        colorLight: '#e2e8f0',
+        color: '#8b5cf6',
         count: 2,
         orgRequired: true
       },
@@ -822,8 +1034,7 @@
         name: 'Risorse e Materiali',
         subtitle: 'Biblioteca · Attrezzature · Riparazioni',
         desc: 'Gestisci la biblioteca scolastica, traccia i prestiti di materiali e attrezzature con QR Code, e tieni sotto controllo le segnalazioni di guasto.',
-        color: '#059669',
-        colorLight: '#d1fae5',
+        color: '#10b981',
         count: 3,
         orgRequired: true
       },
@@ -833,8 +1044,7 @@
         name: 'Gare e Formazione',
         subtitle: 'Kangourou · Corsi · LogiKron',
         desc: 'Gestisci le iscrizioni alle gare matematiche, coordina i corsi di formazione docenti e amministra le gare LogiKron in classe.',
-        color: '#d97706',
-        colorLight: '#fef3c7',
+        color: '#f59e0b',
         count: 3
       }
     ];
@@ -908,20 +1118,28 @@
     ───────────────────────────────────────── */
     function renderCategories() {
       const grid = document.getElementById('categoriesGrid');
-      grid.innerHTML = CATEGORIES.map(cat => `
-        <div class="cat-card" onclick="openCategory('${cat.id}')" role="button" tabindex="0"
+      grid.innerHTML = CATEGORIES.map((cat, i) => `
+        <div class="cat-card"
+             style="animation-delay:${i * 0.1 + 0.05}s"
+             onclick="openCategory('${cat.id}')"
+             role="button" tabindex="0"
              aria-label="Apri categoria ${cat.name}"
-             onkeydown="if(event.key==='Enter'||event.key===' '){openCategory('${cat.id}')}">
-          <div class="cat-card-bar" style="background:${cat.color};"></div>
+             onkeydown="if(event.key==='Enter'||event.key===' '){openCategory('${cat.id}')}"
+             onmouseenter="this.style.boxShadow='0 20px 60px ${cat.color}28'"
+             onmouseleave="this.style.boxShadow=''">
+          <div class="cat-card-accent" style="background:${cat.color};"></div>
           <div class="cat-card-body">
-            <div class="cat-card-icon" style="background:${cat.colorLight};">${cat.emoji}</div>
+            <div class="cat-card-icon" style="background:${cat.color}18;">${cat.emoji}</div>
             <div class="cat-card-name">${cat.name}</div>
-            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;">
-              <div class="cat-card-count" style="margin-top:0;background:${cat.colorLight};color:${cat.color};">${cat.count} applicazioni</div>
+            <div class="cat-card-meta">
+              <div class="cat-card-count" style="background:${cat.color}20;color:${cat.color};">${cat.count} applicazioni</div>
               ${cat.orgRequired ? `<div class="cat-card-org-badge">🔒 @icgottolengo.edu.it</div>` : ''}
             </div>
             <p class="cat-card-desc">${cat.desc}</p>
-            <div class="cat-card-btn" style="background:linear-gradient(135deg,${cat.color} 0%,${cat.color}cc 100%);">Esplora →</div>
+            <div class="cat-card-btn" style="background:linear-gradient(135deg,${cat.color} 0%,${cat.color}bb 100%);">
+              <span>Esplora</span>
+              <span class="cat-card-btn-arrow" aria-hidden="true">→</span>
+            </div>
           </div>
         </div>
       `).join('');
@@ -942,9 +1160,9 @@
       const apps = APPS[catId] || [];
       document.getElementById('modalAppsGrid').innerHTML = apps.map(app => `
         <div class="app-card${app.broken ? ' broken' : ''}" role="listitem"
-             onmouseenter="${app.broken ? '' : `this.style.borderColor='${cat.color}'`}"
+             onmouseenter="${app.broken ? '' : `this.style.borderColor='${cat.color}55'`}"
              onmouseleave="${app.broken ? '' : `this.style.borderColor=''`}">
-          <div class="app-card-icon" style="background:${cat.colorLight};">${app.emoji}</div>
+          <div class="app-card-icon" style="background:${cat.color}18;">${app.emoji}</div>
           <div class="app-card-name">${app.name}</div>
           <p class="app-card-desc">${app.desc}</p>
           ${app.broken
@@ -955,7 +1173,7 @@
                  href="${app.url}"
                  target="_blank"
                  rel="noopener noreferrer"
-                 style="background:linear-gradient(135deg,${cat.color} 0%,${cat.color}cc 100%);"
+                 style="background:linear-gradient(135deg,${cat.color} 0%,${cat.color}bb 100%);"
                  aria-label="Apri ${app.name} in una nuova scheda">Apri App →</a>`
           }
         </div>
@@ -965,23 +1183,20 @@
     }
 
     /* ─────────────────────────────────────────
-       GESTIONE MODAL GENERICA
+       GESTIONE MODAL
     ───────────────────────────────────────── */
     function openModal(id) {
       const overlay = document.getElementById(id);
       overlay.classList.add('active');
       document.body.classList.add('modal-open');
-
-      // Rianimazione modal box
       const box = overlay.querySelector('.modal-box');
       box.style.animation = 'none';
-      box.offsetHeight; // reflow
+      box.offsetHeight;
       box.style.animation = '';
     }
 
     function closeModal(id) {
       document.getElementById(id).classList.remove('active');
-      // Rimuovi modal-open solo se nessun altro modal è aperto
       const anyOpen = document.querySelectorAll('.modal-overlay.active').length > 0;
       if (!anyOpen) document.body.classList.remove('modal-open');
     }
@@ -989,12 +1204,27 @@
     function openInfoModal()    { openModal('infoModal'); }
     function openPrivacyModal() { openModal('privacyModal'); }
 
-    /* ── BANNER DISMISS ── */
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', function(e) {
+        if (e.target === this) closeModal(this.id);
+      });
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(o => closeModal(o.id));
+      }
+    });
+
+    /* ─────────────────────────────────────────
+       BANNER DISMISS
+    ───────────────────────────────────────── */
     function dismissBanner() {
       const b = document.getElementById('accountBanner');
-      if (b) { b.style.display = 'none'; }
+      if (b) b.style.display = 'none';
       try { localStorage.setItem('scrivaniaBannerDismissed', '1'); } catch(e) {}
     }
+
     (function() {
       try {
         if (localStorage.getItem('scrivaniaBannerDismissed') === '1') {
@@ -1003,22 +1233,6 @@
         }
       } catch(e) {}
     })();
-
-    // Click backdrop → chiudi
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-      overlay.addEventListener('click', function(e) {
-        if (e.target === this) closeModal(this.id);
-      });
-    });
-
-    // ESC → chiudi modal aperto
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        document.querySelectorAll('.modal-overlay.active').forEach(overlay => {
-          closeModal(overlay.id);
-        });
-      }
-    });
 
     /* ─────────────────────────────────────────
        INIT
@@ -1041,9 +1255,7 @@
       if (!deferredPrompt) return;
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        installBtn.classList.remove('visible');
-      }
+      if (outcome === 'accepted') installBtn.classList.remove('visible');
       deferredPrompt = null;
     });
 
@@ -1057,9 +1269,7 @@
     ───────────────────────────────────────── */
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(() => {
-          // sw.js non presente: modalità offline non disponibile
-        });
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
       });
     }
   </script>
