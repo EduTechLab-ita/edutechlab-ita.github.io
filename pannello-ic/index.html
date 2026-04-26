@@ -375,6 +375,7 @@
     .categories-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      align-items: start;
       gap: 20px;
       max-width: 1100px;
       margin: 0 auto;
@@ -482,10 +483,14 @@
       color: var(--text-2);
       line-height: 1.6;
       margin-top: 12px;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
       overflow: hidden;
+      max-height: calc(1.6em * 3);
+      transition: max-height 0.45s ease, color 0.25s ease;
+    }
+
+    .cat-card:hover .cat-card-desc {
+      max-height: 24em;
+      color: #cbd5e1;
     }
 
     .cat-card-btn {
@@ -1012,8 +1017,8 @@
         id: 'account',
         emoji: '👤',
         name: 'Gestione Account',
-        subtitle: 'Operazioni durante l\'anno',
-        desc: 'Crea, aggiorna e archivia gli account Google Workspace degli alunni. Gestisci le classi Classroom dell\'intero Istituto.',
+        subtitle: 'Google Workspace · Uso durante l\'anno',
+        desc: 'App per la gestione immediata di Google Workspace: crea, aggiorna e archivia gli account alunni (nuovi iscritti, trasferiti, uscenti) e gestisci in modo centralizzato le classi Google Classroom dell\'Istituto senza dover accedere a ogni classe singolarmente.',
         color: '#3b82f6',
         count: 2,
         orgRequired: true
@@ -1022,8 +1027,8 @@
         id: 'setup',
         emoji: '📅',
         name: 'Setup Inizio Anno',
-        subtitle: 'Operazioni annuali · Workspace Admin',
-        desc: 'Automazione passaggio anno scolastico e amministrazione globale Google Workspace. Da eseguire una volta a settembre.',
+        subtitle: 'Google Workspace · Da eseguire a settembre',
+        desc: 'Operazioni annuali su Google Workspace da eseguire all\'avvio dell\'anno scolastico: automazione completa del passaggio anno (ricreazione classi, spostamento alunni, archiviazione Classroom) e pannello admin per la configurazione globale dell\'organizzazione Workspace dell\'Istituto.',
         color: '#8b5cf6',
         count: 2,
         orgRequired: true
@@ -1032,8 +1037,8 @@
         id: 'risorse',
         emoji: '📦',
         name: 'Risorse e Materiali',
-        subtitle: 'Biblioteca · Attrezzature · Riparazioni',
-        desc: 'Gestisci la biblioteca scolastica, traccia i prestiti di materiali e attrezzature con QR Code, e tieni sotto controllo le segnalazioni di guasto.',
+        subtitle: 'Progetti di Istituto · Uso continuativo',
+        desc: 'Gestione centralizzata delle risorse fisiche e digitali dell\'Istituto: biblioteca scolastica con catalogo e prestiti libri, tracciamento materiali condivisi e attrezzature tramite QR Code, e registro digitale delle segnalazioni di guasto per docenti e tecnici.',
         color: '#10b981',
         count: 3,
         orgRequired: true
@@ -1042,8 +1047,8 @@
         id: 'gare',
         emoji: '🏆',
         name: 'Gare e Formazione',
-        subtitle: 'Kangourou · Corsi · LogiKron',
-        desc: 'Gestisci le iscrizioni alle gare matematiche, coordina i corsi di formazione docenti e amministra le gare LogiKron in classe.',
+        subtitle: 'Progetti di Istituto · Uso stagionale',
+        desc: 'Coordinamento centralizzato di attività e progetti di Istituto: pannello admin per le iscrizioni alla gara Kangourou, gestione dei corsi di formazione docenti con QR code e presenze, e amministrazione delle gare matematiche LogiKron in classe con tabellone live.',
         color: '#f59e0b',
         count: 3
       }
@@ -1056,58 +1061,58 @@
       account: [
         {
           emoji: '👤', name: 'GestAccount',
-          desc: 'Crea, aggiorna e archivia gli account Google Workspace degli alunni: nuovi iscritti, trasferiti e uscenti con invio automatico credenziali.',
+          desc: 'Gestione diretta degli account Google Workspace: crea gli account per i nuovi iscritti, aggiorna quelli esistenti per i trasferiti, e archivia gli account degli alunni uscenti. Gestisce l\'invio automatico delle credenziali e l\'assegnazione alle unità organizzative corrette.',
           url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbw6vJudSmpskx0LBz5DNdMocb7bhRF_yjEmnuI7Nc_GBE9d4EZWeF35W4U_FYjAkPJL/exec'
         },
         {
           emoji: '🏫', name: 'GestClassroom',
-          desc: 'Pannello centralizzato per creare, popolare e archiviare le classi Google Classroom dell\'intero Istituto senza entrare in ogni classroom.',
+          desc: 'Pannello centralizzato per la gestione di tutte le classi Google Classroom dell\'Istituto: crea in blocco le classroom, aggiunge o rimuovi docenti e studenti, e archivia le classi a fine anno. Evita di dover accedere singolarmente a ogni classroom.',
           url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbzj7OUOS77nDqTeOuhMT6DdjY0LWcoZJ8KqONNN25mGb9tBxjeGE5781ibZkk2D1zZE/exec'
         }
       ],
       setup: [
         {
           emoji: '🔄', name: 'Classroom Rollover',
-          desc: 'Automazione del passaggio di anno scolastico: ricrea le classi, sposta gli studenti e archivia le vecchie Classroom con un click.',
+          desc: 'Automazione completa del passaggio di anno scolastico su Google Workspace: ricrea automaticamente tutte le classi Classroom, sposta gli alunni nelle nuove classi e archivia le vecchie. Eseguito una volta a settembre, risparmia ore di lavoro manuale.',
           url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbweqC9p9RnHYtZcEmJZei3-90SlLnEVdK_G0J4brGgCflw9P8_pdlAsWbSJ5R31bmcV/exec'
         },
         {
           emoji: '⚙️', name: 'Workspace Admin',
-          desc: 'Pannello di amministrazione globale Google Workspace: gestione account, unità organizzative e configurazione dell\'istituto. Usato a inizio anno.',
+          desc: 'Pannello di amministrazione globale dell\'organizzazione Google Workspace IC Gottolengo: gestione delle unità organizzative, configurazione delle policy di dominio, supervisione account e impostazioni generali dell\'istituto. Da usare a inizio anno per la configurazione.',
           url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbzRo2mVJAdPJyY9u_roKiE7mhRPCNjWBBmsYIF9Ygik-qkLAnTrHPM4B3HheCEh1vCnMg/exec'
         }
       ],
       risorse: [
         {
           emoji: '📚', name: 'Libreria Sottovoce',
-          desc: 'Sistema digitale per la biblioteca scolastica: catalogo, prestiti con date restituzione, rientri, storico per alunno e solleciti automatici.',
+          desc: 'Sistema digitale completo per la biblioteca scolastica dell\'Istituto: catalogo dei volumi, registrazione prestiti con date di restituzione, gestione dei rientri, storico completo per singolo alunno e invio solleciti automatici per i libri in ritardo.',
           url: 'https://script.google.com/a/icgottolengo.edu.it/macros/s/AKfycbyoEg8gPsw_AQVZ4mPmt_50o0DUoszqliPXiv8fXM0vFFXV79PKe_3-EAU5val_jbUTBg/exec'
         },
         {
           emoji: '📦', name: 'Gestione Materiali',
-          desc: 'Tracciamento e prestiti dei materiali scolastici: carrelli, tablet e attrezzature con QR Code universale. Pannello amministratore.',
+          desc: 'Tracciamento in tempo reale dei materiali condivisi dell\'Istituto: carrelli LIM, tablet, proiettori e attrezzature. I docenti prenotano e prelevano scansionando il QR Code sul materiale. Il pannello admin mostra lo storico dei movimenti e lo stato attuale di ogni risorsa.',
           url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbzs8sPN2qMusX_MR13CCTNTh6T848g774kDIbGeuqgc8kSpBS4oGz9YLEcaoOEYoTIz/exec?page=admin'
         },
         {
           emoji: '🔧', name: 'Gestione Riparazioni',
-          desc: 'Registro digitale segnalazioni guasti: i docenti segnalano dal proprio device, il tecnico aggiorna lo stato. Storico completo per plesso.',
+          desc: 'Registro digitale centralizzato per le segnalazioni di guasto dell\'Istituto: i docenti segnalano il problema dal proprio device indicando plesso e tipo di guasto, il tecnico visualizza la coda degli interventi e aggiorna lo stato di ciascuno. Storico completo consultabile.',
           url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbwtmtACn6rWt9vigJBTL-wLYAJw2qLjBy01OyTwrhIuhL3Lv5VbFI8m2z_fXc1CbV7j/exec'
         }
       ],
       gare: [
         {
           emoji: '🦘', name: 'Kangourou — Admin',
-          desc: 'Pannello admin raccolta adesioni Kangourou: gestisci classi partecipanti, docenti referenti, visualizza iscrizioni e comunicazioni.',
+          desc: 'Pannello amministrativo per la gestione delle adesioni alla gara Kangourou: visualizza le iscrizioni ricevute dai docenti, monitora i dati per plesso e classe, gestisci i referenti e prepara l\'export dei dati per la Segreteria in vista della gara.',
           url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbxXYZ2nLEjPGZIH7m3m4AnSwmomNBX_TcIoZafYQxr7rZ6XV_Epz6r2xtMzCgJludbURg/exec?page=admin'
         },
         {
           emoji: '📋', name: 'Corso Management',
-          desc: 'Gestione iscrizioni corsi di formazione docenti: corsisti, materiali formativi, QR code di accesso e reportistica completa per il formatore.',
+          desc: 'Gestione completa dei corsi di formazione per docenti: registro corsisti, distribuzione materiali, QR code di accesso rapido a ogni sessione, monitoraggio delle presenze e reportistica finale per il formatore. Usato per i corsi organizzati dall\'Istituto.',
           url: 'https://script.google.com/macros/s/AKfycbzYn9xzSUom1V1tlnQPcMXDhvxy-fEUKgtVVlROHrZat9PD1Y3vXU0ynFj4Y8PjdyH85A/exec'
         },
         {
           emoji: '⏱️', name: 'LogiKron — Gare',
-          desc: 'Gestione gare matematiche in classe: configurazione squadre, tabellone live con cronometro e archivio classifiche storico per anno.',
+          desc: 'Gestione delle gare matematiche LogiKron in classe: configura le squadre, avvia il tabellone live con cronometro per il docente alla LIM, visualizza le classifiche in tempo reale e consulta l\'archivio storico delle gare per anno scolastico.',
           url: 'https://edutechlab.it/logikron-gare/admin.html'
         }
       ]
