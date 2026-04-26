@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1e3a8a">
+  <meta name="description" content="Scrivania Digitale IC — Tutte le applicazioni della segreteria e gestione scolastica dell'IC Gottolengo in un unico posto.">
+  <meta property="og:title" content="Scrivania Digitale IC — IC Gottolengo">
+  <meta property="og:description" content="Tutte le tue applicazioni scolastiche in un unico posto.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Scrivania IC">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <title>Scrivania Digitale IC — IC Gottolengo</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: #f1f5f9;
+      color: #1e293b;
+      padding-top: 72px;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      box-shadow: 0 2px 12px rgba(30,58,138,0.4);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+
+    .header-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 480px) {
+      .header-title { font-size: 0.95rem; }
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-school {
+      background: rgba(255,255,255,0.18);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.25);
+      white-space: nowrap;
+    }
+
+    @media (max-width: 400px) {
+      .badge-school { display: none; }
+    }
+
+    #installBtn {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.22);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+
+    #installBtn:hover { background: rgba(255,255,255,0.32); }
+    #installBtn.visible { display: flex; }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 36px 24px 24px;
+    }
+
+    .hero p {
+      color: #475569;
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ── MAIN CONTENT ── */
+    main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    /* ── SECTION ── */
+    .category-section {
+      margin-bottom: 48px;
+    }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .category-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .category-count {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #64748b;
+      background: #e2e8f0;
+      padding: 2px 10px;
+      border-radius: 20px;
+    }
+
+    /* ── GRID ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07), 0 2px 8px rgba(0,0,0,0.05);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .card-top-bar {
+      height: 4px;
+      width: 100%;
+      flex-shrink: 0;
+    }
+
+    .card-body {
+      padding: 20px 20px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card-icon-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .card-icon-badge {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .card-name-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .card-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1.3;
+    }
+
+    .card-missing-badge {
+      display: none;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #92400e;
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-radius: 6px;
+      padding: 2px 8px;
+      width: fit-content;
+    }
+
+    .card.missing .card-missing-badge { display: flex; }
+
+    .card-desc {
+      font-size: 0.875rem;
+      color: #64748b;
+      line-height: 1.55;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      flex: 1;
+    }
+
+    .card-footer {
+      padding: 0 20px 20px;
+    }
+
+    .btn-open {
+      display: block;
+      width: 100%;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: filter 0.2s ease, transform 0.15s ease;
+      letter-spacing: 0.2px;
+    }
+
+    .btn-open:hover:not(:disabled) {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    .btn-open:disabled,
+    .btn-open.disabled {
+      background: #cbd5e1 !important;
+      color: #94a3b8 !important;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #1e3a8a;
+      color: rgba(255,255,255,0.75);
+      text-align: center;
+      padding: 20px 24px;
+      font-size: 0.82rem;
+      line-height: 1.6;
+    }
+
+    footer strong {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header" role="banner">
+    <div class="header-left">
+      <div class="header-logo" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="1" y="1" width="7" height="7" rx="2" fill="white"/>
+          <rect x="12" y="1" width="7" height="7" rx="2" fill="white"/>
+          <rect x="1" y="12" width="7" height="7" rx="2" fill="white"/>
+          <rect x="12" y="12" width="7" height="7" rx="2" fill="white"/>
+        </svg>
+      </div>
+      <span class="header-title">Scrivania Digitale IC</span>
+    </div>
+    <div class="header-right">
+      <span class="badge-school">IC Gottolengo</span>
+      <button id="installBtn" aria-label="Installa l'app Scrivania Digitale IC">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Installa
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" aria-label="Benvenuto">
+    <p>Tutte le tue applicazioni in un unico posto</p>
+  </section>
+
+  <!-- MAIN -->
+  <main id="app" role="main" aria-label="Applicazioni scolastiche">
+    <!-- Renderizzato via JS -->
+  </main>
+
+  <!-- FOOTER -->
+  <footer role="contentinfo">
+    <strong>Scrivania Digitale IC</strong> &nbsp;·&nbsp; IC Gottolengo &nbsp;·&nbsp; Fabio Rizzotto
+  </footer>
+
+  <script>
+    /* ─────────────────────────────────────────
+       DATI
+    ───────────────────────────────────────── */
+    const APPS = [
+      {
+        id: 'gestaccount', emoji: '👤', name: 'GestAccount',
+        desc: 'Crea, aggiorna e archivia gli account Google Workspace degli alunni. Gestisce nuovi iscritti, trasferiti e uscenti in modo automatico.',
+        url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbw6vJudSmpskx0LBz5DNdMocb7bhRF_yjEmnuI7Nc_GBE9d4EZWeF35W4U_FYjAkPJL/exec',
+        category: 'account'
+      },
+      {
+        id: 'gestclassroom', emoji: '🏫', name: 'GestClassroom',
+        desc: 'Pannello centralizzato per creare, popolare e archiviare le classi Google Classroom dell\'intero Istituto senza entrare in ogni classroom.',
+        url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbzj7OUOS77nDqTeOuhMT6DdjY0LWcoZJ8KqONNN25mGb9tBxjeGE5781ibZkk2D1zZE/exec',
+        category: 'account'
+      },
+      {
+        id: 'rollover', emoji: '🔄', name: 'Classroom Rollover',
+        desc: 'Automazione del passaggio di anno scolastico: ricrea le classi, sposta gli studenti e archivia le vecchie Classroom con un click.',
+        url: 'https://script.google.com/macros/s/AKfycbzzxkhmwWyIgTXtZpwunPFX-xLN9nkP9FIxKsz3KFgJZXV_cqvdUbPWoxp2ZRQXJzlX/exec',
+        category: 'account'
+      },
+      {
+        id: 'workspace', emoji: '⚙️', name: 'Workspace Admin',
+        desc: 'Pannello amministrazione Google Workspace: sospensione account, gestione unità organizzative e operazioni massive sul dominio IC.',
+        url: null,
+        category: 'account'
+      },
+      {
+        id: 'libreria', emoji: '📚', name: 'Libreria Sottovoce',
+        desc: 'Sistema digitale per la biblioteca scolastica: catalogo, prestiti, rientri, storico per alunno e solleciti automatici. Semplice per tutti.',
+        url: 'https://script.google.com/a/icgottolengo.edu.it/macros/s/AKfycbyoEg8gPsw_AQVZ4mPmt_50o0DUoszqliPXiv8fXM0vFFXV79PKe_3-EAU5val_jbUTBg/exec',
+        category: 'risorse'
+      },
+      {
+        id: 'materiali', emoji: '📦', name: 'Gestione Materiali',
+        desc: 'Tracciamento prestiti dei materiali scolastici condivisi: carrelli, tablet e attrezzature. Con QR Code universale per ogni dispositivo.',
+        url: null,
+        category: 'risorse'
+      },
+      {
+        id: 'riparazioni', emoji: '🔧', name: 'Gestione Riparazioni',
+        desc: 'Registro digitale segnalazioni guasti: i docenti segnalano da qualsiasi device, il tecnico aggiorna lo stato. Storico completo per plesso.',
+        url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbwtmtACn6rWt9vigJBTL-wLYAJw2qLjBy01OyTwrhIuhL3Lv5VbFI8m2z_fXc1CbV7j/exec',
+        category: 'risorse'
+      },
+      {
+        id: 'kangourou', emoji: '🦘', name: 'Kangourou — Adesioni',
+        desc: 'Raccolta adesioni e iscrizioni alla gara Kangourou. Pannello admin per gestire classi, docenti, report e invio comunicazioni.',
+        url: 'https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbyDkLCtBXJ50c1GAVPXB6CF6dVquB_f8PgpDN4XVPOOnrusD4P6wdwLAHzXbIoc2AGSzA/exec?page=admin',
+        category: 'gare'
+      },
+      {
+        id: 'corso', emoji: '📋', name: 'Corso Management',
+        desc: 'Gestione iscrizioni corsi di formazione: corsisti, materiali formativi, QR code di accesso e reportistica completa per il formatore.',
+        url: 'https://script.google.com/macros/s/AKfycbzYn9xzSUom1V1tlnQPcMXDhvxy-fEUKgtVVlROHrZat9PD1Y3vXU0ynFj4Y8PjdyH85A/exec',
+        category: 'gare'
+      },
+      {
+        id: 'logikron', emoji: '⏱️', name: 'LogiKron — Gare',
+        desc: 'Gestione gare matematiche in classe: configurazione squadre, admin panel, tabellone live e archivio classifiche storico.',
+        url: 'https://edutechlab.it/logikron-gare/admin.html',
+        category: 'gare'
+      },
+    ];
+
+    const CAT_COLORS = {
+      account: { primary: '#4f46e5', light: '#ede9fe', label: '🔑 Gestione Account Google Workspace' },
+      risorse: { primary: '#059669', light: '#d1fae5', label: '📦 Risorse e Materiali' },
+      gare:    { primary: '#d97706', light: '#fef3c7', label: '🏆 Gare e Formazione' },
+    };
+
+    const CATEGORY_ORDER = ['account', 'risorse', 'gare'];
+
+    /* ─────────────────────────────────────────
+       RENDER
+    ───────────────────────────────────────── */
+    function buildCard(app) {
+      const cat = CAT_COLORS[app.category];
+      const missing = !app.url;
+
+      const btnAttrs = missing
+        ? `class="btn-open disabled" disabled aria-disabled="true" aria-label="${app.name} — URL non ancora configurato"`
+        : `class="btn-open" href="${app.url}" target="_blank" rel="noopener noreferrer" aria-label="Apri ${app.name} in una nuova scheda"`;
+
+      const btnTag = missing ? 'button' : 'a';
+      const btnLabel = missing ? '⚠️ URL da configurare' : 'Apri App →';
+
+      return `
+        <article class="card${missing ? ' missing' : ''}" aria-label="${app.name}">
+          <div class="card-top-bar" style="background:${cat.primary};" aria-hidden="true"></div>
+          <div class="card-body">
+            <div class="card-icon-row">
+              <div class="card-icon-badge" style="background:${cat.light};" role="img" aria-label="Icona ${app.name}">${app.emoji}</div>
+              <div class="card-name-block">
+                <span class="card-name">${app.name}</span>
+                <span class="card-missing-badge" aria-label="URL non configurato">⚠️ URL da configurare</span>
+              </div>
+            </div>
+            <p class="card-desc">${app.desc}</p>
+          </div>
+          <div class="card-footer">
+            <${btnTag} ${btnAttrs} style="${missing ? '' : `background: linear-gradient(135deg, ${cat.primary} 0%, ${cat.primary}cc 100%);`}">${btnLabel}</${btnTag}>
+          </div>
+        </article>`;
+    }
+
+    function render() {
+      const main = document.getElementById('app');
+      let html = '';
+
+      for (const catKey of CATEGORY_ORDER) {
+        const cat = CAT_COLORS[catKey];
+        const apps = APPS.filter(a => a.category === catKey);
+        if (!apps.length) continue;
+
+        html += `
+          <section class="category-section" aria-labelledby="cat-${catKey}">
+            <div class="category-header">
+              <h2 class="category-title" id="cat-${catKey}">${cat.label}</h2>
+              <span class="category-count" aria-label="${apps.length} applicazioni">${apps.length}</span>
+            </div>
+            <div class="cards-grid" role="list">
+              ${apps.map(a => `<div role="listitem">${buildCard(a)}</div>`).join('')}
+            </div>
+          </section>`;
+      }
+
+      main.innerHTML = html;
+    }
+
+    render();
+
+    /* ─────────────────────────────────────────
+       PWA — INSTALL PROMPT
+    ───────────────────────────────────────── */
+    let deferredPrompt = null;
+    const installBtn = document.getElementById('installBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.classList.add('visible');
+    });
+
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        installBtn.classList.remove('visible');
+      }
+      deferredPrompt = null;
+    });
+
+    window.addEventListener('appinstalled', () => {
+      installBtn.classList.remove('visible');
+      deferredPrompt = null;
+    });
+
+    /* ─────────────────────────────────────────
+       SERVICE WORKER
+    ───────────────────────────────────────── */
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {
+          // sw.js non presente: modalita offline non disponibile
+        });
+      });
+    }
+  </script>
+</body>
+</html>
