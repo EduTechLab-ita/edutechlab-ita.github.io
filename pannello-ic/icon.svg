@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.18)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect width="512" height="260" rx="112" fill="url(#shine)"/>
+  <circle cx="152" cy="152" r="10" fill="white" opacity="0.14"/>
+  <circle cx="256" cy="152" r="10" fill="white" opacity="0.14"/>
+  <circle cx="360" cy="152" r="10" fill="white" opacity="0.14"/>
+  <circle cx="152" cy="256" r="10" fill="white" opacity="0.14"/>
+  <circle cx="256" cy="256" r="10" fill="white" opacity="0.14"/>
+  <circle cx="360" cy="256" r="10" fill="white" opacity="0.14"/>
+  <circle cx="152" cy="360" r="10" fill="white" opacity="0.14"/>
+  <circle cx="256" cy="360" r="10" fill="white" opacity="0.14"/>
+  <circle cx="360" cy="360" r="10" fill="white" opacity="0.14"/>
+  <text
+    x="256" y="334"
+    text-anchor="middle"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+    font-weight="800"
+    font-size="218"
+    letter-spacing="-6"
+    fill="white">IC</text>
+</svg>

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GestClassroom — Demo Interattiva</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Banner demo fisso */
+    .demo-banner {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      color: white; text-align: center; padding: 10px 16px;
+      font-size: 14px; font-weight: 700; letter-spacing: 0.5px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .demo-banner a { color: white; font-weight: 600; text-decoration: underline; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0d9488 0%, #059669 100%);
+      min-height: 100vh; padding: 20px; padding-top: 60px;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    .header {
+      background: white; padding: 25px; border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-bottom: 25px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .header-left h1 { color: #0d9488; font-size: 26px; margin-bottom: 4px; }
+    .header-left p { color: #666; font-size: 14px; }
+    .header-badge {
+      background: #f0fdfa; border: 2px solid #5eead4; color: #0d9488;
+      padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 700;
+    }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab {
+      padding: 11px 22px; border-radius: 10px; border: none; cursor: pointer;
+      font-size: 14px; font-weight: 600; transition: all 0.2s;
+      background: rgba(255,255,255,0.2); color: white;
+    }
+    .tab:hover:not(.active) { background: rgba(255,255,255,0.3); }
+    .tab.active { background: white; color: #0d9488; }
+
+    /* Card */
+    .card {
+      background: white; border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15); overflow: hidden;
+    }
+
+    /* Tabella */
+    .table-container { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: linear-gradient(135deg, #0d9488, #059669); color: white; }
+    th { padding: 14px 16px; text-align: left; font-weight: 600; font-size: 13px; white-space: nowrap; }
+    td { padding: 13px 16px; border-bottom: 1px solid #f3f4f6; font-size: 13px; }
+    tbody tr { transition: background 0.2s; }
+    tbody tr:hover { background: #f0fdfa; }
+
+    .classe-nome { font-weight: 700; color: #1a1a1a; font-size: 14px; }
+    .classe-sub { color: #6b7280; font-size: 12px; margin-top: 2px; }
+
+    .docente-avatar {
+      width: 30px; height: 30px; border-radius: 50%; background: #ccfbf1;
+      color: #0d9488; display: inline-flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; margin-right: 8px; vertical-align: middle; flex-shrink: 0;
+    }
+
+    .badge {
+      display: inline-block; padding: 4px 12px; border-radius: 15px;
+      font-size: 12px; font-weight: 600;
+    }
+    .badge-attiva { background: #d1fae5; color: #065f46; }
+    .badge-archiviata { background: #f3f4f6; color: #9ca3af; }
+
+    .action-btns { display: flex; gap: 6px; }
+    .btn-action {
+      padding: 6px 12px; border-radius: 8px; border: none; cursor: pointer;
+      font-size: 12px; font-weight: 600; transition: all 0.2s;
+    }
+    .btn-studenti { background: #ccfbf1; color: #0d9488; }
+    .btn-studenti:hover { background: #0d9488; color: white; }
+    .btn-archivia { background: #f3f4f6; color: #6b7280; }
+    .btn-archivia:hover { background: #dc2626; color: white; }
+
+    /* Tab panel */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* Form crea classe */
+    .form-crea { padding: 28px; }
+    .form-crea h2 { color: #0d9488; font-size: 18px; margin-bottom: 24px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-weight: 600; color: #374151; margin-bottom: 7px; font-size: 14px; }
+    .form-group input, .form-group select {
+      width: 100%; padding: 12px 14px; border: 2px solid #e5e7eb; border-radius: 10px;
+      font-size: 14px; font-family: inherit; transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none; border-color: #0d9488; box-shadow: 0 0 0 3px rgba(13,148,136,0.1);
+    }
+    .btn-crea {
+      background: linear-gradient(135deg, #0d9488, #059669); color: white;
+      border: none; padding: 14px 28px; border-radius: 10px;
+      font-size: 15px; font-weight: 600; cursor: pointer; width: 100%;
+      transition: transform 0.2s, box-shadow 0.2s; margin-top: 6px;
+    }
+    .btn-crea:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(13,148,136,0.4); }
+    .btn-crea:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .spinner {
+      display: none; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.4);
+      border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* MODAL */
+    .modal {
+      display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+      width: 100%; height: 100%; background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(5px); animation: fadeIn 0.3s;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .modal-content {
+      background: white; margin: 5% auto; border-radius: 20px;
+      width: 90%; max-width: 540px; max-height: 85vh; overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: slideDown 0.3s;
+    }
+    @keyframes slideDown { from { transform: translateY(-40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-header {
+      background: linear-gradient(135deg, #0d9488, #059669); color: white;
+      padding: 24px 28px; border-radius: 20px 20px 0 0; position: relative;
+    }
+    .modal-header h2 { font-size: 20px; margin-bottom: 4px; }
+    .modal-header p { opacity: 0.85; font-size: 13px; }
+    .close {
+      position: absolute; right: 20px; top: 16px;
+      color: white; font-size: 28px; cursor: pointer; line-height: 1; transition: transform 0.2s;
+    }
+    .close:hover { transform: scale(1.2); }
+    .modal-body { padding: 28px; }
+
+    .studente-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 0; border-bottom: 1px solid #f3f4f6;
+    }
+    .studente-item:last-child { border-bottom: none; }
+    .studente-avatar {
+      width: 34px; height: 34px; border-radius: 50%; background: #ccfbf1;
+      color: #0d9488; display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; flex-shrink: 0;
+    }
+    .studente-nome { font-size: 14px; font-weight: 600; color: #1a1a1a; }
+    .studente-email { font-size: 12px; color: #6b7280; font-family: monospace; }
+
+    /* Modal conferma archivia */
+    .modal-confirm-body { padding: 28px; text-align: center; }
+    .modal-confirm-body p { color: #374151; font-size: 15px; margin-bottom: 8px; }
+    .modal-confirm-body .warn { color: #dc2626; font-size: 13px; margin-bottom: 24px; }
+    .confirm-btns { display: flex; gap: 12px; justify-content: center; }
+    .btn-cancel {
+      background: #f3f4f6; color: #374151; border: none;
+      padding: 11px 22px; border-radius: 10px; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .btn-cancel:hover { background: #e5e7eb; }
+    .btn-confirm-arch {
+      background: linear-gradient(135deg, #dc2626, #991b1b); color: white; border: none;
+      padding: 11px 22px; border-radius: 10px; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: transform 0.2s;
+    }
+    .btn-confirm-arch:hover { transform: translateY(-2px); }
+
+    /* Toast */
+    .toast {
+      display: none; position: fixed; bottom: 30px; right: 30px;
+      background: #059669; color: white; padding: 14px 22px;
+      border-radius: 12px; font-weight: 600; font-size: 14px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2); z-index: 9998;
+      animation: fadeIn 0.3s;
+    }
+
+    @media (max-width: 640px) {
+      .tabs { gap: 5px; }
+      .tab { padding: 9px 14px; font-size: 13px; }
+      th, td { padding: 11px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Banner DEMO -->
+  <div class="demo-banner">
+    🎮 MODALITÀ DEMO — Nessun dato viene salvato &nbsp;|&nbsp;
+    <a href="https://edutechlab.it">Torna al sito EduTechLab</a>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <div class="header-left">
+        <h1>🏫 GestClassroom</h1>
+        <p>IC Demo — Pannello Gestione Google Classroom</p>
+      </div>
+      <div class="header-badge">Anno 2025/26</div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" id="tab-btn-attive"    onclick="switchTab('attive')">📋 Classi Attive</button>
+      <button class="tab"        id="tab-btn-archiviate" onclick="switchTab('archiviate')">📦 Classi Archiviate</button>
+      <button class="tab"        id="tab-btn-crea"       onclick="switchTab('crea')">➕ Crea Classe</button>
+    </div>
+
+    <!-- TAB: Classi Attive -->
+    <div id="tab-attive" class="tab-panel active">
+      <div class="card">
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Classe</th>
+                <th>Docente</th>
+                <th>N° Studenti</th>
+                <th>Stato</th>
+                <th>Azioni</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyAttive"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Classi Archiviate -->
+    <div id="tab-archiviate" class="tab-panel">
+      <div class="card">
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Classe</th>
+                <th>Docente</th>
+                <th>N° Studenti</th>
+                <th>Stato</th>
+                <th>Azioni</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyArchiviate"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Crea Classe -->
+    <div id="tab-crea" class="tab-panel">
+      <div class="card">
+        <div class="form-crea">
+          <h2>➕ Crea Nuova Classroom</h2>
+          <div class="form-group">
+            <label for="nuomoNome">Nome classe</label>
+            <input type="text" id="nuomoNome" placeholder="Es: 2C">
+          </div>
+          <div class="form-group">
+            <label for="nuovoDocente">Docente</label>
+            <select id="nuovoDocente">
+              <option value="Mario Verdi">Mario Verdi — mario.verdi@icdemo.edu.it</option>
+              <option value="Laura Conti">Laura Conti — laura.conti@icdemo.edu.it</option>
+              <option value="Paolo Neri">Paolo Neri — paolo.neri@icdemo.edu.it</option>
+              <option value="Anna Russo">Anna Russo — anna.russo@icdemo.edu.it</option>
+              <option value="Giulia Mari">Giulia Mari — giulia.mari@icdemo.edu.it</option>
+              <option value="Marco Sala">Marco Sala — marco.sala@icdemo.edu.it</option>
+              <option value="Sofia Galli">Sofia Galli — sofia.galli@icdemo.edu.it</option>
+              <option value="Luca Ricci">Luca Ricci — luca.ricci@icdemo.edu.it</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="nuovoAnno">Anno scolastico</label>
+            <input type="text" id="nuovoAnno" value="2025/26" readonly>
+          </div>
+          <button class="btn-crea" id="btnCrea" onclick="creaClasse()">
+            <span id="btnCreaText">Crea Classroom →</span>
+            <div class="spinner" id="btnSpinner"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Studenti -->
+  <div id="modalStudenti" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close" onclick="chiudiModal('modalStudenti')">&times;</span>
+        <h2 id="msNome">—</h2>
+        <p id="msSub">—</p>
+      </div>
+      <div class="modal-body">
+        <div id="msStudentiList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Conferma Archivia -->
+  <div id="modalArchivia" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close" onclick="chiudiModal('modalArchivia')">&times;</span>
+        <h2>🗄️ Archivia Classroom</h2>
+        <p id="maSubtitle">—</p>
+      </div>
+      <div class="modal-confirm-body">
+        <p>Sei sicuro di voler archiviare questa classe?</p>
+        <p class="warn">⚠️ La classe sparirà dalle Classi Attive e verrà spostata nelle Archiviate.</p>
+        <div class="confirm-btns">
+          <button class="btn-cancel" onclick="chiudiModal('modalArchivia')">Annulla</button>
+          <button class="btn-confirm-arch" id="btnConfermaArchivia" onclick="confermArchivia()">🗄️ Archivia</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <script>
+    // Studenti fittizi per ciascuna classe (5 per classe)
+    var studentiPerClasse = {
+      1: ['Marco Bellini','Sara Nardi','Luca Fabbri','Elena Costa','Davide Poli'],
+      2: ['Giulia Monti','Pietro Rosi','Francesca Levi','Andrea Cesi','Marta Boni'],
+      3: ['Tommaso Riva','Alice Fera','Simone Pini','Chiara Lago','Roberto Fiori'],
+      4: ['Valentina Olmo','Francesco Savi','Irene Vico','Matteo Gori','Aurora Mari'],
+      5: ['Leonardo Tosi','Emma Valli','Nicola Bruni','Beatrice Sala','Federico Riva'],
+      6: ['Camilla Neva','Giacomo Lupi','Elisa Mora','Riccardo Gamba','Sofia Carpi'],
+      7: ['Giorgia Dori','Fabio Leoni','Paola Serra','Carlo Fusi','Diana Radi'],
+      8: ['Marta Negri','Andrea Peri','Giulia Rondi','Stefano Bari','Elisa Poli']
+    };
+
+    var docenti = [
+      { nome: 'Mario Verdi',   email: 'mario.verdi@icdemo.edu.it'  },
+      { nome: 'Laura Conti',   email: 'laura.conti@icdemo.edu.it'  },
+      { nome: 'Paolo Neri',    email: 'paolo.neri@icdemo.edu.it'   },
+      { nome: 'Anna Russo',    email: 'anna.russo@icdemo.edu.it'   },
+      { nome: 'Giulia Mari',   email: 'giulia.mari@icdemo.edu.it'  },
+      { nome: 'Marco Sala',    email: 'marco.sala@icdemo.edu.it'   },
+      { nome: 'Sofia Galli',   email: 'sofia.galli@icdemo.edu.it'  },
+      { nome: 'Luca Ricci',    email: 'luca.ricci@icdemo.edu.it'   }
+    ];
+
+    var classi = [
+      { id:1, nome:'1A', docente:'Mario Verdi',  email:'mario.verdi@icdemo.edu.it', nStudenti:22, stato:'attiva',    anno:'2025/26' },
+      { id:2, nome:'1B', docente:'Laura Conti',  email:'laura.conti@icdemo.edu.it', nStudenti:20, stato:'attiva',    anno:'2025/26' },
+      { id:3, nome:'2A', docente:'Paolo Neri',   email:'paolo.neri@icdemo.edu.it',  nStudenti:21, stato:'attiva',    anno:'2025/26' },
+      { id:4, nome:'2B', docente:'Anna Russo',   email:'anna.russo@icdemo.edu.it',  nStudenti:19, stato:'attiva',    anno:'2025/26' },
+      { id:5, nome:'3A', docente:'Giulia Mari',  email:'giulia.mari@icdemo.edu.it', nStudenti:23, stato:'attiva',    anno:'2025/26' },
+      { id:6, nome:'3B', docente:'Marco Sala',   email:'marco.sala@icdemo.edu.it',  nStudenti:22, stato:'attiva',    anno:'2025/26' },
+      { id:7, nome:'4A', docente:'Sofia Galli',  email:'sofia.galli@icdemo.edu.it', nStudenti:20, stato:'attiva',    anno:'2025/26' },
+      { id:8, nome:'5A', docente:'Luca Ricci',   email:'luca.ricci@icdemo.edu.it',  nStudenti:18, stato:'attiva',    anno:'2025/26' },
+      // Classi archiviate anno precedente
+      { id:9,  nome:'5A', docente:'Mario Verdi',  email:'mario.verdi@icdemo.edu.it', nStudenti:20, stato:'archiviata', anno:'2024/25' },
+      { id:10, nome:'5B', docente:'Laura Conti',  email:'laura.conti@icdemo.edu.it', nStudenti:18, stato:'archiviata', anno:'2024/25' }
+    ];
+
+    var idArchivia = null;
+    var nextId = 11;
+
+    function iniziali(nome) {
+      return nome.split(' ').map(function(n){ return n[0]; }).join('').substring(0, 2).toUpperCase();
+    }
+
+    function makeEmailStudente(nome) {
+      var parts = nome.toLowerCase().split(' ');
+      return (parts[0] || '') + '.' + (parts[1] || '') + '@studenti.icdemo.edu.it';
+    }
+
+    function renderTabella(stato, tbodyId) {
+      var tbody = document.getElementById(tbodyId);
+      tbody.innerHTML = '';
+      var lista = classi.filter(function(c){ return c.stato === stato; });
+      if (!lista.length) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:30px;color:#9ca3af;">Nessuna classe</td></tr>';
+        return;
+      }
+      lista.forEach(function(c) {
+        var tr = document.createElement('tr');
+        var azioni = stato === 'attiva'
+          ? '<button class="btn-action btn-studenti" onclick="apriStudenti(' + c.id + ')">👥 Studenti</button>' +
+            '<button class="btn-action btn-archivia" onclick="apriArchivia(' + c.id + ')">🗄️ Archivia</button>'
+          : '<span style="color:#9ca3af;font-size:12px;">—</span>';
+        tr.innerHTML =
+          '<td><div class="classe-nome">📚 ' + c.nome + '</div>' +
+          '<div class="classe-sub">Anno ' + c.anno + '</div></td>' +
+          '<td><span class="docente-avatar">' + iniziali(c.docente) + '</span>' + c.docente + '</td>' +
+          '<td><strong>' + c.nStudenti + '</strong> studenti</td>' +
+          '<td><span class="badge badge-' + c.stato + '">' + (c.stato === 'attiva' ? '🟢 Attiva' : '📦 Archiviata') + '</span></td>' +
+          '<td><div class="action-btns">' + azioni + '</div></td>';
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderAll() {
+      renderTabella('attiva',     'tbodyAttive');
+      renderTabella('archiviata', 'tbodyArchiviate');
+    }
+
+    function apriStudenti(id) {
+      var c = classi.find(function(x){ return x.id === id; });
+      if (!c) return;
+      document.getElementById('msNome').textContent = '👥 Studenti — Classe ' + c.nome;
+      document.getElementById('msSub').textContent = c.docente + ' • Anno ' + c.anno;
+      var list = document.getElementById('msStudentiList');
+      list.innerHTML = '';
+      var studenti = studentiPerClasse[id] || ['Studente Demo 1','Studente Demo 2','Studente Demo 3','Studente Demo 4','Studente Demo 5'];
+      studenti.forEach(function(s) {
+        list.innerHTML +=
+          '<div class="studente-item">' +
+          '<div class="studente-avatar">' + iniziali(s) + '</div>' +
+          '<div>' +
+          '<div class="studente-nome">' + s + '</div>' +
+          '<div class="studente-email">' + makeEmailStudente(s) + '</div>' +
+          '</div></div>';
+      });
+      document.getElementById('modalStudenti').style.display = 'block';
+    }
+
+    function apriArchivia(id) {
+      var c = classi.find(function(x){ return x.id === id; });
+      if (!c) return;
+      idArchivia = id;
+      document.getElementById('maSubtitle').textContent = 'Classe ' + c.nome + ' — ' + c.docente;
+      document.getElementById('modalArchivia').style.display = 'block';
+    }
+
+    function confermArchivia() {
+      var c = classi.find(function(x){ return x.id === idArchivia; });
+      if (!c) return;
+      c.stato = 'archiviata';
+      chiudiModal('modalArchivia');
+      renderAll();
+      mostraToast('✅ Classe ' + c.nome + ' archiviata con successo.');
+      idArchivia = null;
+    }
+
+    function switchTab(nome) {
+      document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+      document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+      document.getElementById('tab-' + nome).classList.add('active');
+      document.getElementById('tab-btn-' + nome).classList.add('active');
+    }
+
+    function creaClasse() {
+      var nome    = document.getElementById('nuomoNome').value.trim();
+      var docente = document.getElementById('nuovoDocente').value;
+      var anno    = document.getElementById('nuovoAnno').value.trim();
+
+      if (!nome) {
+        document.getElementById('nuomoNome').focus();
+        return;
+      }
+
+      var btn     = document.getElementById('btnCrea');
+      var btnText = document.getElementById('btnCreaText');
+      var spinner = document.getElementById('btnSpinner');
+
+      btn.disabled = true;
+      btnText.style.display = 'none';
+      spinner.style.display = 'block';
+
+      setTimeout(function() {
+        // Trova email del docente selezionato
+        var dEmail = docente.toLowerCase().replace(' ', '.') + '@icdemo.edu.it';
+        var found  = docenti.find(function(d){ return d.nome === docente; });
+        if (found) dEmail = found.email;
+
+        classi.unshift({
+          id: nextId++, nome: nome, docente: docente, email: dEmail,
+          nStudenti: 0, stato: 'attiva', anno: anno
+        });
+
+        renderAll();
+
+        btn.disabled = false;
+        btnText.style.display = 'block';
+        spinner.style.display = 'none';
+        document.getElementById('nuomoNome').value = '';
+
+        switchTab('attive');
+        mostraToast('✅ Classroom creata! Inviti inviati al docente.');
+      }, 1200);
+    }
+
+    function chiudiModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    window.onclick = function(e) {
+      ['modalStudenti', 'modalArchivia'].forEach(function(id) {
+        if (e.target === document.getElementById(id)) chiudiModal(id);
+      });
+    };
+
+    var toastTimer = null;
+    function mostraToast(msg) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(function(){ t.style.display = 'none'; }, 3000);
+    }
+
+    // Init
+    renderAll();
+  </script>
+</body>
+</html>

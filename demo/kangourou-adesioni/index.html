@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kangourou Adesioni — Demo Interattiva</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Banner demo fisso */
+    .demo-banner {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      color: white; text-align: center; padding: 10px 16px;
+      font-size: 14px; font-weight: 700; letter-spacing: 0.5px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .demo-banner a {
+      color: white; font-weight: 600; text-decoration: underline;
+    }
+
+    body {
+      font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh; padding: 20px; padding-top: 60px;
+    }
+
+    .container {
+      max-width: 900px; margin: 0 auto;
+      background: white; border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white; padding: 30px; text-align: center;
+    }
+    .header h1 { font-size: 28px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .header .subtitle { opacity: 0.9; font-size: 16px; }
+
+    .scadenza-box {
+      background: #ff6b6b; color: white; padding: 15px;
+      text-align: center; font-weight: bold; font-size: 18px;
+      border-bottom: 3px solid #ee5a52;
+    }
+
+    .content { padding: 30px; }
+
+    .welcome {
+      background: #e3f2fd; border-left: 4px solid #2196f3;
+      padding: 15px; margin-bottom: 25px; border-radius: 4px;
+    }
+
+    .section { margin-bottom: 30px; }
+    .section-title {
+      font-size: 20px; font-weight: 600; color: #333;
+      margin-bottom: 15px; display: flex; align-items: center; gap: 10px;
+    }
+
+    .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+    .form-group { display: flex; flex-direction: column; }
+    label { font-weight: 600; color: #555; margin-bottom: 5px; font-size: 14px; }
+
+    select, input, textarea {
+      padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px;
+      font-size: 16px; transition: all 0.3s; font-family: inherit;
+    }
+    select:focus, input:focus, textarea:focus {
+      outline: none; border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+    }
+    textarea { resize: vertical; min-height: 150px; font-family: 'Courier New', monospace; }
+
+    .btn {
+      padding: 14px 28px; border: none; border-radius: 8px;
+      font-size: 16px; font-weight: 600; cursor: pointer;
+      transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary { background: linear-gradient(135deg,#667eea,#764ba2); color: white; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(102,126,234,0.4); }
+    .btn-success { background: linear-gradient(135deg,#11998e,#38ef7d); color: white; }
+    .btn-success:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(56,239,125,0.4); }
+    .btn-secondary { background: #6c757d; color: white; }
+    .btn-secondary:hover { background: #5a6268; }
+
+    .alunni-list { margin-top: 20px; }
+    .alunno-card {
+      background: #f8f9fa; border: 2px solid #e9ecef;
+      border-radius: 12px; padding: 20px; margin-bottom: 15px; transition: all 0.3s;
+    }
+    .alunno-card:hover { border-color: #667eea; box-shadow: 0 4px 12px rgba(102,126,234,0.1); }
+    .alunno-header {
+      font-size: 18px; font-weight: 700; color: #333; margin-bottom: 15px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .alunno-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap: 15px; }
+    .checkbox-group {
+      display: flex; align-items: center; gap: 10px; padding: 12px;
+      background: white; border-radius: 8px; cursor: pointer; transition: all 0.3s;
+    }
+    .checkbox-group:hover { background: #e3f2fd; }
+    .checkbox-group input[type="checkbox"] { width: 24px; height: 24px; cursor: pointer; }
+    .checkbox-group label { margin: 0; cursor: pointer; flex: 1; }
+
+    .riassunto-box {
+      background: linear-gradient(135deg,#667eea,#764ba2);
+      color: white; padding: 20px; border-radius: 12px; margin-top: 30px;
+    }
+    .riassunto-box h3 { margin-bottom: 15px; font-size: 22px; }
+    .riassunto-stats { display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: 15px; }
+    .stat-item { background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; text-align: center; }
+    .stat-number { font-size: 32px; font-weight: 700; display: block; margin-bottom: 5px; }
+    .stat-label { font-size: 14px; opacity: 0.9; }
+
+    .actions { display: flex; gap: 15px; margin-top: 30px; flex-wrap: wrap; }
+
+    .alert { padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; }
+    .alert-success { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
+    .alert-error { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; }
+    .alert-info { background: #d1ecf1; color: #0c5460; border-left: 4px solid #17a2b8; }
+    .hidden { display: none; }
+
+    .modal-overlay {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); z-index: 10000; justify-content: center; align-items: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-content {
+      background: white; padding: 40px; border-radius: 16px; max-width: 600px; width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: modalFadeIn 0.3s ease;
+    }
+    @keyframes modalFadeIn { from { opacity:0; transform:translateY(-50px); } to { opacity:1; transform:translateY(0); } }
+    .modal-header { text-align: center; margin-bottom: 25px; }
+    .modal-icon { font-size: 64px; margin-bottom: 15px; }
+    .modal-title { font-size: 28px; font-weight: 700; color: #28a745; margin-bottom: 10px; }
+    .modal-body { color: #333; font-size: 16px; line-height: 1.6; margin-bottom: 25px; }
+    .modal-body ul { list-style: none; padding: 0; margin: 20px 0; }
+    .modal-body li { padding: 12px 0; border-bottom: 1px solid #eee; display: flex; align-items: start; gap: 10px; }
+    .modal-body li:last-child { border-bottom: none; }
+    .modal-body li::before { content: '✓'; color: #28a745; font-weight: bold; font-size: 20px; flex-shrink: 0; }
+    .modal-footer { text-align: center; }
+    .modal-btn {
+      background: linear-gradient(135deg,#28a745,#20c997); color: white; border: none;
+      padding: 15px 40px; font-size: 18px; font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.3s;
+    }
+    .modal-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(40,167,69,0.4); }
+
+    @media (max-width: 768px) {
+      .content { padding: 20px; }
+      .header h1 { font-size: 22px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Banner DEMO -->
+  <div class="demo-banner">
+    🎮 MODALITÀ DEMO — Nessun dato viene salvato &nbsp;|&nbsp;
+    <a href="https://edutechlab.it">Torna al sito EduTechLab</a>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <h1>🦘 Raccolta Adesioni Kangourou 2025/2026</h1>
+      <p class="subtitle">IC Demo — Sistema Centralizzato</p>
+    </div>
+
+    <div class="scadenza-box">
+      ⏰ Scadenza Adesioni: 15 maggio 2026
+    </div>
+
+    <div class="content">
+      <div class="welcome" id="welcomeBox">
+        <strong>👋 Benvenuto/a Prof.ssa Maria Bianchi</strong>
+        <p style="margin-top:5px;">Compila le adesioni per le tue classi. Puoi incollare l'elenco alunni dal registro elettronico.</p>
+      </div>
+
+      <div class="alert alert-success hidden" id="alertSuccess"></div>
+      <div class="alert alert-error hidden" id="alertError"></div>
+      <div class="alert alert-info hidden" id="alertInfo"></div>
+
+      <!-- STEP 1 -->
+      <div class="section" id="step1">
+        <div class="section-title">📋 STEP 1: Seleziona la Classe</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="plesso">Plesso</label>
+            <select id="plesso">
+              <option value="">-- Seleziona Plesso --</option>
+              <option value="Gottolengo Primaria">Gottolengo Primaria</option>
+              <option value="Gottolengo Secondaria">Gottolengo Secondaria</option>
+              <option value="Remedello">Remedello</option>
+              <option value="Calvisano">Calvisano</option>
+              <option value="Acquafredda">Acquafredda</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="ordine">Ordine Scolastico</label>
+            <select id="ordine" onchange="aggiornaClassi()">
+              <option value="">-- Seleziona Ordine --</option>
+              <option value="Primaria">Primaria</option>
+              <option value="Secondaria">Secondaria</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="classe">Classe</label>
+            <select id="classe">
+              <option value="">-- Seleziona Classe --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="sezione">Sezione</label>
+            <select id="sezione">
+              <option value="">-- Seleziona Sezione --</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="elencoAlunni">📝 Incolla Elenco Alunni dal Registro</label>
+          <textarea id="elencoAlunni" placeholder="Esempio:&#10;Rossi Mario&#10;Bianchi Sara&#10;Verdi Luca">Ferrari Giulia
+Conti Marco
+Ricci Sofia
+Barbieri Luca
+Galli Elena
+Moretti Andrea
+Bianchi Chiara
+Greco Matteo
+De Luca Valentina
+Bruno Alessandro</textarea>
+        </div>
+
+        <button class="btn btn-primary" onclick="caricaAlunni()">▶️ Carica Alunni</button>
+        <button class="btn btn-secondary" onclick="showAlert('info','💡 Demo: nessun dato salvato da caricare.')" style="margin-left:10px;">🔄 Carica Dati Salvati</button>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="section hidden" id="step2">
+        <div class="section-title">✅ STEP 2: Spunta le Adesioni</div>
+        <div class="alunni-list" id="alunniList"></div>
+
+        <div class="riassunto-box">
+          <h3>📊 Riassunto Classe</h3>
+          <div class="riassunto-stats">
+            <div class="stat-item">
+              <span class="stat-number" id="totaleAlunni">0</span>
+              <span class="stat-label">Totale Alunni</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" id="totaleTagliandini">0</span>
+              <span class="stat-label">Tagliandini Riconsegnati</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" id="totaleAdesioni">0</span>
+              <span class="stat-label">Aderiscono</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" id="totaleNonAdesioni">0</span>
+              <span class="stat-label">Non Aderiscono</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-success" onclick="salvaDati()">💾 Salva Adesioni</button>
+          <button class="btn btn-primary" onclick="window.print()">🖨️ Stampa PDF Archivio</button>
+          <button class="btn btn-secondary" onclick="reset()">🔄 Nuova Classe</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Conferma -->
+  <div class="modal-overlay" id="modalConferma">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-icon">✅</div>
+        <h2 class="modal-title">Dati Salvati con Successo!</h2>
+      </div>
+      <div class="modal-body">
+        <p style="text-align:center; font-size:18px; font-weight:600; margin-bottom:20px;" id="modalRiepilogo"></p>
+        <ul>
+          <li><strong>Puoi modificare i dati</strong> fino alla scadenza prefissata accedendo nuovamente a questo sistema</li>
+          <li><strong>Conserva i tagliandini cartacei</strong> delle adesioni ricevute dagli alunni</li>
+          <li><strong>Il sistema invierà automaticamente</strong> i dati telematici alla Segreteria per l'iscrizione alla gara</li>
+        </ul>
+        <p style="text-align:center; color:#666; font-size:14px; margin-top:20px;">🎮 <em>Questa è una demo — nessun dato è stato realmente salvato</em></p>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn" onclick="chiudiModal()">Ho Capito</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var alunniData = [];
+
+    function aggiornaClassi() {
+      var ordine = document.getElementById('ordine').value;
+      var sel = document.getElementById('classe');
+      sel.innerHTML = '<option value="">-- Seleziona Classe --</option>';
+      var classi = ordine === 'Primaria'
+        ? ['1°','2°','3°','4°','5°']
+        : ['1ª','2ª','3ª'];
+      classi.forEach(function(c) {
+        var o = document.createElement('option');
+        o.value = c; o.textContent = c;
+        sel.appendChild(o);
+      });
+    }
+
+    function parseElenco(testo) {
+      var righe = testo.trim().split('\n');
+      var alunni = [];
+      righe.forEach(function(riga) {
+        var r = riga.trim().replace(/^\d+[\.\)\-]\s*/, '').replace(',', ' ');
+        var parti = r.split(/\s+/).filter(function(p) { return p.length > 0; });
+        if (parti.length >= 2) {
+          alunni.push({
+            cognome: parti[0],
+            nome: parti.slice(1).join(' '),
+            tagliandino: false,
+            aderisce: false
+          });
+        }
+      });
+      return alunni;
+    }
+
+    function caricaAlunni() {
+      var elenco = document.getElementById('elencoAlunni').value;
+      var plesso = document.getElementById('plesso').value;
+      var ordine = document.getElementById('ordine').value;
+      var classe = document.getElementById('classe').value;
+      var sezione = document.getElementById('sezione').value;
+
+      if (!plesso || !ordine || !classe || !sezione) {
+        showAlert('error', 'Compila tutti i campi della classe prima di caricare gli alunni!');
+        return;
+      }
+      if (!elenco.trim()) {
+        showAlert('error', "Incolla l'elenco degli alunni!");
+        return;
+      }
+
+      alunniData = parseElenco(elenco);
+      if (alunniData.length === 0) {
+        showAlert('error', 'Nessun alunno riconosciuto. Verifica il formato!');
+        return;
+      }
+
+      renderAlunniList();
+      document.getElementById('step1').classList.add('hidden');
+      document.getElementById('step2').classList.remove('hidden');
+      showAlert('success', '✅ ' + alunniData.length + ' alunni caricati correttamente!');
+      updateRiassunto();
+    }
+
+    function renderAlunniList() {
+      var container = document.getElementById('alunniList');
+      container.innerHTML = '';
+      alunniData.forEach(function(alunno, index) {
+        var card = document.createElement('div');
+        card.className = 'alunno-card';
+        card.innerHTML =
+          '<div class="alunno-header">👤 ' + alunno.cognome + ' ' + alunno.nome + '</div>' +
+          '<div class="alunno-options">' +
+            '<div class="checkbox-group" onclick="toggleCheckbox(' + index + ',\'tagliandino\',event)">' +
+              '<input type="checkbox" id="tag_' + index + '" ' + (alunno.tagliandino ? 'checked' : '') + ' onclick="event.stopPropagation()" onchange="updateAlunno(' + index + ',\'tagliandino\',this.checked)">' +
+              '<label for="tag_' + index + '">📄 Tagliandino Riconsegnato</label>' +
+            '</div>' +
+            '<div class="checkbox-group" onclick="toggleCheckbox(' + index + ',\'aderisce\',event)">' +
+              '<input type="checkbox" id="ade_' + index + '" ' + (alunno.aderisce ? 'checked' : '') + ' onclick="event.stopPropagation()" onchange="updateAlunno(' + index + ',\'aderisce\',this.checked)">' +
+              '<label for="ade_' + index + '">✅ Aderisce ai Giochi Kangourou</label>' +
+            '</div>' +
+          '</div>';
+        container.appendChild(card);
+      });
+    }
+
+    function toggleCheckbox(index, field, event) {
+      if (event.target.type === 'checkbox') return;
+      var cb = document.getElementById(field === 'tagliandino' ? 'tag_' + index : 'ade_' + index);
+      cb.checked = !cb.checked;
+      updateAlunno(index, field, cb.checked);
+    }
+
+    function updateAlunno(index, field, value) {
+      alunniData[index][field] = value;
+      updateRiassunto();
+    }
+
+    function updateRiassunto() {
+      var totale = alunniData.length;
+      var tagliandini = alunniData.filter(function(a) { return a.tagliandino; }).length;
+      var aderiscono = alunniData.filter(function(a) { return a.aderisce; }).length;
+      var nonAderiscono = alunniData.filter(function(a) { return a.tagliandino && !a.aderisce; }).length;
+      document.getElementById('totaleAlunni').textContent = totale;
+      document.getElementById('totaleTagliandini').textContent = tagliandini;
+      document.getElementById('totaleAdesioni').textContent = aderiscono;
+      document.getElementById('totaleNonAdesioni').textContent = nonAderiscono;
+    }
+
+    function salvaDati() {
+      var plesso = document.getElementById('plesso').value;
+      var classe = document.getElementById('classe').value;
+      var sezione = document.getElementById('sezione').value;
+      var aderiscono = alunniData.filter(function(a) { return a.aderisce; }).length;
+      var msg = aderiscono + ' adesioni su ' + alunniData.length + ' alunni<br>Classe ' + classe + sezione + ' — ' + plesso;
+      document.getElementById('modalRiepilogo').innerHTML = msg;
+      document.getElementById('modalConferma').classList.add('active');
+    }
+
+    function chiudiModal() {
+      document.getElementById('modalConferma').classList.remove('active');
+    }
+
+    function reset() {
+      document.getElementById('step1').classList.remove('hidden');
+      document.getElementById('step2').classList.add('hidden');
+      document.getElementById('elencoAlunni').value = '';
+      alunniData = [];
+    }
+
+    function showAlert(type, msg) {
+      ['Success','Error','Info'].forEach(function(t) {
+        var el = document.getElementById('alert' + t);
+        el.classList.add('hidden'); el.textContent = '';
+      });
+      var el = document.getElementById('alert' + type.charAt(0).toUpperCase() + type.slice(1));
+      if (el) {
+        el.textContent = msg;
+        el.classList.remove('hidden');
+        setTimeout(function() { el.classList.add('hidden'); }, 5000);
+      }
+    }
+  </script>
+</body>
+</html>

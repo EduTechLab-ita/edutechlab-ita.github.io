@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GestAccount — Demo Interattiva</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Banner demo fisso */
+    .demo-banner {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      color: white; text-align: center; padding: 10px 16px;
+      font-size: 14px; font-weight: 700; letter-spacing: 0.5px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .demo-banner a { color: white; font-weight: 600; text-decoration: underline; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      min-height: 100vh; padding: 20px; padding-top: 60px;
+    }
+
+    .container { max-width: 900px; margin: 0 auto; }
+
+    .header {
+      background: white; padding: 25px; border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-bottom: 30px; text-align: center;
+    }
+    .header h1 { color: #4f46e5; font-size: 28px; margin-bottom: 8px; }
+    .header p { color: #666; font-size: 14px; }
+
+    /* Stepper */
+    .stepper {
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 30px;
+    }
+    .step-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .step-circle {
+      width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-weight: 700; font-size: 16px;
+      border: 3px solid #d1d5db; background: white; color: #9ca3af; transition: all 0.3s;
+    }
+    .step-circle.active { border-color: #4f46e5; background: #4f46e5; color: white; }
+    .step-circle.done { border-color: #059669; background: #059669; color: white; }
+    .step-label { font-size: 12px; font-weight: 600; color: #9ca3af; white-space: nowrap; }
+    .step-label.active { color: #4f46e5; }
+    .step-label.done { color: #059669; }
+    .step-line { width: 80px; height: 3px; background: #d1d5db; margin-bottom: 18px; transition: background 0.3s; }
+    .step-line.done { background: #059669; }
+
+    /* Card */
+    .card {
+      background: white; border-radius: 15px;
+      padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .card h2 { color: #4f46e5; margin-bottom: 20px; font-size: 20px; }
+
+    /* Step 1 — selezione operazione */
+    .op-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+    .op-card {
+      border: 3px solid #e5e7eb; border-radius: 12px; padding: 20px 16px;
+      text-align: center; cursor: pointer; transition: all 0.2s; background: #fafafa;
+    }
+    .op-card:hover { border-color: #7c3aed; background: #f5f3ff; }
+    .op-card.selected { border-color: #4f46e5; background: #ede9fe; box-shadow: 0 0 0 3px rgba(79,70,229,0.15); }
+    .op-card .op-icon { font-size: 36px; margin-bottom: 10px; }
+    .op-card .op-title { font-size: 15px; font-weight: 700; color: #1f2937; margin-bottom: 6px; }
+    .op-card .op-desc { font-size: 12px; color: #6b7280; }
+
+    .file-box {
+      background: #f0fdf4; border: 2px solid #86efac; border-radius: 10px;
+      padding: 16px 20px; display: flex; align-items: center; gap: 14px; margin-bottom: 28px;
+    }
+    .file-icon { font-size: 28px; }
+    .file-info .file-name { font-weight: 700; color: #166534; font-size: 15px; }
+    .file-info .file-meta { font-size: 12px; color: #4b7a60; margin-top: 2px; }
+    .file-badge {
+      margin-left: auto; background: #dcfce7; color: #15803d;
+      font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 20px;
+    }
+
+    /* Step 2 — tabella anteprima */
+    .table-container { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+    thead { background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; }
+    th { padding: 13px 14px; text-align: left; font-weight: 600; font-size: 13px; }
+    td { padding: 13px 14px; border-bottom: 1px solid #eee; font-size: 13px; }
+    tbody tr:hover { background-color: #f5f3ff; }
+    .badge-pronto {
+      background: #dcfce7; color: #166534; font-size: 11px;
+      font-weight: 700; padding: 4px 10px; border-radius: 20px; display: inline-block;
+    }
+    .badge-email {
+      background: #e0e7ff; color: #4f46e5; font-size: 11px;
+      font-weight: 600; padding: 3px 8px; border-radius: 8px; display: inline-block;
+      font-family: monospace;
+    }
+
+    /* Step 3 — esecuzione */
+    .progress-wrap { margin: 20px 0 10px; }
+    .progress-label { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .progress-label span { font-size: 14px; font-weight: 600; color: #4f46e5; }
+    .progress-bar-outer {
+      width: 100%; height: 22px; background: #e0e7ff; border-radius: 20px; overflow: hidden;
+    }
+    .progress-bar-inner {
+      height: 100%; width: 0; background: linear-gradient(90deg, #4f46e5, #7c3aed);
+      border-radius: 20px; transition: width 0.3s ease; display: flex; align-items: center;
+      justify-content: flex-end; padding-right: 8px;
+    }
+    .progress-bar-inner span { font-size: 11px; font-weight: 700; color: white; }
+
+    .log-box {
+      background: #1e1b4b; border-radius: 10px; padding: 20px;
+      min-height: 200px; max-height: 280px; overflow-y: auto;
+      font-family: monospace; font-size: 13px; margin-top: 20px;
+    }
+    .log-line { margin-bottom: 6px; animation: fadeInLog 0.3s; }
+    .log-line.ok { color: #86efac; }
+    .log-line.info { color: #fde68a; }
+    .log-line.wait { color: #a5b4fc; }
+    @keyframes fadeInLog {
+      from { opacity: 0; transform: translateX(-10px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .result-box {
+      display: none; background: #f0fdf4; border: 2px solid #86efac;
+      border-radius: 12px; padding: 24px; text-align: center; margin-top: 20px;
+    }
+    .result-box h3 { color: #166534; font-size: 22px; margin-bottom: 8px; }
+    .result-box p { color: #4b7a60; font-size: 15px; margin-bottom: 6px; }
+    .result-badge {
+      display: inline-block; margin-top: 10px; background: #dcfce7; color: #15803d;
+      font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 20px;
+    }
+
+    /* Bottoni */
+    .nav-row { display: flex; gap: 12px; margin-top: 28px; justify-content: flex-end; }
+    .btn-back {
+      background: #f3f4f6; color: #374151; border: none;
+      padding: 12px 24px; border-radius: 10px; font-size: 15px;
+      font-weight: 600; cursor: pointer; transition: background 0.2s;
+    }
+    .btn-back:hover { background: #e5e7eb; }
+    .btn-next {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white;
+      border: none; padding: 12px 28px; border-radius: 10px;
+      font-size: 15px; font-weight: 600; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-next:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(79,70,229,0.4); }
+    .btn-nuova {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white;
+      border: none; padding: 12px 28px; border-radius: 10px;
+      font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 16px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-nuova:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(79,70,229,0.4); }
+
+    @media (max-width: 640px) {
+      .op-cards { grid-template-columns: 1fr; }
+      .step-line { width: 40px; }
+      table { font-size: 11px; }
+      th, td { padding: 10px 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Banner DEMO -->
+  <div class="demo-banner">
+    🎮 MODALITÀ DEMO — Nessun dato viene salvato &nbsp;|&nbsp;
+    <a href="https://edutechlab.it">Torna al sito EduTechLab</a>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <h1>👤 GestAccount</h1>
+      <p>Gestione Account Google Workspace — IC Demo</p>
+    </div>
+
+    <!-- Stepper -->
+    <div class="stepper">
+      <div class="step-item">
+        <div class="step-circle active" id="sc1">1</div>
+        <div class="step-label active" id="sl1">Operazione</div>
+      </div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-item">
+        <div class="step-circle" id="sc2">2</div>
+        <div class="step-label" id="sl2">Anteprima</div>
+      </div>
+      <div class="step-line" id="line2"></div>
+      <div class="step-item">
+        <div class="step-circle" id="sc3">3</div>
+        <div class="step-label" id="sl3">Esecuzione</div>
+      </div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="card" id="step1">
+      <h2>📋 Seleziona Operazione</h2>
+      <div class="op-cards">
+        <div class="op-card selected" id="opCard0" onclick="selectOp(0)">
+          <div class="op-icon">🆕</div>
+          <div class="op-title">Crea Nuovi Account</div>
+          <div class="op-desc">Crea account per i nuovi iscritti dall'elenco Excel</div>
+        </div>
+        <div class="op-card" id="opCard1" onclick="selectOp(1)">
+          <div class="op-icon">🔄</div>
+          <div class="op-title">Aggiorna Account Esistenti</div>
+          <div class="op-desc">Sincronizza dati (classe, plesso) degli account attivi</div>
+        </div>
+        <div class="op-card" id="opCard2" onclick="selectOp(2)">
+          <div class="op-icon">📤</div>
+          <div class="op-title">Archivia Account Uscenti</div>
+          <div class="op-desc">Archivia e disabilita gli account degli alunni usciti</div>
+        </div>
+      </div>
+
+      <div class="file-box">
+        <div class="file-icon">📊</div>
+        <div class="file-info">
+          <div class="file-name">nuovi_iscritti_2025-26.xlsx</div>
+          <div class="file-meta">Caricato il 26/04/2026 — 8 righe trovate</div>
+        </div>
+        <div class="file-badge">✅ Pronto</div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn-next" onclick="goStep(2)">Vai alla Anteprima →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="card" id="step2" style="display:none;">
+      <h2>👁️ Anteprima Dati</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nome</th>
+              <th>Cognome</th>
+              <th>Classe</th>
+              <th>Plesso</th>
+              <th>Email generata</th>
+              <th>Stato</th>
+            </tr>
+          </thead>
+          <tbody id="previewBody"></tbody>
+        </table>
+      </div>
+      <div class="nav-row">
+        <button class="btn-back" onclick="goStep(1)">← Indietro</button>
+        <button class="btn-next" onclick="goStep(3)">Esegui Operazione →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="card" id="step3" style="display:none;">
+      <h2>⚙️ Esecuzione in Corso</h2>
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span id="progressLabel">Avvio...</span>
+          <span id="progressPct">0%</span>
+        </div>
+        <div class="progress-bar-outer">
+          <div class="progress-bar-inner" id="progressBar">
+            <span id="progressBarText"></span>
+          </div>
+        </div>
+      </div>
+      <div class="log-box" id="logBox"></div>
+      <div class="result-box" id="resultBox">
+        <h3>✅ Operazione completata!</h3>
+        <p>8 account elaborati. 8 email inviate.</p>
+        <p style="font-size:13px; color:#6b7280;">Tutti i dati sono stati processati correttamente.</p>
+        <div class="result-badge">🎮 Demo — nessun account reale creato</div>
+        <br>
+        <button class="btn-nuova" onclick="goStep(1)">Nuova Operazione</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    var selectedOp = 0;
+
+    var alunni = [
+      { nome: 'Mario',   cognome: 'Rossi',    classe: '1A', plesso: 'Gottolengo' },
+      { nome: 'Lucia',   cognome: 'Bianchi',  classe: '1B', plesso: 'Remedello'  },
+      { nome: 'Davide',  cognome: 'Verdi',    classe: '2A', plesso: 'Calvisano'  },
+      { nome: 'Sofia',   cognome: 'Galli',    classe: '2B', plesso: 'Gottolengo' },
+      { nome: 'Matilde', cognome: 'Conti',    classe: '3A', plesso: 'Remedello'  },
+      { nome: 'Lorenzo', cognome: 'Ferrara',  classe: '3B', plesso: 'Calvisano'  },
+      { nome: 'Chiara',  cognome: 'Russo',    classe: '4A', plesso: 'Gottolengo' },
+      { nome: 'Tommaso', cognome: 'Marino',   classe: '5A', plesso: 'Remedello'  }
+    ];
+
+    function makeEmail(a) {
+      return a.nome.toLowerCase() + '.' + a.cognome.toLowerCase() + '@icdemo.edu.it';
+    }
+
+    function selectOp(idx) {
+      selectedOp = idx;
+      document.querySelectorAll('.op-card').forEach(function(c, i) {
+        c.classList.toggle('selected', i === idx);
+      });
+    }
+
+    function updateStepper(step) {
+      for (var i = 1; i <= 3; i++) {
+        var circle = document.getElementById('sc' + i);
+        var label  = document.getElementById('sl' + i);
+        circle.classList.remove('active', 'done');
+        label.classList.remove('active', 'done');
+        if (i < step) {
+          circle.classList.add('done');
+          circle.textContent = '✓';
+          label.classList.add('done');
+        } else if (i === step) {
+          circle.classList.add('active');
+          circle.textContent = i;
+          label.classList.add('active');
+        } else {
+          circle.textContent = i;
+        }
+      }
+      for (var j = 1; j <= 2; j++) {
+        document.getElementById('line' + j).classList.toggle('done', j < step);
+      }
+    }
+
+    function goStep(step) {
+      document.getElementById('step1').style.display = 'none';
+      document.getElementById('step2').style.display = 'none';
+      document.getElementById('step3').style.display = 'none';
+      document.getElementById('step' + step).style.display = 'block';
+      updateStepper(step);
+      if (step === 2) renderPreview();
+      if (step === 3) startExecution();
+      if (step === 1) resetStep3();
+    }
+
+    function renderPreview() {
+      var tbody = document.getElementById('previewBody');
+      tbody.innerHTML = '';
+      alunni.forEach(function(a, i) {
+        var tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td><strong>' + (i + 1) + '</strong></td>' +
+          '<td>' + a.nome + '</td>' +
+          '<td>' + a.cognome + '</td>' +
+          '<td>' + a.classe + '</td>' +
+          '<td>' + a.plesso + '</td>' +
+          '<td><span class="badge-email">' + makeEmail(a) + '</span></td>' +
+          '<td><span class="badge-pronto">Pronto</span></td>';
+        tbody.appendChild(tr);
+      });
+    }
+
+    var execTimer = null;
+
+    function resetStep3() {
+      if (execTimer) { clearInterval(execTimer); execTimer = null; }
+      document.getElementById('progressBar').style.width = '0';
+      document.getElementById('progressBarText').textContent = '';
+      document.getElementById('progressPct').textContent = '0%';
+      document.getElementById('progressLabel').textContent = 'Avvio...';
+      document.getElementById('logBox').innerHTML = '';
+      document.getElementById('resultBox').style.display = 'none';
+    }
+
+    function startExecution() {
+      resetStep3();
+
+      var logMessages = [];
+      alunni.forEach(function(a) {
+        logMessages.push({ type: 'ok',   text: '✅ Account creato: ' + makeEmail(a) });
+        logMessages.push({ type: 'info', text: '📧 Email credenziali inviata a: ' + a.cognome + ' ' + a.nome });
+      });
+      logMessages.push({ type: 'ok', text: '🎉 Operazione completata — 8 account, 8 email inviate.' });
+
+      var total   = logMessages.length;
+      var current = 0;
+
+      document.getElementById('progressLabel').textContent = 'Elaborazione account in corso...';
+
+      execTimer = setInterval(function() {
+        if (current < total) {
+          var msg = logMessages[current];
+          var div = document.createElement('div');
+          div.className = 'log-line ' + msg.type;
+          div.textContent = msg.text;
+          var logBox = document.getElementById('logBox');
+          logBox.appendChild(div);
+          logBox.scrollTop = logBox.scrollHeight;
+
+          var pct = Math.min(Math.round((current + 1) / total * 100), 99);
+          document.getElementById('progressBar').style.width = pct + '%';
+          document.getElementById('progressBarText').textContent = pct + '%';
+          document.getElementById('progressPct').textContent = pct + '%';
+          current++;
+        } else {
+          clearInterval(execTimer);
+          execTimer = null;
+          document.getElementById('progressBar').style.width = '100%';
+          document.getElementById('progressBarText').textContent = '100%';
+          document.getElementById('progressPct').textContent = '100%';
+          document.getElementById('progressLabel').textContent = 'Completato!';
+          document.getElementById('resultBox').style.display = 'block';
+        }
+      }, 300);
+    }
+
+    // Init
+    updateStepper(1);
+  </script>
+</body>
+</html>

@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestione Gruppi Docenti — Demo Interattiva</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* DEMO BANNER */
+    #demo-banner {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 9999;
+      height: 44px;
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      gap: 12px;
+      padding: 0 16px;
+      font-family: system-ui, sans-serif;
+    }
+    #demo-banner a { color: #fff; text-decoration: underline; }
+
+    body {
+      padding-top: 60px;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f0f9ff;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, #0284c7, #0891b2);
+      color: white;
+      padding: 32px 24px 24px;
+      text-align: center;
+    }
+    .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+    .header .subtitle { font-size: 14px; opacity: 0.85; }
+
+    /* INFO BAR */
+    .info-bar {
+      background: #e0f2fe;
+      border-bottom: 1px solid #bae6fd;
+      padding: 10px 24px;
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: #0369a1;
+      font-weight: 500;
+    }
+    .info-bar span { display: flex; align-items: center; gap: 5px; }
+
+    /* MAIN CONTENT */
+    .main { max-width: 900px; margin: 0 auto; padding: 28px 16px; }
+
+    /* TOP ACTION BAR */
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .action-bar h2 { font-size: 18px; color: #0369a1; font-weight: 700; }
+
+    .btn-sync-all {
+      background: linear-gradient(135deg, #0284c7, #0891b2);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-sync-all:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(2,132,199,0.4); }
+
+    /* GROUP CARDS */
+    .groups-list { display: flex; flex-direction: column; gap: 14px; }
+
+    .group-card {
+      background: white;
+      border-radius: 12px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      border-left: 4px solid #0284c7;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      transition: box-shadow 0.2s;
+    }
+    .group-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+    .group-card.warning { border-left-color: #f59e0b; }
+
+    .group-icon {
+      width: 44px; height: 44px;
+      background: #e0f2fe;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .group-info { flex: 1; min-width: 180px; }
+    .group-info h3 { font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 4px; }
+    .group-meta { font-size: 13px; color: #64748b; }
+
+    .badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .badge-green { background: #dcfce7; color: #166534; }
+    .badge-orange { background: #fef3c7; color: #92400e; }
+
+    .group-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .btn-members {
+      background: #f0f9ff;
+      color: #0284c7;
+      border: 1px solid #bae6fd;
+      padding: 7px 14px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-members:hover { background: #e0f2fe; }
+
+    .btn-sync {
+      background: white;
+      color: #0891b2;
+      border: 1px solid #0891b2;
+      padding: 7px 14px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-sync:hover { background: #e0f2fe; }
+
+    /* OVERLAY SYNC */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .overlay.active { display: flex; }
+
+    .overlay-box {
+      background: #0f172a;
+      border-radius: 14px;
+      padding: 28px 28px 24px;
+      width: 100%;
+      max-width: 560px;
+      color: #e2e8f0;
+      font-family: 'Courier New', monospace;
+    }
+    .overlay-box h3 {
+      font-family: system-ui, sans-serif;
+      font-size: 16px;
+      color: white;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #334155;
+    }
+    .log-area { min-height: 200px; font-size: 13px; line-height: 1.8; }
+    .log-line { opacity: 0; transform: translateY(4px); transition: all 0.3s; }
+    .log-line.visible { opacity: 1; transform: translateY(0); }
+    .log-line.success { color: #4ade80; }
+    .log-line.add { color: #60a5fa; }
+    .log-line.remove { color: #f87171; }
+    .log-line.info { color: #fbbf24; }
+    .log-line.done { color: #a78bfa; font-weight: bold; }
+
+    .overlay-footer {
+      margin-top: 20px;
+      text-align: right;
+      border-top: 1px solid #334155;
+      padding-top: 16px;
+    }
+    .btn-close-overlay {
+      background: #0284c7;
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: system-ui, sans-serif;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .btn-close-overlay.visible { opacity: 1; }
+    .btn-close-overlay:hover { background: #0369a1; }
+
+    /* MODAL MEMBRI */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-backdrop.active { display: flex; }
+
+    .modal {
+      background: white;
+      border-radius: 14px;
+      padding: 24px;
+      width: 100%;
+      max-width: 460px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .modal-header h3 { font-size: 17px; color: #0284c7; font-weight: 700; }
+    .btn-close-modal {
+      background: #f1f5f9;
+      border: none;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #64748b;
+    }
+    .btn-close-modal:hover { background: #e2e8f0; }
+
+    .member-list { list-style: none; }
+    .member-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 14px;
+      color: #334155;
+    }
+    .member-item:last-child { border-bottom: none; }
+    .member-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0284c7, #0891b2);
+      color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .member-details { flex: 1; }
+    .member-name { font-weight: 600; }
+    .member-email { font-size: 12px; color: #94a3b8; margin-top: 1px; }
+    .badge-new { background: #dbeafe; color: #1d4ed8; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+
+    @media (max-width: 600px) {
+      .action-bar { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .group-card { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- BANNER DEMO -->
+<div id="demo-banner">
+  🎮 MODALITÀ DEMO — Nessun dato viene salvato &nbsp;|&nbsp;
+  <a href="https://edutechlab.it">Torna al sito EduTechLab</a>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>👥 Gestione Gruppi Docenti</h1>
+  <div class="subtitle">IC Demo — Ultima sincronizzazione: ieri alle 02:00</div>
+</div>
+
+<!-- INFO BAR -->
+<div class="info-bar">
+  <span>📊 5 gruppi monitorati</span>
+  <span>👨‍🏫 23 docenti totali</span>
+  <span>🕐 Prossima sync: stanotte alle 02:00</span>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="action-bar">
+    <h2>📋 Gruppi Email Attivi</h2>
+    <button class="btn-sync-all" onclick="syncAll()">🔄 Sincronizza Tutti</button>
+  </div>
+
+  <div class="groups-list" id="groups-list">
+    <!-- Cards generate da JS -->
+  </div>
+</div>
+
+<!-- OVERLAY SYNC -->
+<div class="overlay" id="sync-overlay">
+  <div class="overlay-box">
+    <h3>🔄 Sincronizzazione in corso...</h3>
+    <div class="log-area" id="log-area"></div>
+    <div class="overlay-footer">
+      <button class="btn-close-overlay" id="btn-close-overlay" onclick="closeSyncOverlay()">✓ Chiudi</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL MEMBRI -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="closeModal(event)">
+  <div class="modal" id="modal-content">
+    <div class="modal-header">
+      <h3 id="modal-title">Membri del gruppo</h3>
+      <button class="btn-close-modal" onclick="closeModalDirect()">✕</button>
+    </div>
+    <ul class="member-list" id="modal-member-list"></ul>
+  </div>
+</div>
+
+<script>
+  // =====================
+  // DATI MOCKATI
+  // =====================
+  const groups = [
+    {
+      id: 'collegio',
+      name: 'Collegio Docenti',
+      email: 'collegio@icdemo.edu.it',
+      members: 23,
+      icon: '🏫',
+      status: 'ok',
+      lastSync: 'ieri alle 02:00',
+      memberList: [
+        { name: 'Paola Ferri', email: 'paola.ferri@icdemo.edu.it', isNew: false },
+        { name: 'Marco Bianchi', email: 'marco.bianchi@icdemo.edu.it', isNew: false },
+        { name: 'Giulia Morra', email: 'giulia.morra@icdemo.edu.it', isNew: false },
+        { name: 'Alberto Piva', email: 'alberto.piva@icdemo.edu.it', isNew: false },
+        { name: 'Chiara Sala', email: 'chiara.sala@icdemo.edu.it', isNew: false },
+        { name: 'Roberto Fabbri', email: 'roberto.fabbri@icdemo.edu.it', isNew: false },
+        { name: 'Serena Boschi', email: 'serena.boschi@icdemo.edu.it', isNew: false },
+        { name: 'Davide Carini', email: 'davide.carini@icdemo.edu.it', isNew: false },
+        { name: 'Federica Rizzi', email: 'federica.rizzi@icdemo.edu.it', isNew: false },
+        { name: 'Lorenzo Melli', email: 'lorenzo.melli@icdemo.edu.it', isNew: false },
+        { name: 'Valentina Grandi', email: 'valentina.grandi@icdemo.edu.it', isNew: false },
+        { name: 'Stefano Mora', email: 'stefano.mora@icdemo.edu.it', isNew: false },
+        { name: 'Alessia Tonini', email: 'alessia.tonini@icdemo.edu.it', isNew: false },
+        { name: 'Massimo Belotti', email: 'massimo.belotti@icdemo.edu.it', isNew: false },
+        { name: 'Ilaria Campi', email: 'ilaria.campi@icdemo.edu.it', isNew: false },
+        { name: 'Nicola Zanetti', email: 'nicola.zanetti@icdemo.edu.it', isNew: false },
+        { name: 'Martina Poggi', email: 'martina.poggi@icdemo.edu.it', isNew: false },
+        { name: 'Emanuele Rosso', email: 'emanuele.rosso@icdemo.edu.it', isNew: false },
+        { name: 'Silvia Grassi', email: 'silvia.grassi@icdemo.edu.it', isNew: false },
+        { name: 'Cristian Lodi', email: 'cristian.lodi@icdemo.edu.it', isNew: false },
+        { name: 'Barbara Furlani', email: 'barbara.furlani@icdemo.edu.it', isNew: false },
+        { name: 'Tiziana Aceti', email: 'tiziana.aceti@icdemo.edu.it', isNew: false },
+        { name: 'Gianluca Mori', email: 'gianluca.mori@icdemo.edu.it', isNew: false },
+      ]
+    },
+    {
+      id: 'gottolengo',
+      name: 'Docenti Gottolengo',
+      email: 'docenti.gottolengo@icdemo.edu.it',
+      members: 12,
+      icon: '🏢',
+      status: 'ok',
+      lastSync: 'ieri alle 02:00',
+      memberList: [
+        { name: 'Paola Ferri', email: 'paola.ferri@icdemo.edu.it', isNew: false },
+        { name: 'Marco Bianchi', email: 'marco.bianchi@icdemo.edu.it', isNew: false },
+        { name: 'Giulia Morra', email: 'giulia.morra@icdemo.edu.it', isNew: false },
+        { name: 'Alberto Piva', email: 'alberto.piva@icdemo.edu.it', isNew: false },
+        { name: 'Chiara Sala', email: 'chiara.sala@icdemo.edu.it', isNew: false },
+        { name: 'Roberto Fabbri', email: 'roberto.fabbri@icdemo.edu.it', isNew: false },
+        { name: 'Serena Boschi', email: 'serena.boschi@icdemo.edu.it', isNew: false },
+        { name: 'Davide Carini', email: 'davide.carini@icdemo.edu.it', isNew: false },
+        { name: 'Federica Rizzi', email: 'federica.rizzi@icdemo.edu.it', isNew: false },
+        { name: 'Lorenzo Melli', email: 'lorenzo.melli@icdemo.edu.it', isNew: false },
+        { name: 'Valentina Grandi', email: 'valentina.grandi@icdemo.edu.it', isNew: false },
+        { name: 'Stefano Mora', email: 'stefano.mora@icdemo.edu.it', isNew: false },
+      ]
+    },
+    {
+      id: 'remedello',
+      name: 'Docenti Remedello',
+      email: 'docenti.remedello@icdemo.edu.it',
+      members: 7,
+      icon: '🏢',
+      status: 'ok',
+      lastSync: 'ieri alle 02:00',
+      memberList: [
+        { name: 'Alessia Tonini', email: 'alessia.tonini@icdemo.edu.it', isNew: false },
+        { name: 'Massimo Belotti', email: 'massimo.belotti@icdemo.edu.it', isNew: false },
+        { name: 'Ilaria Campi', email: 'ilaria.campi@icdemo.edu.it', isNew: false },
+        { name: 'Nicola Zanetti', email: 'nicola.zanetti@icdemo.edu.it', isNew: false },
+        { name: 'Martina Poggi', email: 'martina.poggi@icdemo.edu.it', isNew: false },
+        { name: 'Emanuele Rosso', email: 'emanuele.rosso@icdemo.edu.it', isNew: false },
+        { name: 'Silvia Grassi', email: 'silvia.grassi@icdemo.edu.it', isNew: false },
+      ]
+    },
+    {
+      id: 'calvisano',
+      name: 'Docenti Calvisano',
+      email: 'docenti.calvisano@icdemo.edu.it',
+      members: 4,
+      icon: '🏢',
+      status: 'warning',
+      lastSync: '3 giorni fa',
+      warning: '2 docenti aggiunti, 1 rimosso',
+      memberList: [
+        { name: 'Cristian Lodi', email: 'cristian.lodi@icdemo.edu.it', isNew: false },
+        { name: 'Barbara Furlani', email: 'barbara.furlani@icdemo.edu.it', isNew: false },
+        { name: 'Paolo Conti', email: 'paolo.conti@icdemo.edu.it', isNew: true },
+        { name: 'Anna Neri', email: 'anna.neri@icdemo.edu.it', isNew: true },
+      ]
+    },
+    {
+      id: 'coordinatori',
+      name: 'Coordinatori',
+      email: 'coordinatori@icdemo.edu.it',
+      members: 3,
+      icon: '⭐',
+      status: 'ok',
+      lastSync: 'ieri alle 02:00',
+      memberList: [
+        { name: 'Paola Ferri', email: 'paola.ferri@icdemo.edu.it', isNew: false },
+        { name: 'Alessia Tonini', email: 'alessia.tonini@icdemo.edu.it', isNew: false },
+        { name: 'Cristian Lodi', email: 'cristian.lodi@icdemo.edu.it', isNew: false },
+      ]
+    }
+  ];
+
+  // =====================
+  // RENDER CARDS
+  // =====================
+  function renderGroups() {
+    const container = document.getElementById('groups-list');
+    container.innerHTML = '';
+    groups.forEach(g => {
+      const isWarning = g.status === 'warning';
+      const badge = isWarning
+        ? `<span class="badge badge-orange">⚠️ Da aggiornare</span>`
+        : `<span class="badge badge-green" id="badge-${g.id}">✅ Aggiornato</span>`;
+      const warningNote = isWarning && g.warning
+        ? `<div style="font-size:12px;color:#b45309;margin-top:3px;">⚠️ ${g.warning}</div>`
+        : '';
+
+      container.innerHTML += `
+        <div class="group-card ${isWarning ? 'warning' : ''}" id="card-${g.id}">
+          <div class="group-icon">${g.icon}</div>
+          <div class="group-info">
+            <h3>${g.name}</h3>
+            <div class="group-meta">📧 ${g.email} &nbsp;·&nbsp; 👥 ${g.members} membri &nbsp;·&nbsp; 🕐 Ultima sync: ${g.lastSync}</div>
+            ${warningNote}
+          </div>
+          <div id="badge-wrap-${g.id}">${badge}</div>
+          <div class="group-actions">
+            <button class="btn-members" onclick="openModal('${g.id}')">👁 Vedi Membri</button>
+            <button class="btn-sync" onclick="syncSingle('${g.id}')">🔄 Sincronizza ora</button>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  // =====================
+  // MODAL MEMBRI
+  // =====================
+  function openModal(groupId) {
+    const g = groups.find(x => x.id === groupId);
+    if (!g) return;
+    document.getElementById('modal-title').textContent = `👥 ${g.name} — ${g.members} membri`;
+    const list = document.getElementById('modal-member-list');
+    list.innerHTML = '';
+    g.memberList.forEach(m => {
+      const initials = m.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+      list.innerHTML += `
+        <li class="member-item">
+          <div class="member-avatar">${initials}</div>
+          <div class="member-details">
+            <div class="member-name">${m.name}</div>
+            <div class="member-email">${m.email}</div>
+          </div>
+          ${m.isNew ? '<span class="badge-new">Nuovo</span>' : ''}
+        </li>
+      `;
+    });
+    document.getElementById('modal-backdrop').classList.add('active');
+  }
+
+  function closeModal(event) {
+    if (event.target === document.getElementById('modal-backdrop')) {
+      document.getElementById('modal-backdrop').classList.remove('active');
+    }
+  }
+
+  function closeModalDirect() {
+    document.getElementById('modal-backdrop').classList.remove('active');
+  }
+
+  // =====================
+  // SYNC SINGOLO
+  // =====================
+  function syncSingle(groupId) {
+    const g = groups.find(x => x.id === groupId);
+    if (!g) return;
+    const btn = event.target;
+    btn.textContent = '⏳...';
+    btn.disabled = true;
+    setTimeout(() => {
+      if (g.status === 'warning') {
+        g.status = 'ok';
+        const badgeWrap = document.getElementById(`badge-wrap-${g.id}`);
+        if (badgeWrap) badgeWrap.innerHTML = `<span class="badge badge-green" id="badge-${g.id}">✅ Aggiornato</span>`;
+        const card = document.getElementById(`card-${g.id}`);
+        if (card) card.classList.remove('warning');
+      }
+      btn.textContent = '✅ Fatto';
+      setTimeout(() => {
+        btn.textContent = '🔄 Sincronizza ora';
+        btn.disabled = false;
+      }, 1500);
+    }, 1200);
+  }
+
+  // =====================
+  // SYNC TUTTI (con log live)
+  // =====================
+  const syncLogs = [
+    { text: '🔍 Analisi dati personale in corso...', cls: 'info', delay: 400 },
+    { text: '✅ Collegio Docenti: nessuna modifica', cls: 'success', delay: 1000 },
+    { text: '✅ Docenti Gottolengo: nessuna modifica', cls: 'success', delay: 1600 },
+    { text: '✅ Docenti Remedello: nessuna modifica', cls: 'success', delay: 2200 },
+    { text: '➕ Docenti Calvisano: aggiunto paolo.conti@icdemo.edu.it', cls: 'add', delay: 2900 },
+    { text: '➕ Docenti Calvisano: aggiunto anna.neri@icdemo.edu.it', cls: 'add', delay: 3400 },
+    { text: '➖ Docenti Calvisano: rimosso mario.bianchi@icdemo.edu.it (trasferito)', cls: 'remove', delay: 3900 },
+    { text: '✅ Coordinatori: nessuna modifica', cls: 'success', delay: 4500 },
+    { text: '📧 Email riepilogo inviata a: ds@icdemo.edu.it', cls: 'info', delay: 5100 },
+    { text: '🎉 Sincronizzazione completata!', cls: 'done', delay: 5700 },
+  ];
+
+  function syncAll() {
+    const overlay = document.getElementById('sync-overlay');
+    const logArea = document.getElementById('log-area');
+    const btnClose = document.getElementById('btn-close-overlay');
+    logArea.innerHTML = '';
+    btnClose.classList.remove('visible');
+    overlay.classList.add('active');
+
+    syncLogs.forEach((entry, i) => {
+      setTimeout(() => {
+        const line = document.createElement('div');
+        line.className = `log-line ${entry.cls}`;
+        line.textContent = entry.text;
+        logArea.appendChild(line);
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => line.classList.add('visible'));
+        });
+        logArea.scrollTop = logArea.scrollHeight;
+
+        if (i === syncLogs.length - 1) {
+          setTimeout(() => btnClose.classList.add('visible'), 300);
+          // Aggiorna badge Calvisano
+          const calvisano = groups.find(x => x.id === 'calvisano');
+          if (calvisano) {
+            calvisano.status = 'ok';
+            const badgeWrap = document.getElementById('badge-wrap-calvisano');
+            if (badgeWrap) badgeWrap.innerHTML = `<span class="badge badge-green">✅ Aggiornato</span>`;
+            const card = document.getElementById('card-calvisano');
+            if (card) card.classList.remove('warning');
+          }
+        }
+      }, entry.delay);
+    });
+  }
+
+  function closeSyncOverlay() {
+    document.getElementById('sync-overlay').classList.remove('active');
+  }
+
+  // =====================
+  // INIT
+  // =====================
+  renderGroups();
+</script>
+</body>
+</html>

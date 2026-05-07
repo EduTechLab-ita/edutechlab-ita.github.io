@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestione Materiali Condivisi — Demo Interattiva</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* DEMO BANNER */
+    #demo-banner {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 9999;
+      height: 44px;
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      gap: 12px;
+      padding: 0 16px;
+      font-family: system-ui, sans-serif;
+    }
+    #demo-banner a { color: #fff; text-decoration: underline; }
+
+    body {
+      padding-top: 60px;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #fffbeb;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, #d97706, #b45309);
+      color: white;
+      padding: 28px 24px 20px;
+      text-align: center;
+    }
+    .header h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+    .header .subtitle { font-size: 13px; opacity: 0.85; margin-bottom: 14px; }
+
+    /* WEEK SELECTOR */
+    .week-selector {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 8px 16px;
+      display: inline-flex;
+      margin: 0 auto;
+    }
+    .week-label { font-size: 15px; font-weight: 700; min-width: 200px; text-align: center; }
+    .week-nav {
+      background: rgba(255,255,255,0.25);
+      border: none;
+      color: white;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .week-nav:hover { background: rgba(255,255,255,0.35); }
+    .header-center { display: flex; justify-content: center; margin-top: 10px; }
+
+    /* MATERIAL TABS */
+    .tabs-bar {
+      background: white;
+      border-bottom: 2px solid #fde68a;
+      padding: 0 16px;
+      display: flex;
+      gap: 2px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      padding: 13px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      background: none;
+      color: #78716c;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s;
+    }
+    .tab-btn.active { color: #d97706; border-bottom-color: #d97706; }
+    .tab-btn:hover:not(.active) { color: #b45309; background: #fffbeb; }
+
+    /* MAIN */
+    .main { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* LEGEND */
+    .legend {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      align-items: center;
+    }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-dot { width: 14px; height: 14px; border-radius: 4px; }
+    .legend-dot.free { background: #d1fae5; border: 1px solid #6ee7b7; }
+    .legend-dot.taken { background: #bfdbfe; border: 1px solid #93c5fd; }
+    .legend-dot.mine { background: #fef08a; border: 1px solid #fbbf24; }
+
+    /* GRID */
+    .grid-wrap { overflow-x: auto; }
+    .booking-grid {
+      min-width: 620px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border: 1px solid #fde68a;
+    }
+    .grid-header {
+      display: grid;
+      grid-template-columns: 110px repeat(5, 1fr);
+      background: linear-gradient(135deg, #d97706, #b45309);
+      color: white;
+    }
+    .grid-header-cell {
+      padding: 11px 8px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      border-right: 1px solid rgba(255,255,255,0.15);
+    }
+    .grid-header-cell:last-child { border-right: none; }
+
+    .grid-row {
+      display: grid;
+      grid-template-columns: 110px repeat(5, 1fr);
+      border-top: 1px solid #fde68a;
+    }
+    .grid-row:first-child { border-top: none; }
+
+    .time-label {
+      background: #fef9c3;
+      padding: 0 10px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #78350f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-right: 2px solid #fde68a;
+      min-height: 64px;
+    }
+
+    .grid-cell {
+      min-height: 64px;
+      border-right: 1px solid #fde68a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      padding: 6px;
+      position: relative;
+    }
+    .grid-cell:last-child { border-right: none; }
+
+    .grid-cell.free {
+      background: #d1fae5;
+    }
+    .grid-cell.free:hover {
+      background: #a7f3d0;
+      transform: scale(0.97);
+    }
+
+    .grid-cell.taken {
+      background: #bfdbfe;
+      cursor: default;
+    }
+    .grid-cell.taken:hover {
+      background: #93c5fd;
+    }
+
+    .grid-cell.mine {
+      background: #fef08a;
+      cursor: pointer;
+    }
+    .grid-cell.mine:hover {
+      background: #fde047;
+    }
+
+    .cell-content {
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.4;
+      pointer-events: none;
+    }
+    .cell-content .cell-name { font-weight: 700; color: #1e40af; }
+    .cell-content .cell-class { color: #3b82f6; font-size: 11px; }
+    .cell-content .cell-mine-name { font-weight: 700; color: #78350f; }
+    .cell-content .cell-mine-class { color: #92400e; font-size: 11px; }
+    .cell-content .cell-free-label { color: #059669; font-size: 11px; }
+
+    /* MODAL */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-backdrop.active { display: flex; }
+    .modal {
+      background: white;
+      border-radius: 14px;
+      padding: 26px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid #e2e8f0; }
+    .modal-header h3 { font-size: 16px; color: #d97706; font-weight: 700; line-height: 1.4; padding-right: 12px; }
+    .btn-close-modal { background: #f1f5f9; border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #64748b; flex-shrink: 0; }
+    .btn-close-modal:hover { background: #e2e8f0; }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 5px; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 2px solid #fde68a;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #d97706; }
+    .form-group textarea { resize: none; height: 72px; }
+
+    .btn-confirm {
+      width: 100%;
+      background: linear-gradient(135deg, #d97706, #b45309);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: all 0.2s;
+    }
+    .btn-confirm:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(217,119,6,0.4); }
+
+    .btn-close-only {
+      width: 100%;
+      background: #f1f5f9;
+      color: #374151;
+      border: none;
+      padding: 11px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .btn-close-only:hover { background: #e2e8f0; }
+
+    .info-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 14px;
+      color: #1d4ed8;
+      margin-bottom: 16px;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #d97706;
+      color: white;
+      padding: 13px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(217,119,6,0.4);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 3000;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+  </style>
+</head>
+<body>
+
+<!-- BANNER DEMO -->
+<div id="demo-banner">
+  🎮 MODALITÀ DEMO — Nessun dato viene salvato &nbsp;|&nbsp;
+  <a href="https://edutechlab.it">Torna al sito EduTechLab</a>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>📦 Gestione Materiali Condivisi</h1>
+  <div class="subtitle">IC Demo — Prenotazioni settimana corrente</div>
+  <div class="header-center">
+    <div class="week-selector">
+      <button class="week-nav" onclick="prevWeek()">◀</button>
+      <div class="week-label" id="week-label">28 apr – 2 mag 2025</div>
+      <button class="week-nav" onclick="nextWeek()">▶</button>
+    </div>
+  </div>
+</div>
+
+<!-- MATERIAL TABS -->
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="showMaterial(0)">🖥️ Carrello A</button>
+  <button class="tab-btn" onclick="showMaterial(1)">🖥️ Carrello B</button>
+  <button class="tab-btn" onclick="showMaterial(2)">📱 Tablet</button>
+  <button class="tab-btn" onclick="showMaterial(3)">🎥 Proiettore</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot free"></div> Libera (clicca per prenotare)</div>
+    <div class="legend-item"><div class="legend-dot taken"></div> Prenotata da altri</div>
+    <div class="legend-item"><div class="legend-dot mine"></div> Tua prenotazione</div>
+  </div>
+
+  <div id="material-panels">
+    <!-- Generato da JS -->
+  </div>
+</div>
+
+<!-- MODAL PRENOTAZIONE -->
+<div class="modal-backdrop" id="book-modal-backdrop" onclick="closeBookModal(event)">
+  <div class="modal" id="book-modal-content">
+    <div class="modal-header">
+      <h3 id="book-modal-title">Prenota</h3>
+      <button class="btn-close-modal" onclick="closeBookModalDirect()">✕</button>
+    </div>
+    <div id="book-modal-body"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // =====================
+  // CONFIGURAZIONE
+  // =====================
+  const DAYS = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì'];
+  const TIMES = ['8:00 – 9:00', '9:00 – 10:00', '10:00 – 11:00', '11:00 – 12:00', '12:00 – 13:00'];
+  const MATERIALS = ['Carrello A', 'Carrello B', 'Tablet', 'Proiettore'];
+
+  // Settimane navigabili (solo label)
+  const weeks = [
+    '21 apr – 25 apr 2025',
+    '28 apr – 2 mag 2025',
+    '5 mag – 9 mag 2025',
+    '12 mag – 16 mag 2025',
+  ];
+  let currentWeekIdx = 1;
+
+  // =====================
+  // STATO PRENOTAZIONI
+  // Struttura: bookings[materialIdx][dayIdx][timeIdx] = { name, class, isMine }
+  // =====================
+  function createEmptyGrid() {
+    return Array.from({length: 5}, () => Array.from({length: 5}, () => null));
+  }
+
+  // Dati iniziali: stesso set visivo per tutti i materiali, varierà solo chi è prenotato
+  // Indici: [materialIdx][dayIdx][timeIdx]
+  // Giorni: Lun=0, Mar=1, Mer=2, Gio=3, Ven=4
+  // Ore:    8:00=0, 9:00=1, 10:00=2, 11:00=3, 12:00=4
+  const initialBookings = [
+    // Carrello A
+    (() => {
+      const g = createEmptyGrid();
+      g[0][0] = { name: 'Mario Verdi', cls: '3A', isMine: false };     // Lun 8:00
+      g[1][2] = { name: 'Laura Conti', cls: '2B', isMine: false };     // Mar 10:00
+      g[2][1] = { name: 'Paolo Neri', cls: '4A', isMine: false };      // Mer 9:00
+      g[3][3] = { name: 'Anna Russo', cls: '1A', isMine: false };      // Gio 11:00
+      return g;
+    })(),
+    // Carrello B
+    (() => {
+      const g = createEmptyGrid();
+      g[0][2] = { name: 'Francesca Lodi', cls: '5B', isMine: false };  // Lun 10:00
+      g[2][1] = { name: 'Giorgio Sala', cls: '2B', isMine: false };    // Mer 9:00
+      g[4][3] = { name: 'Marta Furlani', cls: '3A', isMine: false };   // Ven 11:00
+      return g;
+    })(),
+    // Tablet
+    (() => {
+      const g = createEmptyGrid();
+      g[1][1] = { name: 'Marco Sala', cls: '2A', isMine: false };      // Mar 9:00
+      g[4][3] = { name: 'Elena Boschi', cls: '3B', isMine: false };    // Ven 11:00
+      return g;
+    })(),
+    // Proiettore
+    (() => {
+      const g = createEmptyGrid();
+      g[0][4] = { name: 'Davide Mori', cls: '4B', isMine: false };     // Lun 12:00
+      g[2][2] = { name: 'Sara Rizzi', cls: '1B', isMine: false };      // Mer 10:00
+      g[4][0] = { name: 'Giulio Piva', cls: '3A', isMine: false };     // Ven 8:00
+      return g;
+    })(),
+  ];
+
+  let bookings = initialBookings;
+  let currentMaterial = 0;
+  let pendingCell = null; // { dayIdx, timeIdx }
+
+  // =====================
+  // WEEK NAV
+  // =====================
+  function prevWeek() {
+    if (currentWeekIdx > 0) currentWeekIdx--;
+    document.getElementById('week-label').textContent = weeks[currentWeekIdx];
+  }
+  function nextWeek() {
+    if (currentWeekIdx < weeks.length - 1) currentWeekIdx++;
+    document.getElementById('week-label').textContent = weeks[currentWeekIdx];
+  }
+
+  // =====================
+  // MATERIAL TABS
+  // =====================
+  function showMaterial(idx) {
+    currentMaterial = idx;
+    document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+    renderGrid();
+  }
+
+  // =====================
+  // RENDER GRIGLIA
+  // =====================
+  function renderGrid() {
+    const container = document.getElementById('material-panels');
+    const grid = bookings[currentMaterial];
+    const matName = MATERIALS[currentMaterial];
+
+    let html = `<div class="grid-wrap"><div class="booking-grid">`;
+    // Header
+    html += `<div class="grid-header"><div class="grid-header-cell">Orario</div>`;
+    DAYS.forEach(d => { html += `<div class="grid-header-cell">${d}</div>`; });
+    html += `</div>`;
+
+    // Rows: one per time slot
+    TIMES.forEach((time, tIdx) => {
+      html += `<div class="grid-row"><div class="time-label">${time}</div>`;
+      DAYS.forEach((day, dIdx) => {
+        const cell = grid[dIdx][tIdx];
+        if (!cell) {
+          html += `<div class="grid-cell free" onclick="openBookModal(${dIdx}, ${tIdx})">
+            <div class="cell-content"><div class="cell-free-label">+ Libera</div></div>
+          </div>`;
+        } else if (cell.isMine) {
+          html += `<div class="grid-cell mine" onclick="openTakenModal(${dIdx}, ${tIdx}, true)">
+            <div class="cell-content">
+              <div class="cell-mine-name">📌 ${cell.name}</div>
+              <div class="cell-mine-class">${cell.cls}</div>
+            </div>
+          </div>`;
+        } else {
+          html += `<div class="grid-cell taken" onclick="openTakenModal(${dIdx}, ${tIdx}, false)">
+            <div class="cell-content">
+              <div class="cell-name">${cell.name}</div>
+              <div class="cell-class">${cell.cls}</div>
+            </div>
+          </div>`;
+        }
+      });
+      html += `</div>`;
+    });
+
+    html += `</div></div>`;
+    container.innerHTML = html;
+  }
+
+  // =====================
+  // MODAL PRENOTAZIONE LIBERA
+  // =====================
+  function openBookModal(dIdx, tIdx) {
+    pendingCell = { dIdx, tIdx };
+    const matName = MATERIALS[currentMaterial];
+    const day = DAYS[dIdx];
+    const time = TIMES[tIdx];
+    document.getElementById('book-modal-title').textContent = `📦 Prenota ${matName} — ${day} ${time}`;
+    document.getElementById('book-modal-body').innerHTML = `
+      <div class="form-group">
+        <label>Il tuo nome</label>
+        <input type="text" id="book-name" value="Docente Demo">
+      </div>
+      <div class="form-group">
+        <label>Classe</label>
+        <select id="book-class">
+          <option value="">— Seleziona —</option>
+          <option>1A</option><option>1B</option>
+          <option>2A</option><option>2B</option>
+          <option>3A</option><option>3B</option>
+          <option>4A</option><option>4B</option>
+          <option>5A</option><option>5B</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Note (opzionale)</label>
+        <textarea id="book-notes" placeholder="Es. attività di coding, visione video..."></textarea>
+      </div>
+      <button class="btn-confirm" onclick="confirmBooking()">✅ Prenota</button>
+    `;
+    document.getElementById('book-modal-backdrop').classList.add('active');
+  }
+
+  function confirmBooking() {
+    const name = document.getElementById('book-name').value.trim();
+    const cls = document.getElementById('book-class').value;
+    if (!name) { alert('Inserisci il tuo nome.'); return; }
+    if (!cls) { alert('Seleziona la classe.'); return; }
+
+    const { dIdx, tIdx } = pendingCell;
+    bookings[currentMaterial][dIdx][tIdx] = { name, cls, isMine: true };
+    closeBookModalDirect();
+    renderGrid();
+    showToast(`✅ Prenotazione confermata per ${DAYS[dIdx]} ${TIMES[tIdx]}!`);
+  }
+
+  // =====================
+  // MODAL SLOT OCCUPATO
+  // =====================
+  function openTakenModal(dIdx, tIdx, isMine) {
+    const cell = bookings[currentMaterial][dIdx][tIdx];
+    const day = DAYS[dIdx];
+    const time = TIMES[tIdx];
+    const matName = MATERIALS[currentMaterial];
+
+    if (isMine) {
+      document.getElementById('book-modal-title').textContent = `📌 Tua prenotazione — ${day} ${time}`;
+      document.getElementById('book-modal-body').innerHTML = `
+        <div class="info-box" style="background:#fef9c3;border-color:#fde047;color:#78350f;">
+          ✅ Hai prenotato <strong>${matName}</strong> il <strong>${day}</strong> alle <strong>${time}</strong> per la classe <strong>${cell.cls}</strong>.
+        </div>
+        <button class="btn-close-only" onclick="closeBookModalDirect()">Chiudi</button>
+      `;
+    } else {
+      document.getElementById('book-modal-title').textContent = `ℹ️ Già prenotato — ${day} ${time}`;
+      document.getElementById('book-modal-body').innerHTML = `
+        <div class="info-box">
+          Questo slot è già prenotato da <strong>${cell.name}</strong> per la classe <strong>${cell.cls}</strong>.<br>
+          Non puoi modificarlo.
+        </div>
+        <button class="btn-close-only" onclick="closeBookModalDirect()">Chiudi</button>
+      `;
+    }
+    document.getElementById('book-modal-backdrop').classList.add('active');
+  }
+
+  // =====================
+  // MODAL UTILS
+  // =====================
+  function closeBookModal(event) {
+    if (event.target === document.getElementById('book-modal-backdrop')) {
+      document.getElementById('book-modal-backdrop').classList.remove('active');
+    }
+  }
+  function closeBookModalDirect() {
+    document.getElementById('book-modal-backdrop').classList.remove('active');
+  }
+
+  // =====================
+  // TOAST
+  // =====================
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3200);
+  }
+
+  // =====================
+  // INIT
+  // =====================
+  renderGrid();
+</script>
+</body>
+</html>

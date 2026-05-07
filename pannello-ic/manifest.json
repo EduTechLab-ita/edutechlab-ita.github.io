@@ -1,0 +1,32 @@
+{
+  "name": "Scrivania Digitale IC",
+  "short_name": "Scrivania IC",
+  "description": "Dashboard app per la gestione scolastica dell'IC Gottolengo",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "orientation": "any",
+  "lang": "it",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "shortcuts": [
+    {
+      "name": "GestAccount",
+      "url": "https://script.google.com/a/macros/icgottolengo.edu.it/s/AKfycbw6vJudSmpskx0LBz5DNdMocb7bhRF_yjEmnuI7Nc_GBE9d4EZWeF35W4U_FYjAkPJL/exec",
+      "description": "Gestione account Google Workspace"
+    },
+    {
+      "name": "Libreria Sottovoce",
+      "url": "https://script.google.com/a/icgottolengo.edu.it/macros/s/AKfycbyoEg8gPsw_AQVZ4mPmt_50o0DUoszqliPXiv8fXM0vFFXV79PKe_3-EAU5val_jbUTBg/exec",
+      "description": "Biblioteca scolastica digitale"
+    }
+  ]
+}

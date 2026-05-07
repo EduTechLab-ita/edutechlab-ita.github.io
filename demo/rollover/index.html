@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classroom Rollover — Demo Interattiva | EduTechLab</title>
+  <style>
+    /* ── Reset & base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #fdf6ec;
+      color: #1c1917;
+      padding-top: 60px;
+      min-height: 100vh;
+    }
+
+    /* ── Demo banner ──────────────────────────────────────────── */
+    #demo-banner {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 44px;
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      z-index: 9999;
+      letter-spacing: 0.02em;
+      padding: 0 16px;
+    }
+    #demo-banner a { color: #fff; text-underline-offset: 3px; }
+    #demo-banner a:hover { opacity: 0.85; }
+
+    /* ── Wrapper ──────────────────────────────────────────────── */
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    /* ── App header ───────────────────────────────────────────── */
+    .app-header {
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+      border-radius: 20px;
+      padding: 32px 36px;
+      color: #fff;
+      margin-bottom: 32px;
+      box-shadow: 0 8px 32px rgba(180, 83, 9, 0.25);
+    }
+    .app-header .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .app-header h1 {
+      font-size: 1.9rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+    .app-header p { font-size: 0.95rem; opacity: 0.88; }
+
+    /* ── Anno scolastico arrow ────────────────────────────────── */
+    .year-transition {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .year-pill {
+      background: #fff7ed;
+      border: 2px solid #fed7aa;
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #b45309;
+    }
+    .year-arrow {
+      font-size: 1.6rem;
+      color: #d97706;
+      animation: pulse-arrow 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse-arrow {
+      0%, 100% { transform: translateX(0); opacity: 1; }
+      50% { transform: translateX(5px); opacity: 0.6; }
+    }
+
+    /* ── Card ─────────────────────────────────────────────────── */
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px 32px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      margin-bottom: 24px;
+    }
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #92400e;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ── Toolbar ──────────────────────────────────────────────── */
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    /* ── Buttons ──────────────────────────────────────────────── */
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-outline {
+      background: #fff;
+      border: 2px solid #d97706;
+      color: #d97706;
+    }
+    .btn-outline:hover { background: #fff7ed; }
+    .btn-primary {
+      background: linear-gradient(135deg, #d97706, #b45309);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(180, 83, 9, 0.3);
+    }
+    .btn-primary:hover { box-shadow: 0 6px 20px rgba(180, 83, 9, 0.42); transform: translateY(-1px); }
+    .btn-primary:disabled {
+      background: #e5e7eb;
+      color: #9ca3af;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .btn-ghost {
+      background: #f3f4f6;
+      color: #374151;
+      border: 2px solid transparent;
+    }
+    .btn-ghost:hover { background: #e5e7eb; }
+    .btn-success {
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(22,163,74,0.3);
+    }
+    .btn-success:hover { box-shadow: 0 6px 20px rgba(22,163,74,0.42); transform: translateY(-1px); }
+
+    /* ── Classe list ──────────────────────────────────────────── */
+    .class-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .class-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: 2px solid #f3f4f6;
+      background: #fafafa;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      user-select: none;
+    }
+    .class-item:hover { border-color: #fbbf24; background: #fffbeb; }
+    .class-item.selected { border-color: #d97706; background: #fff7ed; }
+    .class-item.terminal { opacity: 0.7; cursor: default; }
+    .class-item.terminal:hover { border-color: #f3f4f6; background: #fafafa; }
+
+    .class-checkbox {
+      width: 20px; height: 20px;
+      border: 2px solid #d1d5db;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+      color: #fff;
+      font-size: 0.75rem;
+    }
+    .class-item.selected .class-checkbox { background: #d97706; border-color: #d97706; }
+    .class-item.terminal .class-checkbox { background: #9ca3af; border-color: #9ca3af; }
+
+    .class-info { flex: 1; }
+    .class-name { font-weight: 700; font-size: 1rem; color: #1c1917; }
+    .class-teacher { font-size: 0.8rem; color: #6b7280; margin-top: 2px; }
+
+    .class-arrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+    .class-arrow .from-name { font-weight: 700; color: #b45309; }
+    .class-arrow .to-name { font-weight: 700; color: #16a34a; }
+    .class-arrow .arrow-sym { color: #d97706; }
+
+    .badge-terminal {
+      background: #fef2f2;
+      color: #dc2626;
+      border: 1.5px solid #fca5a5;
+      border-radius: 20px;
+      padding: 3px 12px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    /* ── Step indicator ───────────────────────────────────────── */
+    .step-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      margin-bottom: 28px;
+    }
+    .step-col { display: flex; flex-direction: column; align-items: center; }
+    .step-dot {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700; flex-shrink: 0;
+    }
+    .step-dot.active { background: #d97706; color: #fff; }
+    .step-dot.done   { background: #16a34a; color: #fff; }
+    .step-dot.inactive { background: #e5e7eb; color: #9ca3af; }
+    .step-lbl {
+      font-size: 0.78rem; font-weight: 600; margin-top: 6px; text-align: center; white-space: nowrap;
+    }
+    .step-line {
+      flex: 1;
+      height: 3px;
+      background: #e5e7eb;
+      margin-top: 14px;
+      transition: background 0.4s;
+    }
+    .step-line.done { background: #16a34a; }
+
+    /* ── Progress ─────────────────────────────────────────────── */
+    .progress-wrap {
+      background: #f3f4f6;
+      border-radius: 99px;
+      height: 12px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #d97706, #b45309);
+      border-radius: 99px;
+      transition: width 0.35s ease;
+      width: 0%;
+    }
+    .progress-label {
+      font-size: 0.82rem; color: #6b7280; text-align: right; margin-bottom: 20px;
+    }
+
+    /* ── Log ──────────────────────────────────────────────────── */
+    .log-box {
+      background: #1c1917;
+      border-radius: 12px;
+      padding: 20px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.82rem;
+      color: #d6d3d1;
+      min-height: 200px;
+      max-height: 380px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .log-line { animation: fade-in 0.3s ease; }
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .log-line.ok     { color: #86efac; }
+    .log-line.info   { color: #93c5fd; }
+    .log-line.warn   { color: #fcd34d; }
+    .log-line.diploma{ color: #c084fc; }
+
+    /* ── Result box ───────────────────────────────────────────── */
+    .result-box {
+      border-radius: 14px;
+      padding: 24px 28px;
+      background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+      border: 2px solid #6ee7b7;
+      text-align: center;
+    }
+    .result-box .result-icon { font-size: 2.6rem; margin-bottom: 10px; }
+    .result-box h3 { font-size: 1.3rem; font-weight: 800; color: #065f46; margin-bottom: 6px; }
+    .result-box p  { color: #047857; font-size: 0.92rem; }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- Demo banner -->
+  <div id="demo-banner">
+    🎮 MODALITÀ DEMO — Nessun dato viene salvato
+    <span>|</span>
+    <a href="https://edutechlab.it" target="_blank" rel="noopener">Torna al sito EduTechLab</a>
+  </div>
+
+  <div class="container">
+
+    <!-- App header -->
+    <div class="app-header">
+      <div class="badge">🏫 Google Workspace for Education</div>
+      <h1>Classroom Rollover</h1>
+      <p>IC Demo — Passaggio a.s. 2025/26 → 2026/27</p>
+    </div>
+
+    <!-- Anno transition -->
+    <div class="year-transition">
+      <div class="year-pill">📅 2025/26</div>
+      <div class="year-arrow">→</div>
+      <div class="year-pill">🆕 2026/27</div>
+    </div>
+
+    <!-- Step indicator -->
+    <div class="step-row">
+      <div class="step-col">
+        <div class="step-dot active" id="dot-1">1</div>
+        <div class="step-lbl" id="lbl-1" style="color:#d97706">Selezione</div>
+      </div>
+      <div class="step-line" id="line-1"></div>
+      <div class="step-col">
+        <div class="step-dot inactive" id="dot-2">2</div>
+        <div class="step-lbl" id="lbl-2" style="color:#9ca3af">Esecuzione</div>
+      </div>
+    </div>
+
+    <!-- ─── STEP 1: Selezione classi ─────────────────────────── -->
+    <div id="step1">
+      <div class="card">
+        <div class="card-title">📋 Seleziona le classi da elaborare</div>
+        <div class="toolbar">
+          <button class="btn btn-outline" onclick="selectAll()">✅ Seleziona Tutto</button>
+          <button class="btn btn-ghost" onclick="deselectAll()">⬜ Deseleziona Tutto</button>
+        </div>
+        <div class="class-list" id="class-list"></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+        <button class="btn btn-primary" id="btn-avvia" disabled onclick="avviaRollover()">
+          Avvia Rollover →
+        </button>
+      </div>
+    </div>
+
+    <!-- ─── STEP 2: Esecuzione ────────────────────────────────── -->
+    <div id="step2" class="hidden">
+      <div class="card">
+        <div class="card-title" id="card-title-2">⚙️ Esecuzione rollover in corso...</div>
+        <div class="progress-wrap">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="progress-label" id="progress-label">0%</div>
+        <div class="log-box" id="log-box"></div>
+        <div id="result-box" class="result-box hidden" style="margin-top:24px;">
+          <div class="result-icon">🎉</div>
+          <h3 id="result-title">Rollover completato!</h3>
+          <p id="result-desc"></p>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+        <button class="btn btn-success hidden" id="btn-nuovo" onclick="nuovoRollover()">
+          🔁 Nuovo Rollover
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const CLASSI = [
+      { id:'1A', da:'1A', a:'2A', docente:'Mario Verdi', email:'mario.verdi@icdemo.edu.it', studenti:22, terminal:false },
+      { id:'1B', da:'1B', a:'2B', docente:'Laura Conti', email:'laura.conti@icdemo.edu.it', studenti:21, terminal:false },
+      { id:'2A', da:'2A', a:'3A', docente:'Paolo Neri',  email:'paolo.neri@icdemo.edu.it',  studenti:20, terminal:false },
+      { id:'2B', da:'2B', a:'3B', docente:'Anna Russo',  email:'anna.russo@icdemo.edu.it',  studenti:19, terminal:false },
+      { id:'3A', da:'3A', a:'4A', docente:'Giulia Mari', email:'giulia.mari@icdemo.edu.it', studenti:23, terminal:false },
+      { id:'4A', da:'4A', a:'5A', docente:'Marco Sala',  email:'marco.sala@icdemo.edu.it',  studenti:18, terminal:false },
+      { id:'5A', da:'5A', a:null, docente:'Sara Ferri',  email:'sara.ferri@icdemo.edu.it',  studenti:20, terminal:true  },
+    ];
+
+    let selected = new Set();
+
+    function renderClassList() {
+      const list = document.getElementById('class-list');
+      list.innerHTML = '';
+      CLASSI.forEach(function(cls) {
+        var item = document.createElement('div');
+        var isSel = selected.has(cls.id);
+        item.className = 'class-item' + (cls.terminal ? ' terminal' : '') + (isSel ? ' selected' : '');
+        item.dataset.id = cls.id;
+        if (!cls.terminal) {
+          item.addEventListener('click', function() { toggleClass(cls.id); });
+        }
+        item.innerHTML =
+          '<div class="class-checkbox">' + (isSel || cls.terminal ? '✓' : '') + '</div>' +
+          '<div class="class-info">' +
+            '<div class="class-name">Classe ' + cls.da + '</div>' +
+            '<div class="class-teacher">👤 ' + cls.docente + ' — ' + cls.email + '</div>' +
+          '</div>' +
+          '<div class="class-arrow">' +
+            '<span class="from-name">' + cls.da + '</span>' +
+            '<span class="arrow-sym"> → </span>' +
+            (cls.terminal ? '<span style="color:#9ca3af">—</span>' : '<span class="to-name">' + cls.a + '</span>') +
+          '</div>' +
+          (cls.terminal ? '<span class="badge-terminal">🎓 Terminale</span>' : '');
+        list.appendChild(item);
+      });
+      document.getElementById('btn-avvia').disabled = selected.size === 0;
+    }
+
+    function toggleClass(id) {
+      if (selected.has(id)) { selected.delete(id); } else { selected.add(id); }
+      renderClassList();
+    }
+
+    function selectAll() {
+      CLASSI.filter(function(c) { return !c.terminal; }).forEach(function(c) { selected.add(c.id); });
+      renderClassList();
+    }
+
+    function deselectAll() {
+      selected.clear();
+      renderClassList();
+    }
+
+    function avviaRollover() {
+      var classiScelte = CLASSI.filter(function(c) { return selected.has(c.id); });
+
+      document.getElementById('step1').classList.add('hidden');
+      document.getElementById('step2').classList.remove('hidden');
+
+      document.getElementById('dot-1').className = 'step-dot done';
+      document.getElementById('dot-1').textContent = '✓';
+      document.getElementById('lbl-1').style.color = '#16a34a';
+      document.getElementById('line-1').classList.add('done');
+      document.getElementById('dot-2').className = 'step-dot active';
+      document.getElementById('lbl-2').style.color = '#d97706';
+
+      var logBox = document.getElementById('log-box');
+      var progressBar = document.getElementById('progress-bar');
+      var progressLabel = document.getElementById('progress-label');
+      logBox.innerHTML = '';
+
+      // Orario di partenza simulato
+      var h = 9, m = 15, s = 0;
+      function ts() {
+        s += 3; if (s >= 60) { s -= 60; m += 1; } if (m >= 60) { m -= 60; h += 1; }
+        return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+      }
+
+      var queue = [];
+      queue.push({ text: '[' + ts() + '] 🚀 Avvio rollover — ' + classiScelte.length + ' classe/i selezionate', cls: 'info' });
+
+      classiScelte.forEach(function(c) {
+        if (c.terminal) {
+          queue.push({ text: '[' + ts() + '] 🎓 Classe terminale ' + c.da + ' — avvio procedura diplomati...', cls: 'diploma' });
+          queue.push({ text: '[' + ts() + '] 📤 Esportazione dati ' + c.studenti + ' alunni diplomati', cls: 'diploma' });
+          queue.push({ text: '[' + ts() + '] 🔒 Sospensione account studenti classe ' + c.da + '...', cls: 'warn' });
+          queue.push({ text: '[' + ts() + '] 📚 Classroom archiviate: ' + c.da + ' 2024/25', cls: 'info' });
+          queue.push({ text: '[' + ts() + '] ✅ Procedura diplomati ' + c.da + ' completata', cls: 'ok' });
+        } else {
+          queue.push({ text: '[' + ts() + '] 🔄 Elaborazione classe ' + c.da + ' → ' + c.a + '...', cls: 'info' });
+          queue.push({ text: '[' + ts() + '] ✅ Studenti spostati: ' + c.studenti, cls: 'ok' });
+          queue.push({ text: '[' + ts() + '] 📚 Classroom archiviate: ' + c.da + ' 2024/25', cls: 'info' });
+          queue.push({ text: '[' + ts() + '] ✅ Nuova classroom creata: ' + c.a + ' 2025/26', cls: 'ok' });
+          queue.push({ text: '[' + ts() + '] 📧 Inviti inviati a: ' + c.email, cls: 'ok' });
+        }
+      });
+
+      queue.push({ text: '[' + ts() + '] ─────────────────────────────────────', cls: '' });
+      queue.push({ text: '[' + ts() + '] ✅ Rollover completato con successo.', cls: 'ok' });
+
+      var total = queue.length;
+      var i = 0;
+
+      function processNext() {
+        if (i >= total) {
+          progressBar.style.width = '100%';
+          progressLabel.textContent = '100%';
+          document.getElementById('result-box').classList.remove('hidden');
+          document.getElementById('result-title').textContent = '🎉 Rollover completato! ' + classiScelte.length + ' classe/i elaborate.';
+          document.getElementById('result-desc').textContent = 'Tutte le operazioni sono state eseguite con successo per l\'a.s. 2026/27.';
+          document.getElementById('btn-nuovo').classList.remove('hidden');
+          document.getElementById('card-title-2').textContent = '✅ Esecuzione completata';
+          return;
+        }
+        var entry = queue[i];
+        i++;
+        var pct = Math.round((i / total) * 100);
+        progressBar.style.width = pct + '%';
+        progressLabel.textContent = pct + '%';
+
+        var line = document.createElement('div');
+        line.className = 'log-line ' + (entry.cls || '');
+        line.textContent = entry.text;
+        logBox.appendChild(line);
+        logBox.scrollTop = logBox.scrollHeight;
+        setTimeout(processNext, 400);
+      }
+
+      processNext();
+    }
+
+    function nuovoRollover() {
+      selected.clear();
+      document.getElementById('step2').classList.add('hidden');
+      document.getElementById('step1').classList.remove('hidden');
+      document.getElementById('result-box').classList.add('hidden');
+      document.getElementById('btn-nuovo').classList.add('hidden');
+      document.getElementById('log-box').innerHTML = '';
+      document.getElementById('progress-bar').style.width = '0%';
+      document.getElementById('progress-label').textContent = '0%';
+      document.getElementById('card-title-2').textContent = '⚙️ Esecuzione rollover in corso...';
+      document.getElementById('dot-1').className = 'step-dot active';
+      document.getElementById('dot-1').textContent = '1';
+      document.getElementById('lbl-1').style.color = '#d97706';
+      document.getElementById('line-1').classList.remove('done');
+      document.getElementById('dot-2').className = 'step-dot inactive';
+      document.getElementById('lbl-2').style.color = '#9ca3af';
+      renderClassList();
+    }
+
+    renderClassList();
+  </script>
+</body>
+</html>
