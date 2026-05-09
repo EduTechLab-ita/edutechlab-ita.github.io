@@ -850,12 +850,13 @@
         .nav-dropdown {
             display: none;
             position: absolute;
-            top: calc(100% + 0.5rem);
+            top: 100%;
             right: -120px;
             background: white;
             border-radius: 16px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.15);
             padding: 1.25rem;
+            padding-top: calc(1.25rem + 0.5rem); /* gap visivo spostato DENTRO: nessun buco tra link e menu */
             width: 520px;
             z-index: 2000;
             opacity: 0;
