@@ -136,7 +136,7 @@
 
 <main>
     <h1>Privacy Policy</h1>
-    <p class="updated"><strong>Ultimo aggiornamento:</strong> 17 maggio 2026</p>
+    <p class="updated"><strong>Ultimo aggiornamento:</strong> 27 luglio 2026</p>
 
     <h2>1. Titolare del Trattamento</h2>
     <p>Il titolare del trattamento dei dati personali è <strong>Fabio Rizzotto</strong>, operante tramite il progetto EduTechLab.</p>
@@ -147,14 +147,17 @@
     <h2>2. Tipologie di Dati Raccolti</h2>
     <p>A seconda dell'applicazione utilizzata, possono essere raccolti i seguenti dati:</p>
     <ul>
-        <li><strong>Dati di navigazione:</strong> informazioni tecniche raccolte automaticamente (indirizzo IP, tipo di browser, sistema operativo)</li>
         <li><strong>Dati di account Google:</strong> nome, indirizzo email e foto profilo — solo quando si accede tramite Google OAuth</li>
         <li><strong>File su Google Drive:</strong> solo i file creati direttamente dall'applicazione (mai file preesistenti dell'utente)</li>
-        <li><strong>Cookie tecnici:</strong> necessari per il funzionamento delle applicazioni</li>
+        <li><strong>Dati di lavoro inseriti dall'utente:</strong> i contenuti che l'utente crea nell'applicazione (es. valutazioni, pagine della lavagna, vocabolari, iscrizioni). Vedi il §8 per il caso, frequente, in cui riguardano alunni minorenni</li>
+        <li><strong>Archiviazione locale sul dispositivo:</strong> le applicazioni salvano i dati di lavoro nella memoria locale del browser (localStorage/IndexedDB) per permetterne l'uso anche offline. Si tratta di archiviazione <strong>tecnica</strong>, necessaria al servizio richiesto dall'utente</li>
     </ul>
+    <div class="highlight">
+        <strong>Cosa NON viene raccolto:</strong> le applicazioni EduTechLab non utilizzano alcuno strumento di analisi statistica o di tracciamento (nessun Google Analytics, nessun pixel pubblicitario, nessun cookie di profilazione) e non creano profili degli utenti. I normali log tecnici di accesso sono gestiti dai fornitori di hosting (GitHub Pages, Cloudflare) secondo le rispettive policy, e non sono nella disponibilità di EduTechLab.
+    </div>
 
     <h2>3. Utilizzo delle API Google</h2>
-    <p>Le applicazioni EduTechLab (EduBoard, CAArtella, Valutazione Primaria, Comportamento Scuola, VitaeLab) utilizzano le API Google per le seguenti finalità:</p>
+    <p>Le applicazioni EduTechLab che prevedono il collegamento a Google Drive (fra cui EduBoard, CAArtella, Valutazione Primaria, Comportamento Scuola, VitaeLab) utilizzano le API Google per le seguenti finalità:</p>
 
     <div class="google-section">
         <h3>Scope drive.file</h3>
@@ -179,20 +182,47 @@
     <h2>5. Base Giuridica</h2>
     <ul>
         <li><strong>Legittimo interesse</strong> (art. 6, co. 1, lett. f GDPR) per cookie tecnici</li>
-        <li><strong>Consenso esplicito</strong> (art. 6, co. 1, lett. a GDPR) per l'accesso Google OAuth — l'utente autorizza espressamente tramite la schermata di consenso Google</li>
+        <li><strong>Consenso esplicito</strong> (art. 6, co. 1, lett. a GDPR) per l'accesso Google OAuth — l'utente autorizza espressamente tramite la schermata di consenso Google — e per l'eventuale iscrizione a comunicazioni informative, che è sempre facoltativa e revocabile</li>
+        <li><strong>Esecuzione del servizio richiesto</strong> (art. 6, co. 1, lett. b GDPR) per i dati inseriti nei moduli di iscrizione e di contatto, senza i quali il servizio non può essere erogato</li>
     </ul>
 
     <h2>6. Conservazione dei Dati</h2>
     <ul>
-        <li><strong>Token di accesso Google:</strong> conservati solo nella sessione del browser (sessionStorage), non su server</li>
+        <li><strong>Token di accesso Google:</strong> conservati nella sessione del browser e scadono automaticamente (circa un'ora). Unica eccezione: nella funzione di abbinamento tramite QR code di EduBoard (collegamento fra LIM e telefono), il token transita su un servizio intermedio gestito da EduTechLab per un massimo di <strong>5 minuti</strong>, dopodiché viene cancellato automaticamente</li>
         <li><strong>File su Drive:</strong> rimangono nel Drive dell'utente — possono essere eliminati in qualsiasi momento dall'utente stesso</li>
+        <li><strong>Dati sui servizi gestiti da EduTechLab</strong> (vedi §7): i vocabolari condivisi di CAArtella restano finché l'utente proprietario non li elimina; i dati delle gare LogiKron restano fino al termine dell'edizione annuale e vengono cancellati con la preparazione dell'edizione successiva</li>
         <li><strong>Dati di contatto:</strong> fino a revoca del consenso o cessazione dell'attività</li>
     </ul>
 
-    <h2>7. Condivisione dei Dati</h2>
-    <p>I dati personali <strong>non vengono venduti, ceduti o condivisi</strong> con terze parti per finalità commerciali. I dati transitano esclusivamente tra il browser dell'utente e i servizi Google (Drive, OAuth), senza passare per server propri di EduTechLab.</p>
+    <h2>7. Condivisione dei Dati e servizi utilizzati</h2>
+    <p>I dati personali <strong>non vengono venduti, ceduti o condivisi</strong> con terze parti per finalità commerciali, e non vengono utilizzati per finalità diverse da quelle indicate al §4.</p>
 
-    <h2>8. Diritti dell'Interessato</h2>
+    <p><strong>Nella maggior parte delle applicazioni</strong> (Valutazione Primaria, Comportamento Scuola, VitaeLab, Orario Sostegno e le app didattiche) i dati non passano da alcun sistema di EduTechLab: restano sul dispositivo dell'utente e, se questi attiva il collegamento, nel <strong>suo</strong> Google Drive.</p>
+
+    <p><strong>Alcune funzioni specifiche</strong> richiedono invece un servizio intermedio gestito da EduTechLab. Sono le seguenti, ed è opportuno che l'utente le conosca:</p>
+    <ul>
+        <li><strong>CAArtella — condivisione dei vocabolari fra docenti:</strong> il vocabolario condiviso transita e viene conservato su un database <em>Google Firebase Realtime Database</em> gestito da EduTechLab, con server situati nell'Unione Europea (<code>europe-west1</code>). L'applicazione richiede espressamente di identificare l'alunno con <strong>iniziali o pseudonimo</strong>, in modo che sul database non compaia mai il nome per esteso.</li>
+        <li><strong>EduBoard — abbinamento tramite QR code e funzioni collaborative:</strong> lo stesso database Firebase viene utilizzato per collegare la lavagna al telefono del docente e per le funzioni di sessione (invio foto, timer). Non vi transitano dati di alunni.</li>
+        <li><strong>LogiKron — gare matematiche fra istituti:</strong> i dati delle iscrizioni e delle gare sono conservati su un database <em>Cloudflare D1</em> gestito da EduTechLab. Vi figurano il nome e l'email del docente referente e, per l'edizione in corso, i nominativi degli alunni componenti le squadre, necessari alla predisposizione degli attestati. Tali dati vengono cancellati al termine di ogni edizione annuale. <strong>È in corso una modifica</strong> che eliminerà del tutto il transito dei nominativi degli alunni da questo database.</li>
+        <li><strong>Moduli di contatto e iscrizione ai materiali formativi:</strong> i dati inseriti (nome, email, istituto) sono ricevuti tramite Google Apps Script e conservati su Google Workspace/Drive di EduTechLab.</li>
+    </ul>
+
+    <p><strong>Fornitori che agiscono come responsabili del trattamento</strong> per conto di EduTechLab: Google Ireland Ltd. (Google Drive, Firebase, Apps Script, Gmail), Cloudflare Inc. (Workers e database D1), GitHub Inc. (hosting delle pagine). I database sopra indicati sono configurati su <strong>server nell'Unione Europea</strong>.</p>
+
+    <h2>8. Minori, dati particolari e ruoli</h2>
+    <p>Le applicazioni EduTechLab sono utilizzate in ambito scolastico e, in molti casi, comportano il trattamento di dati riferiti ad <strong>alunni minorenni</strong>. Questo paragrafo chiarisce chi fa cosa, perché è la domanda che le istituzioni scolastiche pongono più spesso.</p>
+
+    <div class="highlight">
+        <strong>Regola generale:</strong> quando un docente utilizza un'applicazione EduTechLab con dati dei propri alunni, tali dati restano sul dispositivo in uso oppure nel dominio Google Workspace dell'istituzione scolastica. In questi casi il <strong>titolare del trattamento è l'istituzione scolastica</strong>; EduTechLab fornisce unicamente lo strumento e <strong>non accede, non riceve e non conserva</strong> quei dati.
+    </div>
+
+    <p><strong>Fanno eccezione le funzioni elencate al §7</strong> (condivisione dei vocabolari CAArtella e gare LogiKron), nelle quali i dati transitano da servizi gestiti da EduTechLab. Limitatamente a queste funzioni, EduTechLab agisce come <strong>responsabile del trattamento ai sensi dell'art. 28 GDPR</strong> e si rende disponibile a sottoscrivere l'atto di nomina con l'istituzione scolastica che ne faccia richiesta.</p>
+
+    <p><strong>Dati appartenenti a categorie particolari (art. 9 GDPR).</strong> CAArtella è destinata alla Comunicazione Aumentativa Alternativa: l'esistenza stessa di un vocabolario riferito a un alunno può rivelare una condizione di disabilità. Per questa ragione l'applicazione richiede espressamente di identificare l'alunno con iniziali o pseudonimo, così che sui sistemi di EduTechLab non sia presente alcun dato che consenta di identificarlo. La corrispondenza fra pseudonimo e alunno resta esclusivamente in possesso del docente.</p>
+
+    <p><strong>Nessuna decisione automatizzata e nessuna intelligenza artificiale.</strong> Nessuna applicazione destinata all'uso scolastico impiega sistemi di intelligenza artificiale sui dati degli alunni, né adotta decisioni automatizzate ai sensi dell'art. 22 GDPR. Le funzioni di valutazione applicano esclusivamente i criteri deliberati dagli organi collegiali della scuola.</p>
+
+    <h2>9. Diritti dell'Interessato</h2>
     <p>Ai sensi del GDPR, hai diritto a:</p>
     <ul>
         <li>Accesso ai tuoi dati personali</li>
@@ -205,10 +235,11 @@
     </ul>
     <p>Per revocare l'accesso alle API Google: <strong>myaccount.google.com → Sicurezza → App di terze parti con accesso all'account</strong>.</p>
 
-    <h2>9. Sicurezza</h2>
-    <p>Tutte le comunicazioni avvengono tramite HTTPS. I token OAuth non vengono mai salvati su server esterni. Le applicazioni utilizzano esclusivamente risorse statiche (GitHub Pages / Cloudflare Pages) senza database propri.</p>
+    <h2>10. Sicurezza</h2>
+    <p>Tutte le comunicazioni avvengono tramite HTTPS. Le applicazioni sono distribuite come risorse statiche (GitHub Pages) e richiedono a Google il solo permesso <code>drive.file</code>, che consente l'accesso ai soli file creati dall'applicazione: <strong>nessuna applicazione è tecnicamente in grado di leggere il resto del Google Drive dell'utente</strong>.</p>
+    <p>I database indicati al §7 sono protetti da regole di accesso che limitano la lettura e la scrittura ai soli dati pertinenti, sono ospitati su server nell'Unione Europea e non sono indicizzati né accessibili pubblicamente. I token di accesso non vengono conservati in modo permanente su alcun server.</p>
 
-    <h2>10. Modifiche</h2>
+    <h2>11. Modifiche</h2>
     <p>Questa Privacy Policy può essere aggiornata. Le modifiche saranno pubblicate su questa pagina con indicazione della data di aggiornamento.</p>
 
     <div class="highlight">
