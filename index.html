@@ -529,6 +529,14 @@
             letter-spacing: 1px;
         }
 
+        .stat-note {
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 0.8rem;
+            font-weight: 400;
+            margin-top: 0.35rem;
+            line-height: 1.3;
+        }
+
         /* About Section */
         .about {
             padding: 80px 0;
@@ -1796,8 +1804,8 @@
             </div>
             <p class="hero-description">
                 <strong>Fabio Rizzotto</strong><br>
-                Formatore Docenti - Esperto PNRR &bull; Innovazione Digitale STEAM<br>
-                <em>342+ ore di formazione erogata &bull; Google Certified &bull; AI Educational Specialist</em>
+                Formatore Docenti - Esperto PNRR &bull; Referente IA d'Istituto<br>
+                <em>500+ ore di formazione erogata &bull; Google Certified &bull; AI Educational Specialist &bull; Innovazione Digitale STEAM</em>
             </p>
             <div class="cta-container">
                 <a href="#tools" class="cta-button">Scopri gli Strumenti</a>
@@ -1811,20 +1819,24 @@
         <div class="container">
             <div class="stats-grid">
                 <div class="stat-item fade-in">
-                    <div class="stat-number" data-target="342" data-suffix="+">0</div>
+                    <div class="stat-number" data-target="500" data-suffix="+">0</div>
                     <div class="stat-label">Ore di Formazione</div>
+                    <div class="stat-note">erogate come formatore dal 2016</div>
                 </div>
                 <div class="stat-item fade-in">
-                    <div class="stat-number" data-target="9">0</div>
-                    <div class="stat-label">Istituti Formati</div>
+                    <div class="stat-number" data-target="13">0</div>
+                    <div class="stat-label">Istituti ed Enti</div>
                 </div>
                 <div class="stat-item fade-in">
-                    <div class="stat-number" data-target="20">0</div>
+                    <!-- data-target assente: il numero viene contato dalle card degli strumenti
+                         pi&ugrave; sotto (escluse quelle "In Arrivo"), cos&igrave; non pu&ograve; divergere -->
+                    <div class="stat-number" id="statStrumenti">0</div>
                     <div class="stat-label">Strumenti Creati</div>
                 </div>
                 <div class="stat-item fade-in">
-                    <div class="stat-number" data-target="4">0</div>
+                    <div class="stat-number" data-target="9">0</div>
                     <div class="stat-label">Certificazioni</div>
+                    <div class="stat-note">di cui 6 rilasciate da Google</div>
                 </div>
             </div>
         </div>
@@ -1857,12 +1869,16 @@
                         <p>Insegnamento innovativo con integrazione tecnologica e metodologie STEAM</p>
                     </div>
                     <div class="role-card">
-                        <h4>&#128187; Animatore Digitale</h4>
-                        <p>Coordinamento e sviluppo delle competenze digitali dell'Istituto</p>
+                        <h4>&#128187; Animatore Digitale dal 2016</h4>
+                        <p>Dieci anni consecutivi di coordinamento del digitale in due Istituti Comprensivi: transizione digitale, PNSD e PNRR, formazione del personale, piattaforme cloud e registro elettronico</p>
                     </div>
                     <div class="role-card">
                         <h4>&#128300; Formatore Docenti - Esperto PNRR</h4>
                         <p>Esperienza avanzata in metodologie STEAM e innovazione didattica digitale</p>
+                    </div>
+                    <div class="role-card">
+                        <h4>&#129302; Referente IA d'Istituto</h4>
+                        <p>Governance dell'Intelligenza Artificiale a scuola e alfabetizzazione IA del personale docente, in attuazione dell'art. 4 del Regolamento europeo sull'IA</p>
                     </div>
                 </div>
             </div>
@@ -1875,6 +1891,16 @@
             <h2 class="section-title fade-in" style="color: white;">Certificazioni e Competenze</h2>
             <div class="cert-grid">
                 <div class="cert-card fade-in">
+                    <div class="cert-icon">&#10024;</div>
+                    <h3>Docente Certificato Gemini</h3>
+                    <p>Certificazione Google for Education 2026 sull'uso didattico di Google AI &mdash; competenze verificate su Gemini nell'ambiente scolastico</p>
+                </div>
+                <div class="cert-card fade-in">
+                    <div class="cert-icon">&#9878;</div>
+                    <h3>AI Literacy &mdash; Art. 4 EU AI Act</h3>
+                    <p>Attestato 2026 sull'obbligo europeo di alfabetizzazione all'Intelligenza Artificiale che ogni scuola deve garantire al proprio personale</p>
+                </div>
+                <div class="cert-card fade-in">
                     <div class="cert-icon">&#129302;</div>
                     <h3>Generative AI for Educators</h3>
                     <p>Certificazione Google 2024 - Livello 8 QEQ per l'implementazione etica dell'Intelligenza Artificiale nella didattica</p>
@@ -1882,7 +1908,7 @@
                 <div class="cert-card fade-in">
                     <div class="cert-icon">&#127891;</div>
                     <h3>Google for Education Certified</h3>
-                    <p>Certificazioni complete Google Ads, Workspace Premium e competenze amministrative avanzate per l'ecosistema educativo</p>
+                    <p>Google Ads Measurement e Creative Certification &bull; Skill Badge per le funzionalit&agrave; premium di insegnamento e per l'amministrazione IT</p>
                 </div>
                 <div class="cert-card fade-in">
                     <div class="cert-icon">&#128187;</div>
@@ -1892,7 +1918,17 @@
                 <div class="cert-card fade-in">
                     <div class="cert-icon">&#128300;</div>
                     <h3>Esperto Formatore PNRR</h3>
-                    <p>342+ ore di formazione erogata DM66 &bull; Coding, Robotica Educativa, AI, Digital Storytelling &bull; 9 Istituti Lombardia</p>
+                    <p>342 ore DM66 su 9 Istituti della Lombardia &bull; 47 ore nell'anno 2025/26 &bull; 12 ore nel 2023<br>Coding, Robotica Educativa, AI, Digital Storytelling</p>
+                </div>
+                <div class="cert-card fade-in">
+                    <div class="cert-icon">&#128218;</div>
+                    <h3>Coding e Pensiero Computazionale</h3>
+                    <p>MOOC dell'Universit&agrave; di Urbino &mdash; Livello 8 QEQ (2018) e <em>Coding and A.I. in Your Classroom</em> (2026), con il prof. Alessandro Bogliolo</p>
+                </div>
+                <div class="cert-card fade-in">
+                    <div class="cert-icon">&#128260;</div>
+                    <h3>Formazione Continua dal 2016</h3>
+                    <p>Oltre venti corsi e webinar certificati su Intelligenza Artificiale, Gemini, Chromebook, transizione digitale e Google Workspace &mdash; aggiornamento costante, non una tantum</p>
                 </div>
             </div>
         </div>
@@ -2444,10 +2480,32 @@
         // ==========================================
         // ANIMATED COUNTERS
         // ==========================================
+        // Il contatore degli strumenti si conta da se': le card sono gia' nella pagina,
+        // quindi non c'e' un secondo numero da tenere allineato a mano ad ogni app nuova.
+        // Si escludono le app non ancora realizzate, riconosciute dal BADGE ("Prossimamente")
+        // e non dalla categoria in cui stanno: cosi' il conteggio resta giusto anche se in
+        // futuro un'app in arrivo viene messa fuori dalla categoria "In Arrivo".
+        // Le "Riservate" invece si contano: sono app reali, solo non pubbliche.
+        function contaStrumentiPubblicati() {
+            var box = document.getElementById('statStrumenti');
+            if (!box) return;
+            var creati = 0;
+            document.querySelectorAll('.tool-card').forEach(function(card) {
+                var badge = card.querySelector('.coming-soon');
+                var testo = badge ? badge.textContent.trim().toLowerCase() : '';
+                var nonPronta = testo === 'prossimamente' || testo === 'in arrivo'
+                    || card.closest('#cat-arrivo') !== null;
+                if (!nonPronta) creati++;
+            });
+            if (creati > 0) box.setAttribute('data-target', creati);
+        }
+
         function animateCounters() {
+            contaStrumentiPubblicati();
             var counters = document.querySelectorAll('.stat-number');
             counters.forEach(function(counter) {
                 var target = parseInt(counter.getAttribute('data-target'));
+                if (isNaN(target)) return;
                 var suffix = counter.getAttribute('data-suffix') || '';
                 var duration = 2000;
                 var startTime = performance.now();
