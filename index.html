@@ -375,6 +375,12 @@
             animation: fadeInUp 1s ease-out 0.6s both;
         }
 
+        /* Ogni credenziale resta intera: il testo pu&ograve; andare a capo sui separatori,
+           mai in mezzo a una frase. */
+        .nowrap-group {
+            white-space: nowrap;
+        }
+
         .cta-container {
             display: flex;
             gap: 1.5rem;
@@ -1804,8 +1810,12 @@
             </div>
             <p class="hero-description">
                 <strong>Fabio Rizzotto</strong><br>
-                Formatore Docenti - Esperto PNRR &bull; Referente IA d'Istituto<br>
-                <em>500+ ore di formazione erogata &bull; Google Certified &bull; AI Educational Specialist &bull; Innovazione Digitale STEAM</em>
+                <span class="nowrap-group">Formatore Docenti - Esperto PNRR</span> &bull;
+                <span class="nowrap-group">Referente IA d'Istituto</span><br>
+                <em><span class="nowrap-group">500+ ore di formazione erogata</span> &bull;
+                <span class="nowrap-group">Google Certified</span> &bull;
+                <span class="nowrap-group">AI Educational Specialist</span> &bull;
+                <span class="nowrap-group">Innovazione Digitale STEAM</span></em>
             </p>
             <div class="cta-container">
                 <a href="#tools" class="cta-button">Scopri gli Strumenti</a>

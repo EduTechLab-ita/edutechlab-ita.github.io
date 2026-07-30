@@ -5,7 +5,7 @@
 //  skipWaiting + clients.claim + notifica alle schede aperte.
 // ══════════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'edutechlab-v3.6.2';
+const CACHE_NAME = 'edutechlab-v3.6.3';
 
 const urlsToCache = [
   '/',
