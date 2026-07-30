@@ -5,7 +5,7 @@
 //  skipWaiting + clients.claim + notifica alle schede aperte.
 // ══════════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'edutechlab-v3.6.1';
+const CACHE_NAME = 'edutechlab-v3.6.2';
 
 const urlsToCache = [
   '/',
@@ -25,10 +25,16 @@ self.addEventListener('install', (event) => {
 });
 
 // ── Activate: elimina le cache vecchie e avvisa le schede aperte ──
+// ⚠️ Su edutechlab.it convivono altre PWA con cache proprie (VitaeLab,
+// Bolle Aritmetiche, Meccanismo Cambio, pannello-ic). Si cancellano SOLO le
+// versioni precedenti di questo sito: toccare le altre le lascerebbe senza
+// funzionamento offline.
+const PREFISSO_CACHE = 'edutechlab-v';
+
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
-      const oldKeys = keys.filter((k) => k !== CACHE_NAME);
+      const oldKeys = keys.filter((k) => k.startsWith(PREFISSO_CACHE) && k !== CACHE_NAME);
       return Promise.all(oldKeys.map((k) => caches.delete(k))).then(() => {
         // Avvisa SOLO se c'era davvero una versione precedente:
         // al primo ingresso di un nuovo visitatore non serve alcun reload.
