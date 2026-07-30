@@ -2199,11 +2199,12 @@
                 <a onclick="openLegalModal('legalModal')">Note Legali</a>
                 <a onclick="openLegalModal('termsModal')">Termini di Servizio</a>
             </div>
-            <p>&copy; 2025 EduTechLab - Fabio Rizzotto. Tutti i diritti riservati.</p>
+            <p>&copy; 2026 EduTechLab - Fabio Rizzotto. Tutti i diritti riservati.</p>
             <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 1rem;">
                 Sito web per attivit&agrave; di formazione e divulgazione didattica digitale<br>
                 Formatore Docenti Esperto PNRR &bull; Google Certified &bull; Innovazione STEAM
             </p>
+            <p id="siteVersion" style="font-size: 0.75rem; opacity: 0.45; margin-top: 1rem; letter-spacing: 0.03em;" hidden></p>
         </div>
     </footer>
 
@@ -2618,6 +2619,15 @@
         // SERVICE WORKER
         // ==========================================
         if ('serviceWorker' in navigator) {
+            // Il SW avvisa quando una nuova versione ha preso il controllo:
+            // ricarica una sola volta, così l'aggiornamento non resta invisibile.
+            var swReloading = false;
+            navigator.serviceWorker.addEventListener('message', function(e) {
+                if (!e.data || e.data.type !== 'SW_UPDATED' || swReloading) return;
+                swReloading = true;
+                window.location.reload();
+            });
+
             window.addEventListener('load', function() {
                 navigator.serviceWorker.register('sw.js')
                     .then(function(registration) {
@@ -2628,6 +2638,27 @@
                     });
             });
         }
+
+        // ==========================================
+        // VERSIONE MOSTRATA NEL FOOTER
+        // Letta dal CACHE_NAME di sw.js: unica fonte, si aggiorna da sé ad ogni
+        // rilascio. Nessun secondo numero da tenere allineato a mano.
+        // ==========================================
+        (function mostraVersioneSito() {
+            var box = document.getElementById('siteVersion');
+            if (!box) return;
+            fetch('sw.js', { cache: 'no-store' })
+                .then(function(r) { return r.text(); })
+                .then(function(testo) {
+                    var trovato = testo.match(/CACHE_NAME\s*=\s*'edutechlab-v([^']+)'/);
+                    if (!trovato) return;
+                    box.textContent = 'Versione ' + trovato[1];
+                    box.hidden = false;
+                })
+                .catch(function() {
+                    // Nessuna versione leggibile: meglio non mostrare nulla che un numero sbagliato.
+                });
+        })();
 
         // ==========================================
         // SMOOTH SCROLLING
