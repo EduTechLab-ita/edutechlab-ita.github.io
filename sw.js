@@ -5,7 +5,7 @@
 //  skipWaiting + clients.claim + notifica alle schede aperte.
 // ══════════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'edutechlab-v3.7.0';
+const CACHE_NAME = 'edutechlab-v3.7.1';
 
 // ⚠️ Qui dentro va SOLO ciò che serve davvero al primo caricamento: ogni file
 // elencato viene scaricato da chiunque apra il sito. Fino alla v3.6.3 c'era
