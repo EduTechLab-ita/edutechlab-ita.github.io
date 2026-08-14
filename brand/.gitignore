@@ -1,0 +1,24 @@
+# Di questa cartella va online SOLO il pacchetto del marchio (i file finiti).
+# I banchi di prova e i sorgenti restano sul Drive: servono a rimettere in
+# discussione una scelta in futuro, non a chi scarica un logo — e online
+# direbbero a un estraneo piu' di quanto serva.
+
+# Banchi di prova (vedi edutechlab-sito.md, sezione "I BANCHI DI PROVA")
+proposte-marchio-6.html
+marchio-scelto-animazione.html
+confronto-B-vs-E.html
+hero/
+_versioni-superate-28-07/
+
+# Sorgenti di generazione: si usano da qui, non servono pubblicati
+MARCHIO/_genera.js
+MARCHIO/_anima.js
+
+# I 4 font candidati scartati e la pagina del confronto.
+# Outfit.woff2 e Outfit-variabile.ttf restano: sono il font scelto e il
+# manuale li offre in scaricamento.
+MARCHIO/font/CONFRONTO-FONT.html
+MARCHIO/font/Manrope.woff2
+MARCHIO/font/Urbanist.woff2
+MARCHIO/font/Plus-Jakarta-Sans.woff2
+MARCHIO/font/Figtree.woff2

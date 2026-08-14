@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Marchio EduTechLab — tutti i file, pronti da scaricare</title>
+<style>
+  @font-face { font-family:'Outfit'; src:url('font/Outfit.woff2') format('woff2'); font-weight:100 900; font-display:swap; }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --sfondo:#F1F5F9; --carta:#FFFFFF; --testo:#17324D; --tenue:#64748B; --bordo:#E2E8F0;
+    --blu:#17324D; --t1:#0D9488; --t2:#DB2777; --t3:#CA8A04;
+  }
+  body { font-family:-apple-system,'Segoe UI',Roboto,sans-serif; background:var(--sfondo); color:var(--testo); line-height:1.6; }
+  .wrap { max-width:1180px; margin:0 auto; padding:2.2rem 1.5rem 5rem; }
+
+  /* intestazione */
+  .testata { display:flex; align-items:center; gap:1.2rem; flex-wrap:wrap; margin-bottom:.4rem; }
+  .testata svg { width:74px; height:74px; }
+  .titolo { font-family:'Outfit',sans-serif; font-weight:300; font-size:2.6rem; line-height:1; }
+  .titolo .a{color:var(--t1)} .titolo .b{color:var(--t2)} .titolo .c{color:var(--t3)}
+  .sotto { color:var(--tenue); max-width:78ch; margin:.6rem 0 1.4rem; }
+
+  .scarica-tutto {
+    display:inline-flex; align-items:center; gap:.6rem; background:var(--blu); color:#fff;
+    text-decoration:none; padding:.8rem 1.4rem; border-radius:999px; font-weight:600; font-size:.95rem;
+    box-shadow:0 4px 14px rgba(23,50,77,.25); transition:transform .15s;
+  }
+  .scarica-tutto:hover { transform:translateY(-2px); }
+  .scarica-tutto small { font-weight:400; opacity:.75; }
+
+  h2 { font-size:1.2rem; margin:2.8rem 0 .35rem; padding-top:1.6rem; border-top:2px solid #CBD5E1; }
+  .nota { color:var(--tenue); font-size:.92rem; margin-bottom:1.1rem; max-width:78ch; }
+
+  /* schede file */
+  .griglia { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1.1rem; }
+  .scheda { background:var(--carta); border-radius:14px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.09); display:flex; flex-direction:column; }
+  .tela { display:flex; align-items:center; justify-content:center; padding:1.5rem; min-height:148px; }
+  .tela.chiara{background:#fff} .tela.scura{background:#17324D} .tela.foto{background:linear-gradient(135deg,#667eea,#764ba2)}
+  .tela.quadri{background-image:linear-gradient(45deg,#E2E8F0 25%,transparent 25%),linear-gradient(-45deg,#E2E8F0 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#E2E8F0 75%),linear-gradient(-45deg,transparent 75%,#E2E8F0 75%);background-size:16px 16px;background-position:0 0,0 8px,8px -8px,-8px 0}
+  .tela img { max-width:100%; height:auto; }
+  .info { padding:.85rem 1rem 1rem; border-top:1px solid var(--bordo); flex:1; display:flex; flex-direction:column; }
+  .info b { font-size:.92rem; }
+  .info p { font-size:.83rem; color:var(--tenue); margin:.15rem 0 .7rem; flex:1; }
+  .giu { display:flex; gap:.4rem; flex-wrap:wrap; }
+  .giu a {
+    font-size:.78rem; text-decoration:none; color:var(--blu); border:1px solid #CBD5E1;
+    padding:.3rem .7rem; border-radius:999px; background:#F8FAFC; transition:all .15s;
+  }
+  .giu a:hover { background:var(--blu); color:#fff; border-color:var(--blu); }
+
+  /* animazioni */
+  video { width:100%; border-radius:10px; display:block; background:#17324D; }
+
+  /* colori */
+  .colori { display:flex; flex-wrap:wrap; gap:.7rem; }
+  .col { width:158px; background:var(--carta); border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.09); cursor:pointer; border:none; font:inherit; text-align:left; }
+  .col .campione { height:56px; } .col .nome { padding:.45rem .7rem .6rem; font-size:.78rem; }
+  .col code { color:var(--tenue); font-family:ui-monospace,Consolas,monospace; }
+  .col.copiato .nome::after { content:' copiato!'; color:var(--t1); font-weight:600; }
+
+  /* regole */
+  .regole { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1rem; }
+  .regola { background:var(--carta); border-radius:12px; padding:1rem 1.2rem; box-shadow:0 1px 3px rgba(0,0,0,.09); font-size:.9rem; }
+  .regola b { display:block; margin-bottom:.2rem; }
+  .si { border-left:4px solid var(--t1); } .no { border-left:4px solid #DC2626; }
+
+  .avviso { background:#FEF3C7; border-left:4px solid var(--t3); padding:1rem 1.2rem; border-radius:0 10px 10px 0; margin:1.4rem 0; font-size:.92rem; }
+  table { border-collapse:collapse; width:100%; background:var(--carta); border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.09); font-size:.9rem; }
+  th,td { text-align:left; padding:.7rem 1rem; border-bottom:1px solid var(--bordo); }
+  th { background:#F8FAFC; font-size:.82rem; text-transform:uppercase; letter-spacing:.04em; color:var(--tenue); }
+  tr:last-child td { border-bottom:none; }
+  .pie { margin-top:3rem; padding-top:1.2rem; border-top:1px solid #CBD5E1; color:var(--tenue); font-size:.85rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="testata">
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <g fill="none" stroke="#17324D" stroke-width="7" stroke-linecap="round">
+        <path d="M20.5 50 75.5 18.25"/><path d="M20.5 50 84 50"/><path d="M20.5 50 75.5 81.75"/></g>
+      <rect x="7" y="36.5" width="27" height="27" rx="4" fill="#17324D"/>
+      <circle cx="75.5" cy="18.25" r="9" fill="#0D9488"/>
+      <circle cx="84" cy="50" r="9" fill="#DB2777"/>
+      <circle cx="75.5" cy="81.75" r="9" fill="#CA8A04"/>
+    </svg>
+    <div class="titolo"><span class="a">Edu</span><span class="b">Tech</span><span class="c">Lab</span></div>
+  </div>
+  <p class="sotto">Tutti i file del marchio, pronti da scaricare con un clic. Accanto a ognuno c'è scritto
+  <b>quando si usa</b>: non serve ricordarselo, basta aprire questa pagina nel momento del bisogno.</p>
+
+  <a class="scarica-tutto" href="EduTechLab-marchio.zip" download>
+    ⬇ Scarica tutto <small>— un unico file, 0,9 MB</small>
+  </a>
+
+  <!-- ====================== QUALE USO QUANDO ====================== -->
+  <h2>La regola, in una tabella</h2>
+  <p class="nota">Quale versione usare non dipende dal gusto ma dal fondo su cui va a finire.</p>
+  <table>
+    <tr><th>Se il fondo è…</th><th>Usa</th><th>Perché</th></tr>
+    <tr><td>scuro (sito, slide scure)</td><td><b>Colori su scuro</b></td><td>i pastelli sono nati per stare lì</td></tr>
+    <tr><td>bianco o chiaro (carta, Word)</td><td><b>Colori su chiaro</b></td><td>stesse tinte più profonde: sul bianco i pastelli sbiadiscono</td></tr>
+    <tr><td>una stampa in bianco e nero</td><td><b>Nera piena</b></td><td>i tre colori in grigio diventano quasi identici fra loro</td></tr>
+    <tr><td>una foto o un colore pieno</td><td><b>Bianca piena</b></td><td>si stacca da qualsiasi immagine</td></tr>
+  </table>
+
+  <!-- ====================== IL SEGNO ====================== -->
+  <h2>Il marchio da solo</h2>
+  <p class="nota">Per icone, timbri, angoli di slide, avatar dei social: dove il nome non serve o non ci sta.</p>
+  <div class="griglia" id="marchi"></div>
+
+  <!-- ====================== MARCHIO + NOME ====================== -->
+  <h2>Marchio e nome insieme</h2>
+  <p class="nota">La versione da usare quasi sempre: intestazioni, carta, firme, copertine.</p>
+  <div class="griglia" id="lockup"></div>
+
+  <!-- ====================== ICONE ====================== -->
+  <h2>Icone: app installata, telefono, preferiti</h2>
+  <p class="nota">Sono quelle che si vedono quando il sito viene installato come app, quando lo si aggiunge alla
+  schermata del telefono e quando finisce nei preferiti del browser. Hanno il fondo blu perché un'icona
+  trasparente, su Android, finisce su uno sfondo qualsiasi deciso dal telefono.</p>
+  <div class="griglia" id="icone"></div>
+
+  <!-- ====================== ANIMAZIONI ====================== -->
+  <h2>Il marchio in movimento</h2>
+  <p class="nota">Per l'apertura dei corsi e le presentazioni. <b>MP4</b> per PowerPoint, Gamma e Genially;
+  <b>GIF</b> dove il video non si può caricare. Sono disegnate fotogramma per fotogramma, non registrate da
+  schermo: restano nitide su qualsiasi proiettore e la più pesante è 138 KB.</p>
+  <div class="griglia" id="video"></div>
+
+  <!-- ====================== COLORI ====================== -->
+  <h2>I colori</h2>
+  <p class="nota">Clicca su un colore per copiarne il codice: serve quando lo devi incollare in Canva, Gamma, Word o PowerPoint.</p>
+  <div class="colori" id="colori"></div>
+
+  <!-- ====================== FONT ====================== -->
+  <h2>Il font del nome</h2>
+  <p class="nota"><b>Outfit Light.</b> Licenza SIL Open Font: si può usare liberamente, anche per lavoro, e
+  incorporare nei documenti. Se lo installi sul computer puoi scrivere titoli coerenti col marchio anche in
+  Word e PowerPoint. Sul sito viene servito dal nostro dominio, mai da Google: così le reti scolastiche non
+  possono bloccarlo e nessun dato del visitatore va a terzi.</p>
+  <div class="griglia">
+    <div class="scheda">
+      <div class="tela chiara"><div style="font-family:'Outfit';font-weight:300;font-size:2.6rem">Aa Bb Cc 123</div></div>
+      <div class="info"><b>Outfit Light</b><p>Per il web (.woff2, 31 KB) e per installarlo sul computer (.ttf).</p>
+        <div class="giu"><a href="font/Outfit.woff2" download>woff2 (web)</a><a href="font/Outfit-variabile.ttf" download>ttf (da installare)</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================== REGOLE ====================== -->
+  <h2>Le quattro cose da non sbagliare</h2>
+  <div class="regole">
+    <div class="regola si"><b>✓ Lascia respiro</b>Intorno al marchio va tenuto uno spazio libero pari almeno all'altezza del pixel quadrato. Se è schiacciato fra altre cose, sembra un'icona qualsiasi.</div>
+    <div class="regola si"><b>✓ Misura minima</b>Il marchio da solo non sotto i 16 px; con il nome accanto non sotto i 120 px di larghezza, altrimenti le tre parti del nome non si distinguono più.</div>
+    <div class="regola no"><b>✗ Non ricolorarlo</b>I tre colori dei nodi sono sempre quelli, nell'ordine turchese → rosa → giallo. Se il fondo non li regge, si passa alla versione nera o bianca — non si cambiano le tinte.</div>
+    <div class="regola no"><b>✗ Non deformarlo, non aggiungere effetti</b>Niente stiramenti, ombre, contorni o sfumature: il segno è nato pieno e piatto. Per ingrandire usa sempre gli SVG, che non perdono qualità.</div>
+  </div>
+
+  <div class="avviso" id="avvisoFirma">
+    <b>Firma mail:</b> il file <code>firma-mail/firma.html</code> è pronto (aprilo, Ctrl+A, Ctrl+C e incollalo in
+    Gmail → Impostazioni → Firma), ma funziona solo dopo che <code>logo-firma.png</code> sarà pubblicato su
+    <code>edutechlab.it/brand/</code>: finché non è online, chi riceve la mail vede un riquadro vuoto.
+  </div>
+
+  <p class="pie">Pacchetto generato l'11 agosto 2026 · Se un colore o il font cambiano, si modifica in un punto solo
+  (<code>_genera.js</code>) e si rilancia: tutti i file qui sopra si rifanno da soli, senza ritocchi a mano.</p>
+
+</div>
+
+<script>
+/* Le schede sono costruite da un elenco unico: aggiungere un file significa
+   aggiungere una riga qui, e la pagina resta coerente da sola. */
+const SCHEDE = {
+  marchi: [
+    ['png/marchio-colori-su-scuro.png','scura','Colori su scuro','Sito, slide scure, schermo notturno.',['svg/marchio-colori-su-scuro.svg|SVG','png/marchio-colori-su-scuro.png|PNG']],
+    ['png/marchio-colori-su-chiaro.png','chiara','Colori su chiaro','Carta, Word, slide chiare. È questa che va su fondo bianco.',['svg/marchio-colori-su-chiaro.svg|SVG','png/marchio-colori-su-chiaro.png|PNG']],
+    ['png/marchio-nero.png','chiara','Nera piena','Stampa in bianco e nero, fotocopie, timbri, documenti da protocollare.',['svg/marchio-nero.svg|SVG','png/marchio-nero.png|PNG']],
+    ['png/marchio-bianco.png','foto','Bianca piena','Sopra fotografie e colori pieni.',['svg/marchio-bianco.svg|SVG','png/marchio-bianco.png|PNG']],
+    ['svg/marchio-linea.svg','chiara','A filo','Solo contorno, non riempito: incisioni, ricami, filigrane, stampa su carta colorata.',['svg/marchio-linea.svg|SVG']]
+  ],
+  lockup: [
+    ['png/lockup-colori-su-scuro.png','scura','Su scuro','Intestazione del sito, copertine di slide scure.',['svg/lockup-colori-su-scuro.svg|SVG','png/lockup-colori-su-scuro.png|PNG']],
+    ['png/lockup-colori-su-chiaro.png','chiara','Su chiaro','Carta intestata, firma mail, documenti, Word.',['svg/lockup-colori-su-chiaro.svg|SVG','png/lockup-colori-su-chiaro.png|PNG']],
+    ['png/lockup-nero.png','chiara','Nero','Quando il documento va stampato o protocollato.',['svg/lockup-nero.svg|SVG','png/lockup-nero.png|PNG']],
+    ['png/lockup-bianco.png','foto','Bianco','Sopra foto e fondi colorati pieni.',['svg/lockup-bianco.svg|SVG','png/lockup-bianco.png|PNG']]
+  ],
+  icone: [
+    ['icone-pwa/icona-192.png','quadri','App installata','Quella che compare quando il sito viene installato come app sul computer. Serve anche nel manifest come 192 e 512.',['icone-pwa/icona-192.png|192','icone-pwa/icona-512.png|512']],
+    ['icone-pwa/icona-512-maskable.png','quadri','Android (maskable)','Il segno è più piccolo perché Android ritaglia i bordi per dare a tutte le icone la stessa forma.',['icone-pwa/icona-512-maskable.png|512 maskable']],
+    ['icone-pwa/apple-touch-icon.png','quadri','iPhone e iPad','Usata quando si aggiunge il sito alla schermata Home su Apple.',['icone-pwa/apple-touch-icon.png|180']],
+    ['favicon/favicon-64.png','quadri','Preferiti e scheda del browser','La minuscola accanto al titolo della scheda e nei preferiti. Il .ico serve a Windows e ai browser più vecchi.',['favicon/favicon.ico|.ico','favicon/favicon-32.png|32','favicon/favicon-16.png|16']]
+  ]
+};
+const VIDEO = [
+  ['animazioni/completo-con-payoff','Completa','Marchio, nome e sottotitolo. Per la prima slide di un corso.'],
+  ['animazioni/marchio-e-nome-scuro','Marchio e nome — scuro','Intestazione di una presentazione su fondo scuro.'],
+  ['animazioni/marchio-e-nome-chiaro','Marchio e nome — chiaro','La stessa, per slide con fondo bianco.'],
+  ['animazioni/marchio-solo-scuro','Solo marchio — scuro','Breve, per stacchi e angoli di slide.'],
+  ['animazioni/marchio-solo-chiaro','Solo marchio — chiaro','La stessa, su fondo bianco.']
+];
+const COLORI = [
+  ['#5EEAD4','Turchese chiaro','sui fondi scuri'], ['#F9A8D4','Rosa chiaro','sui fondi scuri'], ['#FCD34D','Giallo chiaro','sui fondi scuri'],
+  ['#0D9488','Turchese profondo','sui fondi chiari'], ['#DB2777','Rosa profondo','sui fondi chiari'], ['#CA8A04','Ambra profonda','sui fondi chiari'],
+  ['#17324D','Blu istituzionale','testi, pixel, fondo delle icone']
+];
+
+function scheda([img, tela, titolo, desc, giu]) {
+  return `<div class="scheda">
+    <div class="tela ${tela}"><img src="${img}" alt="" loading="lazy"></div>
+    <div class="info"><b>${titolo}</b><p>${desc}</p>
+      <div class="giu">${giu.map(g => { const [f, e] = g.split('|'); return `<a href="${f}" download>⬇ ${e}</a>`; }).join('')}</div>
+    </div></div>`;
+}
+for (const [id, elenco] of Object.entries(SCHEDE)) {
+  document.getElementById(id).innerHTML = elenco.map(scheda).join('');
+}
+document.getElementById('video').innerHTML = VIDEO.map(([base, titolo, desc]) => `
+  <div class="scheda">
+    <div class="tela chiara" style="padding:.8rem"><video src="${base}.mp4" autoplay loop muted playsinline></video></div>
+    <div class="info"><b>${titolo}</b><p>${desc}</p>
+      <div class="giu"><a href="${base}.mp4" download>⬇ MP4</a><a href="${base}.gif" download>⬇ GIF</a></div>
+    </div></div>`).join('');
+
+document.getElementById('colori').innerHTML = COLORI.map(([hex, nome, uso]) => `
+  <button class="col" data-hex="${hex}">
+    <div class="campione" style="background:${hex}"></div>
+    <div class="nome">${nome}<br><code>${hex}</code><br><span style="opacity:.7">${uso}</span></div>
+  </button>`).join('');
+
+document.querySelectorAll('.col').forEach(b => b.addEventListener('click', async () => {
+  const hex = b.dataset.hex;
+  try { await navigator.clipboard.writeText(hex); }
+  catch {                                   // aperta da file:// la scorciatoia moderna non sempre e' concessa
+    const t = document.createElement('textarea');
+    t.value = hex; document.body.appendChild(t); t.select();
+    document.execCommand('copy'); t.remove();
+  }
+  document.querySelectorAll('.col').forEach(x => x.classList.remove('copiato'));
+  b.classList.add('copiato');
+  setTimeout(() => b.classList.remove('copiato'), 1600);
+}));
+</script>
+</body>
+</html>

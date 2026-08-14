@@ -11,18 +11,36 @@
 
     <!-- PWA Configuration -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1e293b">
+    <meta name="theme-color" content="#17324D">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="EduTechLab">
-    <link rel="apple-touch-icon" href="icon-192.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+    <!-- Icone del marchio Costellazione. iOS non gestisce la trasparenza (riempirebbe
+         di nero) e Android ritaglia in squircle: per questo apple-touch e maskable
+         hanno il fondo blu pieno, mentre la 192/512 "any" resta trasparente. -->
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    <link rel="icon" href="assets/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+    <!-- Il font sta sul nostro server, mai da Google Fonts: le reti scolastiche
+         filtrano i CDN esterni e cos&igrave; nessuna richiesta a terzi parte
+         all'apertura della pagina. -->
+    <link rel="preload" href="assets/Outfit.woff2" as="font" type="font/woff2" crossorigin>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        /* Outfit &egrave; il font del MARCHIO: si usa dove compare il nome EduTechLab
+           (lockup dell'hero e barra in alto), non come font di lettura del sito.
+           File unico variabile 100-900, servito da noi. */
+        @font-face {
+            font-family: 'Outfit';
+            src: url('assets/Outfit.woff2') format('woff2');
+            font-weight: 100 900;
+            font-display: swap;
         }
 
         body {
@@ -67,12 +85,19 @@
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
         }
 
-        header.scrolled .logo {
-            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+        /* Il marchio nella barra segue i due stati dell'header: sopra l'hero
+           scuro i pastelli, dopo lo scroll — fondo bianco — le tinte profonde.
+           I pastelli su bianco sparirebbero: in scala di grigi valgono 203, 188
+           e 210 su 255. Per questo il pacchetto marchio ha due versioni. */
+        header.scrolled .logo { color: #17324D; }
+        header.scrolled .logo .lg-tratto { stroke: #17324D; }
+        header.scrolled .logo .lg-src { fill: #17324D; }
+        header.scrolled .logo .lg-n1 { fill: #0D9488; }
+        header.scrolled .logo .lg-n2 { fill: #DB2777; }
+        header.scrolled .logo .lg-n3 { fill: #CA8A04; }
+        header.scrolled .logo .lg-w1 { color: #0D9488; }
+        header.scrolled .logo .lg-w2 { color: #DB2777; }
+        header.scrolled .logo .lg-w3 { color: #CA8A04; }
 
         header.scrolled .nav-menu a {
             color: #1e293b;
@@ -88,12 +113,45 @@
             align-items: center;
         }
 
+        /* Il marchio in barra riporta all'inizio: &egrave; la convenzione che chiunque
+           d&agrave; per scontata, e finora era un div inerte. Punta a #home e non a "/"
+           perch&eacute; il sito &egrave; una pagina sola: risale in cima senza ricaricare. */
         .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-family: 'Outfit', 'Segoe UI', sans-serif;
+            font-size: 1.65rem;
+            font-weight: 300;
+            letter-spacing: 0.01em;
             color: white;
-            transition: all 0.3s ease;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.3s ease, opacity 0.3s ease;
         }
+
+        .logo:hover { opacity: 0.85; }
+
+        .logo:focus-visible {
+            outline: 2px solid currentColor;
+            outline-offset: 6px;
+            border-radius: 6px;
+        }
+
+        .logo svg {
+            width: 34px;
+            height: 34px;
+            flex-shrink: 0;
+        }
+
+        .logo .lg-tratto { stroke: #FFFFFF; transition: stroke 0.3s ease; }
+        .logo .lg-src { fill: #FFFFFF; transition: fill 0.3s ease; }
+        .logo .lg-n1 { fill: #5EEAD4; transition: fill 0.3s ease; }
+        .logo .lg-n2 { fill: #F9A8D4; transition: fill 0.3s ease; }
+        .logo .lg-n3 { fill: #FCD34D; transition: fill 0.3s ease; }
+        .logo .lg-w1 { color: #5EEAD4; transition: color 0.3s ease; }
+        .logo .lg-w2 { color: #F9A8D4; transition: color 0.3s ease; }
+        .logo .lg-w3 { color: #FCD34D; transition: color 0.3s ease; }
 
         .nav-menu {
             display: flex;
@@ -238,15 +296,20 @@
             transform: translateY(-2px);
         }
 
-        /* Hero Section with Video Background */
+        /* ==========================================================
+           HERO — il marchio che si apre sul prodotto (rifatto 14/08/2026)
+           Sostituisce il video di sfondo da 34,3 MB: le catture reali delle
+           app pesano 270 KB in tutto, si vedono subito anche da rete
+           scolastica e mostrano l'unica cosa che non ha nessun altro.
+           Due colonne: a sinistra chi &egrave; e cosa sa fare, a destra cosa ha fatto.
+           ========================================================== */
         .hero {
             position: relative;
-            height: 100vh;
-            min-height: 600px;
+            min-height: 100vh;
             overflow: hidden;
             display: flex;
             align-items: center;
-            justify-content: center;
+            padding: 96px 0 56px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
@@ -258,70 +321,161 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Video background - object-fit cover per iframe */
-        .video-bg-wrapper {
+        /* Sfondo, primo strato: aurora. Macchie di colore che respirano,
+           CSS puro: nessuna immagine da scaricare. */
+        .aurora {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
+            inset: -20%;
             z-index: 1;
-        }
-
-        .video-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
             pointer-events: none;
-            opacity: 1;
         }
 
-
-        .video-overlay {
+        .aurora span {
             position: absolute;
-            top: 0;
-            left: 0;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.55;
+            will-change: transform;
+        }
+
+        .aurora .b1 { width: 46vw; height: 46vw; background: #4f9cff; top: 2%;  left: 4%;  animation: drift1 26s ease-in-out infinite; }
+        .aurora .b2 { width: 40vw; height: 40vw; background: #c86dd7; top: 34%; left: 52%; animation: drift2 32s ease-in-out infinite; }
+        .aurora .b3 { width: 34vw; height: 34vw; background: #3fd6c1; top: 52%; left: 16%; animation: drift3 29s ease-in-out infinite; }
+
+        @keyframes drift1 { 0%, 100% { transform: translate(0, 0) scale(1); }   50% { transform: translate(14%, 10%) scale(1.18); } }
+        @keyframes drift2 { 0%, 100% { transform: translate(0, 0) scale(1.1); } 50% { transform: translate(-16%, 12%) scale(0.92); } }
+        @keyframes drift3 { 0%, 100% { transform: translate(0, 0) scale(0.95); } 50% { transform: translate(12%, -14%) scale(1.15); } }
+
+        /* Sfondo, secondo strato: costellazioni che ripetono la forma del
+           marchio (una sorgente, i suoi nodi). Poche e piccole; il canvas si
+           spegne da solo a scheda nascosta, non consuma batteria a vuoto. */
+        /* width/height al 100% sono obbligatori, non decorativi: un canvas con
+           l'attributo width valorizzato NON si adatta al contenitore nemmeno con
+           left/right a zero — prende la misura dell'attributo. Senza queste due
+           righe ogni ridimensionamento della finestra moltiplicava il buffer per
+           il rapporto dei pixel, fino a saturare la GPU e far sparire lo sfondo. */
+        #stars {
+            position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(
-                135deg,
-                rgba(59, 130, 246, 0.25) 0%,
-                rgba(139, 92, 246, 0.3) 50%,
-                rgba(59, 130, 246, 0.25) 100%
-            );
-            z-index: 2;
+            z-index: 1;
+            pointer-events: none;
         }
 
-        .hero-content {
+        .hero-grid {
             position: relative;
             z-index: 3;
-            text-align: center;
-            color: white;
-            max-width: 900px;
-            padding: 2rem;
-            padding-top: 80px;
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1.05fr;
+            gap: 3.5rem;
+            align-items: center;
         }
 
-        .hero-content h1 {
-            font-size: clamp(3rem, 8vw, 5rem);
-            font-weight: 300;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
-            animation: fadeInUp 1s ease-out;
+        .hero-text {
+            color: white;
+            text-align: center;
         }
+
+        /* Il lockup (marchio + nome + payoff) &egrave; un blocco unico: inline-block
+           lo rende largo quanto la riga del nome, cos&igrave; il payoff pu&ograve;
+           distribuirsi esattamente su quella misura. */
+        .lockup {
+            display: inline-block;
+            cursor: default;
+        }
+
+        .brand-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.9rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .brand-row svg {
+            width: 58px;
+            height: 58px;
+            flex-shrink: 0;
+            overflow: visible;
+        }
+
+        .hero-text h1 {
+            font-family: 'Outfit', 'Segoe UI', sans-serif;
+            font-size: clamp(2rem, 8vw, 4rem);
+            font-weight: 300;
+            line-height: 1.05;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+            /* Il nome del marchio non va MAI a capo: spezzato in "EduTechL / ab"
+               non &egrave; pi&ugrave; un marchio. Verificato fino a 320px. */
+            white-space: nowrap;
+        }
+
+        /* I tre colori dei nodi escono dal marchio e prendono anche i tre pezzi
+           del nome (Edu | Tech | Lab), che sono gi&agrave; tre per costruzione: la
+           corrispondenza &egrave; uno a uno. Il payoff resta bianco, come riga di
+           lettura neutra — colorare anche quello ripeterebbe la stessa sequenza
+           due volte a pochi centimetri senza aggiungere nulla. */
+        .mk .node1, .wordmark .wm1 { fill: #5EEAD4; color: #5EEAD4; }
+        .mk .node2, .wordmark .wm2 { fill: #F9A8D4; color: #F9A8D4; }
+        .mk .node3, .wordmark .wm3 { fill: #FCD34D; color: #FCD34D; }
+
+        /* Il nome: le lettere salgono una dopo l'altra, dopo i tre nodi. */
+        .wordmark .ltr {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(16px);
+        }
+
+        .wordmark.run .ltr {
+            animation: ltrSu 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+        }
+
+        @keyframes ltrSu {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Animazione del marchio: il pixel si accende, partono i tre raggi,
+           rispondono i tre nodi. Riparte al passaggio del mouse e non in loop:
+           chi arriva dopo l'ingresso pu&ograve; comunque vederla, e nessun movimento
+           ciclico ruba attenzione alle credenziali. */
+        .mk { transition: filter 0.3s; }
+        .mk .ray  { stroke-dasharray: 100; stroke-dashoffset: 100; }
+        .mk .node { opacity: 0; transform: scale(0.2); transform-origin: center; transform-box: fill-box; }
+        .mk .src  { opacity: 0; transform: scale(0.55) rotate(-14deg); transform-origin: center; transform-box: fill-box; }
+        .mk.run .src   { animation: mkPop 0.55s cubic-bezier(0.2, 1.5, 0.4, 1) 0.15s both; }
+        .mk.run .ray1  { animation: mkDraw 0.5s ease-out 0.55s both; }
+        .mk.run .ray2  { animation: mkDraw 0.5s ease-out 0.75s both; }
+        .mk.run .ray3  { animation: mkDraw 0.5s ease-out 0.95s both; }
+        .mk.run .node1 { animation: mkPop 0.45s cubic-bezier(0.2, 1.6, 0.4, 1) 0.95s both; }
+        .mk.run .node2 { animation: mkPop 0.45s cubic-bezier(0.2, 1.6, 0.4, 1) 1.15s both; }
+        .mk.run .node3 { animation: mkPop 0.45s cubic-bezier(0.2, 1.6, 0.4, 1) 1.35s both; }
+        .lockup:hover .mk { filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.35)); }
+
+        @keyframes mkDraw { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+        @keyframes mkPop  { from { opacity: 0; transform: scale(0.35); } to { opacity: 1; transform: scale(1); } }
 
         .hero-subtitle {
-            font-size: clamp(1.2rem, 3vw, 1.8rem);
-            margin-bottom: 2rem;
+            font-size: clamp(0.95rem, 2vw, 1.5rem);
+            margin-bottom: 1.4rem;
             font-style: italic;
             opacity: 0.95;
             text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
-            animation: fadeInUp 1s ease-out 0.2s both;
             min-height: 1.5em;
+        }
+
+        /* Il payoff si allarga fino alla larghezza di marchio + nome distanziando
+           le LETTERE, come nei lockup dei marchi: la giustificazione classica
+           lascerebbe buchi enormi fra le tre parole. Il calcolo &egrave; nel JS e si
+           applica solo a scrittura finita. */
+        .hero-subtitle .sub-txt {
+            display: inline-block;
+            white-space: nowrap;
         }
 
         .typing-cursor {
@@ -339,24 +493,27 @@
             51%, 100% { opacity: 0; }
         }
 
+        /* Badge e credenziali sono pi&ugrave; compatti di prima: ora vivono in met&agrave;
+           larghezza di pagina, non su tutta. */
         .hero-badges {
             display: flex;
             flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 2.5rem;
+            gap: 0.55rem;
+            margin-bottom: 1.4rem;
             justify-content: center;
             animation: fadeInUp 1s ease-out 0.4s both;
         }
 
         .badge {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(8px);
             color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 30px;
-            font-size: 0.9rem;
+            padding: 0.45rem 1rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
             font-weight: 500;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            white-space: nowrap;
+            border: 1px solid rgba(255, 255, 255, 0.25);
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
         }
@@ -367,9 +524,9 @@
         }
 
         .hero-description {
-            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            font-size: 0.96rem;
             line-height: 1.7;
-            margin-bottom: 3rem;
+            margin-bottom: 1.6rem;
             opacity: 0.95;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
             animation: fadeInUp 1s ease-out 0.6s both;
@@ -383,7 +540,7 @@
 
         .cta-container {
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
             flex-wrap: wrap;
             justify-content: center;
             animation: fadeInUp 1s ease-out 0.8s both;
@@ -391,7 +548,7 @@
 
         .cta-button {
             display: inline-block;
-            padding: 1.2rem 2.5rem;
+            padding: 0.95rem 2rem;
             background: linear-gradient(45deg, #3b82f6, #8b5cf6);
             color: white;
             text-decoration: none;
@@ -419,6 +576,152 @@
             background: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 0.5);
         }
+
+        /* ---- Vetrina delle app: tre catture reali a ventaglio ----
+           L'app attiva sta davanti, le altre due restano dietro inclinate.
+           Sono immagini e non un video perch&eacute; le interfacce vanno lette: a
+           bitrate basso l'H.264 impasta il testo, mentre un JPG resta nitido a
+           ogni risoluzione e pesa un ventesimo. */
+        .showcase {
+            position: relative;
+        }
+
+        .frame {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1440 / 735;
+        }
+
+        .shot {
+            position: absolute;
+            inset: 0;
+            display: block;
+            border-radius: 12px;
+            overflow: hidden;
+            opacity: 0.4;
+            transform: translate(6%, 7%) rotate(4deg) scale(0.9);
+            transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.34, 1.2, 0.64, 1);
+            box-shadow: 0 22px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.15);
+            will-change: opacity, transform;
+            pointer-events: none;   /* solo la cattura in primo piano &egrave; cliccabile */
+            text-decoration: none;
+        }
+
+        .shot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            display: block;
+        }
+
+        .shot.on {
+            opacity: 1;
+            transform: translate(0, 0) rotate(0) scale(1);
+            z-index: 3;
+            pointer-events: auto;
+        }
+
+        .shot.prev {
+            opacity: 0.32;
+            transform: translate(-6%, -7%) rotate(-4deg) scale(0.9);
+            z-index: 1;
+        }
+
+        .shot.on:hover {
+            transform: translate(0, -6px) scale(1.012);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.3);
+        }
+
+        .shot.on:focus-visible {
+            outline: 3px solid #fff;
+            outline-offset: 4px;
+        }
+
+        .open-hint {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            z-index: 4;
+            background: rgba(17, 24, 39, 0.86);
+            color: white;
+            font-size: 0.76rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 999px;
+            backdrop-filter: blur(6px);
+            opacity: 0;
+            transform: translateY(6px);
+            transition: all 0.25s;
+            pointer-events: none;
+        }
+
+        .shot.on:hover .open-hint {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .shot-label {
+            margin-top: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            color: white;
+        }
+
+        .shot-name {
+            font-size: 1rem;
+            font-weight: 600;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.35);
+        }
+
+        .shot-name span {
+            display: block;
+            font-weight: 400;
+            font-size: 0.82rem;
+            opacity: 0.8;
+            margin-top: 0.15rem;
+        }
+
+        .dots {
+            display: flex;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.35);
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot.on {
+            background: white;
+            width: 26px;
+            border-radius: 999px;
+        }
+
+        .showcase-more {
+            margin-top: 0.7rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.86rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .showcase-more strong { font-weight: 700; color: white; }
+        .showcase-more a {
+            color: white;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            padding-bottom: 1px;
+        }
+        .showcase-more a:hover { border-bottom-color: white; }
 
         /* Update Notification Banner */
         .update-notification {
@@ -1476,8 +1779,19 @@
                 padding: 0 1rem;
             }
 
-            .hero-content h1 {
-                font-size: 2.5rem;
+            .hero-text h1 {
+                font-size: 2.1rem;
+            }
+
+            /* Anche il segno rimpicciolisce con il nome: il lockup deve restare
+               proporzionato, non un marchio grande accanto a una scritta piccola. */
+            .brand-row svg {
+                width: 44px;
+                height: 44px;
+            }
+
+            .brand-row {
+                gap: 0.6rem;
             }
 
             .hero-badges {
@@ -1485,8 +1799,14 @@
             }
 
             .badge {
-                padding: 0.5rem 1rem;
-                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.78rem;
+            }
+
+            .shot-label {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
             }
 
             .section-title {
@@ -1532,8 +1852,8 @@
                 min-height: 100dvh;
             }
 
-            .hero-content {
-                padding: 1rem;
+            .hero-grid {
+                padding: 0 1.1rem;
             }
 
             .about-content {
@@ -1595,6 +1915,23 @@
             }
         }
 
+        /* Sotto i 900px le due colonne dell'hero non stanno pi&ugrave; affiancate:
+           il testo va sopra e la vetrina sotto, in colonna unica. Su telefono
+           l'allineamento centrato vale quindi per tutto, non solo per il testo. */
+        @media (max-width: 900px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 2.2rem;
+            }
+
+            .hero-text { order: 1; }
+            .showcase  { order: 2; }
+
+            .shot {
+                transform: translate(4%, 5%) rotate(3deg) scale(0.92);
+            }
+        }
+
         @media (min-width: 769px) and (max-width: 1024px) {
             .about-content {
                 gap: 3rem;
@@ -1631,7 +1968,7 @@
                 padding: 60px 0 20px;
             }
 
-            .hero-content h1 {
+            .hero-text h1 {
                 font-size: 2.5rem;
                 margin-bottom: 0.5rem;
             }
@@ -1656,16 +1993,25 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .video-background {
-                display: none;
+            .hero,
+            .aurora span {
+                animation: none;
+                background-position: 0% 50%;
             }
 
             .hero {
-                animation: none;
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             }
 
-            .hero-content h1,
+            /* Il marchio resta disegnato, semplicemente non si costruisce
+               davanti agli occhi. Le costellazioni non partono affatto. */
+            .mk .ray { stroke-dashoffset: 0; }
+            .mk .node, .mk .src { opacity: 1; transform: none; }
+            .mk.run * { animation: none !important; }
+            .wordmark .ltr { opacity: 1; transform: none; }
+            .shot { transition: none; }
+
+            .hero-text h1,
             .hero-subtitle,
             .hero-badges,
             .hero-description,
@@ -1707,7 +2053,20 @@
     <!-- Header -->
     <header id="header">
         <nav class="container">
-            <div class="logo">EduTechLab</div>
+            <a class="logo" href="#home" aria-label="EduTechLab, torna all'inizio">
+                <svg viewBox="0 0 100 100" aria-hidden="true">
+                    <g class="lg-tratto" fill="none" stroke-width="7" stroke-linecap="round">
+                        <path d="M20.5 50 75.5 18.25"/>
+                        <path d="M20.5 50 84 50"/>
+                        <path d="M20.5 50 75.5 81.75"/>
+                    </g>
+                    <rect class="lg-src" x="7" y="36.5" width="27" height="27" rx="4"/>
+                    <circle class="lg-n1" cx="75.5" cy="18.25" r="9"/>
+                    <circle class="lg-n2" cx="84"   cy="50"    r="9"/>
+                    <circle class="lg-n3" cx="75.5" cy="81.75" r="9"/>
+                </svg>
+                <span><span class="lg-w1">Edu</span><span class="lg-w2">Tech</span><span class="lg-w3">Lab</span></span>
+            </a>
             <ul class="nav-menu">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">Chi Sono</a></li>
@@ -1782,45 +2141,87 @@
         </ul>
     </div>
 
-    <!-- Hero Section with Video Background -->
+    <!-- Hero: il marchio si costruisce, accanto le app vere in funzione -->
     <section class="hero" id="home">
-        <div class="video-bg-wrapper">
-            <video
-                class="video-background"
-                id="heroVideo"
-                autoplay
-                muted
-                loop
-                playsinline
-            >
-                <source src="hero-video.mp4" type="video/mp4">
-            </video>
-        </div>
 
-        <div class="video-overlay"></div>
+        <div class="aurora" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
+        <canvas id="stars" aria-hidden="true"></canvas>
 
-        <div class="hero-content">
-            <h1>EduTechLab</h1>
-            <p class="hero-subtitle" id="typingText"><span class="typing-cursor"></span></p>
-            <div class="hero-badges">
-                <span class="badge">&#129504; Pensiero Computazionale</span>
-                <span class="badge">&#128187; Coding</span>
-                <span class="badge">&#129302; Robotica Educativa</span>
-                <span class="badge">&#129302; Intelligenza Artificiale</span>
+        <div class="hero-grid">
+
+            <div class="hero-text">
+                <div class="lockup">
+                    <div class="brand-row">
+                        <svg class="mk" id="marchio" viewBox="0 0 100 100" role="img" aria-label="EduTechLab">
+                            <g fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round">
+                                <path class="ray ray1" d="M20.5 50 75.5 18.25"/>
+                                <path class="ray ray2" d="M20.5 50 84 50"/>
+                                <path class="ray ray3" d="M20.5 50 75.5 81.75"/>
+                            </g>
+                            <rect class="src" x="7" y="36.5" width="27" height="27" rx="4" fill="#fff"/>
+                            <circle class="node node1" cx="75.5" cy="18.25" r="9"/>
+                            <circle class="node node2" cx="84"   cy="50"    r="9"/>
+                            <circle class="node node3" cx="75.5" cy="81.75" r="9"/>
+                        </svg>
+                        <h1 class="wordmark" id="wordmark">EduTechLab</h1>
+                    </div>
+
+                    <p class="hero-subtitle" id="typingText"><span class="typing-cursor"></span></p>
+                </div>
+
+                <div class="hero-badges">
+                    <span class="badge">&#129504; Pensiero Computazionale</span>
+                    <span class="badge">&#128187; Coding</span>
+                    <span class="badge">&#129302; Robotica Educativa</span>
+                    <span class="badge">&#129302; Intelligenza Artificiale</span>
+                </div>
+
+                <p class="hero-description">
+                    <strong>Fabio Rizzotto</strong><br>
+                    <span class="nowrap-group">Formatore Docenti - Esperto PNRR</span> &bull;
+                    <span class="nowrap-group">Referente IA d'Istituto</span><br>
+                    <em><span class="nowrap-group">500+ ore di formazione erogata</span> &bull;
+                    <span class="nowrap-group">Google Certified</span> &bull;
+                    <span class="nowrap-group">AI Educational Specialist</span> &bull;
+                    <span class="nowrap-group">Innovazione Digitale STEAM</span></em>
+                </p>
+
+                <div class="cta-container">
+                    <a href="#tools" class="cta-button">Scopri gli Strumenti</a>
+                    <a href="#contact" class="cta-button cta-secondary">Contattami</a>
+                </div>
             </div>
-            <p class="hero-description">
-                <strong>Fabio Rizzotto</strong><br>
-                <span class="nowrap-group">Formatore Docenti - Esperto PNRR</span> &bull;
-                <span class="nowrap-group">Referente IA d'Istituto</span><br>
-                <em><span class="nowrap-group">500+ ore di formazione erogata</span> &bull;
-                <span class="nowrap-group">Google Certified</span> &bull;
-                <span class="nowrap-group">AI Educational Specialist</span> &bull;
-                <span class="nowrap-group">Innovazione Digitale STEAM</span></em>
-            </p>
-            <div class="cta-container">
-                <a href="#tools" class="cta-button">Scopri gli Strumenti</a>
-                <a href="#contact" class="cta-button cta-secondary">Contattami</a>
+
+            <div class="showcase">
+                <div class="frame" id="frame">
+                    <a class="shot" href="https://board.edutechlab.it/" target="_blank" rel="noopener">
+                        <img src="assets/hero/app-eduboard.jpg" alt="EduBoard, la lavagna digitale, con una lezione sugli angoli" width="1440" height="735">
+                        <span class="open-hint">Apri EduBoard &#8599;</span>
+                    </a>
+                    <a class="shot" href="https://edutechlab.it/caa-tesserine/" target="_blank" rel="noopener">
+                        <img src="assets/hero/app-caartella.jpg" alt="CAArtella, tesserine CAA generate da una frase" width="1440" height="735" loading="lazy">
+                        <span class="open-hint">Apri CAArtella &#8599;</span>
+                    </a>
+                    <a class="shot" href="https://logikron.edutechlab.it/" target="_blank" rel="noopener">
+                        <img src="assets/hero/app-logikron.jpg" alt="LogiKron, gare di logica a squadre tra istituti" width="1440" height="735" loading="lazy">
+                        <span class="open-hint">Apri LogiKron &#8599;</span>
+                    </a>
+                </div>
+
+                <div class="shot-label">
+                    <div class="shot-name" id="shotName"></div>
+                    <div class="dots" id="dots"></div>
+                </div>
+
+                <!-- Chiarisce che le tre in vetrina sono un assaggio, non tutto.
+                     Il numero lo conta gi&agrave; contaStrumentiPubblicati() dalle card,
+                     quindi non c'&egrave; un secondo numero da aggiornare a mano. -->
+                <p class="showcase-more">
+                    Tre dei <strong id="quantiStrumenti">20</strong> strumenti realizzati &mdash;
+                    <a href="#tools">vedili tutti &#8594;</a>
+                </p>
             </div>
+
         </div>
     </section>
 
@@ -2470,22 +2871,276 @@
         // ==========================================
         // TYPING EFFECT
         // ==========================================
-        function typeWriter(element, text, speed) {
-            var i = 0;
-            element.innerHTML = '<span class="typing-cursor"></span>';
-            function type() {
-                if (i < text.length) {
-                    element.innerHTML = text.substring(0, i + 1) + '<span class="typing-cursor"></span>';
-                    i++;
-                    setTimeout(type, speed);
-                } else {
-                    setTimeout(function() {
-                        element.innerHTML = text;
-                    }, 2000);
+        // ==========================================
+        // HERO — marchio, payoff e vetrina delle app
+        // ==========================================
+        // Un modulo solo per tutto ci&ograve; che vive nell'hero. Nessuna dipendenza
+        // esterna: tre JPG, un SVG scritto nella pagina e un canvas.
+        var HERO = (function () {
+
+            var APPS = [
+                { nome: 'EduBoard',  desc: 'la lavagna digitale, usata in classe tutti i giorni' },
+                { nome: 'CAArtella', desc: 'tesserine CAA con pittogrammi, pronte da stampare' },
+                { nome: 'LogiKron',  desc: 'gare di logica a squadre tra istituti comprensivi' }
+            ];
+            var DURATA = 3600;
+
+            var shots = [], dots = [], dotsBox, nameBox, frame;
+            var idx = 0, timer = null, fermo = false;
+
+            // ---------- vetrina ----------
+            function vaiA(n) {
+                var prec = idx;
+                idx = (n + shots.length) % shots.length;
+                shots.forEach(function (s, i) {
+                    s.classList.remove('on', 'prev');
+                    if (i === idx) s.classList.add('on');
+                    else if (i === prec) s.classList.add('prev');
+                });
+                dots.forEach(function (d, i) { d.classList.toggle('on', i === idx); });
+                nameBox.innerHTML = APPS[idx].nome + '<span>' + APPS[idx].desc + '</span>';
+            }
+
+            function riavvia() {
+                clearInterval(timer);
+                if (!fermo) timer = setInterval(function () { vaiA(idx + 1); }, DURATA);
+            }
+
+            function preparaVetrina() {
+                shots   = [].slice.call(document.querySelectorAll('.shot'));
+                dotsBox = document.getElementById('dots');
+                nameBox = document.getElementById('shotName');
+                frame   = document.getElementById('frame');
+                if (!shots.length || !dotsBox || !nameBox || !frame) return false;
+
+                APPS.forEach(function (a, i) {
+                    var b = document.createElement('button');
+                    b.className = 'dot' + (i === 0 ? ' on' : '');
+                    b.setAttribute('aria-label', 'Mostra ' + a.nome);
+                    b.addEventListener('click', function () { vaiA(i); riavvia(); });
+                    dotsBox.appendChild(b);
+                });
+                dots = [].slice.call(dotsBox.children);
+
+                // Col mouse sopra la vetrina la rotazione si ferma: senza la pausa
+                // si rischia di cliccare l'app sbagliata proprio mentre cambia.
+                frame.addEventListener('mouseenter', function () { fermo = true;  clearInterval(timer); });
+                frame.addEventListener('mouseleave', function () { fermo = false; riavvia(); });
+                frame.addEventListener('focusin',    function () { fermo = true;  clearInterval(timer); });
+                frame.addEventListener('focusout',   function () { fermo = false; riavvia(); });
+                return true;
+            }
+
+            // ---------- marchio: pixel, raggi, tre nodi, poi il nome ----------
+            var mk, wm, lockup, inCorso = false;
+            var NOME = 'EduTechLab';
+            // Il nome &egrave; gi&agrave; diviso in tre dalle maiuscole (Edu | Tech | Lab) e i
+            // tagli coincidono con i tre nodi: il tricolore non &egrave; arbitrario.
+            var TAGLI_NOME = [3, 7];
+
+            function costruisciNome() {
+                wm.textContent = '';
+                for (var i = 0; i < NOME.length; i++) {
+                    var s = document.createElement('span');
+                    var pezzo = i < TAGLI_NOME[0] ? ' wm1' : (i < TAGLI_NOME[1] ? ' wm2' : ' wm3');
+                    s.className = 'ltr' + pezzo;
+                    s.textContent = NOME[i];
+                    s.style.animationDelay = (1.5 + i * 0.05).toFixed(2) + 's';  // dopo i tre nodi
+                    wm.appendChild(s);
                 }
             }
-            setTimeout(type, 800);
-        }
+
+            function suonaMarchio() {
+                mk.classList.remove('run');
+                wm.classList.remove('run');
+                void mk.offsetWidth;              // forza il riavvio dell'animazione
+                void wm.offsetWidth;
+                mk.classList.add('run');
+                wm.classList.add('run');
+            }
+
+            // ---------- payoff che si scrive ----------
+            var elSub, subTimer = null;
+            var TESTO_SUB = 'innovazione didattica digitale';
+
+            function riscriviSottotitolo() {
+                clearTimeout(subTimer);
+                elSub.classList.remove('pronto');
+                elSub.style.letterSpacing = '0px';
+                var i = 0;
+                (function passo() {
+                    if (i <= TESTO_SUB.length) {
+                        elSub.innerHTML = '<span class="sub-txt">' + TESTO_SUB.substring(0, i) +
+                                          '</span><span class="typing-cursor"></span>';
+                        i++;
+                        subTimer = setTimeout(passo, 80);
+                    } else {
+                        elSub.classList.add('pronto');
+                        allargaPayoff();
+                    }
+                })();
+            }
+
+            // Porta il payoff esattamente alla larghezza di marchio + nome.
+            // Solo a scrittura finita: distribuire mentre le lettere arrivano le
+            // spalmerebbe su tutta la riga ad ogni battuta.
+            function allargaPayoff() {
+                var riga = document.querySelector('.brand-row');
+                var txt  = elSub.querySelector('.sub-txt');
+                if (!riga || !txt) return;
+                elSub.style.letterSpacing = '0px';
+                var target  = riga.getBoundingClientRect().width;
+                var attuale = txt.getBoundingClientRect().width;
+                var salti   = Math.max(1, TESTO_SUB.length - 1);
+                var extra   = (target - attuale) / salti;
+                // Solo se serve allargare, e senza esagerare: oltre ~6px diventa illeggibile.
+                if (extra > 0) elSub.style.letterSpacing = Math.min(extra, 6).toFixed(2) + 'px';
+            }
+
+            function rianimaLockup() {
+                if (inCorso) return;              // niente ripartenze a raffica
+                inCorso = true;
+                suonaMarchio();
+                riscriviSottotitolo();
+                setTimeout(function () { inCorso = false; }, 2600);
+            }
+
+            // ---------- sfondo: le costellazioni ----------
+            // Ogni costellazione ha la forma del marchio: una sorgente quadrata e i
+            // suoi nodi collegati. Ruota su se stessa e deriva piano. Poche e
+            // piccole, cos&igrave; il costo resta trascurabile anche su un Chromebook.
+            var cv, ctx, punti = [], raf = null, W = 0, H = 0;
+            var LEGGERO = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            function dimensiona() {
+                var r = Math.min(window.devicePixelRatio || 1, 2);
+                W = cv.clientWidth; H = cv.clientHeight;
+                // Cintura di sicurezza: la misura deve venire dal contenitore, mai
+                // dal canvas stesso. Se arriva un valore assurdo si lascia perdere
+                // invece di allocare un buffer che manderebbe in tilt la GPU.
+                if (!W || !H || W > 4000 || H > 4000) { W = 0; H = 0; return; }
+                cv.width = W * r; cv.height = H * r;
+                ctx.setTransform(r, 0, 0, r, 0, 0);
+
+                var quante = Math.max(3, Math.min(7, Math.round(W / 260)));
+                punti = [];
+                for (var i = 0; i < quante; i++) {
+                    var nodi = 3 + Math.floor(Math.random() * 2);      // 3 o 4, come il marchio
+                    var raggio = 46 + Math.random() * 54;
+                    var bracci = [];
+                    for (var k = 0; k < nodi; k++) {
+                        bracci.push({
+                            ang: Math.random() * 6.284,
+                            len: raggio * (0.55 + Math.random() * 0.45),
+                            r: 1.6 + Math.random() * 1.4
+                        });
+                    }
+                    punti.push({
+                        x: Math.random() * W, y: Math.random() * H,
+                        vx: (Math.random() - 0.5) * 0.12, vy: (Math.random() - 0.5) * 0.12,
+                        rot: Math.random() * 6.284,
+                        vr: (Math.random() - 0.5) * 0.0022,
+                        scala: 0.8 + Math.random() * 0.5,
+                        bracci: bracci
+                    });
+                }
+            }
+
+            function disegna() {
+                ctx.clearRect(0, 0, W, H);
+                for (var i = 0; i < punti.length; i++) {
+                    var c = punti[i];
+                    c.x += c.vx; c.y += c.vy; c.rot += c.vr;
+                    if (c.x < -140) c.x = W + 140; if (c.x > W + 140) c.x = -140;
+                    if (c.y < -140) c.y = H + 140; if (c.y > H + 140) c.y = -140;
+
+                    ctx.save();
+                    ctx.translate(c.x, c.y);
+                    ctx.rotate(c.rot);
+                    ctx.scale(c.scala, c.scala);
+
+                    ctx.strokeStyle = 'rgba(255,255,255,.22)';
+                    ctx.lineWidth = 1.4;
+                    ctx.lineCap = 'round';
+                    for (var b = 0; b < c.bracci.length; b++) {
+                        var br = c.bracci[b];
+                        ctx.beginPath();
+                        ctx.moveTo(0, 0);
+                        ctx.lineTo(Math.cos(br.ang) * br.len, Math.sin(br.ang) * br.len);
+                        ctx.stroke();
+                    }
+                    ctx.fillStyle = 'rgba(255,255,255,.8)';
+                    for (var b2 = 0; b2 < c.bracci.length; b2++) {
+                        var br2 = c.bracci[b2];
+                        ctx.beginPath();
+                        ctx.arc(Math.cos(br2.ang) * br2.len, Math.sin(br2.ang) * br2.len, br2.r, 0, 6.284);
+                        ctx.fill();
+                    }
+                    // la sorgente, quadrata come il pixel del marchio
+                    ctx.fillStyle = 'rgba(255,255,255,.9)';
+                    ctx.beginPath();
+                    if (ctx.roundRect) { ctx.roundRect(-3.4, -3.4, 6.8, 6.8, 1.6); }
+                    else { ctx.rect(-3.4, -3.4, 6.8, 6.8); }
+                    ctx.fill();
+
+                    ctx.restore();
+                }
+                raf = requestAnimationFrame(disegna);
+            }
+
+            function avviaStelle() {
+                if (LEGGERO || raf || !ctx) return;
+                dimensiona();
+                raf = requestAnimationFrame(disegna);
+            }
+
+            // ---------- avvio ----------
+            function avvia() {
+                elSub  = document.getElementById('typingText');
+                mk     = document.getElementById('marchio');
+                wm     = document.getElementById('wordmark');
+                lockup = document.querySelector('.lockup');
+                cv     = document.getElementById('stars');
+                if (!elSub || !mk || !wm || !lockup) return;
+
+                if (cv && cv.getContext) ctx = cv.getContext('2d');
+
+                costruisciNome();
+                if (preparaVetrina()) { vaiA(0); riavvia(); }
+
+                // Il marchio riparte al passaggio del mouse: chi arriva dopo
+                // l'ingresso, o chi risale la pagina, pu&ograve; comunque vederlo.
+                // Su telefono l'hover non esiste: la stessa cosa al tocco.
+                lockup.addEventListener('mouseenter', rianimaLockup);
+                lockup.addEventListener('touchstart', rianimaLockup, { passive: true });
+
+                // Il ridimensionamento arriva a raffica mentre si trascina il bordo
+                // della finestra: si ricalcola una volta sola, a movimento finito.
+                var attesaResize = null;
+                window.addEventListener('resize', function () {
+                    clearTimeout(attesaResize);
+                    attesaResize = setTimeout(function () {
+                        if (raf) dimensiona();
+                        if (elSub.classList.contains('pronto')) allargaPayoff();
+                    }, 150);
+                });
+
+                // A scheda nascosta il canvas si spegne: non consuma batteria a vuoto.
+                document.addEventListener('visibilitychange', function () {
+                    if (document.hidden) {
+                        if (raf) { cancelAnimationFrame(raf); raf = null; }
+                    } else {
+                        avviaStelle();
+                    }
+                });
+
+                suonaMarchio();
+                riscriviSottotitolo();
+                avviaStelle();
+            }
+
+            return { avvia: avvia };
+        })();
 
         // ==========================================
         // ANIMATED COUNTERS
@@ -2497,8 +3152,6 @@
         // futuro un'app in arrivo viene messa fuori dalla categoria "In Arrivo".
         // Le "Riservate" invece si contano: sono app reali, solo non pubbliche.
         function contaStrumentiPubblicati() {
-            var box = document.getElementById('statStrumenti');
-            if (!box) return;
             var creati = 0;
             document.querySelectorAll('.tool-card').forEach(function(card) {
                 var badge = card.querySelector('.coming-soon');
@@ -2507,7 +3160,16 @@
                     || card.closest('#cat-arrivo') !== null;
                 if (!nonPronta) creati++;
             });
-            if (creati > 0) box.setAttribute('data-target', creati);
+            if (creati <= 0) return;
+
+            var box = document.getElementById('statStrumenti');
+            if (box) box.setAttribute('data-target', creati);
+
+            // Lo stesso numero compare sotto la vetrina dell'hero ("Tre dei N
+            // strumenti realizzati"): si scrive da qui, cos&igrave; resta una fonte sola
+            // e non c'&egrave; un secondo numero che possa divergere.
+            var inHero = document.getElementById('quantiStrumenti');
+            if (inHero) inHero.textContent = creati;
         }
 
         function animateCounters() {
@@ -2783,8 +3445,8 @@
             initTiltEffect();
             initParallax();
 
-            var typingEl = document.getElementById('typingText');
-            typeWriter(typingEl, 'innovazione didattica digitale', 80);
+            HERO.avvia();
+            contaStrumentiPubblicati();   // la riga sotto la vetrina dev'essere giusta subito
 
             setTimeout(function() {
                 document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(function(el, index) {

@@ -5,15 +5,24 @@
 //  skipWaiting + clients.claim + notifica alle schede aperte.
 // ══════════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'edutechlab-v3.6.3';
+const CACHE_NAME = 'edutechlab-v3.7.0';
 
+// ⚠️ Qui dentro va SOLO ciò che serve davvero al primo caricamento: ogni file
+// elencato viene scaricato da chiunque apra il sito. Fino alla v3.6.3 c'era
+// 'hero-background.jpg.png' (5,8 MB) che nessuna pagina usava più — scaricato
+// da tutti per niente. Ora l'hero pesa 270 KB in tutto.
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png',
-  '/hero-background.jpg.png'
+  '/assets/Outfit.woff2',
+  '/assets/icona-192.png',
+  '/assets/icona-512.png',
+  '/assets/apple-touch-icon.png',
+  '/assets/favicon.ico',
+  '/assets/hero/app-eduboard.jpg',
+  '/assets/hero/app-caartella.jpg',
+  '/assets/hero/app-logikron.jpg'
 ];
 
 // ── Install: pre-cacha i file principali e attiva subito il nuovo SW ──

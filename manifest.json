@@ -4,32 +4,30 @@
   "description": "Formazione STEAM, Coding, Robotica Educativa e Intelligenza Artificiale per docenti",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#1e293b",
-  "theme_color": "#1e293b",
+  "background_color": "#17324D",
+  "theme_color": "#17324D",
   "orientation": "portrait-primary",
   "categories": ["education", "productivity", "utilities"],
   "lang": "it",
   "dir": "ltr",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "assets/icona-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "maskable any"
+      "purpose": "any"
     },
     {
-      "src": "icon-512.png",
+      "src": "assets/icona-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "maskable any"
-    }
-  ],
-  "screenshots": [
+      "purpose": "any"
+    },
     {
-      "src": "hero-background.jpg.png",
-      "sizes": "1200x800",
+      "src": "assets/icona-512-maskable.png",
+      "sizes": "512x512",
       "type": "image/png",
-      "form_factor": "wide"
+      "purpose": "maskable"
     }
   ]
 }

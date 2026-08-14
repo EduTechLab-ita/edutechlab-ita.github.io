@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 140" width="1120" height="280" role="img" aria-labelledby="t d">
+  <title id="t">EduTechLab</title>
+  <desc id="d">Marchio e nome a colori su fondo chiaro.</desc>
+  <g transform="translate(14 20) scale(1)">
+    
+  <g fill="none" stroke="#17324D" stroke-width="7" stroke-linecap="round">
+    <path d="M20.5 50 75.5 18.25"/>
+    <path d="M20.5 50 84 50"/>
+    <path d="M20.5 50 75.5 81.75"/>
+  </g>
+  <rect x="7" y="36.5" width="27" height="27" rx="4" fill="#17324D"/>
+  <circle cx="75.5" cy="18.25" r="9" fill="#0D9488"/>
+  <circle cx="84" cy="50" r="9" fill="#DB2777"/>
+  <circle cx="75.5" cy="81.75" r="9" fill="#CA8A04"/>
+  </g>
+  <text x="132" y="92" font-family="Outfit, 'Segoe UI', system-ui, sans-serif" font-size="76" font-weight="300"><tspan fill="#0D9488">Edu</tspan><tspan fill="#DB2777">Tech</tspan><tspan fill="#CA8A04">Lab</tspan></text>
+</svg>
