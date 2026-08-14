@@ -68,6 +68,20 @@
   .si { border-left:4px solid var(--t1); } .no { border-left:4px solid #DC2626; }
 
   .avviso { background:#FEF3C7; border-left:4px solid var(--t3); padding:1rem 1.2rem; border-radius:0 10px 10px 0; margin:1.4rem 0; font-size:.92rem; }
+
+  /* firma mail */
+  .firma-box { background:var(--carta); border-radius:14px; padding:1.4rem; box-shadow:0 1px 3px rgba(0,0,0,.09); }
+  .firma-anteprima { border:1px dashed #CBD5E1; border-radius:10px; padding:1.3rem; overflow-x:auto; background:#fff; color:var(--tenue); }
+  .copia-firma {
+    margin-top:1.1rem; background:var(--blu); color:#fff; border:none; font:inherit; font-weight:600;
+    padding:.75rem 1.4rem; border-radius:999px; cursor:pointer; transition:transform .15s, background .2s;
+    box-shadow:0 4px 14px rgba(23,50,77,.25);
+  }
+  .copia-firma:hover { transform:translateY(-2px); }
+  .copia-firma.fatto { background:var(--t1); }
+  .copia-firma:disabled { background:#94A3B8; cursor:default; transform:none; box-shadow:none; }
+  .passi { margin:.5rem 0 0 1.3rem; font-size:.92rem; }
+  .passi li { margin-bottom:.4rem; }
   table { border-collapse:collapse; width:100%; background:var(--carta); border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.09); font-size:.9rem; }
   th,td { text-align:left; padding:.7rem 1rem; border-bottom:1px solid var(--bordo); }
   th { background:#F8FAFC; font-size:.82rem; text-transform:uppercase; letter-spacing:.04em; color:var(--tenue); }
@@ -160,15 +174,35 @@
     <div class="regola no"><b>✗ Non deformarlo, non aggiungere effetti</b>Niente stiramenti, ombre, contorni o sfumature: il segno è nato pieno e piatto. Per ingrandire usa sempre gli SVG, che non perdono qualità.</div>
   </div>
 
-  <div class="avviso" id="avvisoFirma">
-    <b>Firma mail — pronta all'uso dal 14 agosto 2026.</b> Apri <code>firma-mail/firma.html</code>, seleziona
-    tutto (Ctrl+A), copia (Ctrl+C) e incolla in Gmail → Impostazioni → Firma.
-    <br><br>
-    Il logo dentro la firma viene caricato da <code>edutechlab.it/brand/logo-firma.png</code>, che <b>ora è
-    online</b>. Non è una pagina da aprire né un file da scaricare: è l'indirizzo da cui la casella di posta
-    di chi ti legge va a prendere l'immagine, ogni volta che apre la tua mail. Per questo il logo della firma
-    non compare fra i file scaricabili qui sopra — e per questo <b>quell'indirizzo non va mai cambiato</b>:
-    vive dentro ogni messaggio già spedito.
+  <!-- ====================== FIRMA MAIL ====================== -->
+  <h2>La firma per le mail</h2>
+  <p class="nota">Qui sotto c'è la firma vera, non un esempio: la copi con un pulsante e la incolli in Gmail.
+  Non c'è nessun file da scaricare e nessun codice da toccare.</p>
+
+  <div class="firma-box">
+    <div class="firma-anteprima" id="firmaAnteprima">Sto caricando l'anteprima…</div>
+
+    <button class="copia-firma" id="copiaFirma">📋 Copia la firma</button>
+
+    <p class="nota" style="margin:.7rem 0 0"><b>Poi, dentro Gmail:</b></p>
+    <ol class="passi">
+      <li>In alto a destra premi l'<b>ingranaggio ⚙</b> → <b>Visualizza tutte le impostazioni</b>.</li>
+      <li>Resti nella scheda <b>Generali</b> (è già quella aperta) e scorri in basso fino alla voce <b>Firma</b>.</li>
+      <li>Premi <b>+ Crea nuova</b>, dai un nome qualsiasi — per esempio <i>EduTechLab</i> — e conferma.</li>
+      <li>Clicca <b>dentro il riquadro bianco grande</b> che compare a destra e incolla con <b>Ctrl+V</b>.</li>
+      <li>Subito sotto, in <b>Impostazioni predefinite firma</b>, scegli la firma appena creata sia per i
+          <b>nuovi messaggi</b> sia per <b>risposte e inoltri</b>.</li>
+      <li>Scendi in fondo alla pagina e premi <b>Salva modifiche</b>.
+          <b>Senza quest'ultimo passaggio Gmail non salva niente</b>: è l'errore più comune.</li>
+    </ol>
+  </div>
+
+  <div class="avviso">
+    <b>Perché il logo non è fra i file scaricabili.</b> Il logo dentro la firma non viene da un file sul tuo
+    computer: viene preso ogni volta da <code>edutechlab.it/brand/logo-firma.png</code>, dalla casella di
+    posta di <i>chi riceve</i> il messaggio. È il motivo per cui la firma si vede anche se la mail viene
+    aperta dal telefono di un altro — e il motivo per cui <b>quell'indirizzo non va mai cambiato</b>: vive
+    dentro ogni messaggio già spedito.
   </div>
 
   <p class="pie">Pacchetto generato l'11 agosto 2026 · Se un colore o il font cambiano, si modifica in un punto solo
@@ -248,6 +282,58 @@ document.querySelectorAll('.col').forEach(b => b.addEventListener('click', async
   b.classList.add('copiato');
   setTimeout(() => b.classList.remove('copiato'), 1600);
 }));
+
+/* ---------- firma mail ----------
+   L'anteprima si carica dal file vero (firma-mail/firma.html): una fonte sola,
+   cosi' quello che si vede e quello che si copia non possono divergere.
+   Si copia come text/html, altrimenti Gmail incollerebbe il codice invece
+   della firma formattata. */
+(async function firmaMail() {
+  const box     = document.getElementById('firmaAnteprima');
+  const bottone = document.getElementById('copiaFirma');
+  if (!box || !bottone) return;
+
+  let sorgente = '';
+  try {
+    const r = await fetch('firma-mail/firma.html');
+    if (!r.ok) throw new Error(r.status);
+    sorgente = await r.text();
+    box.innerHTML = sorgente;
+    box.style.color = 'inherit';
+  } catch {
+    // capita aprendo la pagina da file:// sul Drive: il browser blocca la lettura
+    box.innerHTML = '<b>Anteprima non disponibile da qui.</b><br>Apri questa pagina da ' +
+                    '<a href="https://edutechlab.it/brand/">edutechlab.it/brand/</a> invece che dal Drive.';
+    bottone.disabled = true;
+    return;
+  }
+
+  bottone.addEventListener('click', async () => {
+    let fatto = false;
+    try {
+      await navigator.clipboard.write([new ClipboardItem({
+        'text/html':  new Blob([sorgente],   { type: 'text/html'  }),
+        'text/plain': new Blob([box.innerText], { type: 'text/plain' })
+      })]);
+      fatto = true;
+    } catch {
+      // riserva per i browser che non hanno la scrittura ricca negli appunti:
+      // si seleziona l'anteprima e si copia la selezione, che resta formattata
+      const sel = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(box);
+      sel.removeAllRanges(); sel.addRange(range);
+      fatto = document.execCommand('copy');
+      sel.removeAllRanges();
+    }
+    bottone.textContent = fatto ? '✓ Copiata — ora incollala in Gmail' : 'Non è riuscito: selezionala a mano';
+    bottone.classList.toggle('fatto', fatto);
+    setTimeout(() => {
+      bottone.textContent = '📋 Copia la firma';
+      bottone.classList.remove('fatto');
+    }, 4000);
+  });
+})();
 </script>
 </body>
 </html>
