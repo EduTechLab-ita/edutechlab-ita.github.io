@@ -1,11 +1,15 @@
-const CACHE_NAME = 'bolle-aritmetiche-v2.2';
+const CACHE_NAME = 'bolle-aritmetiche-v2.3';
 const urlsToCache = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
-  'https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js'
+  // Matter.js ora è nostro (21/08/2026): niente più cdnjs.cloudflare.com, quindi nessun
+  // IP di alunno esposto a un terzo fuori UE e nessun CDN che i firewall scolastici
+  // possano bloccare. In più il gioco ora funziona davvero offline: prima, senza rete,
+  // il motore fisico non si caricava affatto.
+  './vendor/matter.min.js'
 ];
 
 // Install - cache resources

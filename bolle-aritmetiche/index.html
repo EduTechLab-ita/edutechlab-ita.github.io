@@ -17,7 +17,12 @@
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <!-- Matter.js PORTATO IN LOCALE il 21/08/2026: prima arrivava da cdnjs.cloudflare.com,
+         quindi l'indirizzo IP di ogni alunno che apriva il gioco veniva esposto a un terzo
+         fuori UE ad ogni avvio, per un file che possiamo semplicemente tenere noi. Chiude
+         insieme il punto normativo e quello pratico dei firewall scolastici, che spesso
+         bloccano i CDN esterni (regola "librerie JS sempre locali" dell'Anima). -->
+    <script src="./vendor/matter.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -412,7 +417,8 @@
 
         <!-- FOOTER -->
         <div id="footer">
-            © 2026 <a href="https://edutechlab.it/" target="_blank">EduTechLab</a> | Bolle Aritmetiche v2.2
+            © 2026 <a href="https://edutechlab.it/" target="_blank">EduTechLab</a> | Bolle Aritmetiche v2.3
+            | <a href="https://edutechlab.it/privacy-policy/" target="_blank" rel="noopener">Informativa privacy</a>
         </div>
     </div>
 
