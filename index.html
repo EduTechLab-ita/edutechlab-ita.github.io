@@ -1315,14 +1315,12 @@
         .cat-strumenti .cat-header { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
         .cat-gare .cat-header      { background: linear-gradient(135deg, #f59e0b, #ef4444); }
         .cat-segreteria .cat-header{ background: linear-gradient(135deg, #0ea5e9, #6366f1); }
-        .cat-arrivo .cat-header    { background: linear-gradient(135deg, #64748b, #94a3b8); }
 
         .cat-didattica { border: 2px solid #6366f1; }
         .cat-gestione  { border: 2px solid #06b6d4; }
         .cat-strumenti { border: 2px solid #ec4899; }
         .cat-gare      { border: 2px solid #ef4444; }
         .cat-segreteria{ border: 2px solid #6366f1; }
-        .cat-arrivo    { border: 2px solid #94a3b8; }
 
         /* Badges */
         .coming-soon.amber {
@@ -2104,18 +2102,13 @@
                         <div class="nav-dropdown-divider"></div>
                         <div class="nav-dropdown-section">
                             <div class="nav-dropdown-label">🏫 Gestione Scolastica</div>
+                            <a href="https://horologium.edutechlab.it/" target="_blank">Horologium — Orario Scolastico</a>
                             <a href="#tools" onclick="toggleCat('cat-segreteria')">GestAccount</a>
                             <a href="#tools" onclick="toggleCat('cat-segreteria')">GestClassroom</a>
                             <a href="#tools" onclick="toggleCat('cat-segreteria')">Classroom Rollover</a>
                             <a href="#tools" onclick="toggleCat('cat-segreteria')">Gestione Diplomati</a>
                             <a href="#tools" onclick="toggleCat('cat-segreteria')">Gruppi Docenti</a>
                             <a href="#tools" onclick="toggleCat('cat-segreteria')">Libreria · Materiali · Riparazioni</a>
-                        </div>
-                        <div class="nav-dropdown-divider"></div>
-                        <div class="nav-dropdown-section">
-                            <div class="nav-dropdown-label">⏳ In Arrivo</div>
-                            <a href="#tools" onclick="toggleCat('cat-arrivo')">Orario Scolastico</a>
-                            <a href="#tools" onclick="toggleCat('cat-arrivo')">Orario Sostegno</a>
                         </div>
                     </div>
                 </li>
@@ -2525,13 +2518,22 @@
                             <p>App su misura per segreterie e amministrazione degli Istituti Comprensivi</p>
                         </div>
                         <div class="cat-meta">
-                            <span class="cat-count">8 app</span>
+                            <span class="cat-count">9 app</span>
                             <span class="cat-arrow">▼</span>
                         </div>
                     </div>
                     <div class="cat-body">
                         <p style="color:#64748b;font-size:0.9rem;margin-bottom:1.5rem;">Applicazioni personalizzate per la gestione interna degli IC. Clicca su ogni card per una dimostrazione e per richiedere l'implementazione nella tua scuola.</p>
                         <div class="tools-grid">
+                            <div class="tool-card fade-in">
+                                <h3><img src="./icons/horologium.png" class="card-icon" alt="Horologium"> Horologium — Orario Scolastico <span class="coming-soon">Disponibile</span> <span class="coming-soon amber">Riservata</span></h3>
+                                <p>Genera l'orario della scuola del <strong>primo ciclo</strong> — infanzia, primaria e secondaria di primo grado — curricolare e sostegno insieme. Accesso con Google, salvataggio su Drive, più varianti a confronto ed editor visuale per gli aggiustamenti.</p>
+                                <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+                                    <a href="https://horologium.edutechlab.it/" class="tool-button" target="_blank">Apri Horologium</a>
+                                    <span class="tool-button" style="cursor:pointer; background:linear-gradient(135deg,#8b5cf6,#ec4899);" onclick="openModal('horologium')">🎮 Prova la Demo</span>
+                                </div>
+                                <p style="font-size:12px; color:#94a3b8; margin-top:10px;">Riservato alle scuole con licenza attiva — clicca "Prova la Demo" per richiederla</p>
+                            </div>
                             <div class="tool-card vetrina fade-in" onclick="openModal('gestaccount')">
                                 <h3>&#128100; GestAccount <span class="coming-soon amber">Riservata</span> <span class="demo-badge">🎮 Demo</span></h3>
                                 <p>Crea e gestisce automaticamente gli account Google Workspace di nuovi iscritti, trasferiti e uscenti. Clicca per la demo.</p>
@@ -2571,35 +2573,6 @@
                                 <h3>&#128295; Gestione Riparazioni <span class="coming-soon amber">Riservata</span> <span class="demo-badge">🎮 Demo</span></h3>
                                 <p>Registro digitale delle segnalazioni di guasti. I docenti segnalano dal device, la segreteria smista e aggiorna lo stato. Storico completo per aula. Clicca per la demo.</p>
                                 <span class="tool-button" style="display:inline-block;">Scopri + 🎮 Demo →</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ⏳ IN ARRIVO -->
-                <div class="cat-accordion cat-arrivo fade-in" id="cat-arrivo">
-                    <div class="cat-header" onclick="toggleCat('cat-arrivo')">
-                        <div class="cat-emoji">⏳</div>
-                        <div class="cat-info">
-                            <h3>In Arrivo</h3>
-                            <p>Applicazioni attualmente in sviluppo — presto disponibili</p>
-                        </div>
-                        <div class="cat-meta">
-                            <span class="cat-count">2 app</span>
-                            <span class="cat-arrow">▼</span>
-                        </div>
-                    </div>
-                    <div class="cat-body">
-                        <div class="tools-grid">
-                            <div class="tool-card fade-in">
-                                <h3>&#128197; Orario Scolastico <span class="coming-soon blue">Prossimamente</span></h3>
-                                <p>Creazione e condivisione dell'orario scolastico dell'Istituto: visualizzazione per classe, docente e aula. Export PDF e accesso da qualsiasi device.</p>
-                                <a href="#" class="tool-button" style="opacity:0.6;cursor:not-allowed;">In Sviluppo</a>
-                            </div>
-                            <div class="tool-card fade-in">
-                                <h3>&#9855; Orario Sostegno <span class="coming-soon blue">Prossimamente</span></h3>
-                                <p>Gestione dell'orario degli insegnanti di sostegno: assegnazioni ore, visualizzazione per alunno e report per la dirigenza.</p>
-                                <a href="#" class="tool-button" style="opacity:0.6;cursor:not-allowed;">In Sviluppo</a>
                             </div>
                         </div>
                     </div>
@@ -3505,6 +3478,20 @@
     <script>
     // ===================== APP DATA =====================
     var appData = {
+        'horologium': {
+            emoji: '📅',
+            title: 'Horologium — Orario Scolastico',
+            tagline: 'Genera l\'orario della scuola del primo ciclo, curricolare e sostegno insieme',
+            features: [
+                'Generazione automatica con più varianti a confronto e i numeri di qualità di ciascuna',
+                'Editor visuale: trascina le ore, il programma ricolloca da solo per far posto',
+                'Sostegno gestito come l\'orario curricolare: stesso editor, stesse varianti',
+                'Accesso con Google e salvataggio automatico su Google Drive della scuola',
+                'Export per la stampa, pronto per essere condiviso con docenti e famiglie'
+            ],
+            screenshots: [],
+            demoUrl: './demo/horologium/'
+        },
         'kangourou-adesioni': {
             emoji: '🦘',
             title: 'Kangourou Adesioni',
