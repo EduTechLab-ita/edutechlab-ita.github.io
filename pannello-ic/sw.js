@@ -1,4 +1,4 @@
-const CACHE_NAME = 'scrivania-ic-v1.4';
+const CACHE_NAME = 'scrivania-ic-v1.5';
 const ASSETS = ['./', './index.html', './manifest.json', './icon.svg'];
 
 self.addEventListener('install', e => {
